@@ -1,0 +1,1894 @@
+{
+  "_meta": {
+    "game": "War of the Three Kingdoms (Sanguosha / 三国杀) — Project-SAN",
+    "generatedBy": "source/build-cards.js — DO NOT hand-edit. Edit the CSVs and re-run.",
+    "generatedAt": "2026-06-19T14:37:47.968Z",
+    "counts": {
+      "total": 108,
+      "basic": 53,
+      "tactic": 36,
+      "equipment": 19
+    }
+  },
+  "roles": [
+    {
+      "id": "lord",
+      "name": "Lord",
+      "name_cn": "主公",
+      "win": "Survive and eliminate all Rebels and the Spy."
+    },
+    {
+      "id": "loyalist",
+      "name": "Loyalist",
+      "name_cn": "忠臣",
+      "win": "Keep the Lord alive."
+    },
+    {
+      "id": "rebel",
+      "name": "Rebel",
+      "name_cn": "反贼",
+      "win": "Kill the Lord."
+    },
+    {
+      "id": "spy",
+      "name": "Spy",
+      "name_cn": "内奸",
+      "win": "Be the last standing with the Lord, then defeat the Lord."
+    }
+  ],
+  "cards": [
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "2",
+      "rank": 2,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_02",
+      "img": "dodge_diamond_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "2",
+      "rank": 2,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_02__1",
+      "img": "dodge_diamond_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "3",
+      "rank": 3,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_03",
+      "img": "dodge_diamond_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "4",
+      "rank": 4,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_04",
+      "img": "dodge_diamond_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "6",
+      "rank": 6,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_06",
+      "img": "dodge_diamond_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "5",
+      "rank": 5,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_05",
+      "img": "dodge_diamond_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "7",
+      "rank": 7,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_07",
+      "img": "dodge_diamond_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_08",
+      "img": "dodge_diamond_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_09",
+      "img": "dodge_diamond_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_10",
+      "img": "dodge_diamond_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "J",
+      "rank": 11,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_11",
+      "img": "dodge_diamond_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "J",
+      "rank": 11,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_diamond_11__1",
+      "img": "dodge_diamond_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "2",
+      "rank": 2,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_heart_02",
+      "img": "dodge_heart_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "2",
+      "rank": 2,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_heart_02__1",
+      "img": "dodge_heart_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หลบ",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "K",
+      "rank": 13,
+      "source": "basic",
+      "category": "basic",
+      "kind": "dodge",
+      "name": "Dodge",
+      "name_cn": "闪",
+      "id": "dodge_heart_13",
+      "img": "dodge_heart_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "3",
+      "rank": 3,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_03",
+      "img": "peach_heart_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "4",
+      "rank": 4,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_04",
+      "img": "peach_heart_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "6",
+      "rank": 6,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_06",
+      "img": "peach_heart_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "7",
+      "rank": 7,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_07",
+      "img": "peach_heart_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_08",
+      "img": "peach_heart_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_09",
+      "img": "peach_heart_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "Q",
+      "rank": 12,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_heart_12",
+      "img": "peach_heart_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เสบียง",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "Q",
+      "rank": 12,
+      "source": "basic",
+      "category": "basic",
+      "kind": "peach",
+      "name": "Peach",
+      "name_cn": "桃",
+      "id": "peach_diamond_12",
+      "img": "peach_diamond_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_heart_10",
+      "img": "strike_heart_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_heart_10__1",
+      "img": "strike_heart_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "J",
+      "rank": 11,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_heart_11",
+      "img": "strike_heart_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "6",
+      "rank": 6,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_06",
+      "img": "strike_diamond_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "7",
+      "rank": 7,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_07",
+      "img": "strike_diamond_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_08",
+      "img": "strike_diamond_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_09",
+      "img": "strike_diamond_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_10",
+      "img": "strike_diamond_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "K",
+      "rank": 13,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_diamond_13",
+      "img": "strike_diamond_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "7",
+      "rank": 7,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_07",
+      "img": "strike_spade_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_08",
+      "img": "strike_spade_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_08__1",
+      "img": "strike_spade_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_09",
+      "img": "strike_spade_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_09__1",
+      "img": "strike_spade_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_10",
+      "img": "strike_spade_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_spade_10__1",
+      "img": "strike_spade_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "2",
+      "rank": 2,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_02",
+      "img": "strike_club_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "3",
+      "rank": 3,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_03",
+      "img": "strike_club_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "4",
+      "rank": 4,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_04",
+      "img": "strike_club_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "5",
+      "rank": 5,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_05",
+      "img": "strike_club_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "6",
+      "rank": 6,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_06",
+      "img": "strike_club_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "7",
+      "rank": 7,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_07",
+      "img": "strike_club_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_08",
+      "img": "strike_club_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "8",
+      "rank": 8,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_08__1",
+      "img": "strike_club_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_09",
+      "img": "strike_club_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "9",
+      "rank": 9,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_09__1",
+      "img": "strike_club_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_10",
+      "img": "strike_club_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "10",
+      "rank": 10,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_10__1",
+      "img": "strike_club_10.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "J",
+      "rank": 11,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_11",
+      "img": "strike_club_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โจมตี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "J",
+      "rank": 11,
+      "source": "basic",
+      "category": "basic",
+      "kind": "strike",
+      "name": "Strike",
+      "name_cn": "杀",
+      "id": "strike_club_11__1",
+      "img": "strike_club_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "3",
+      "rank": 3,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_club_03",
+      "img": "dismantle_club_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "4",
+      "rank": 4,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_club_04",
+      "img": "dismantle_club_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "3",
+      "rank": 3,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_spade_03",
+      "img": "dismantle_spade_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "4",
+      "rank": 4,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_spade_04",
+      "img": "dismantle_spade_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_heart_12",
+      "img": "dismantle_heart_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ถอนสะพาน",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ถอนสะพาน",
+      "id": "dismantle_spade_12",
+      "img": "dismantle_spade_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เกาทัณฑ์พันดอก",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "เกาทัณฑ์พันดอก",
+      "id": "arrow_barrage_heart_01",
+      "img": "arrow_barrage_heart_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ร่วมสาบาน",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ร่วมสาบาน",
+      "id": "peach_garden_heart_01",
+      "img": "peach_garden_heart_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ละโมบฉกฉวย",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "J",
+      "rank": 11,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ละโมบฉกฉวย",
+      "id": "snatch_heart_11",
+      "img": "snatch_heart_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ละโมบฉกฉวย",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "7",
+      "rank": 7,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ละโมบฉกฉวย",
+      "id": "snatch_heart_07",
+      "img": "snatch_heart_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ละโมบฉกฉวย",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "8",
+      "rank": 8,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ละโมบฉกฉวย",
+      "id": "snatch_heart_08",
+      "img": "snatch_heart_08.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ละโมบฉกฉวย",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "9",
+      "rank": 9,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ละโมบฉกฉวย",
+      "id": "snatch_heart_09",
+      "img": "snatch_heart_09.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ยืมมือสังหาร",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ยืมมือสังหาร",
+      "id": "borrowed_knife_club_13",
+      "img": "borrowed_knife_club_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ยืมมือสังหาร",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ยืมมือสังหาร",
+      "id": "borrowed_knife_club_12",
+      "img": "borrowed_knife_club_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "มีสุขลืมเมือง",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "6",
+      "rank": 6,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "มีสุขลืมเมือง",
+      "id": "indulgence_club_06",
+      "img": "indulgence_club_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "มีสุขลืมเมือง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "6",
+      "rank": 6,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "มีสุขลืมเมือง",
+      "id": "indulgence_heart_06",
+      "img": "indulgence_heart_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "มีสุขลืมเมือง",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "6",
+      "rank": 6,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "มีสุขลืมเมือง",
+      "id": "indulgence_spade_06",
+      "img": "indulgence_spade_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ลอบขโมย",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "4",
+      "rank": 4,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ลอบขโมย",
+      "id": "steal_spade_04",
+      "img": "steal_spade_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ลอบขโมย",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "4",
+      "rank": 4,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ลอบขโมย",
+      "id": "steal_diamond_04",
+      "img": "steal_diamond_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ลอบขโมย",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "3",
+      "rank": 3,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ลอบขโมย",
+      "id": "steal_diamond_03",
+      "img": "steal_diamond_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ลอบขโมย",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "J",
+      "rank": 11,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ลอบขโมย",
+      "id": "steal_spade_11",
+      "img": "steal_spade_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ลอบขโมย",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "3",
+      "rank": 3,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ลอบขโมย",
+      "id": "steal_spade_03",
+      "img": "steal_spade_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คงกระพันชาตรี",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "J",
+      "rank": 11,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คงกระพันชาตรี",
+      "id": "nullification_spade_11",
+      "img": "nullification_spade_11.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คงกระพันชาตรี",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คงกระพันชาตรี",
+      "id": "nullification_diamond_12",
+      "img": "nullification_diamond_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คงกระพันชาตรี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คงกระพันชาตรี",
+      "id": "nullification_club_13",
+      "img": "nullification_club_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คงกระพันชาตรี",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คงกระพันชาตรี",
+      "id": "nullification_club_12",
+      "img": "nullification_club_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ท้าสู้",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ท้าสู้",
+      "id": "duel_diamond_01",
+      "img": "duel_diamond_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ท้าสู้",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ท้าสู้",
+      "id": "duel_club_01",
+      "img": "duel_club_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ท้าสู้",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ท้าสู้",
+      "id": "duel_spade_01",
+      "img": "duel_spade_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คนเถื่อนบุกรุก",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "7",
+      "rank": 7,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คนเถื่อนบุกรุก",
+      "id": "barbarians_club_07",
+      "img": "barbarians_club_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คนเถื่อนบุกรุก",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คนเถื่อนบุกรุก",
+      "id": "barbarians_spade_13",
+      "img": "barbarians_spade_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "คนเถื่อนบุกรุก",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "7",
+      "rank": 7,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "คนเถื่อนบุกรุก",
+      "id": "barbarians_spade_07",
+      "img": "barbarians_spade_07.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เก็บเกี่ยวยุ้งฉาง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "4",
+      "rank": 4,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "เก็บเกี่ยวยุ้งฉาง",
+      "id": "harvest_heart_04",
+      "img": "harvest_heart_04.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เก็บเกี่ยวยุ้งฉาง",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "3",
+      "rank": 3,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "เก็บเกี่ยวยุ้งฉาง",
+      "id": "harvest_heart_03",
+      "img": "harvest_heart_03.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ฟ้าลงโทษ",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ฟ้าลงโทษ",
+      "id": "lightning_spade_01",
+      "img": "lightning_spade_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ฟ้าลงโทษ",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "tactic",
+      "name": "ฟ้าลงโทษ",
+      "id": "lightning_heart_12",
+      "img": "lightning_heart_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เซ็กเธาว์",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "เซ็กเธาว์",
+      "id": "redhare_heart_05",
+      "img": "redhare_heart_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เจ่าหวงเฟยเตี้ยน",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "เจ่าหวงเฟยเตี้ยน",
+      "id": "zhuahuang_heart_13",
+      "img": "zhuahuang_heart_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ต้าหยวน",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "ต้าหยวน",
+      "id": "dayuan_spade_13",
+      "img": "dayuan_spade_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เต๊กเลา",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "เต๊กเลา",
+      "id": "dilu_teklao_club_05",
+      "img": "dilu_teklao_club_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "เจ่าหยิง",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "เจ่าหยิง",
+      "id": "zixing_spade_05",
+      "img": "zixing_spade_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ตี้หลู",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "K",
+      "rank": 13,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "horse",
+      "name": "ตี้หลู",
+      "id": "dilu_diamond_13",
+      "img": "dilu_diamond_13.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "โล่จักรพรรดิ",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "2",
+      "rank": 2,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "armor",
+      "name": "โล่จักรพรรดิ",
+      "id": "renwang_shield_club_02",
+      "img": "renwang_shield_club_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ค่ายกลแปดทิศ",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "2",
+      "rank": 2,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "armor",
+      "name": "ค่ายกลแปดทิศ",
+      "id": "bagua_club_02",
+      "img": "bagua_club_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ค่ายกลแปดทิศ",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "2",
+      "rank": 2,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "armor",
+      "name": "ค่ายกลแปดทิศ",
+      "id": "bagua_spade_02",
+      "img": "bagua_spade_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ทวนกรีดนภา",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ทวนกรีดนภา",
+      "id": "guding_spear_diamond_12",
+      "img": "guding_spear_diamond_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ทวนอสรพิษ",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "Q",
+      "rank": 12,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ทวนอสรพิษ",
+      "id": "serpent_spear_spade_12",
+      "img": "serpent_spear_spade_12.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หน้าไม้กล",
+      "suit": "club",
+      "color": "black",
+      "glyph": "♣",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "หน้าไม้กล",
+      "id": "crossbow_club_01",
+      "img": "crossbow_club_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "หน้าไม้กล",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "A",
+      "rank": 1,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "หน้าไม้กล",
+      "id": "crossbow_diamond_01",
+      "img": "crossbow_diamond_01.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ธนูกิเลน",
+      "suit": "heart",
+      "color": "red",
+      "glyph": "♥",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ธนูกิเลน",
+      "id": "qilin_bow_heart_05",
+      "img": "qilin_bow_heart_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ขวานก้วนสื่อ",
+      "suit": "diamond",
+      "color": "red",
+      "glyph": "♦",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ขวานก้วนสื่อ",
+      "id": "guanshi_axe_diamond_05",
+      "img": "guanshi_axe_diamond_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ง้าวมังกรเขียว",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "5",
+      "rank": 5,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ง้าวมังกรเขียว",
+      "id": "green_dragon_spade_05",
+      "img": "green_dragon_spade_05.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "กระบี่ชิงกัง",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "6",
+      "rank": 6,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "กระบี่ชิงกัง",
+      "id": "qinggang_spade_06",
+      "img": "qinggang_spade_06.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "กระบี่ชวงกู่",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "2",
+      "rank": 2,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "กระบี่ชวงกู่",
+      "id": "zhuge_crossbow_spade_02",
+      "img": "zhuge_crossbow_spade_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    },
+    {
+      "name_th": "ดาบห่างปิง",
+      "suit": "spade",
+      "color": "black",
+      "glyph": "♠",
+      "number": "2",
+      "rank": 2,
+      "source": "tactic-equip",
+      "category": "equipment",
+      "slot": "weapon",
+      "name": "ดาบห่างปิง",
+      "id": "fan_spade_02",
+      "img": "fan_spade_02.png",
+      "effect": {
+        "todo": "encode in engine"
+      }
+    }
+  ]
+}
