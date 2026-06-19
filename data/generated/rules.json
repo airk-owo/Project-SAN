@@ -1,0 +1,299 @@
+{
+  "authority": "H:\\WTK project\\Project-SAN\\source\\คู่มือ WTK.docx",
+  "authoritativeSetup": {
+    "initialHandSize": 4,
+    "firstPlayerRole": "emperor",
+    "direction": "counterclockwise",
+    "emperorHpBonus": {
+      "amount": 1,
+      "exceptPlayerCount": 4
+    },
+    "source": "H:\\WTK project\\Project-SAN\\source\\คู่มือ WTK.docx"
+  },
+  "roleCompositions": {
+    "4": [
+      {
+        "emperor": 1,
+        "loyalist": 1,
+        "rebel": 1,
+        "traitor": 1
+      }
+    ],
+    "5": [
+      {
+        "emperor": 1,
+        "loyalist": 1,
+        "rebel": 2,
+        "traitor": 1
+      }
+    ],
+    "6": [
+      {
+        "emperor": 1,
+        "loyalist": 1,
+        "rebel": 3,
+        "traitor": 1
+      },
+      {
+        "emperor": 1,
+        "loyalist": 1,
+        "rebel": 2,
+        "traitor": 2
+      }
+    ],
+    "7": [
+      {
+        "emperor": 1,
+        "loyalist": 2,
+        "rebel": 3,
+        "traitor": 1
+      }
+    ],
+    "8": [
+      {
+        "emperor": 1,
+        "loyalist": 2,
+        "rebel": 4,
+        "traitor": 1
+      },
+      {
+        "emperor": 1,
+        "loyalist": 2,
+        "rebel": 3,
+        "traitor": 2
+      }
+    ],
+    "9": [
+      {
+        "emperor": 1,
+        "loyalist": 3,
+        "rebel": 4,
+        "traitor": 1
+      }
+    ],
+    "10": [
+      {
+        "emperor": 1,
+        "loyalist": 3,
+        "rebel": 4,
+        "traitor": 2
+      }
+    ]
+  },
+  "roles": [
+    {
+      "role_key": "emperor",
+      "role_th": "จักรพรรดิ",
+      "visibility": "เปิดเผยตั้งแต่เริ่มเกม",
+      "win_condition_th": "กำจัดพวกกบฏและคนทรยศทั้งหมด เพื่อความสงบสุข",
+      "team": "emperor_loyalist"
+    },
+    {
+      "role_key": "loyalist",
+      "role_th": "ผู้ภักดี",
+      "visibility": "ลับ",
+      "win_condition_th": "ทำทุกสิ่งทุกอย่างเพื่อปกป้องจักรพรรดิ เงื่อนไขการชนะเหมือนจักรพรรดิ",
+      "team": "emperor_loyalist"
+    },
+    {
+      "role_key": "rebel",
+      "role_th": "กบฏ",
+      "visibility": "ลับ",
+      "win_condition_th": "กำจัดจักรพรรดิ เพื่อล้มล้างการปกครอง",
+      "team": "rebel"
+    },
+    {
+      "role_key": "traitor",
+      "role_th": "คนทรยศ",
+      "visibility": "ลับ",
+      "win_condition_th": "กำจัดทุกคน เพื่อเป็นผู้รอดชีวิตคนสุดท้าย",
+      "team": "traitor"
+    }
+  ],
+  "turnPhases": [
+    {
+      "phase_order": "1",
+      "phase_name": "เตรียมการ",
+      "description_th": "เริ่มรอบ/ใช้ทักษะของขุนพลบางคน"
+    },
+    {
+      "phase_order": "2",
+      "phase_name": "ตัดสิน",
+      "description_th": "เปิดการ์ดใบบนสุดเพื่อตัดสิน สำหรับอุบายประเภทรอเวลาหรือเอฟเฟกต์ที่ต้องตัดสิน กรณีมีการ์ดอุบายวางอยู่เกิน 1 ใบให้เปิดการ์ดตัดสินทีละใบโดยเริ่มจากใบที่ได้รับล่าสุดก่อน"
+    },
+    {
+      "phase_order": "3",
+      "phase_name": "จั่วการ์ด",
+      "description_th": "จั่วการ์ดจากกองกลางตามกติกา ปกติ 2 ใบ"
+    },
+    {
+      "phase_order": "4",
+      "phase_name": "เล่นการ์ด",
+      "description_th": "ใช้การ์ด/ติดตั้งอุปกรณ์/ใช้ความสามารถ กี่ใบก็ได้ ตามเงื่อนไข ตามปกติสามารถใช้การ์ด โจมตี ได้เพียงครั้งเดียวในแต่ละเทิร์น ยกเว้นใช้ความสามารถจากอุปกรณ์หรือขุนพล และไม่สามารถวางการ์ดที่มีชื่อเดียวกันไว้ด้านหน้าผู้เล่นคนเดียวกันได้"
+    },
+    {
+      "phase_order": "5",
+      "phase_name": "ทิ้งการ์ด",
+      "description_th": "ถ้าการ์ดบนมือเกินพลังชีวิตปัจจุบันให้ทิ้งจนเท่ากัน"
+    },
+    {
+      "phase_order": "6",
+      "phase_name": "จบเทิร์น",
+      "description_th": "ใช้ทักษะของขุนพล/ส่งเทิร์นให้ผู้เล่นถัดไปที่ยังไม่ตาย"
+    }
+  ],
+  "gameRules": [
+    {
+      "rule_key": "players",
+      "topic": "จำนวนผู้เล่น",
+      "title": "รองรับ 4-10 คนตามคู่มือ และสามารถขยายในอนาคต",
+      "source": "คู่มือ"
+    },
+    {
+      "rule_key": "role_deal",
+      "topic": "แจกบทบาท",
+      "title": "สุ่มแจกบทบาทตามจำนวนผู้เล่น จักรพรรดิเปิดเผย บทบาทอื่นปิดเป็นความลับ",
+      "source": "คู่มือ"
+    },
+    {
+      "rule_key": "character_choice_emperor",
+      "topic": "เลือกตัวละครจักรพรรดิ",
+      "title": "ระบบออนไลน์ที่ต้องการ: จักรพรรดิเลือกได้ 5 ตัว คือ เล่าปี่ โจโฉ ซุนกวน และตัวละครสุ่มอีก 2 ตัว",
+      "source": "requirement จากผู้ใช้"
+    },
+    {
+      "rule_key": "character_choice_others",
+      "topic": "เลือกตัวละครบทบาทอื่น",
+      "title": "ผู้เล่นบทบาทอื่นสุ่มตัวละคร 3 ตัวแล้วเลือก 1 ตัว",
+      "source": "requirement จากผู้ใช้"
+    },
+    {
+      "rule_key": "reveal_character",
+      "topic": "เปิดเผยตัวละคร",
+      "title": "หลังทุกคนเลือกเสร็จ เปิดเผยตัวละครพร้อมกัน",
+      "source": "requirement จากผู้ใช้"
+    },
+    {
+      "rule_key": "emperor_hp_bonus",
+      "topic": "พลังชีวิตจักรพรรดิ",
+      "title": "จักรพรรดิได้รับพลังชีวิตสูงสุด +1 จากค่าบนตัวละคร ยกเว้นเกม 4 คน",
+      "source": "คู่มือ WTK.docx"
+    },
+    {
+      "rule_key": "initial_hand",
+      "topic": "ไพ่เริ่มต้น",
+      "title": "ผู้เล่นทุกคนได้รับการ์ดพิชัยยุทธเริ่มต้นคนละ 4 ใบ",
+      "source": "คู่มือ WTK.docx"
+    },
+    {
+      "rule_key": "first_turn",
+      "topic": "ลำดับเริ่มเกม",
+      "title": "จักรพรรดิเป็นผู้เล่นคนแรกและลำดับเล่นทวนเข็มนาฬิกา",
+      "source": "คู่มือ WTK.docx"
+    },
+    {
+      "rule_key": "character_choice_others_10",
+      "topic": "เลือกตัวละครเกม 10 คน",
+      "title": "ผู้เล่นที่ไม่ใช่จักรพรรดิได้รับตัวเลือกขุนพลคนละ 2 ตัว",
+      "source": "คู่มือ WTK.docx"
+    },
+    {
+      "rule_key": "death",
+      "topic": "ใกล้ตาย/ตาย",
+      "title": "เมื่อพลังชีวิตเหลือ 0 เข้าสถานะใกล้ตาย ผู้เล่นใช้เสบียงช่วยได้ หากช่วยไม่ได้ผู้เล่นตาย",
+      "source": "คู่มือ"
+    },
+    {
+      "rule_key": "distance",
+      "topic": "ระยะ",
+      "title": "ระยะนับตามตำแหน่งรอบโต๊ะและปรับด้วยม้า/อุปกรณ์ ผู้เล่นข้างซ้ายขวาระยะ 1",
+      "source": "คู่มือ"
+    },
+    {
+      "rule_key": "attack_limit",
+      "topic": "จำกัดโจมตี",
+      "title": "ปกติใช้การ์ดโจมตีได้ 1 ครั้งต่อเทิร์น ยกเว้นมีอุปกรณ์/ความสามารถที่ระบุว่าใช้ได้เพิ่ม",
+      "source": "คู่มือ/การ์ด"
+    }
+  ],
+  "backendEvents": [
+    {
+      "event_key": "GAME_CREATED",
+      "trigger": "host creates room",
+      "payload_fields": "room_id, host_user_id, max_players",
+      "notes": "สร้างห้อง"
+    },
+    {
+      "event_key": "PLAYER_JOINED",
+      "trigger": "player joins room",
+      "payload_fields": "room_id, user_id, seat_no",
+      "notes": "เข้าห้อง"
+    },
+    {
+      "event_key": "ROLES_DEALT",
+      "trigger": "start game",
+      "payload_fields": "game_id, player_id, role_key",
+      "notes": "แจกบทบาทแบบลับ ยกเว้นจักรพรรดิ"
+    },
+    {
+      "event_key": "CHARACTER_OPTIONS_DEALT",
+      "trigger": "after role deal",
+      "payload_fields": "player_id, option_character_ids",
+      "notes": "จักรพรรดิ 5 ตัวเลือก คนอื่น 3 ตัวเลือก"
+    },
+    {
+      "event_key": "CHARACTER_SELECTED",
+      "trigger": "player selects character",
+      "payload_fields": "player_id, character_id",
+      "notes": "เลือกตัวละคร"
+    },
+    {
+      "event_key": "CHARACTERS_REVEALED",
+      "trigger": "all selected",
+      "payload_fields": "game_id, player_character_map",
+      "notes": "เปิดเผยตัวละคร"
+    },
+    {
+      "event_key": "CARD_DRAWN",
+      "trigger": "draw phase/effect",
+      "payload_fields": "player_id, card_instance_ids, reason",
+      "notes": "จั่วการ์ด"
+    },
+    {
+      "event_key": "CARD_PLAYED",
+      "trigger": "play/respond",
+      "payload_fields": "player_id, card_instance_id, target_player_ids",
+      "notes": "เล่นการ์ด"
+    },
+    {
+      "event_key": "DAMAGE_DEALT",
+      "trigger": "attack/trick/effect",
+      "payload_fields": "source_player_id, target_player_id, amount, damage_type",
+      "notes": "ทำความเสียหาย"
+    },
+    {
+      "event_key": "HEAL_APPLIED",
+      "trigger": "provision/skill",
+      "payload_fields": "source_player_id, target_player_id, amount",
+      "notes": "ฟื้นฟู"
+    },
+    {
+      "event_key": "PLAYER_DYING",
+      "trigger": "hp <= 0",
+      "payload_fields": "player_id, required_heal",
+      "notes": "สถานะใกล้ตาย"
+    },
+    {
+      "event_key": "PLAYER_DIED",
+      "trigger": "dying unresolved",
+      "payload_fields": "player_id, killer_player_id",
+      "notes": "ตาย"
+    },
+    {
+      "event_key": "VICTORY_CHECKED",
+      "trigger": "after death/end action",
+      "payload_fields": "winner_team, reason",
+      "notes": "ตรวจชนะ"
+    }
+  ]
+}

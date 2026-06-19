@@ -1,0 +1,25 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {io} from 'socket.io-client';
+const socket=io(process.env.NEXT_PUBLIC_SOCKET_URL||'http://localhost:3001',{autoConnect:false});
+type Character={id:string;name:string;hp:number;kingdomTh?:string;skills:{name:string;description:string}[]};
+type RoleSet={emperor:number;loyalist:number;rebel:number;traitor:number};
+type Card={id:string;name:string;suit:string;number:string;effect:string|null};
+type Player={id:string;username:string;ready:boolean;confirmedCharacter:boolean;alive:boolean;handCount:number;hand:Card[];character?:Character;characterOptions:Character[];hp?:number;maxHp?:number};
+type Game={viewerId:string;phase:string;currentPlayerId?:string;pendingAction?:{kind:'attack';actorId:string;targetId:string};players:Player[];deck:{length:number};discard:{length:number};log:{message:string}[]};
+const roleText=(r:RoleSet)=>`จักรพรรดิ ${r.emperor} · ผู้ภักดี ${r.loyalist} · กบฏ ${r.rebel} · คนทรยศ ${r.traitor}`;
+export default function Home(){
+  const [game,setGame]=useState<Game>(),[room,setRoom]=useState('demo'),[name,setName]=useState(''),[text,setText]=useState(''),[chat,setChat]=useState<{username:string;text:string}[]>([]),[roleOptions,setRoleOptions]=useState<RoleSet[]>([]),[targetId,setTargetId]=useState('');
+  useEffect(()=>{const state=(v:Game)=>setGame(v),message=(m:{username:string;text:string})=>setChat(x=>[...x,m]),options=(v:RoleSet[])=>setRoleOptions(v),error=(m:string)=>alert(m);socket.on('game:state',state);socket.on('chat:message',message);socket.on('game:role-options',options);socket.on('game:error',error);return()=>{socket.off('game:state',state);socket.off('chat:message',message);socket.off('game:role-options',options);socket.off('game:error',error)};},[]);
+  const join=()=>{socket.connect();socket.emit('room:join',{gameId:room,username:name||'ผู้เล่น'})};
+  if(!game)return <main><h1>WTK Online</h1><p>Prototype V1 · ห้องเล่น · ไพ่จาก source</p><input value={name} onChange={e=>setName(e.target.value)} placeholder="Username"/><input value={room} onChange={e=>setRoom(e.target.value)} placeholder="Room ID"/><button onClick={join}>เข้าห้อง</button></main>;
+  const chooser=game.players.find(p=>!p.confirmedCharacter&&p.characterOptions.length>0);
+  return <main><header><h1>WTK Online</h1><span>Phase: {game.phase}</span></header>
+    <section className="table"><div className="players">{game.players.map(p=><article key={p.id}><b>{p.username}{p.id===game.currentPlayerId?' ← เทิร์นนี้':''}</b><p>{p.ready?'พร้อม':'รอ'}</p>{p.character&&<p>{p.character.name} · HP {p.hp}/{p.maxHp}</p>}<small>มือ {p.handCount} ใบ</small></article>)}</div><div className="center">กองจั่ว {game.deck.length}<br/>กองทิ้ง {game.discard.length}</div></section>
+    {roleOptions.length>0&&<section className="choice"><h2>เลือกชุดบทบาท</h2>{roleOptions.map((r,i)=><button key={i} onClick={()=>{socket.emit('game:start',{gameId:room,composition:r});setRoleOptions([])}}>{roleText(r)}</button>)}</section>}
+    {game.phase==='character-select'&&chooser&&<section className="choice"><h2>เลือกขุนพลของคุณ</h2><p>เลือกแล้วจะล็อกทันที {game.players.length===10?'(เกม 10 คน: 2 ตัวเลือก)':''}</p><div className="character-grid">{chooser.characterOptions.map(c=><article key={c.id}><h3>{c.name}</h3><p>{c.kingdomTh||'—'} · HP {c.hp}</p>{c.skills.map(s=><p key={s.name}><b>{s.name}</b> — {s.description}</p>)}<button onClick={()=>socket.emit('character:select',{gameId:room,characterId:c.id})}>เลือก {c.name}</button></article>)}</div></section>}
+    <section><button onClick={()=>socket.emit('player:ready',{gameId:room,ready:true})}>Ready</button><button onClick={()=>socket.emit('game:start',{gameId:room})}>เริ่มเกม</button></section>
+    {game.phase==='playing'&&<section className="hand"><h2>ไพ่ของคุณ</h2><select value={targetId} onChange={e=>setTargetId(e.target.value)}><option value="">เลือกเป้าหมาย (ถ้าจำเป็น)</option>{game.players.filter(p=>p.id!==game.viewerId&&p.alive!==false).map(p=><option value={p.id} key={p.id}>{p.username}</option>)}</select>{game.players.flatMap(p=>p.hand).map(c=><button key={c.id} onClick={()=>socket.emit('card:play',{gameId:room,cardId:c.id,targetId:targetId||undefined})}>{c.name} {c.number} {c.suit}</button>)}{game.currentPlayerId===game.viewerId&&<button onClick={()=>socket.emit('turn:end',{gameId:room})}>จบเทิร์น</button>}{game.pendingAction?.targetId===game.viewerId&&<section className="choice"><h2>ถูกโจมตี — ตอบสนอง</h2>{game.players.find(p=>p.id===game.viewerId)?.hand.filter(c=>c.effect==='dodge').map(c=><button key={c.id} onClick={()=>socket.emit('attack:respond',{gameId:room,cardId:c.id})}>ใช้หลบ</button>)}<button onClick={()=>socket.emit('attack:respond',{gameId:room})}>ไม่หลบ (รับความเสียหาย)</button></section>}</section>}
+    <section className="chat"><h2>Chat</h2>{chat.map((m,i)=><p key={i}><b>{m.username}</b>: {m.text}</p>)}<input value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&text.trim()){socket.emit('chat:send',{gameId:room,text});setText('')}}} placeholder="พิมพ์ข้อความ"/></section>
+  </main>;
+}

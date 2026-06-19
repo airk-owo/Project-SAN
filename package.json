@@ -1,0 +1,13 @@
+{
+  "name": "wtk-online",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @wtk/web\" \"npm run dev -w @wtk/server\"",
+    "import:manual": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/import-manual-docx.ps1",
+    "import:game-data": "npm run import:manual && node scripts/import-cards.mjs",
+    "import:cards": "npm run import:game-data",
+    "check": "npm run check -ws"
+  },
+  "devDependencies": { "concurrently": "^9.1.2" }
+}

@@ -1,0 +1,14 @@
+event_key,trigger,payload_fields,notes
+GAME_CREATED,host creates room,"room_id, host_user_id, max_players",สร้างห้อง
+PLAYER_JOINED,player joins room,"room_id, user_id, seat_no",เข้าห้อง
+ROLES_DEALT,start game,"game_id, player_id, role_key",แจกบทบาทแบบลับ ยกเว้นจักรพรรดิ
+CHARACTER_OPTIONS_DEALT,after role deal,"player_id, option_character_ids",จักรพรรดิ 5 ตัวเลือก คนอื่น 3 ตัวเลือก
+CHARACTER_SELECTED,player selects character,"player_id, character_id",เลือกตัวละคร
+CHARACTERS_REVEALED,all selected,"game_id, player_character_map",เปิดเผยตัวละคร
+CARD_DRAWN,draw phase/effect,"player_id, card_instance_ids, reason",จั่วการ์ด
+CARD_PLAYED,play/respond,"player_id, card_instance_id, target_player_ids",เล่นการ์ด
+DAMAGE_DEALT,attack/trick/effect,"source_player_id, target_player_id, amount, damage_type",ทำความเสียหาย
+HEAL_APPLIED,provision/skill,"source_player_id, target_player_id, amount",ฟื้นฟู
+PLAYER_DYING,hp <= 0,"player_id, required_heal",สถานะใกล้ตาย
+PLAYER_DIED,dying unresolved,"player_id, killer_player_id",ตาย
+VICTORY_CHECKED,after death/end action,"winner_team, reason",ตรวจชนะ
