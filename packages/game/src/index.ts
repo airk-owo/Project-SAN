@@ -4,11 +4,12 @@ export type Character = { id:string; name:string; hp:number; faction:string; ski
 export type Player = { id:string; username:string; role?:Role; character?:Character; characterOptions:Character[]; hand:Card[]; equipment:Card[]; ready:boolean; confirmedCharacter:boolean; alive:boolean; hp?:number; maxHp?:number };
 export type GamePhase = 'waiting'|'role-vote'|'character-select'|'direction-select'|'playing'|'ended';
 export type PendingAction = { id:string; kind:'attack'; actorId:string; targetId:string; cardId:string };
-export type GameState = { id:string; phase:GamePhase; players:Player[]; deck:Card[]; discard:Card[]; direction:1|-1; currentPlayerId?:string; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
+export type GameState = { id:string; hostId:string; phase:GamePhase; players:Player[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => [...items].sort(() => Math.random() - .5);
 export function createGame(id:string, players:Pick<Player,'id'|'username'>[], cards:Card[]):GameState {
-  return { id, phase:'waiting', players:players.map(p=>({...p, characterOptions:[],hand:[],equipment:[],ready:false,confirmedCharacter:false,alive:true})), deck:shuffled(cards), discard:[], direction:1, log:[], attacksThisTurn:0 };
+  if(!players[0]) throw new Error('A room needs a host');
+  return { id, hostId:players[0].id, phase:'waiting', players:players.map(p=>({...p, characterOptions:[],hand:[],equipment:[],ready:false,confirmedCharacter:false,alive:true})), deck:shuffled(cards), discard:[], direction:1, log:[], attacksThisTurn:0 };
 }
 export type RoleComposition=Record<Role,number>;
 export function dealRoles(state:GameState, composition:RoleComposition){
@@ -59,6 +60,7 @@ export function playCard(state:GameState, actorId:string, cardId:string, targetI
   const actor=state.players.find(p=>p.id===actorId); if(!actor) throw new Error('Unknown player');
   const card=actor.hand.find(c=>c.id===cardId); if(!card) throw new Error('Card is not in your hand');
   actor.hand=actor.hand.filter(c=>c.id!==cardId);
+  state.lastPlayedCard=card;
   const target=targetId?state.players.find(p=>p.id===targetId):actor;
   if(card.effect==='attack'){
     if(!targetId||!target||targetId===actorId||!target.alive) throw new Error('Choose a living opponent to attack');
@@ -81,7 +83,7 @@ export function respondToAttack(state:GameState, responderId:string, cardId?:str
   if(pending.targetId!==responderId) throw new Error('Only the attack target may respond');
   const target=state.players.find(p=>p.id===responderId)!, attacker=state.players.find(p=>p.id===pending.actorId)!;
   const dodge=cardId?target.hand.find(c=>c.id===cardId&&c.effect==='dodge'):undefined;
-  if(dodge){target.hand=target.hand.filter(c=>c.id!==dodge.id);state.discard.push(dodge);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-dodged',actorId:attacker.id,targetId:target.id,cardId:dodge.id,message:`${target.username} dodges ${attacker.username}'s attack.`});}
+  if(dodge){target.hand=target.hand.filter(c=>c.id!==dodge.id);state.lastPlayedCard=dodge;state.discard.push(dodge);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-dodged',actorId:attacker.id,targetId:target.id,cardId:dodge.id,message:`${target.username} dodges ${attacker.username}'s attack.`});}
   else { if(target.hp===undefined) throw new Error('Target has no HP'); target.hp--; state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'damage',actorId:attacker.id,targetId:target.id,cardId:pending.cardId,message:`${target.username} takes 1 damage.`}); if(target.hp<=0) state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'dying',targetId:target.id,message:`${target.username} is dying; healing response is pending manual confirmation.`}); }
   state.pendingAction=undefined;
 }

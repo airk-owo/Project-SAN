@@ -1,5 +1,6 @@
 # Source-data TODO
 
+- [ ] Build room browser, password-protected rooms, and persistent room metadata after Supabase Auth is connected.
 - [x] Import character name, id, HP, faction and skill descriptions from `source/07_characters.csv`.
 - [x] Import exact role composition and 6/8-player voting rules.
 - [x] Import initial-hand, first-turn and emperor-HP rules from `source/คู่มือ WTK.docx` (authoritative).
