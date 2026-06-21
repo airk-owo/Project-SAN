@@ -24,13 +24,16 @@ const [instances,definitions,distributions,roles,phases,rules,characters,events,
   ,JSON.parse(await readFile(resolve(output,'manual.json'),'utf8'))
 ]);
 const byName=new Map(definitions.map(d=>[d.name_th,d]));
-const cards=instances.map(instance=>{const d=byName.get(instance.name_th);if(!d)throw Error(`No definition for ${instance.card_id} (${instance.name_th})`);return {
-  id:instance.card_id,name:instance.name_th,type:d.category,suit:instance.suit,number:instance.rank,
-  image:null,description:d.effect_th,effect:d.backend_effect_key||null,conditions:{timing:d.timing,targetRule:d.target_rule,rangeOrValue:d.range_or_value},source:instance.source
+const allowedCardTypes=new Set(['basic','instant_trick','delayed_trick','weapon','armor','offensive_mount','defensive_mount']);
+const allowedTiming=new Set(['on_play','on_response','on_judgment','on_damage','after_damage','on_attack_declared','on_attack_dodged','passive']);
+const allowedSlots=new Set(['','weapon','armor','offensive_mount','defensive_mount']);
+const cards=instances.map(instance=>{const d=byName.get(instance.name_th);if(!d)throw Error(`No definition for ${instance.card_id} (${instance.name_th})`);if(!allowedCardTypes.has(d.card_type))throw Error(`Invalid card_type for ${d.name_th}`);if(!allowedTiming.has(d.trigger_timing))throw Error(`Invalid trigger_timing for ${d.name_th}`);if(!allowedSlots.has(d.equipment_slot))throw Error(`Invalid equipment_slot for ${d.name_th}`);let effectParams={};try{effectParams=JSON.parse(d.effect_params||'{}')}catch{throw Error(`Invalid effect_params JSON for ${d.name_th}`)}return {
+  id:instance.card_id,name:instance.name_th,type:d.category,cardType:d.card_type,suit:instance.suit,number:instance.rank,
+  image:null,description:d.effect_th,effect:d.backend_effect_key||null,effectParams,triggerTiming:d.trigger_timing,equipmentSlot:d.equipment_slot||null,createsResponseWindow:d.creates_response_window==='true',conditions:{timing:d.timing,targetRule:d.target_rule,rangeOrValue:d.range_or_value},source:instance.source
 };});
 if(cards.length!==108)throw Error(`Expected 108 cards, got ${cards.length}`);
 if(characters.length!==27||characters.some(c=>!c.char_id||!c.name_th||!c.max_hp))throw Error('Characters must contain 27 complete verified records');
-const characterData=characters.map(c=>({id:c.char_id,name:c.name_th,kingdom:c.kingdom,kingdomTh:c.kingdom_th,gender:c.gender,hp:Number(c.max_hp),skills:[c.skill_1_name&&{name:c.skill_1_name,description:c.skill_1_desc},c.skill_2_name&&{name:c.skill_2_name,description:c.skill_2_desc}].filter(Boolean),image:null,source:c.source}));
+const characterData=characters.map(c=>({id:c.char_id,name:c.name_th,kingdom:c.kingdom,kingdomTh:c.kingdom_th,gender:c.gender,hp:Number(c.max_hp),skills:[c.skill_1_name&&{name:c.skill_1_name,description:c.skill_1_desc,condition:c.skill_1_condition||null},c.skill_2_name&&{name:c.skill_2_name,description:c.skill_2_desc,condition:c.skill_2_condition||null}].filter(Boolean),image:null,source:c.source}));
 const roleCompositions={}; for(const r of distributions){const v={emperor:Number(r.emperor),loyalist:Number(r.loyalist),rebel:Number(r.rebel),traitor:Number(r.traitor)};(roleCompositions[r.players]??=[]).push(v);}
 const findManual=(needle)=>manual.paragraphs.find(p=>p.includes(needle));
 const openingDeal=findManual('แจกให้ผู้เล่นทุกคน');

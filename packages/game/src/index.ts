@@ -1,22 +1,91 @@
 export type Role = 'emperor' | 'rebel' | 'loyalist' | 'traitor';
-export type Card = { id:string; name:string; type:string; suit:string; number:string; image:string|null; description:string|null; effect:string|null; conditions:unknown };
-export type Character = { id:string; name:string; hp:number; faction:string; skills: { name:string; description:string }[]; image?:string };
-export type Player = { id:string; username:string; role?:Role; character?:Character; characterOptions:Character[]; hand:Card[]; equipment:Card[]; ready:boolean; confirmedCharacter:boolean; alive:boolean; hp?:number; maxHp?:number };
+export type GameStatus = 'setup'|'character_selection'|'playing'|'finished';
+export type TurnPhase = 'inactive'|'start'|'judgment'|'draw'|'play'|'discard'|'end';
+export type CardZone = 'draw_pile'|'discard_pile'|'hand'|'equipment'|'decision_area'|'current_action'|'revealed';
+export type PlayerIdentity = { userId:string; username:string; displayName?:string };
+export type CharacterState = { characterKey:string; name:string; kingdom?:string; gender?:string; maxHp:number; skillKeys:string[] };
+export type CardInstance = { instanceId:string; definitionKey:string; name:string; cardType:string; suit?:string; rank?:string; color?:'red'|'black'; backendEffectKey?:string; effectParams?:Record<string,unknown> };
+export type EquipmentSlots<T=CardInstance> = { weapon:T|null; armor:T|null; offensiveMount:T|null; defensiveMount:T|null };
+export type TurnState = { activePlayerId:string|null; phase:TurnPhase; direction:'clockwise'|'counterclockwise'; turnNumber:number; attackUsedThisTurn:number };
+export type ResponseRecord = { playerId:string; response:'card'|'decline'|'timeout'; cardInstanceId?:string; createdAt:string };
+export type ResponseWindow = { windowId:string; type:'attack_dodge'|'dying_heal'|'mass_dodge'|'mass_attack'|'duel_attack'|'negate'; sourceActionId:string; requiredPlayerIds:string[]; currentResponderId:string|null; allowedResponseEffectKeys:string[]; responses:ResponseRecord[]; status:'open'|'resolved'|'cancelled'; createdAt:string; dyingPlayerId?:string; responderQueue?:string[] };
+export type CurrentAction = { actionId:string; actorId:string; card:CardInstance|null; effectKey:string; targetIds:string[]; status:'declared'|'resolving'|'resolved'|'cancelled'; createdAt:string };
+export type GameLogEntry = { id:string; type:string; message:string; actorId?:string; targetIds?:string[]; cardInstanceId?:string; createdAt:string };
+export type ChatMessage = { id:string; userId:string; username:string; message:string; createdAt:string };
+/** Canonical player shape for persistence and future engine migration. */
+export type PlayerState = PlayerIdentity & { seatIndex:number; connectionStatus:'online'|'disconnected'; roleKey:string; roleRevealed:boolean; character:CharacterState|null; hp:number; maxHp:number; isAlive:boolean; hand:CardInstance[]; equipment:EquipmentSlots; decisionArea:CardInstance[]; handLimitOverride?:number|null; flags:string[] };
+export type CardType = 'basic'|'instant_trick'|'delayed_trick'|'weapon'|'armor'|'offensive_mount'|'defensive_mount';
+export type TriggerTiming = 'on_play'|'on_response'|'on_judgment'|'on_damage'|'after_damage'|'on_attack_declared'|'on_attack_dodged'|'passive';
+export type EquipmentSlot = 'weapon'|'armor'|'offensive_mount'|'defensive_mount';
+export type EffectParams = Record<string,unknown>;
+export type Card = { id:string; name:string; type:string; cardType:CardType; suit:string; number:string; image:string|null; description:string|null; effect:string|null; effectParams:EffectParams; triggerTiming:TriggerTiming; equipmentSlot:EquipmentSlot|null; createsResponseWindow:boolean; conditions:unknown };
+export type Character = { id:string; name:string; hp:number; faction:string; kingdomTh?:string; skills: { name:string; description:string; condition?:string|null }[]; image?:string };
+export type ConnectionStatus = 'online'|'disconnected';
+export type Player = { id:string; username:string; seatIndex:number; connectionStatus:ConnectionStatus; joinedAt:string; lastSeenAt:string; role?:Role; roleRevealed:boolean; character?:Character; characterOptions:Character[]; hand:Card[]; equipment:EquipmentSlots<Card>; ready:boolean; confirmedCharacter:boolean; alive:boolean; hp?:number; maxHp?:number };
 export type GamePhase = 'waiting'|'role-vote'|'character-select'|'direction-select'|'playing'|'ended';
-export type PendingAction = { id:string; kind:'attack'; actorId:string; targetId:string; cardId:string };
-export type GameState = { id:string; hostId:string; phase:GamePhase; players:Player[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
+export type PendingAction = { id:string; kind:'attack'; actorId:string; targetId:string; cardId:string; responseKey:'dodge'; damage:number };
+export type GameEventName = 'before_attack'|'after_attack'|'before_damage'|'after_damage'|'before_judgment'|'after_judgment'|'before_heal'|'after_heal';
+export type GameEvent = { name:GameEventName; actorId?:string; targetId?:string; card?:Card; amount?:number; cancelled?:boolean; metadata?:Record<string,unknown> };
+export type EventSubscriber = { id:string; event:GameEventName; priority?:number; handle:(state:GameState,event:GameEvent)=>void };
+export const dispatchGameEvent=(state:GameState,event:GameEvent,subscribers:EventSubscriber[]=[])=>([...subscribers].filter(subscriber=>subscriber.event===event.name).sort((a,b)=>(b.priority||0)-(a.priority||0)).forEach(subscriber=>subscriber.handle(state,event)),event);
+export type EffectResolverContext = { state:GameState; actor:Player; card:Card; target?:Player; targetId?:string; subscribers?:EventSubscriber[] };
+export type EffectResolver = (context:EffectResolverContext)=>boolean;
+export type Spectator = { id:string; username:string; connectionStatus:ConnectionStatus; joinedAt:string; lastSeenAt:string };
+/**
+ * The canonical state is serializable. Legacy fields remain temporarily so the
+ * playable prototype and its Socket payload can migrate without a flag day.
+ */
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
-export const shuffled = <T>(items:T[]) => [...items].sort(() => Math.random() - .5);
-export function createGame(id:string, players:Pick<Player,'id'|'username'>[], cards:Card[]):GameState {
-  if(!players[0]) throw new Error('A room needs a host');
-  return { id, hostId:players[0].id, phase:'waiting', players:players.map(p=>({...p, characterOptions:[],hand:[],equipment:[],ready:false,confirmedCharacter:false,alive:true})), deck:shuffled(cards), discard:[], direction:1, log:[], attacksThisTurn:0 };
+export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
+export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
+export const toCardInstance=(card:Card,index=0):CardInstance=>({instanceId:`${card.id}:${index}`,definitionKey:card.id,name:card.name,cardType:card.cardType,suit:card.suit||undefined,rank:card.number||undefined,color:['♥','♦'].includes(card.suit)?'red':['♠','♣'].includes(card.suit)?'black':undefined,backendEffectKey:card.effect||undefined,effectParams:card.effectParams});
+const gameStatusFor=(phase:GamePhase):GameStatus=>phase==='waiting'||phase==='role-vote'?'setup':phase==='character-select'||phase==='direction-select'?'character_selection':phase==='playing'?'playing':'finished';
+const turnPhaseFor=(state:GameState):TurnPhase=>{if(state.phase!=='playing')return 'inactive';return state.turn.phase==='inactive'?(state.hasDrawnThisTurn?'play':'draw'):state.turn.phase};
+/** Keeps the persisted model aligned with the existing prototype fields during migration. */
+export function synchronizeGameState(state:GameState):GameState {
+  state.gameId=state.id; state.roomId=state.id; state.status=gameStatusFor(state.phase); state.updatedAt=new Date().toISOString();
+  state.turn={activePlayerId:state.currentPlayerId||null,phase:turnPhaseFor(state),direction:state.direction===1?'clockwise':'counterclockwise',turnNumber:state.turn.turnNumber,attackUsedThisTurn:state.attacksThisTurn};
+  state.drawPile=state.deck.map(toCardInstance); state.discardPile=state.discard.map(toCardInstance);
+  if(state.pendingAction&&!state.currentAction) state.currentAction={actionId:state.pendingAction.id,actorId:state.pendingAction.actorId,card:toCardInstance(state.lastPlayedCard||state.discard.find(card=>card.id===state.pendingAction!.cardId)||{id:state.pendingAction.cardId,name:'Unknown',type:'',cardType:'basic',suit:'',number:'',image:null,description:null,effect:'attack',effectParams:{},triggerTiming:'on_play',equipmentSlot:null,createsResponseWindow:true,conditions:null}),effectKey:'attack',targetIds:[state.pendingAction.targetId],status:'resolving',createdAt:state.updatedAt};
+  if(state.pendingAction&&!state.responseWindow) state.responseWindow={windowId:`response:${state.pendingAction.id}`,type:'attack_dodge',sourceActionId:state.pendingAction.id,requiredPlayerIds:[state.pendingAction.targetId],currentResponderId:state.pendingAction.targetId,allowedResponseEffectKeys:[state.pendingAction.responseKey],responses:[],status:'open',createdAt:state.updatedAt};
+  return state;
 }
+export const getPlayerById=(state:GameState,playerId:string)=>state.players.find(player=>player.id===playerId);
+export const getAlivePlayers=(state:GameState)=>state.players.filter(player=>player.alive);
+export const getPlayersInSeatOrder=(state:GameState)=>[...state.players].sort((a,b)=>a.seatIndex-b.seatIndex);
+export const getAlivePlayersInSeatOrder=(state:GameState)=>getPlayersInSeatOrder(state).filter(player=>player.alive);
+export function getBaseDistanceBetweenPlayers(state:GameState,fromPlayerId:string,toPlayerId:string){
+  if(fromPlayerId===toPlayerId)return 0;
+  const players=getAlivePlayersInSeatOrder(state),fromIndex=players.findIndex(player=>player.id===fromPlayerId),toIndex=players.findIndex(player=>player.id===toPlayerId);
+  if(fromIndex<0||toIndex<0)return null;
+  const clockwise=Math.abs(fromIndex-toIndex);return Math.min(clockwise,players.length-clockwise);
+}
+/** TODO: apply weapon range and offensive/defensive mount modifiers here. */
+export const getAttackRange=(_state:GameState,_playerId:string)=>1;
+export function canTargetWithAttack(state:GameState,attackerId:string,targetId:string){
+  const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,targetId),distance=getBaseDistanceBetweenPlayers(state,attackerId,targetId);
+  return Boolean(attacker&&target&&attacker.alive&&target.alive&&attackerId!==targetId&&distance!==null&&distance<=getAttackRange(state,attackerId));
+}
+export const getTopDiscardCard=(state:GameState)=>state.discardPile.at(-1)??null;
+export const getCurrentActionSummary=(state:GameState)=>state.currentAction?{actorId:state.currentAction.actorId,targetIds:state.currentAction.targetIds,effectKey:state.currentAction.effectKey,cardName:state.currentAction.card?.name??null,status:state.currentAction.status}:null;
+export type PublicCardView = Pick<Card,'id'|'name'|'type'|'cardType'|'suit'|'number'|'image'|'description'|'effect'|'equipmentSlot'>;
+export type PublicPlayerState = Omit<Player,'hand'|'characterOptions'> & { hand:PublicCardView[]; handCount:number; characterOptions:Character[] };
+export type PublicResponseRecord = Omit<ResponseRecord,'cardInstanceId'>;
+export type PublicResponseWindow = Omit<ResponseWindow,'responses'> & { responses:PublicResponseRecord[] };
+export type PublicGameState = Omit<GameState,'players'|'deck'|'drawPile'|'responseWindow'> & { viewerId:string; isSpectator:boolean; deck:{length:number}; drawPileCount:number; responseWindow:PublicResponseWindow|null; players:PublicPlayerState[] };
+export function createGame(id:string, host:Pick<Spectator,'id'|'username'>, cards:Card[]):GameState {
+  const now=new Date().toISOString();
+  const deck=shuffled(cards);
+  return { gameId:id, roomId:id, status:'setup', createdAt:now, updatedAt:now, turn:{activePlayerId:null,phase:'inactive',direction:'clockwise',turnNumber:0,attackUsedThisTurn:0}, drawPile:deck.map(toCardInstance), discardPile:[], currentAction:null, responseWindow:null, chat:[], id, hostId:host.id, phase:'waiting', players:[], spectators:[{...host,connectionStatus:'online',joinedAt:now,lastSeenAt:now}], deck, discard:[], direction:1, hasDrawnThisTurn:false, log:[], attacksThisTurn:0 };
+}
+export const createSeatedPlayer=(member:Spectator,seatIndex:number):Player=>({...member,seatIndex,role:undefined,roleRevealed:false,character:undefined,characterOptions:[],hand:[],equipment:createEmptyEquipmentSlots<Card>(),ready:false,confirmedCharacter:false,alive:true});
 export type RoleComposition=Record<Role,number>;
 export function dealRoles(state:GameState, composition:RoleComposition){
   if(state.phase!=='waiting') throw new Error('Roles can only be dealt from the waiting room');
   const roles=shuffled((Object.entries(composition) as [Role,number][]).flatMap(([role,count])=>Array.from({length:count},()=>role)));
   if(roles.length!==state.players.length||composition.emperor!==1) throw new Error('Invalid role composition');
-  state.players.forEach((player,index)=>{player.role=roles[index]}); state.phase='character-select';
+  state.players.forEach((player,index)=>{player.role=roles[index];player.roleRevealed=player.role==='emperor'}); state.phase='character-select';
 }
 const uniqueById=(characters:Character[])=>[...new Map(characters.map(c=>[c.id,c])).values()];
 /** The manual: emperor chooses Cao Cao, Liu Bei, Sun Quan plus two random cards. */
@@ -47,56 +116,233 @@ export function selectCharacter(state:GameState, playerId:string, characterId:st
 export function beginPlayAfterCharacters(state:GameState, initialHandSize:number){
   if(!state.players.every(p=>p.confirmedCharacter)) throw new Error('All players must confirm a character');
   state.players.forEach(p=>draw(state,p.id,initialHandSize));
-  state.direction=-1; state.currentPlayerId=state.players.find(p=>p.role==='emperor')?.id; state.phase='playing';
-  state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'game-started',message:'Characters revealed; emperor takes the first turn counterclockwise.'});
+  state.direction=-1; state.currentPlayerId=state.players.find(p=>p.role==='emperor')?.id; state.phase='playing'; state.turn={activePlayerId:state.currentPlayerId||null,phase:'draw',direction:'counterclockwise',turnNumber:1,attackUsedThisTurn:0}; state.hasDrawnThisTurn=false; state.attacksThisTurn=0;
+  state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'game-started',message:'เปิดเผยขุนพลแล้ว จักรพรรดิเป็นผู้เล่นคนแรก และเล่นทวนเข็มนาฬิกา'});
 }
 export function draw(state:GameState, playerId:string, count=1) {
   const player = state.players.find(p=>p.id===playerId); if (!player) throw new Error('Unknown player');
   for(let i=0;i<count;i++) { if(!state.deck.length && state.discard.length) state.deck=shuffled(state.discard.splice(0)); const card=state.deck.pop(); if(card) player.hand.push(card); }
 }
-export function playCard(state:GameState, actorId:string, cardId:string, targetId?:string) {
-  if(state.phase!=='playing' || state.currentPlayerId!==actorId) throw new Error('It is not your turn');
-  if(state.pendingAction) throw new Error('Resolve the pending response first');
-  const actor=state.players.find(p=>p.id===actorId); if(!actor) throw new Error('Unknown player');
-  const card=actor.hand.find(c=>c.id===cardId); if(!card) throw new Error('Card is not in your hand');
-  actor.hand=actor.hand.filter(c=>c.id!==cardId);
-  state.lastPlayedCard=card;
-  const target=targetId?state.players.find(p=>p.id===targetId):actor;
-  if(card.effect==='attack'){
-    if(!targetId||!target||targetId===actorId||!target.alive) throw new Error('Choose a living opponent to attack');
-    if(state.attacksThisTurn>=1) throw new Error('You may only use one attack per turn');
-    state.attacksThisTurn++; state.discard.push(card);
-    state.pendingAction={id:crypto.randomUUID(),kind:'attack',actorId,targetId,cardId};
-    state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-pending',actorId,targetId,cardId,message:`${actor.username} attacks ${target.username}; waiting for dodge.`}); return;
-  }
-  if(card.effect==='heal'){
-    if(!target||!target.alive||target.hp===undefined||target.maxHp===undefined||target.hp>=target.maxHp) throw new Error('Choose a living wounded player');
-    target.hp=Math.min(target.maxHp,target.hp+1); state.discard.push(card);
-    state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'healed',actorId,targetId:target.id,cardId,message:`${actor.username} heals ${target.username}.`}); return;
-  }
-  if(card.effect==='dodge') throw new Error('Dodge can only be used in response to an attack');
-  if(card.type.includes('อุปกรณ์')) actor.equipment.push(card); else state.discard.push(card);
-  state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'card-played',actorId,targetId,cardId,message:`${actor.username} played ${card.name}`});
+const numberParam=(card:Card,key:string,fallback:number)=>{const value=card.effectParams[key];return typeof value==='number'?value:fallback};
+const characterName=(player:Player)=>player.character?.name||player.username;
+const findHandCard=(player:Player,cardInstanceId:string)=>player.hand.find((card,index)=>card.id===cardInstanceId||toCardInstance(card,index).instanceId===cardInstanceId);
+const logAction=(state:GameState,type:string,message:string,actorId?:string,targetId?:string,cardId?:string)=>state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type,message,actorId,targetId,cardId});
+const moveToDiscard=(state:GameState,card:Card,setLastPlayed=true)=>{state.discard.push(card);state.discardPile.push(toCardInstance(card,state.discard.length-1));if(setLastPlayed)state.lastPlayedCard=card};
+type RuntimeEquipmentSlot=keyof EquipmentSlots<Card>;
+const equipmentSlotForCard=(card:Card):RuntimeEquipmentSlot|undefined=>{switch(card.cardType){case 'weapon':return 'weapon';case 'armor':return 'armor';case 'offensive_mount':return 'offensiveMount';case 'defensive_mount':return 'defensiveMount';default:break;}switch(card.equipmentSlot){case 'weapon':return 'weapon';case 'armor':return 'armor';case 'offensive_mount':return 'offensiveMount';case 'defensive_mount':return 'defensiveMount';default:return undefined;}};
+export const isEquipmentCard=(card:Card)=>Boolean(equipmentSlotForCard(card));
+
+export const getDiscardRequirement=(state:GameState,playerId:string)=>{const player=getPlayerById(state,playerId);return player?.hp===undefined?0:Math.max(0,player.hand.length-player.hp)};
+export function getNextAlivePlayer(state:GameState,currentPlayerId:string){
+  const players=getPlayersInSeatOrder(state),currentIndex=players.findIndex(player=>player.id===currentPlayerId); if(currentIndex<0)return undefined;
+  for(let step=1;step<=players.length;step++){const index=(currentIndex+step*state.direction+players.length)%players.length; if(players[index].alive)return players[index];}
+  return undefined;
 }
-export function respondToAttack(state:GameState, responderId:string, cardId?:string){
+export function canPlayerAct(state:GameState,playerId:string){return state.phase==='playing'&&state.turn.activePlayerId===playerId&&state.turn.phase==='play'&&!state.responseWindow&&!state.currentAction;}
+export function canPlayCardNow(state:GameState,playerId:string,card:Card){
+  if(card.effect==='dodge')return state.responseWindow?.type==='attack_dodge'&&state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
+  if(card.effect==='heal'&&state.responseWindow?.type==='dying_heal')return state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
+  return (card.effect==='attack'||card.effect==='heal'||isEquipmentCard(card))&&canPlayerAct(state,playerId);
+}
+export function startTurn(state:GameState,playerId:string){
+  const player=getPlayerById(state,playerId); if(!player||!player.alive)throw new Error('Cannot start a turn for this player');
+  state.currentPlayerId=playerId; state.hasDrawnThisTurn=false; state.attacksThisTurn=0; state.turn={activePlayerId:playerId,phase:'draw',direction:state.direction===1?'clockwise':'counterclockwise',turnNumber:Math.max(1,state.turn.turnNumber),attackUsedThisTurn:0};
+  logAction(state,'turn-start',`${characterName(player)} เริ่มเทิร์น`,player.id); synchronizeGameState(state);
+}
+/** Keeps the visible top discard card on the table and shuffles older discards. TODO: seeded RNG for replay. */
+export function reshuffleDiscardIntoDrawPile(state:GameState){
+  if(state.deck.length||state.discard.length<2)return 0;
+  const topDiscard=state.discard.at(-1)!,recycled=state.discard.slice(0,-1);
+  state.deck=shuffled(recycled);state.discard=[topDiscard];state.lastPlayedCard=topDiscard;
+  logAction(state,'draw-pile-reshuffled','กองจั่วหมด จึงสับกองทิ้งเป็นกองจั่วใหม่');synchronizeGameState(state);return recycled.length;
+}
+export function drawCards(state:GameState,playerId:string,amount:number){
+  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('It is not the draw phase for this player');
+  const player=getPlayerById(state,playerId); if(!player)throw new Error('Unknown player'); let drawn=0;
+  for(let index=0;index<amount;index++){if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);const card=state.deck.pop();if(!card){if(index===0||drawn<amount)logAction(state,'draw-pile-empty','กองจั่วและกองทิ้งมีไพ่ไม่พอสำหรับการจั่ว');break;}player.hand.push(card);drawn++;}
+  state.hasDrawnThisTurn=true; state.turn.phase='play'; logAction(state,'turn-draw',`${characterName(player)} จั่วการ์ด ${drawn} ใบ`,player.id); logAction(state,'turn-play',`${characterName(player)} เข้าสู่ช่วงเล่นไพ่`,player.id); synchronizeGameState(state); return drawn;
+}
+export function advancePhase(state:GameState){
+  if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
+  const playerId=state.turn.activePlayerId,player=playerId?getPlayerById(state,playerId):undefined; if(!player)throw new Error('There is no active player');
+  if(state.turn.phase==='start'){state.turn.phase='draw';logAction(state,'turn-draw-phase',`${characterName(player)} เข้าสู่ช่วงจั่ว`,player.id);}
+  else if(state.turn.phase==='play'){state.turn.phase='discard';logAction(state,'turn-discard-phase',`${characterName(player)} เข้าสู่ช่วงทิ้งไพ่`,player.id);}
+  else if(state.turn.phase==='discard'){if(getDiscardRequirement(state,player.id)>0)throw new Error('Discard cards until your hand is at or below HP');state.turn.phase='end';}
+  else throw new Error('Use Draw or End Turn for the current phase');
+  synchronizeGameState(state);
+}
+
+function openDyingRescueWindow(state:GameState,dyingPlayerId:string,sourceActionId=state.currentAction?.actionId||crypto.randomUUID()){
+  const dyingPlayer=getPlayerById(state,dyingPlayerId);if(!dyingPlayer||!dyingPlayer.alive)throw new Error('Dying player is not eligible for rescue');
+  const alive=getAlivePlayersInSeatOrder(state),dyingIndex=alive.findIndex(player=>player.id===dyingPlayerId);if(dyingIndex<0)throw new Error('Dying player is missing from seat order');
+  const queue=[...alive.slice(dyingIndex),...alive.slice(0,dyingIndex)].map(player=>player.id),now=new Date().toISOString();
+  state.responseWindow={windowId:crypto.randomUUID(),type:'dying_heal',sourceActionId,dyingPlayerId,requiredPlayerIds:queue,currentResponderId:queue[0]||null,allowedResponseEffectKeys:['heal'],responses:[],status:'open',createdAt:now,responderQueue:queue};
+  logAction(state,'dying',`${characterName(dyingPlayer)} เข้าสู่สถานะใกล้ตาย`,undefined,dyingPlayer.id);
+  logAction(state,'dying-heal-request',`กำลังขอ เสบียง เพื่อช่วย ${characterName(dyingPlayer)}`,undefined,dyingPlayer.id);
+}
+
+/** Damage opens a dying-heal window at 0 HP; death waits until every responder declines. */
+export function applyDamage(state:GameState,targetId:string,amount:number){
+  const target=getPlayerById(state,targetId); if(!target||!target.alive||target.hp===undefined) throw new Error('Choose a living target');
+  target.hp=Math.max(0,target.hp-amount); logAction(state,'damage',`${characterName(target)} เสีย ${amount} HP`,undefined,target.id);
+  if(target.hp===0)openDyingRescueWindow(state,target.id);
+}
+
+export function healPlayer(state:GameState,playerId:string,amount:number){
+  const player=getPlayerById(state,playerId); if(!player||!player.alive||player.hp===undefined||player.maxHp===undefined) throw new Error('Choose a living player');
+  const restored=Math.min(amount,player.maxHp-player.hp); player.hp+=restored; logAction(state,'healed',`${characterName(player)} ฟื้นฟู ${restored} HP`,player.id);
+  return restored;
+}
+
+export function declineResponse(state:GameState,playerId:string){
+  const window=state.responseWindow;if(!window||window.status!=='open'||window.currentResponderId!==playerId)throw new Error('You cannot decline this response');
+  const responder=getPlayerById(state,playerId);if(!responder)throw new Error('Unknown responder');window.responses.push({playerId,response:'decline',createdAt:new Date().toISOString()});
+  if(window.type==='attack_dodge'){logAction(state,'attack-declined',`${characterName(responder)} ไม่ตอบสนอง`,responder.id);return resolveCurrentAction(state);}
+  if(window.type!=='dying_heal')throw new Error('Unsupported response window');
+  const dying=getPlayerById(state,window.dyingPlayerId||'');if(!dying)throw new Error('Dying player is missing');const queue=window.responderQueue||window.requiredPlayerIds;
+  const next=queue.find(id=>!window.responses.some(response=>response.playerId===id));
+  if(next){const nextPlayer=getPlayerById(state,next);if(!nextPlayer)throw new Error('Responder is missing');window.currentResponderId=next;logAction(state,'dying-heal-request',`กำลังรอ ${characterName(nextPlayer)} ว่าจะใช้ เสบียง ช่วย ${characterName(dying)} หรือไม่`,next,dying.id);synchronizeGameState(state);return;}
+  window.status='resolved';state.responseWindow=null;dying.alive=false;logAction(state,'dying-unrescued',`ไม่มีผู้เล่นช่วย ${characterName(dying)}`,undefined,dying.id);logAction(state,'player-died',`${characterName(dying)} ตาย`,undefined,dying.id); // TODO: move turn if the dead player was active.
+  synchronizeGameState(state);
+}
+
+export function playAttack(state:GameState,attackerId:string,targetId:string,cardInstanceId:string){
+  if(state.currentAction||state.responseWindow) throw new Error('Resolve the current action first');
+  const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,targetId); if(!attacker||!target||!attacker.alive||!target.alive||attacker.id===target.id) throw new Error('Choose a living opponent to attack');
+  if(!canTargetWithAttack(state,attackerId,targetId)) throw new Error('Target is out of attack range');
+  if(!canPlayerAct(state,attackerId)) throw new Error('Attack can only be played by the active player during the play phase');
+  if(state.turn.attackUsedThisTurn>=1) throw new Error('You may only use one attack per turn'); // TODO: weapon exceptions such as unlimited_attack_per_turn.
+  const card=findHandCard(attacker,cardInstanceId); if(!card||card.effect!=='attack') throw new Error('Attack card is not in your hand');
+  attacker.hand=attacker.hand.filter(item=>item!==card); state.lastPlayedCard=card; state.attacksThisTurn++; state.turn.attackUsedThisTurn++;
+  const now=new Date().toISOString(),actionId=crypto.randomUUID();
+  state.currentAction={actionId,actorId:attacker.id,card:toCardInstance(card),effectKey:'attack',targetIds:[target.id],status:'declared',createdAt:now};
+  state.responseWindow={windowId:crypto.randomUUID(),type:'attack_dodge',sourceActionId:actionId,requiredPlayerIds:[target.id],currentResponderId:target.id,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:now};
+  state.pendingAction={id:actionId,kind:'attack',actorId:attacker.id,targetId:target.id,cardId:card.id,responseKey:'dodge',damage:numberParam(card,'damage',1)};
+  logAction(state,'attack-declared',`${characterName(attacker)} ใช้ โจมตี ใส่ ${characterName(target)}`,attacker.id,target.id,card.id);
+  synchronizeGameState(state);
+}
+
+export function resolveCurrentAction(state:GameState){
+  const action=state.currentAction; if(!action) throw new Error('There is no current action to resolve');
+  if(action.effectKey!=='attack') throw new Error('Only attack resolution is supported');
+  const targetId=action.targetIds[0],target=getPlayerById(state,targetId),attacker=getPlayerById(state,action.actorId); if(!target||!attacker) throw new Error('Action participant is missing');
+  const attackWindow=state.responseWindow,response=attackWindow?.responses.find(item=>item.playerId===targetId);
+  if(!response) throw new Error('Attack response is still required');
+  if(response?.response==='card') logAction(state,'attack-cancelled','โจมตีถูกยกเลิก',attacker.id,target.id,action.card?.definitionKey);
+  else applyDamage(state,target.id,numberParam(state.lastPlayedCard||{effectParams:{} as EffectParams} as Card,'damage',1));
+  if(state.lastPlayedCard) moveToDiscard(state,state.lastPlayedCard);
+  action.status='resolved'; if(attackWindow)attackWindow.status='resolved'; state.currentAction=null; if(state.responseWindow===attackWindow)state.responseWindow=null; state.pendingAction=undefined;
+  synchronizeGameState(state);
+}
+
+export function playDodge(state:GameState,playerId:string,cardInstanceId:string){
+  const window=state.responseWindow,action=state.currentAction; if(!window||!action||window.type!=='attack_dodge'||window.status!=='open'||window.currentResponderId!==playerId) throw new Error('You cannot dodge now');
+  const player=getPlayerById(state,playerId); if(!player) throw new Error('Unknown player'); const card=findHandCard(player,cardInstanceId); if(!card||card.effect!=='dodge') throw new Error('Dodge card is not in your hand');
+  player.hand=player.hand.filter(item=>item!==card); moveToDiscard(state,card,false); window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});
+  logAction(state,'attack-dodged',`${characterName(player)} ใช้ หลบ`,player.id,action.actorId,card.id); resolveCurrentAction(state);
+}
+
+export function playHeal(state:GameState,playerId:string,cardInstanceId:string){
+  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Choose a living player');const card=findHandCard(player,cardInstanceId);if(!card||card.effect!=='heal')throw new Error('Heal card is not in your hand');
+  const window=state.responseWindow;
+  if(window?.type==='dying_heal'){
+    if(window.status!=='open'||window.currentResponderId!==playerId)throw new Error('You cannot use Heal in this rescue window');
+    const dying=getPlayerById(state,window.dyingPlayerId||'');if(!dying||dying.hp===undefined)throw new Error('Dying player is missing');
+    player.hand=player.hand.filter(item=>item!==card);logAction(state,'dying-heal-played',`${characterName(player)} ใช้ เสบียง ช่วย ${characterName(dying)}`,player.id,dying.id,card.id);healPlayer(state,dying.id,numberParam(card,'heal_amount',1));moveToDiscard(state,card);
+    window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});window.status='resolved';state.responseWindow=null;logAction(state,'dying-rescued',`${characterName(dying)} รอดจากสถานะใกล้ตาย`,undefined,dying.id);synchronizeGameState(state);return;
+  }
+  if(state.currentAction||window) throw new Error('Resolve the current action first');
+  if(player.hp===undefined||player.maxHp===undefined||player.hp>=player.maxHp) throw new Error('You can only heal yourself while wounded');
+  if(!canPlayerAct(state,playerId)) throw new Error('Heal can only be played by the active player during the play phase');
+  player.hand=player.hand.filter(item=>item!==card); logAction(state,'heal-played',`${characterName(player)} ใช้ เสบียง`,player.id,undefined,card.id); healPlayer(state,player.id,numberParam(card,'heal_amount',1)); moveToDiscard(state,card); synchronizeGameState(state);
+}
+
+/** Equips a card by metadata only. Individual equipment effects remain TODO. */
+export function playEquipment(state:GameState,playerId:string,cardInstanceId:string){
+  if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
+  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Choose a living player');
+  if(!canPlayerAct(state,playerId))throw new Error('Equipment can only be played by the active player during the play phase');
+  const card=findHandCard(player,cardInstanceId),slot=card?equipmentSlotForCard(card):undefined;if(!card||!slot)throw new Error('Equipment card is not in your hand');
+  player.hand=player.hand.filter(item=>item!==card);const replaced=player.equipment[slot];
+  if(replaced){moveToDiscard(state,replaced,false);logAction(state,'equipment-replaced',`${characterName(player)} เปลี่ยนอุปกรณ์จาก ${replaced.name} เป็น ${card.name}`,player.id,undefined,card.id);}
+  else logAction(state,'equipment-equipped',`${characterName(player)} ติดตั้ง ${card.name}`,player.id,undefined,card.id);
+  player.equipment[slot]=card;synchronizeGameState(state);
+}
+const effectResolvers:Record<string,EffectResolver>={
+  attack:({state,actor,card,target,targetId,subscribers=[]})=>{if(!targetId||!target||target.id===actor.id||!target.alive)throw new Error('Choose a living opponent to attack');if(state.attacksThisTurn>=1)throw new Error('You may only use one attack per turn');const event=dispatchGameEvent(state,{name:'before_attack',actorId:actor.id,targetId:target.id,card,amount:numberParam(card,'damage',1)},subscribers);if(event.cancelled)return true;state.attacksThisTurn++;state.discard.push(card);state.pendingAction={id:crypto.randomUUID(),kind:'attack',actorId:actor.id,targetId:target.id,cardId:card.id,responseKey:'dodge',damage:event.amount||1};state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-pending',actorId:actor.id,targetId:target.id,cardId:card.id,message:`${actor.username} ใช้โจมตีใส่ ${target.username} กำลังรอการตอบโต้`});dispatchGameEvent(state,{name:'after_attack',actorId:actor.id,targetId:target.id,card,amount:event.amount},subscribers);return true},
+  heal:({state,actor,card,target,subscribers=[]})=>{const recipient=target||actor;if(!recipient.alive||recipient.hp===undefined||recipient.maxHp===undefined)throw new Error('Choose a living player');if(recipient.id===actor.id&&recipient.hp>=recipient.maxHp)throw new Error('You can only heal yourself while wounded');if(recipient.id!==actor.id&&recipient.hp>0)throw new Error('You can only heal another player during a dying window');const amount=numberParam(card,'heal_amount',1),event=dispatchGameEvent(state,{name:'before_heal',actorId:actor.id,targetId:recipient.id,card,amount},subscribers);if(event.cancelled)return true;recipient.hp=Math.min(recipient.maxHp,recipient.hp+(event.amount||amount));state.discard.push(card);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'healed',actorId:actor.id,targetId:recipient.id,cardId:card.id,message:`${actor.username} ใช้เสบียงฟื้นฟูพลังชีวิตให้ ${recipient.username}`});dispatchGameEvent(state,{name:'after_heal',actorId:actor.id,targetId:recipient.id,card,amount:event.amount},subscribers);return true}
+};
+export function playCard(state:GameState, actorId:string, cardId:string, targetId?:string, subscribers:EventSubscriber[]=[]){
+  if(state.phase!=='playing'||state.currentPlayerId!==actorId)throw new Error('It is not your turn');if(!state.hasDrawnThisTurn)throw new Error('ต้องจั่วไพ่ก่อนเล่นการ์ด');if(state.pendingAction)throw new Error('Resolve the pending response first');
+  const actor=state.players.find(player=>player.id===actorId);if(!actor)throw new Error('Unknown player');const card=actor.hand.find(item=>item.id===cardId);if(!card)throw new Error('Card is not in your hand');const target=targetId?state.players.find(player=>player.id===targetId):undefined;
+  if(card.effect==='attack'){if(!targetId)throw new Error('Choose a target');return playAttack(state,actorId,targetId,cardId);}
+  if(card.effect==='heal') return playHeal(state,actorId,cardId);
+  if(isEquipmentCard(card)) return playEquipment(state,actorId,cardId);
+  actor.hand=actor.hand.filter(item=>item.id!==cardId);state.lastPlayedCard=card;
+  if(card.effect==='dodge')throw new Error('Dodge can only be used in response to an attack');
+  const resolved=card.effect?effectResolvers[card.effect]?.({state,actor,card,target,targetId,subscribers}):false;if(resolved)return;
+  state.discard.push(card);
+  state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'card-played',actorId,targetId,cardId,message:`${actor.username} ใช้ไพ่ ${card.name}`});
+}
+export function respondToAttack(state:GameState, responderId:string, cardId?:string, subscribers:EventSubscriber[]=[]){
   const pending=state.pendingAction; if(!pending||pending.kind!=='attack') throw new Error('There is no attack to respond to');
   if(pending.targetId!==responderId) throw new Error('Only the attack target may respond');
   const target=state.players.find(p=>p.id===responderId)!, attacker=state.players.find(p=>p.id===pending.actorId)!;
+  if(cardId) return playDodge(state,responderId,cardId);
+  const window=state.responseWindow; if(window)return declineResponse(state,responderId);
   const dodge=cardId?target.hand.find(c=>c.id===cardId&&c.effect==='dodge'):undefined;
-  if(dodge){target.hand=target.hand.filter(c=>c.id!==dodge.id);state.lastPlayedCard=dodge;state.discard.push(dodge);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-dodged',actorId:attacker.id,targetId:target.id,cardId:dodge.id,message:`${target.username} dodges ${attacker.username}'s attack.`});}
-  else { if(target.hp===undefined) throw new Error('Target has no HP'); target.hp--; state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'damage',actorId:attacker.id,targetId:target.id,cardId:pending.cardId,message:`${target.username} takes 1 damage.`}); if(target.hp<=0) state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'dying',targetId:target.id,message:`${target.username} is dying; healing response is pending manual confirmation.`}); }
+  if(dodge){target.hand=target.hand.filter(c=>c.id!==dodge.id);state.lastPlayedCard=dodge;state.discard.push(dodge);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-dodged',actorId:attacker.id,targetId:target.id,cardId:dodge.id,message:`${target.username} ใช้หลบการโจมตีของ ${attacker.username}`});}
+  else { if(target.hp===undefined) throw new Error('Target has no HP');const attackCard=state.discard.find(card=>card.id===pending.cardId);const event=dispatchGameEvent(state,{name:'before_damage',actorId:attacker.id,targetId:target.id,card:attackCard,amount:pending.damage},subscribers);if(!event.cancelled){target.hp-=event.amount||pending.damage;state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'damage',actorId:attacker.id,targetId:target.id,cardId:pending.cardId,message:`${target.username} ได้รับความเสียหาย ${event.amount||pending.damage} หน่วยจาก ${attacker.username}`});dispatchGameEvent(state,{name:'after_damage',actorId:attacker.id,targetId:target.id,card:attackCard,amount:event.amount},subscribers);if(target.hp<=0) state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'dying',targetId:target.id,message:`${target.username} อยู่ในสถานะใกล้ตาย กำลังรอการใช้เสบียงช่วยเหลือ`});} }
   state.pendingAction=undefined;
 }
-export function endTurn(state:GameState, playerId:string){
+export function endTurn(state:GameState, playerId=state.turn.activePlayerId||''){
+  if(state.turn.activePlayerId){
+    if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
+    if(state.turn.activePlayerId!==playerId)throw new Error('Only the active player can end this turn');
+    const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+    if(state.turn.phase==='draw')throw new Error('Draw cards before ending the turn');
+    if(state.turn.phase==='play'){state.turn.phase='discard';logAction(state,'turn-discard-phase',`${characterName(player)} เข้าสู่ช่วงทิ้งไพ่`,player.id);}
+    const required=getDiscardRequirement(state,playerId);if(required>0){logAction(state,'hand-limit-required',`${characterName(player)} ต้องทิ้งไพ่ ${required} ใบ`,player.id);synchronizeGameState(state);return;}
+    state.turn.phase='end';logAction(state,'turn-end',`${characterName(player)} จบเทิร์น`,player.id);
+    const next=getNextAlivePlayer(state,playerId);if(!next)throw new Error('No alive player can take the next turn');
+    state.turn.turnNumber++;startTurn(state,next.id);return;
+  }
   if(state.phase!=='playing'||state.currentPlayerId!==playerId||state.pendingAction) throw new Error('Cannot end this turn');
-  const current=state.players.findIndex(p=>p.id===playerId); for(let step=1;step<=state.players.length;step++){const next=state.players[(current+step*state.direction+state.players.length*10)%state.players.length];if(next.alive){state.currentPlayerId=next.id;state.attacksThisTurn=0;draw(state,next.id,2);return;}}
+  if(!state.hasDrawnThisTurn) throw new Error('ต้องจั่วไพ่ก่อนจบเทิร์น');
+  const player=state.players.find(p=>p.id===playerId); if(!player) throw new Error('Unknown player');
+  if(player.hp!==undefined&&player.hand.length>player.hp) throw new Error('ต้องทิ้งไพ่บนมือให้ไม่เกินพลังชีวิตก่อนจบเทิร์น');
+  const current=state.players.findIndex(p=>p.id===playerId); for(let step=1;step<=state.players.length;step++){const next=state.players[(current+step*state.direction+state.players.length*10)%state.players.length];if(next.alive){state.currentPlayerId=next.id;state.attacksThisTurn=0;state.hasDrawnThisTurn=false;state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'turn-start',actorId:next.id,message:`เริ่มเทิร์นของ ${next.username}`});return;}}
 }
-export function publicState(state:GameState, viewerId:string) {
+export function drawForTurn(state:GameState, playerId:string){
+  if(state.turn.activePlayerId)return drawCards(state,playerId,2);
+  if(state.phase!=='playing'||state.currentPlayerId!==playerId||state.pendingAction) throw new Error('ยังไม่ถึงเวลาจั่วไพ่');
+  if(state.hasDrawnThisTurn) throw new Error('คุณจั่วไพ่ในเทิร์นนี้แล้ว');
+  draw(state,playerId,2);state.hasDrawnThisTurn=true;
+  const player=state.players.find(p=>p.id===playerId)!;state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'turn-draw',actorId:player.id,message:`${player.username} จั่วไพ่ 2 ใบ`});
+}
+export function discardForHandLimit(state:GameState, playerId:string, cardIds:string[]){
+  if(state.phase!=='playing'||state.currentPlayerId!==playerId||state.pendingAction) throw new Error('You cannot discard now');
+  if(!state.hasDrawnThisTurn) throw new Error('ต้องจั่วไพ่ก่อนทิ้งไพ่');
+  const player=state.players.find(p=>p.id===playerId); if(!player||player.hp===undefined) throw new Error('Unknown player');
+  const required=Math.max(0,player.hand.length-player.hp), unique=[...new Set(cardIds)];
+  if(required===0) throw new Error('You do not need to discard cards');
+  if(unique.length!==required) throw new Error(`You must discard exactly ${required} card(s)`);
+  const selected=player.hand.filter(card=>unique.includes(card.id)); if(selected.length!==required) throw new Error('A selected card is not in your hand');
+  player.hand=player.hand.filter(card=>!unique.includes(card.id));state.discard.push(...selected);state.lastPlayedCard=selected.at(-1);
+  state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'hand-limit-discard',actorId:player.id,message:`${player.username} ทิ้งไพ่ ${selected.length} ใบเพื่อให้จำนวนไพ่บนมือไม่เกินพลังชีวิต`});
+  synchronizeGameState(state);
+}
+export function createPublicGameState(state:GameState, viewerId:string):PublicGameState {
+  synchronizeGameState(state);
   const allCharactersChosen=state.players.every(p=>p.confirmedCharacter);
-  return {...state, viewerId, players: state.players.map(p=>({...p,
-    role:p.id===viewerId||p.role==='emperor'?p.role:undefined,
+  const { drawPile, deck, responseWindow, players, ...publicState }=state;
+  const publicResponseWindow=responseWindow?{...responseWindow,responses:responseWindow.responses.map(({cardInstanceId:_cardInstanceId,...response})=>response)}:null;
+  return {...publicState, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
+    role:p.id===viewerId||p.roleRevealed?p.role:undefined,
     character:p.id===viewerId||p.role==='emperor'||allCharactersChosen?p.character:undefined,
     characterOptions:p.id===viewerId?p.characterOptions:[],
-    hand:p.id===viewerId?p.hand:[], handCount:p.hand.length
+    hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot})):[], handCount:p.hand.length
   }))};
 }
+/** @deprecated Use createPublicGameState for new server code. */
+export const publicState=createPublicGameState;
