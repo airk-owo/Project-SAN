@@ -43,16 +43,23 @@ Future character skills register `EventSubscriber` entries with priority. They m
 
 | Key | Logic |
 | --- | --- |
-| `discard_target_card` | Choose another player then one hand, equipment, or decision-area card. Move chosen card to discard. |
+| `discard_target_card` | Choose another player then a hidden hand position or visible equipment card. Move chosen card to discard; decision-area support is TODO. |
 | `all_others_dodge_or_damage` | Build clockwise response queue of all living players except actor. Each uses `dodge` or takes 1 damage, resolving dying windows before next queue member. |
 | `heal_all_living` | Restore 1 HP to every living player, capped at max HP. Each heal may trigger character hooks. |
 | `draw_cards` | Actor draws the configured amount (currently 2). |
 | `coerce_attack_or_take_weapon` | Actor chooses a player with weapon and a legal victim for that player. Coerced player attacks; if unavailable/declined, actor gains the weapon. |
-| `steal_target_card_in_range` | Choose another player at range 1, then choose one hand, equipment, or decision card. Transfer it to actor hand. |
+| `steal_target_card_in_range` | Choose another player at range 1, then choose a hidden hand position or visible equipment card. Transfer it to actor hand; decision-area support is TODO. |
 | `negate_trick_effect` | Open trick-negation response chain. Cancel the selected trick effect for a target; another negate may negate the previous negate. Lightning special case moves it to next decision area. |
 | `duel_attack_response` | Target responds first; actor and target alternate `attack`. First player unable/declining takes 1 damage. |
 | `all_others_attack_or_damage` | Clockwise queue of all living players except actor. Each uses `attack` or takes 1 damage. |
 | `reveal_and_draft_cards` | Reveal one card per living player; actor then players in turn order each choose one revealed card into hand. Unchosen cards discard. |
+
+`draw_cards` and `heal_all_living` are implemented as immediate play-phase
+effects. They require the active living player, a matching card in hand, and no
+open response window. `draw_cards` uses `effect_params.amount` with a default
+of 2; `heal_all_living` restores 1 HP to each living player without exceeding
+max HP. Both effects discard their played card and write a game log entry.
+Character-skill heal hooks remain TODO.
 
 ## Delayed tricks
 
@@ -86,7 +93,6 @@ Future character skills register `EventSubscriber` entries with priority. They m
 
 ## Implementation order
 
-1. Current: `attack`, `dodge`, `heal`, manual hand-limit discard and turn draw.
-2. Next: `draw_cards`, `heal_all_living`, equipment slot replacement, distance calculation.
-3. Then: shared response queue for mass attacks, duel and negate chain.
-4. Finally: decision area/judgment and all weapon/character-skill hooks.
+1. Current: `attack`, `dodge`, `heal`, `draw_cards`, `heal_all_living`, manual hand-limit discard, turn draw, equipment slots, and base distance calculation.
+2. Next: shared response queue for mass attacks, duel and negate chain.
+3. Then: decision area/judgment and all weapon/character-skill hooks.

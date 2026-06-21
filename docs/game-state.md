@@ -88,9 +88,22 @@ uses the shorter of the two circular paths through that list. Consequently,
 dead players never add to distance and client-side visual rotation has no
 effect on range.
 
-`getAttackRange` currently returns `1`, and `canTargetWithAttack` validates a
-living, non-self target against that range. Weapon range and offensive or
-defensive mount modifiers are intentionally TODOs at this boundary.
+`getEffectiveDistanceBetweenPlayers` applies board modifiers without changing
+the base seat distance: `max(1, base - actor offensive mount + target defensive
+mount)`. An offensive mount therefore helps only its owner target others, while
+a defensive mount makes its owner farther away for every attacker.
+
+`getAttackRange` returns `1` by default and reads a valid positive
+`equipment.weapon.effectParams.range` when the player has a weapon. Attack
+compares this range with effective distance. Other targeted cards with a
+numeric distance rule (such as `steal_target_card_in_range`) also use effective
+distance, but never weapon range, so Steal remains limited to distance 1.
+
+The card importer maps each weapon definition's positive integer
+`range_or_value` CSV column into `effectParams.range`. It emits a warning when
+a weapon has no valid range and rejects a conflicting explicit JSON range. This
+keeps the source CSV authoritative while making imported weapon cards ready for
+the engine directly.
 
 ## Equipment slots
 
@@ -108,6 +121,32 @@ Equipping replaces only the matching slot. If the slot already contains a
 card, that card moves to the discard pile before the new card is stored. This
 task deliberately does not apply weapon range, armor, or mount effects; the
 slot data is ready for those resolvers later.
+
+## Targeted card actions
+
+`createTargetedCardAction` is the common declaration step for cards that need
+one or more targets. It validates the active actor, a card in that actor's
+hand, unique target count, living targets, self-target restrictions, and an
+optional base-distance limit. It then removes the card from hand and creates
+`currentAction`. `resolveTargetedCardAction` moves that card to discard only
+after the effect has resolved.
+
+Attack now uses this framework before opening its Dodge response window.
+`HiddenHandSelection` represents only a target player ID and zero-based hand
+index. `validateHiddenHandIndex` and `resolveHiddenHandCard` use that stable
+server-side hand order without exposing the selected card identity first. This
+is the reusable path for future skills and tricks that select hidden cards.
+
+`playDiscardTargetCard` supports a hidden hand position or a visible equipment
+card, then discards both the selected card and the resolved trick. Its hidden
+hand log deliberately names neither the selected card nor its suit/rank.
+Decision-area card selection remains future work.
+
+`playStealTargetCard` uses the same declaration and resolution path, but is
+limited to range 1. It can transfer a selected hidden hand position or visible
+equipment card to the actor's hand; only the resolved steal trick itself goes
+to discard. The hidden-card log remains anonymous until the card reaches the
+actor's hand.
 
 ## Helpers
 
@@ -150,9 +189,16 @@ order. Each responder may use `Heal` on the dying player or call
 `declineResponse`.
 
 One successful Heal closes the window and keeps the player alive at at least
-1 HP. If every eligible player declines, the window closes and that player is
-marked dead. Win conditions, role rewards, and moving the turn when the active
-player dies remain deliberately out of scope.
+1 HP. If every eligible player declines, `resolvePlayerDeath` reveals the role,
+discards hand/equipment/decision-area cards, then marks the player dead. A
+killer receives three cards for eliminating a rebel; an emperor who eliminates
+a loyalist discards their own hand and equipment. No killer means neither rule
+applies. If the active player dies and the game has not finished, play safely
+advances to the next living player.
+
+The prototype ends when the emperor dies (traitor wins only if every survivor
+is a traitor; otherwise rebels win), or when every rebel and traitor is dead
+(emperor and loyalists win). `GameState.winner` records the winning side.
 
 ## TODO: complete the runtime migration
 

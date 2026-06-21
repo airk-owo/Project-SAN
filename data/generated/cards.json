@@ -1039,7 +1039,8 @@
     "description": "หากการ์ด \"โจมตี\" ที่คุณใช้เป็นการ์ดใบสุดท้ายบนมือคุณ คุณ\r\nสามารถเลือกเป้าหมายของการโจมตีนี้ได้สูงสุด 3 คน",
     "effect": "last_hand_multi_target_attack",
     "effectParams": {
-      "max_targets": 3
+      "max_targets": 3,
+      "range": 4
     },
     "triggerTiming": "on_attack_declared",
     "equipmentSlot": "weapon",
@@ -1063,7 +1064,8 @@
     "effect": "discard_two_as_attack",
     "effectParams": {
       "discard_amount": 2,
-      "damage": 1
+      "damage": 1,
+      "range": 3
     },
     "triggerTiming": "on_play",
     "equipmentSlot": "weapon",
@@ -1085,7 +1087,9 @@
     "image": null,
     "description": "ทักษะติดตัว: คุณสามารถใช้การ์ด \"โจมตี\" ได้โดยไม่จำกัดจำนวนครั้ง",
     "effect": "unlimited_attack_per_turn",
-    "effectParams": {},
+    "effectParams": {
+      "range": 1
+    },
     "triggerTiming": "passive",
     "equipmentSlot": "weapon",
     "createsResponseWindow": false,
@@ -1106,7 +1110,9 @@
     "image": null,
     "description": "ทักษะติดตัว: คุณสามารถใช้การ์ด \"โจมตี\" ได้โดยไม่จำกัดจำนวนครั้ง",
     "effect": "unlimited_attack_per_turn",
-    "effectParams": {},
+    "effectParams": {
+      "range": 1
+    },
     "triggerTiming": "passive",
     "equipmentSlot": "weapon",
     "createsResponseWindow": false,
@@ -1128,7 +1134,8 @@
     "description": "เมื่อคุณใช้การ์ด \"โจมตี\" และสร้างความเสียหายได้ คุณจะได้เลือกทิ้งการ์ดพาหนะที่ติดตั้งอยู่บนพื้นที่ติดอุปกรณ์ของขุนพลที่ได้รับความเสียหาย 1 ใบ",
     "effect": "damage_destroy_target_mount",
     "effectParams": {
-      "amount": 1
+      "amount": 1,
+      "range": 5
     },
     "triggerTiming": "after_damage",
     "equipmentSlot": "weapon",
@@ -1152,7 +1159,8 @@
     "effect": "discard_two_force_attack_damage",
     "effectParams": {
       "discard_amount": 2,
-      "damage": 1
+      "damage": 1,
+      "range": 3
     },
     "triggerTiming": "on_attack_dodged",
     "equipmentSlot": "weapon",
@@ -1174,7 +1182,9 @@
     "image": null,
     "description": "หากเป้าหมายหลบการโจมตีของคุณ คุณจะยังสามารถใช้การ์ด \"โจมตี\" ใส่เป้าหมายเดิมได้",
     "effect": "repeat_attack_after_dodge",
-    "effectParams": {},
+    "effectParams": {
+      "range": 3
+    },
     "triggerTiming": "on_attack_dodged",
     "equipmentSlot": "weapon",
     "createsResponseWindow": false,
@@ -1195,7 +1205,9 @@
     "image": null,
     "description": "ทักษะติดตัว: ในระหว่างที่คุณโจมตี เกราะของขุนพลเป้าหมายจะไร้ผล",
     "effect": "ignore_target_armor",
-    "effectParams": {},
+    "effectParams": {
+      "range": 2
+    },
     "triggerTiming": "passive",
     "equipmentSlot": "weapon",
     "createsResponseWindow": false,
@@ -1216,7 +1228,9 @@
     "image": null,
     "description": "เมื่อคุณใช้การ์ด \"โจมตี\" ใส่ขุนพลเพศตรงข้าม ก่อนที่เป้าหมายจะใช้การ์ด\"หลบ\" เป้าหมายจะต้องเลือก 1 อย่าง:\r\n- เขาต้องทิ้งการ์ดจากมือตนเอง 1 ใบ - ให้คุณจั่วการ์ด 1 ใบ",
     "effect": "opposite_gender_attack_choice",
-    "effectParams": {},
+    "effectParams": {
+      "range": 2
+    },
     "triggerTiming": "on_attack_declared",
     "equipmentSlot": "weapon",
     "createsResponseWindow": false,
@@ -1238,7 +1252,8 @@
     "description": "เมื่อคุณใช้การ์ด \"โจมตี\" และทำความเสียหายใส่ขุนพลอื่นได้ ถ้าขุนพลเป้าหมายมีการ์ดบนมือ คุณสามารถเลือกที่จะไม่ทำความเสียหายเพื่อเลือกการ์ดบนมือและ/หรือ บนพื้นที่ติดอุปกรณ์ของเป้าหมาย 2 ใบและทิ้งมันได้",
     "effect": "replace_damage_with_discard_two",
     "effectParams": {
-      "discard_amount": 2
+      "discard_amount": 2,
+      "range": 2
     },
     "triggerTiming": "after_damage",
     "equipmentSlot": "weapon",

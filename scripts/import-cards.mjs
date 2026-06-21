@@ -27,7 +27,14 @@ const byName=new Map(definitions.map(d=>[d.name_th,d]));
 const allowedCardTypes=new Set(['basic','instant_trick','delayed_trick','weapon','armor','offensive_mount','defensive_mount']);
 const allowedTiming=new Set(['on_play','on_response','on_judgment','on_damage','after_damage','on_attack_declared','on_attack_dodged','passive']);
 const allowedSlots=new Set(['','weapon','armor','offensive_mount','defensive_mount']);
-const cards=instances.map(instance=>{const d=byName.get(instance.name_th);if(!d)throw Error(`No definition for ${instance.card_id} (${instance.name_th})`);if(!allowedCardTypes.has(d.card_type))throw Error(`Invalid card_type for ${d.name_th}`);if(!allowedTiming.has(d.trigger_timing))throw Error(`Invalid trigger_timing for ${d.name_th}`);if(!allowedSlots.has(d.equipment_slot))throw Error(`Invalid equipment_slot for ${d.name_th}`);let effectParams={};try{effectParams=JSON.parse(d.effect_params||'{}')}catch{throw Error(`Invalid effect_params JSON for ${d.name_th}`)}return {
+const weaponRanges=new Map();
+for(const definition of definitions){
+  if(definition.card_type!=='weapon')continue;
+  const range=Number(definition.range_or_value.trim());
+  if(!Number.isInteger(range)||range<1){console.warn(`Weapon ${definition.name_th} has no valid range_or_value; effectParams.range will be omitted.`);continue;}
+  weaponRanges.set(definition.name_th,range);
+}
+const cards=instances.map(instance=>{const d=byName.get(instance.name_th);if(!d)throw Error(`No definition for ${instance.card_id} (${instance.name_th})`);if(!allowedCardTypes.has(d.card_type))throw Error(`Invalid card_type for ${d.name_th}`);if(!allowedTiming.has(d.trigger_timing))throw Error(`Invalid trigger_timing for ${d.name_th}`);if(!allowedSlots.has(d.equipment_slot))throw Error(`Invalid equipment_slot for ${d.name_th}`);let effectParams={};try{effectParams=JSON.parse(d.effect_params||'{}')}catch{throw Error(`Invalid effect_params JSON for ${d.name_th}`)}if(!effectParams||Array.isArray(effectParams)||typeof effectParams!=='object')throw Error(`effect_params must be an object for ${d.name_th}`);const weaponRange=weaponRanges.get(d.name_th);if(d.card_type==='weapon'&&weaponRange!==undefined){if(effectParams.range!==undefined&&effectParams.range!==weaponRange)throw Error(`Weapon range conflict for ${d.name_th}`);effectParams.range=weaponRange;}return {
   id:instance.card_id,name:instance.name_th,type:d.category,cardType:d.card_type,suit:instance.suit,number:instance.rank,
   image:null,description:d.effect_th,effect:d.backend_effect_key||null,effectParams,triggerTiming:d.trigger_timing,equipmentSlot:d.equipment_slot||null,createsResponseWindow:d.creates_response_window==='true',conditions:{timing:d.timing,targetRule:d.target_rule,rangeOrValue:d.range_or_value},source:instance.source
 };});
