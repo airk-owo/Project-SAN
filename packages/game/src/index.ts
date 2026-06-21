@@ -40,7 +40,10 @@ export type Spectator = { id:string; username:string; connectionStatus:Connectio
  * playable prototype and its Socket payload can migrate without a flag day.
  */
 export type WinningSide = 'emperor_loyalists'|'rebels'|'traitor';
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
+export type PendingRepeatAttack = { attackerId:string; targetId:string; weaponName:string };
+export type PendingDestroyMount = { attackerId:string; targetId:string };
+export type PendingForceAttackDamage = { attackerId:string; targetId:string };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -85,6 +88,11 @@ export function getAttackRange(state:GameState,playerId:string){
   const range=getPlayerById(state,playerId)?.equipment.weapon?.effectParams.range;
   return typeof range==='number'&&Number.isFinite(range)&&range>0?range:1;
 }
+export const hasUnlimitedAttackPerTurn=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='unlimited_attack_per_turn';
+export const hasRepeatAttackAfterDodge=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='repeat_attack_after_dodge';
+export const attackIgnoresTargetArmor=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='ignore_target_armor';
+export const hasDamageDestroyTargetMount=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='damage_destroy_target_mount';
+export const hasDiscardTwoForceAttackDamage=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='discard_two_force_attack_damage';
 export function canTargetWithAttack(state:GameState,attackerId:string,targetId:string){
   const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,targetId),distance=getEffectiveDistanceBetweenPlayers(state,attackerId,targetId);
   return Boolean(attacker&&target&&attacker.alive&&target.alive&&attackerId!==targetId&&distance!==null&&distance<=getAttackRange(state,attackerId));
@@ -192,9 +200,11 @@ export function getNextAlivePlayer(state:GameState,currentPlayerId:string){
 }
 export function canPlayerAct(state:GameState,playerId:string){return state.phase==='playing'&&state.turn.activePlayerId===playerId&&state.turn.phase==='play'&&!state.responseWindow&&!state.currentAction;}
 export function canPlayCardNow(state:GameState,playerId:string,card:Card){
+  if(card.effect==='attack'&&state.responseWindow?.type==='duel_attack')return state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
+  if((card.effect==='dodge'||card.effect==='attack')&&(state.responseWindow?.type==='mass_dodge'||state.responseWindow?.type==='mass_attack'))return state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
   if(card.effect==='dodge')return state.responseWindow?.type==='attack_dodge'&&state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
   if(card.effect==='heal'&&state.responseWindow?.type==='dying_heal')return state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
-  return (card.effect==='attack'||card.effect==='heal'||card.effect==='draw_cards'||card.effect==='heal_all_living'||card.effect==='discard_target_card'||card.effect==='steal_target_card_in_range'||isEquipmentCard(card))&&canPlayerAct(state,playerId);
+  return (card.effect==='attack'||card.effect==='duel_attack_response'||card.effect==='all_others_dodge_or_damage'||card.effect==='all_others_attack_or_damage'||card.effect==='heal'||card.effect==='draw_cards'||card.effect==='heal_all_living'||card.effect==='discard_target_card'||card.effect==='steal_target_card_in_range'||isEquipmentCard(card))&&canPlayerAct(state,playerId);
 }
 export function startTurn(state:GameState,playerId:string){
   const player=getPlayerById(state,playerId); if(!player||!player.alive)throw new Error('Cannot start a turn for this player');
@@ -272,23 +282,50 @@ export function declineResponse(state:GameState,playerId:string){
   const window=state.responseWindow;if(!window||window.status!=='open'||window.currentResponderId!==playerId)throw new Error('You cannot decline this response');
   const responder=getPlayerById(state,playerId);if(!responder)throw new Error('Unknown responder');window.responses.push({playerId,response:'decline',createdAt:new Date().toISOString()});
   if(window.type==='attack_dodge'){logAction(state,'attack-declined',`${characterName(responder)} ไม่ตอบสนอง`,responder.id);return resolveCurrentAction(state);}
+  if(window.type==='duel_attack'){logAction(state,'duel-declined',`${characterName(responder)} ไม่สามารถตอบโต้ได้`,responder.id);return resolveDuel(state,responder.id);}
   if(window.type!=='dying_heal')throw new Error('Unsupported response window');
   const dying=getPlayerById(state,window.dyingPlayerId||'');if(!dying)throw new Error('Dying player is missing');const queue=window.responderQueue||window.requiredPlayerIds;
   const next=queue.find(id=>!window.responses.some(response=>response.playerId===id));
   if(next){const nextPlayer=getPlayerById(state,next);if(!nextPlayer)throw new Error('Responder is missing');window.currentResponderId=next;logAction(state,'dying-heal-request',`กำลังรอ ${characterName(nextPlayer)} ว่าจะใช้ เสบียง ช่วย ${characterName(dying)} หรือไม่`,next,dying.id);synchronizeGameState(state);return;}
-  window.status='resolved';state.responseWindow=null;logAction(state,'dying-unrescued',`ไม่มีผู้เล่นช่วย ${characterName(dying)}`,undefined,dying.id);resolvePlayerDeath(state,dying.id,window.dyingKillerId);
+  window.status='resolved';state.responseWindow=null;logAction(state,'dying-unrescued',`ไม่มีผู้เล่นช่วย ${characterName(dying)}`,undefined,dying.id);resolvePlayerDeath(state,dying.id,window.dyingKillerId);if(state.suspendedResponseWindow&&state.status!=='finished'){state.responseWindow=state.suspendedResponseWindow;state.suspendedResponseWindow=undefined;advanceMassResponseQueue(state);}
 }
 
 export function playAttack(state:GameState,attackerId:string,targetId:string,cardInstanceId:string){
-  if(state.turn.attackUsedThisTurn>=1) throw new Error('You may only use one attack per turn'); // TODO: weapon exceptions such as unlimited_attack_per_turn.
+  const initiatingCard=getPlayerById(state,attackerId)&&findHandCard(getPlayerById(state,attackerId)!,cardInstanceId);if(initiatingCard?.effect==='duel_attack_response')return playDuel(state,attackerId,targetId,cardInstanceId);
+  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttackPerTurn(state,attackerId)) throw new Error('You may only use one attack per turn');
   const prepared=createTargetedCardAction(state,attackerId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false,maxDistance:'attack'},'attack');
   const attacker=prepared.actor,target=prepared.targets[0]!;
   const card=prepared.card,actionId=prepared.action.actionId;if(card.effect!=='attack')throw new Error('Attack card is not in your hand');
+  if(target.equipment.armor?.effect==='black_attack_immunity'&&['♠','♣'].includes(card.suit)&&!attackIgnoresTargetArmor(state,attacker.id)){logAction(state,'armor-blocked-attack',`${characterName(target)} ใช้เกราะป้องกันการโจมตีสีดำ`,target.id,attacker.id);resolveTargetedCardAction(state,actionId);synchronizeGameState(state);return;}
   state.attacksThisTurn++; state.turn.attackUsedThisTurn++;
   state.responseWindow={windowId:crypto.randomUUID(),type:'attack_dodge',sourceActionId:actionId,requiredPlayerIds:[target.id],currentResponderId:target.id,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:new Date().toISOString()};
   state.pendingAction={id:actionId,kind:'attack',actorId:attacker.id,targetId:target.id,cardId:card.id,responseKey:'dodge',damage:numberParam(card,'damage',1)};
   synchronizeGameState(state);
 }
+
+export function playDuel(state:GameState,actorId:string,targetId:string,cardInstanceId:string){
+  const prepared=createTargetedCardAction(state,actorId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false},'duel_attack_response');const target=prepared.targets[0]!;
+  if(prepared.card.effect!=='duel_attack_response')throw new Error('Duel card is not in your hand');
+  state.responseWindow={windowId:crypto.randomUUID(),type:'duel_attack',sourceActionId:prepared.action.actionId,requiredPlayerIds:[actorId,targetId],currentResponderId:targetId,allowedResponseEffectKeys:['attack'],responses:[],status:'open',createdAt:new Date().toISOString()};
+  synchronizeGameState(state);
+}
+export function playAttackResponse(state:GameState,playerId:string,cardInstanceId:string){
+  const window=state.responseWindow,action=state.currentAction;if(!window||!action||window.type!=='duel_attack'||window.currentResponderId!==playerId)throw new Error('You cannot respond to this duel now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId);if(!player||!card||card.effect!=='attack')throw new Error('Attack card is not in your hand');
+  player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'duel-attack-response',`${characterName(player)} ตอบโต้ด้วย โจมตี`,player.id);window.currentResponderId=playerId===action.actorId?action.targetIds[0]!:action.actorId;synchronizeGameState(state);
+}
+export function resolveDuel(state:GameState,failedPlayerId:string){
+  const action=state.currentAction,window=state.responseWindow;if(!action||!window||window.type!=='duel_attack'||window.currentResponderId!==failedPlayerId)throw new Error('Duel is not awaiting this player');const failed=getPlayerById(state,failedPlayerId),killerId=failedPlayerId===action.actorId?action.targetIds[0]:action.actorId;if(!failed)throw new Error('Duel participant is missing');window.status='resolved';state.responseWindow=null;applyDamage(state,failedPlayerId,1,killerId);resolveTargetedCardAction(state,action.actionId);synchronizeGameState(state);
+}
+
+function massQueue(state:GameState,actorId:string){const alive=getAlivePlayersInSeatOrder(state),index=alive.findIndex(player=>player.id===actorId);return index<0?[]:[...alive.slice(index+1),...alive.slice(0,index)].map(player=>player.id);}
+function playMassTrick(state:GameState,actorId:string,cardInstanceId:string,effect:'all_others_dodge_or_damage'|'all_others_attack_or_damage'){
+  const prepared=createTargetedCardAction(state,actorId,cardInstanceId,[],{minTargets:0,maxTargets:0,allowSelf:false},effect);if(prepared.card.effect!==effect)throw new Error('Mass trick card is not in your hand');const queue=massQueue(state,actorId),type=effect==='all_others_dodge_or_damage'?'mass_dodge':'mass_attack',required=type==='mass_dodge'?'dodge':'attack';state.responseWindow={windowId:crypto.randomUUID(),type,sourceActionId:prepared.action.actionId,requiredPlayerIds:queue,currentResponderId:queue[0]||null,allowedResponseEffectKeys:[required],responses:[],status:'open',createdAt:new Date().toISOString(),responderQueue:queue};logAction(state,'mass-trick-played',`${characterName(prepared.actor)} ใช้ ${prepared.card.name}`,actorId);if(!queue.length)advanceMassResponseQueue(state);synchronizeGameState(state);
+}
+export const playMassDodgeOrDamage=(state:GameState,actorId:string,cardInstanceId:string)=>playMassTrick(state,actorId,cardInstanceId,'all_others_dodge_or_damage');
+export const playMassAttackOrDamage=(state:GameState,actorId:string,cardInstanceId:string)=>playMassTrick(state,actorId,cardInstanceId,'all_others_attack_or_damage');
+export function advanceMassResponseQueue(state:GameState){const window=state.responseWindow,action=state.currentAction;if(!window||!action||(window.type!=='mass_dodge'&&window.type!=='mass_attack'))return;if(state.status==='finished')return;const queue=window.responderQueue||[],next=queue.find(id=>{const player=getPlayerById(state,id);return player?.alive&&!window.responses.some(response=>response.playerId===id);});if(next){window.currentResponderId=next;synchronizeGameState(state);return;}window.status='resolved';state.responseWindow=null;resolveTargetedCardAction(state,action.actionId);logAction(state,'mass-trick-finished',`การ์ด ${action.card?.name||''} จบการทำงาน`);synchronizeGameState(state);}
+export function playMassResponseCard(state:GameState,playerId:string,cardInstanceId:string){const window=state.responseWindow;if(!window||(window.type!=='mass_dodge'&&window.type!=='mass_attack')||window.currentResponderId!==playerId)throw new Error('You cannot respond to this mass trick now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId),required=window.type==='mass_dodge'?'dodge':'attack';if(!player||!card||card.effect!==required)throw new Error('Required response card is not in your hand');player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'mass-response',`${characterName(player)} ใช้ ${card.name}`,player.id);advanceMassResponseQueue(state);}
+export function declineMassResponse(state:GameState,playerId:string){const window=state.responseWindow,action=state.currentAction;if(!window||!action||(window.type!=='mass_dodge'&&window.type!=='mass_attack')||window.currentResponderId!==playerId)throw new Error('You cannot decline this mass trick now');window.responses.push({playerId,response:'decline',createdAt:new Date().toISOString()});const actorId=action.actorId;logAction(state,'mass-response-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ตอบสนองและเสีย 1 HP`,playerId);applyDamage(state,playerId,1,actorId);if(state.responseWindow?.type==='dying_heal'){state.suspendedResponseWindow=window;return;}advanceMassResponseQueue(state);}
 
 export function resolveCurrentAction(state:GameState){
   const action=state.currentAction; if(!action) throw new Error('There is no current action to resolve');
@@ -297,16 +334,28 @@ export function resolveCurrentAction(state:GameState){
   const attackWindow=state.responseWindow,response=attackWindow?.responses.find(item=>item.playerId===targetId);
   if(!response) throw new Error('Attack response is still required');
   if(response?.response==='card') logAction(state,'attack-cancelled','โจมตีถูกยกเลิก',attacker.id,target.id,action.card?.definitionKey);
-  else applyDamage(state,target.id,numberParam(state.lastPlayedCard||{effectParams:{} as EffectParams} as Card,'damage',1),attacker.id);
+  else {applyDamage(state,target.id,numberParam(state.lastPlayedCard||{effectParams:{} as EffectParams} as Card,'damage',1),attacker.id);if(target.alive&&hasDamageDestroyTargetMount(state,attacker.id)&&(target.equipment.offensiveMount||target.equipment.defensiveMount))state.pendingDestroyMount={attackerId:attacker.id,targetId:target.id};}
   if(attackWindow)attackWindow.status='resolved';resolveTargetedCardAction(state,action.actionId);if(state.responseWindow===attackWindow)state.responseWindow=null;state.pendingAction=undefined;
   synchronizeGameState(state);
 }
+export function destroyTargetMountAfterDamage(state:GameState,attackerId:string,targetId:string,mountSlot:'offensiveMount'|'defensiveMount'){const pending=state.pendingDestroyMount;if(!pending||pending.attackerId!==attackerId||pending.targetId!==targetId)throw new Error('No mount destruction is pending');const target=getPlayerById(state,targetId),mount=target?.equipment[mountSlot];if(!target||!mount)throw new Error('Selected mount is not available');target.equipment[mountSlot]=null;moveToDiscard(state,mount,false);state.pendingDestroyMount=undefined;logAction(state,'target-mount-destroyed',`${characterName(getPlayerById(state,attackerId)!)} ทำลาย ${mount.name} ของ ${characterName(target)}`,attackerId,targetId,mount.id);synchronizeGameState(state);}
+export function declineDestroyTargetMount(state:GameState,attackerId:string){if(state.pendingDestroyMount?.attackerId!==attackerId)throw new Error('No mount destruction is pending');state.pendingDestroyMount=undefined;logAction(state,'target-mount-destruction-declined',`${characterName(getPlayerById(state,attackerId)!)} ไม่ทำลายพาหนะ`,attackerId);synchronizeGameState(state);}
 
 export function playDodge(state:GameState,playerId:string,cardInstanceId:string){
   const window=state.responseWindow,action=state.currentAction; if(!window||!action||window.type!=='attack_dodge'||window.status!=='open'||window.currentResponderId!==playerId) throw new Error('You cannot dodge now');
   const player=getPlayerById(state,playerId); if(!player) throw new Error('Unknown player'); const card=findHandCard(player,cardInstanceId); if(!card||card.effect!=='dodge') throw new Error('Dodge card is not in your hand');
-  player.hand=player.hand.filter(item=>item!==card); moveToDiscard(state,card,false); window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});
-  logAction(state,'attack-dodged',`${characterName(player)} ใช้ หลบ`,player.id,action.actorId,card.id); resolveCurrentAction(state);
+  const attacker=getPlayerById(state,action.actorId),canRepeat=Boolean(attacker&&hasRepeatAttackAfterDodge(state,attacker.id)&&player.alive&&canTargetWithAttack(state,attacker.id,player.id));player.hand=player.hand.filter(item=>item!==card); moveToDiscard(state,card,false); window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});
+  logAction(state,'attack-dodged',`${characterName(player)} ใช้ หลบ`,player.id,action.actorId,card.id); resolveCurrentAction(state);if(canRepeat&&attacker)state.pendingRepeatAttack={attackerId:attacker.id,targetId:player.id,weaponName:attacker.equipment.weapon?.name||'อาวุธ'};if(attacker&&hasDiscardTwoForceAttackDamage(state,attacker.id)){const discardable=attacker.hand.length+Object.values(attacker.equipment).filter(Boolean).length;if(discardable>=2)state.pendingForceAttackDamage={attackerId:attacker.id,targetId:player.id};
+  }
+}
+export function forceAttackDamageByDiscardingTwo(state:GameState,attackerId:string,cardRefs:string[]){const pending=state.pendingForceAttackDamage;if(!pending||pending.attackerId!==attackerId||cardRefs.length!==2||new Set(cardRefs).size!==2)throw new Error('Choose exactly two cards');const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,pending.targetId);if(!attacker||!target?.alive)throw new Error('Force attack target is unavailable');const discarded:Card[]=[];for(const ref of cardRefs){let card=findHandCard(attacker,ref);if(card)attacker.hand=attacker.hand.filter(item=>item!==card);else for(const slot of Object.keys(attacker.equipment) as RuntimeEquipmentSlot[]){const equipped=attacker.equipment[slot];if(equipped&&equipped.id===ref){card=equipped;attacker.equipment[slot]=null;break;}}if(!card)throw new Error('Selected card is not yours');discarded.push(card);}discarded.forEach(card=>moveToDiscard(state,card,false));state.pendingForceAttackDamage=undefined;logAction(state,'force-attack-damage',`${characterName(attacker)} ทิ้งไพ่ 2 ใบบังคับให้โจมตีโดน`,attacker.id,target.id);applyDamage(state,target.id,1,attacker.id);synchronizeGameState(state);}
+export function declineForceAttackDamage(state:GameState,attackerId:string){if(state.pendingForceAttackDamage?.attackerId!==attackerId)throw new Error('No forced damage is pending');state.pendingForceAttackDamage=undefined;logAction(state,'force-attack-damage-declined',`${characterName(getPlayerById(state,attackerId)!)} ไม่บังคับให้โจมตีโดน`,attackerId);synchronizeGameState(state);}
+export function continueRepeatAttackAfterDodge(state:GameState,attackerId:string,attackCardInstanceId:string){const pending=state.pendingRepeatAttack;if(!pending||pending.attackerId!==attackerId)throw new Error('No repeat attack is pending');const target=getPlayerById(state,pending.targetId),attacker=getPlayerById(state,attackerId);if(!target?.alive||!attacker||!canTargetWithAttack(state,attackerId,target.id))throw new Error('Repeat target is no longer legal');const card=findHandCard(attacker,attackCardInstanceId);if(!card||card.effect!=='attack')throw new Error('Choose another Attack card');state.pendingRepeatAttack=undefined;const prior=state.turn.attackUsedThisTurn;state.turn.attackUsedThisTurn=0;state.attacksThisTurn=0;playAttack(state,attackerId,target.id,attackCardInstanceId);state.turn.attackUsedThisTurn=Math.max(prior+1,state.turn.attackUsedThisTurn);state.attacksThisTurn=state.turn.attackUsedThisTurn;}
+export function declineRepeatAttackAfterDodge(state:GameState,attackerId:string){if(state.pendingRepeatAttack?.attackerId!==attackerId)throw new Error('No repeat attack is pending');state.pendingRepeatAttack=undefined;logAction(state,'repeat-attack-declined',`${characterName(getPlayerById(state,attackerId)!)} ไม่โจมตีซ้ำ`,attackerId);synchronizeGameState(state);}
+export function useArmorJudgment(state:GameState,playerId:string){
+  const window=state.responseWindow,player=getPlayerById(state,playerId),attackerId=state.currentAction?.actorId;if(!window||window.type!=='attack_dodge'||window.currentResponderId!==playerId||player?.equipment.armor?.effect!=='judgment_dodge'||(attackerId&&attackIgnoresTargetArmor(state,attackerId)))throw new Error('Armor judgment is not available');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);const judgment=state.deck.pop();if(!judgment){logAction(state,'armor-judgment-empty','กองจั่วไม่มีไพ่สำหรับการตัดสิน',playerId);return false;}moveToDiscard(state,judgment,false);const success=['♥','♦'].includes(judgment.suit);logAction(state,'armor-judgment',`${characterName(player)} ตัดสิน ${judgment.suit}${judgment.number} ${success?'สำเร็จ':'ไม่สำเร็จ'}`,playerId);
+  if(success){window.responses.push({playerId,response:'card',createdAt:new Date().toISOString()});resolveCurrentAction(state);}else synchronizeGameState(state);return success;
 }
 
 export function playHeal(state:GameState,playerId:string,cardInstanceId:string){
@@ -316,7 +365,7 @@ export function playHeal(state:GameState,playerId:string,cardInstanceId:string){
     if(window.status!=='open'||window.currentResponderId!==playerId)throw new Error('You cannot use Heal in this rescue window');
     const dying=getPlayerById(state,window.dyingPlayerId||'');if(!dying||dying.hp===undefined)throw new Error('Dying player is missing');
     player.hand=player.hand.filter(item=>item!==card);logAction(state,'dying-heal-played',`${characterName(player)} ใช้ เสบียง ช่วย ${characterName(dying)}`,player.id,dying.id,card.id);healPlayer(state,dying.id,numberParam(card,'heal_amount',1));moveToDiscard(state,card);
-    window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});window.status='resolved';state.responseWindow=null;logAction(state,'dying-rescued',`${characterName(dying)} รอดจากสถานะใกล้ตาย`,undefined,dying.id);synchronizeGameState(state);return;
+    window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});window.status='resolved';state.responseWindow=null;logAction(state,'dying-rescued',`${characterName(dying)} รอดจากสถานะใกล้ตาย`,undefined,dying.id);if(state.suspendedResponseWindow){state.responseWindow=state.suspendedResponseWindow;state.suspendedResponseWindow=undefined;advanceMassResponseQueue(state);}synchronizeGameState(state);return;
   }
   if(state.currentAction||window) throw new Error('Resolve the current action first');
   if(player.hp===undefined||player.maxHp===undefined||player.hp>=player.maxHp) throw new Error('You can only heal yourself while wounded');
@@ -390,6 +439,9 @@ export function playCard(state:GameState, actorId:string, cardId:string, targetI
   if(state.phase!=='playing'||state.currentPlayerId!==actorId)throw new Error('It is not your turn');if(!state.hasDrawnThisTurn)throw new Error('ต้องจั่วไพ่ก่อนเล่นการ์ด');if(state.pendingAction)throw new Error('Resolve the pending response first');
   const actor=state.players.find(player=>player.id===actorId);if(!actor)throw new Error('Unknown player');const card=actor.hand.find(item=>item.id===cardId);if(!card)throw new Error('Card is not in your hand');const target=targetId?state.players.find(player=>player.id===targetId):undefined;
   if(card.effect==='attack'){if(!targetId)throw new Error('Choose a target');return playAttack(state,actorId,targetId,cardId);}
+  if(card.effect==='duel_attack_response'){if(!targetId)throw new Error('Choose a target');return playDuel(state,actorId,targetId,cardId);}
+  if(card.effect==='all_others_dodge_or_damage')return playMassDodgeOrDamage(state,actorId,cardId);
+  if(card.effect==='all_others_attack_or_damage')return playMassAttackOrDamage(state,actorId,cardId);
   if(card.effect==='heal') return playHeal(state,actorId,cardId);
   if(card.effect==='draw_cards') return playDrawCardsTrick(state,actorId,cardId);
   if(card.effect==='heal_all_living') return playHealAllLiving(state,actorId,cardId);

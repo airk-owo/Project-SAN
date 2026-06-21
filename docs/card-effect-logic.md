@@ -50,7 +50,7 @@ Future character skills register `EventSubscriber` entries with priority. They m
 | `coerce_attack_or_take_weapon` | Actor chooses a player with weapon and a legal victim for that player. Coerced player attacks; if unavailable/declined, actor gains the weapon. |
 | `steal_target_card_in_range` | Choose another player at range 1, then choose a hidden hand position or visible equipment card. Transfer it to actor hand; decision-area support is TODO. |
 | `negate_trick_effect` | Open trick-negation response chain. Cancel the selected trick effect for a target; another negate may negate the previous negate. Lightning special case moves it to next decision area. |
-| `duel_attack_response` | Target responds first; actor and target alternate `attack`. First player unable/declining takes 1 damage. |
+| `duel_attack_response` | Target responds first; actor and target alternate `attack` through a `duel_attack` response window. First player unable/declining takes 1 damage; response attacks do not consume the normal attack-per-turn limit. |
 | `all_others_attack_or_damage` | Clockwise queue of all living players except actor. Each uses `attack` or takes 1 damage. |
 | `reveal_and_draft_cards` | Reveal one card per living player; actor then players in turn order each choose one revealed card into hand. Unchosen cards discard. |
 
