@@ -51,6 +51,29 @@ input,button{font:inherit;padding:10px 12px;margin:4px;border-radius:8px;border:
 .local-equipment-confirm{max-width:390px;text-align:center}.local-equipment-confirm h2{margin-top:0;color:var(--danger)}.local-equipment-confirm p{line-height:1.65}.local-equipment-confirm .mock-response-actions{display:flex;justify-content:center;margin-top:16px}.local-equipment-confirm .mock-response-actions button{min-width:96px}
 /* A hidden-hand picker contains only enabled face-down card buttons: no names or card metadata are rendered. */
 .local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)){display:flex;align-items:flex-end;justify-content:center;gap:0;padding:12px 6px 18px;overflow-x:auto}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button{display:grid;place-items:center;align-content:center;flex:none;width:74px;height:104px;margin-left:-12px;padding:7px;border:2px solid #e0ba67;border-radius:8px;background:repeating-linear-gradient(135deg,#8b2e2e 0 6px,#e0ba67 6px 8px);box-shadow:3px 4px 0 #3e2f2260;color:#fff;font-size:1.15rem;text-align:center;transition:transform .15s ease,box-shadow .15s ease}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:first-child{margin-left:0;transform:rotate(-4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(2){transform:rotate(-1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(3){transform:rotate(1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(4){transform:rotate(4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:hover{position:relative;z-index:2;transform:translateY(-12px) rotate(0deg);box-shadow:5px 9px 14px #3e2f2266}
+/* Turn status below title */
+.mock-game-header .local-turn-status{margin:4px 0 0;display:inline-flex;gap:10px;align-items:center;padding:4px 10px;border:1px solid var(--border);border-radius:8px;background:#faf8efcc;font-size:.78rem}.mock-game-header .local-turn-status b{color:var(--danger)}
+/* Header right: role counts above restart button */
+.local-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+/* Alive role counts — top right */
+.local-role-counts{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}.local-role-count{padding:2px 8px;border-radius:12px;font-size:.72rem;font-weight:700;white-space:nowrap}.local-role-emperor{background:#b88a3b22;color:#966a24;border:1px solid var(--primary)}.local-role-rebel{background:#8b2e2e22;color:var(--danger);border:1px solid var(--danger)}.local-role-loyalist{background:#355c7d22;color:var(--info);border:1px solid var(--info)}.local-role-traitor{background:#3e2f2222;color:#6b5139;border:1px solid var(--border)}
+/* Fixed-size log/chat panel — flex column so chat input stays at bottom */
+.mock-side-panels .mock-log{max-height:320px;display:flex;flex-direction:column;gap:6px}.local-log-scroll,.local-chat-scroll{flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column}.local-log-scroll p,.local-chat-scroll p{margin:2px 0}
+/* Chat input row */
+.local-chat-form{display:flex;gap:4px;margin-top:2px}.local-chat-input{flex:1;min-width:0;padding:5px 8px;font-size:.76rem;background:#faf8ef11;border:1px solid #c8b58a66;border-radius:6px;color:#faf8ef}.local-chat-input::placeholder{color:#c8b58a88}.local-chat-form button{padding:5px 8px;margin:0;font-size:.74rem;flex-shrink:0}
+/* Timestamps — golden yellow on dark background */
+.mock-log time,.local-log-scroll time,.local-chat-scroll time{display:inline-block;width:40px;font-size:.68rem;color:#e0ba67;font-variant-numeric:tabular-nums;margin-right:3px}
+/* Draw pile clickable state */
+.local-draw-pile-active{cursor:pointer;animation:local-pile-pulse 1.2s ease-in-out infinite}.local-draw-pile-active .mock-deck{background:repeating-linear-gradient(135deg,#355c7d 0 6px,#e0ba67 6px 8px);border-color:#e0ba67;box-shadow:0 0 0 4px #355c7d55,7px 7px 0 #160f0a;font-size:1rem;color:#fff;font-weight:700}@keyframes local-pile-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.local-draw-hint{margin:0 0 6px;color:var(--info);font-weight:700;font-size:.82rem;text-align:center}
+/* Role toggle */
+.local-role-toggle{padding:0 3px;margin:0 4px 0 0;min-width:22px;height:20px;font-size:.8rem;line-height:1;background:transparent;border:1px solid var(--border);color:var(--text)}
+/* Log/chat tabs */
+.local-tab-bar{display:flex;gap:6px;margin:0 0 6px}.local-tab{padding:3px 10px;font-size:.75rem;font-weight:700;background:transparent;border:1px solid #c8b58a88;color:#c8b58a;margin:0}.local-tab.local-tab-active{background:#c8b58a33;color:#f5d994;border-color:#c8b58a}
+/* Mass trick response badge */
+.local-mass-badge{display:inline-block;padding:1px 6px;border-radius:10px;font-size:.65rem;font-weight:700;margin-top:2px}.local-mass-played{background:#4f6f5222;color:var(--success);border:1px solid var(--success)}.local-mass-declined{background:#8b2e2e22;color:var(--danger);border:1px solid var(--danger)}.local-mass-waiting{background:#355c7d22;color:var(--info);border:1px solid var(--info)}
+/* Mass trick card played overlay */
+.local-mass-card-played{position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:4}
 .local-armor-judgment{position:fixed;right:30px;bottom:190px;z-index:12;display:grid;gap:8px;padding:12px 14px;border:2px solid var(--primary);border-radius:10px;background:var(--card);box-shadow:0 8px 20px #3e2f2266;color:var(--text);font-size:.85rem}.local-armor-judgment button{margin:0}
 .local-repeat-attack{position:fixed;right:30px;bottom:285px;z-index:13;display:grid;gap:10px;max-width:350px;padding:14px;border:2px solid var(--primary);border-radius:11px;background:var(--card);box-shadow:0 8px 22px #3e2f2266;color:var(--text)}.local-repeat-attack div{display:flex;gap:7px}.local-repeat-attack button{margin:0}
 
@@ -68,3 +91,9 @@ input,button{font:inherit;padding:10px 12px;margin:4px;border-radius:8px;border:
 .mock-card:focus-visible{outline:3px solid var(--info);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.card-tip{transition:none;transform:translateX(-50%)}.mock-card:hover .card-tip,.mock-card:focus .card-tip,.mock-card:focus-visible .card-tip{transform:translateX(-50%)}}
 @media(max-width:760px){.card-tip{width:190px;font-size:.72rem}}
+/* Discard-for-hand-limit selection mode */
+.local-discard-unselected{opacity:.45;transition:opacity .1s}
+.local-discard-selected{outline:3px solid var(--danger)!important;outline-offset:3px;opacity:1!important;box-shadow:0 0 10px #c0392b99!important}
+.local-discard-badge{position:absolute;top:4px;right:4px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:8px;pointer-events:none}
+.local-discard-limit-bar{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-bottom:6px;background:#8b2e2e22;border:1px solid var(--danger);border-radius:8px;font-size:.82rem;color:var(--text)}.local-discard-limit-bar span{flex:1}.local-discard-limit-bar button{margin:0}
+.local-discard-confirm-list{margin:8px 0;padding:0 0 0 18px;font-size:.85rem;line-height:1.7}

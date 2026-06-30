@@ -1,1 +1,1 @@
-{ "name": "@wtk/game", "version": "0.1.0", "type": "module", "exports": "./src/index.ts", "scripts": { "check": "tsc --noEmit" }, "devDependencies": { "typescript": "^5.7.3" } }
+{ "name": "@wtk/game", "version": "0.1.0", "type": "module", "exports": "./src/index.ts", "scripts": { "check": "tsc --noEmit", "test": "tsx --test src/seat-validation.test.ts src/reconnect.test.ts src/role-distribution.test.ts src/viewer-safe-state.test.ts src/negate.test.ts" }, "devDependencies": { "typescript": "^5.7.3" } }
