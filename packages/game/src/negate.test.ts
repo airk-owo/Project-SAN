@@ -5,6 +5,7 @@ import {
   respondWithNegate, declineNegate, playNegateInMassWindow,
   playDrawCardsTrick, playHealAllLiving, playDiscardTargetCard, playStealTargetCard,
   playMassDodgeOrDamage, playMassAttackOrDamage, playMassResponseCard, declineMassResponse,
+  owedDraws, drawPendingCard,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
 
@@ -190,7 +191,11 @@ describe('declineNegate – trick resolves when all decline', () => {
       declineNegate(game, pid);
     }
     assert.equal(game.responseWindow, null, 'window should close after all decline');
-    assert.ok(actor.hand.length > handBefore, 'actor should have drawn cards');
+    // draw_cards now grants owed draws that the actor takes manually
+    assert.equal(owedDraws(game, 'p0'), 2, 'actor is owed 2 draws');
+    drawPendingCard(game, 'p0');
+    drawPendingCard(game, 'p0');
+    assert.ok(actor.hand.length > handBefore, 'actor drew the owed cards');
   });
 
   it('partial decline advances currentResponderId', () => {

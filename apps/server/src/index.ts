@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import { readFile } from 'node:fs/promises';
-import { beginPlayAfterCharacters, createGame, createSeatedPlayer, dealEmperorOptions, dealRoles, discardForHandLimit, drawForTurn, endTurn, playCard, publicState, respondToAttack, selectCharacter, respondWithNegate, declineNegate, playNegateInMassWindow, playMassResponseCard, declineMassResponse, type Card, type Character, type GameState, type RoleComposition, type Spectator } from '@wtk/game';
+import { beginPlayAfterCharacters, createGame, createSeatedPlayer, dealEmperorOptions, dealRoles, discardForHandLimit, drawForTurn, drawOneTurnCard, endTurn, playCard, publicState, respondToAttack, selectCharacter, respondWithNegate, declineNegate, playNegateInMassWindow, playMassResponseCard, declineMassResponse, playHeal, declineResponse, useArmorJudgment, continueRepeatAttackAfterDodge, declineRepeatAttackAfterDodge, destroyTargetMountAfterDamage, declineDestroyTargetMount, forceAttackDamageByDiscardingTwo, declineForceAttackDamage, replaceAttackDamageByDiscarding, declineReplaceAttackDamage, useDiscardTwoAsAttack, resolveTwinSwordsDiscard, resolveTwinSwordsLetDraw, playLastHandMultiAttack, playCoerceAttack, resolveCoerceWithAttack, declineCoerce, pickHarvestCard, drawPendingCard, drawJudgmentCard, keepJudgmentCard, resolveJudgmentCard, replaceJudgmentCard, takeCardFromDamager, declineFankui, playAttackResponse, useSelfDamageDraw, useDiscardThenDraw, playDiscardTargetCard, playStealTargetCard, getBaseDistanceBetweenPlayers, CHARACTER_SKILLS, type Card, type Character, type GameState, type RoleComposition, type Spectator, type TargetCardSelection } from '@wtk/game';
 
 const app=express(),http=createServer(app),io=new Server(http,{cors:{origin:process.env.WEB_ORIGIN||'http://localhost:3000'}});
 app.use(cors());
@@ -15,7 +15,46 @@ const games=new Map<string,GameState>(),connections=new Map<string,string>();
 const now=()=>new Date().toISOString();
 const allMembers=(game:GameState)=>[...game.players,...game.spectators];
 const memberFor=(game:GameState,userId:string)=>allMembers(game).find(member=>member.id===userId);
-const emitGame=(game:GameState)=>allMembers(game).forEach(member=>{const socketId=connections.get(member.id);if(socketId)io.to(socketId).emit('game:state',{...publicState(game,member.id),roleDefinitions:rules.roles})});
+const roleAliveCounts=(game:GameState)=>({emperor:game.players.filter(p=>p.role==='emperor'&&p.alive).length,loyalist:game.players.filter(p=>p.role==='loyalist'&&p.alive).length,rebel:game.players.filter(p=>p.role==='rebel'&&p.alive).length,traitor:game.players.filter(p=>p.role==='traitor'&&p.alive).length});
+const emitGame=(game:GameState)=>{const deadline=refreshTimeout(game);allMembers(game).forEach(member=>{const socketId=connections.get(member.id);if(socketId){const viewerId=member.id;const distances:Record<string,number|null>={};if(game.phase==='playing')game.players.forEach(p=>{if(p.id!==viewerId)try{distances[p.id]=getBaseDistanceBetweenPlayers(game,viewerId,p.id);}catch{distances[p.id]=null;}});io.to(socketId).emit('game:state',{...publicState(game,member.id),roleDefinitions:rules.roles,roleAliveCounts:roleAliveCounts(game),distances,responseDeadline:deadline,characterSkillKeys:CHARACTER_SKILLS})}})};
+// --- Auto-skip: any player who must respond/decide has 15s before the server skips them (treated as "decline / don't use"). ---
+const TIMEOUT_MS=15000;
+type ActiveTimeout={key:string;deadline:number;timer:ReturnType<typeof setTimeout>};
+const gameTimeouts=new Map<string,ActiveTimeout>();
+// Identify who the game is currently waiting on and the "decline" action to take if they run out of time.
+function pendingTimeoutFor(game:GameState):{key:string;run:()=>void}|null{
+ const rw=game.responseWindow;
+ if(rw&&rw.status==='open'&&rw.currentResponderId){
+  const r=rw.currentResponderId;
+  if(rw.type==='negate')return{key:`negate:${r}`,run:()=>declineNegate(game,r)};
+  if(rw.type==='dying_heal')return{key:`dying:${r}`,run:()=>declineResponse(game,r)};
+  if(rw.type==='duel_attack')return{key:`duel:${r}`,run:()=>declineResponse(game,r)};
+  if(rw.type==='attack_dodge')return{key:`dodge:${r}`,run:()=>respondToAttack(game,r)};
+  if(rw.type==='mass_dodge'||rw.type==='mass_attack'||rw.type==='multi_attack')return{key:`mass:${r}`,run:()=>declineMassResponse(game,r)};
+  if(rw.type==='coerce_attack')return{key:`coerce:${r}`,run:()=>declineCoerce(game,r)};
+  if(rw.type==='harvest_pick')return{key:`harvest:${r}`,run:()=>{const first=game.pendingHarvest?.revealed[0];if(first)pickHarvestCard(game,r,first.id);}};
+  return null;
+ }
+ if(game.pendingRepeatAttack)return{key:`repeat:${game.pendingRepeatAttack.attackerId}`,run:()=>declineRepeatAttackAfterDodge(game,game.pendingRepeatAttack!.attackerId)};
+ if(game.pendingDestroyMount)return{key:`mount:${game.pendingDestroyMount.attackerId}`,run:()=>declineDestroyTargetMount(game,game.pendingDestroyMount!.attackerId)};
+ if(game.pendingForceAttackDamage)return{key:`force:${game.pendingForceAttackDamage.attackerId}`,run:()=>declineForceAttackDamage(game,game.pendingForceAttackDamage!.attackerId)};
+ if(game.pendingJudgment){const j=game.pendingJudgment;return j.stage==='awaiting_draw'?{key:`judge-draw:${j.playerId}`,run:()=>drawJudgmentCard(game,j.playerId)}:{key:`judge-act:${j.playerId}`,run:()=>resolveJudgmentCard(game,j.playerId)};}
+ if(game.pendingReplaceDamage)return{key:`ice:${game.pendingReplaceDamage.attackerId}`,run:()=>declineReplaceAttackDamage(game,game.pendingReplaceDamage!.attackerId)};
+ if(game.pendingTwinSwords)return{key:`twin:${game.pendingTwinSwords.targetId}`,run:()=>resolveTwinSwordsLetDraw(game,game.pendingTwinSwords!.targetId)};
+ if(game.pendingFankui)return{key:`fankui:${game.pendingFankui.playerId}`,run:()=>declineFankui(game,game.pendingFankui!.playerId)};
+ return null;
+}
+// Ensures exactly one timer runs per game for the current waiting state. Returns the deadline (epoch ms) or null.
+function refreshTimeout(game:GameState):number|null{
+ const target=pendingTimeoutFor(game),existing=gameTimeouts.get(game.id);
+ if(!target){if(existing){clearTimeout(existing.timer);gameTimeouts.delete(game.id);}return null;}
+ if(existing&&existing.key===target.key)return existing.deadline; // same responder — keep the running clock
+ if(existing)clearTimeout(existing.timer);
+ const deadline=Date.now()+TIMEOUT_MS;
+ const timer=setTimeout(()=>{gameTimeouts.delete(game.id);if(!games.has(game.id))return;try{target.run();}catch{}emitGame(game);},TIMEOUT_MS);
+ gameTimeouts.set(game.id,{key:target.key,deadline,timer});
+ return deadline;
+}
 const sortSeats=(game:GameState)=>game.players.sort((a,b)=>a.seatIndex-b.seatIndex);
 const transferHost=(game:GameState)=>{const next=allMembers(game).find(member=>member.connectionStatus==='online')||allMembers(game)[0];if(next)game.hostId=next.id};
 const rooms=()=>[...games.values()].map(game=>({id:game.id,playerCount:game.players.length,spectatorCount:game.spectators.length,host:memberFor(game,game.hostId)?.username||'—',status:game.phase,hasPassword:false}));
@@ -39,6 +78,38 @@ io.on('connection',socket=>{
  socket.on('mass:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineMassResponse(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('turn:end',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');endTurn(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('turn:draw',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');drawForTurn(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('turn:draw-one',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');drawOneTurnCard(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('pending:draw',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');drawPendingCard(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('judgment:draw',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');drawJudgmentCard(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('judgment:keep',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');keepJudgmentCard(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('judgment:resolve',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');resolveJudgmentCard(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('judgment:replace',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');replaceJudgmentCard(game,userId,String(cardId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('fankui:take',({gameId,selection})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');takeCardFromDamager(game,userId,selection as TargetCardSelection);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('fankui:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineFankui(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('response:heal',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playHeal(game,userId,cardId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('response:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineResponse(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('duel:respond',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playAttackResponse(game,userId,String(cardId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('skill:self-damage-draw',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');useSelfDamageDraw(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('skill:balance',({gameId,cardIds})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');useDiscardThenDraw(game,userId,Array.isArray(cardIds)?cardIds.map(String):[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('armor:judgment',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');useArmorJudgment(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('attack:repeat',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');continueRepeatAttackAfterDodge(game,userId,cardId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('attack:repeat-decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineRepeatAttackAfterDodge(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('mount:destroy',({gameId,targetId,slot})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');destroyTargetMountAfterDamage(game,userId,targetId,slot);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('mount:destroy-decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineDestroyTargetMount(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('attack:force',({gameId,cardIds})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');forceAttackDamageByDiscardingTwo(game,userId,Array.isArray(cardIds)?cardIds:[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('attack:force-decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineForceAttackDamage(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('ice:replace',({gameId,selections})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');replaceAttackDamageByDiscarding(game,userId,Array.isArray(selections)?selections as TargetCardSelection[]:[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('ice:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineReplaceAttackDamage(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('weapon:snake-attack',({gameId,cardIds,targetId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');useDiscardTwoAsAttack(game,userId,Array.isArray(cardIds)?cardIds:[],String(targetId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('twin:discard',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');resolveTwinSwordsDiscard(game,userId,String(cardId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('twin:draw',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');resolveTwinSwordsLetDraw(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('attack:multi',({gameId,cardId,targetIds})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playLastHandMultiAttack(game,userId,String(cardId||''),Array.isArray(targetIds)?targetIds.map(String):[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('coerce:play',({gameId,cardId,weaponHolderId,victimId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playCoerceAttack(game,userId,String(cardId||''),String(weaponHolderId||''),String(victimId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('coerce:attack',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');resolveCoerceWithAttack(game,userId,String(cardId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('coerce:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineCoerce(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('harvest:pick',({gameId,cardId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');pickHarvestCard(game,userId,String(cardId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('card:discard-target',({gameId,cardId,targetId,selection})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playDiscardTargetCard(game,userId,targetId,cardId,selection);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('card:steal-target',({gameId,cardId,targetId,selection})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');playStealTargetCard(game,userId,targetId,selection,cardId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('hand:discard',({gameId,cardIds})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');discardForHandLimit(game,userId,Array.isArray(cardIds)?cardIds:[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('chat:send',({gameId,text})=>{const game=games.get(gameId),userId=socket.data.userId,speaker=game&&userId?memberFor(game,userId):undefined;if(game&&speaker)io.to(gameId).emit('chat:message',{id:crypto.randomUUID(),username:speaker.username,text:String(text).slice(0,500),at:now()})});
  socket.on('disconnect',()=>{const userId=socket.data.userId;if(!userId)return;connections.delete(userId);for(const game of games.values()){const member=memberFor(game,userId);if(member){member.connectionStatus='disconnected';member.lastSeenAt=now();emitGame(game)}}});

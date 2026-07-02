@@ -8,7 +8,7 @@ export type CardInstance = { instanceId:string; definitionKey:string; name:strin
 export type EquipmentSlots<T=CardInstance> = { weapon:T|null; armor:T|null; offensiveMount:T|null; defensiveMount:T|null };
 export type TurnState = { activePlayerId:string|null; phase:TurnPhase; direction:'clockwise'|'counterclockwise'; turnNumber:number; attackUsedThisTurn:number; drawnThisTurn?:number };
 export type ResponseRecord = { playerId:string; response:'card'|'decline'|'timeout'; cardInstanceId?:string; createdAt:string };
-export type ResponseWindow = { windowId:string; type:'attack_dodge'|'dying_heal'|'mass_dodge'|'mass_attack'|'duel_attack'|'negate'; sourceActionId:string; requiredPlayerIds:string[]; currentResponderId:string|null; allowedResponseEffectKeys:string[]; responses:ResponseRecord[]; status:'open'|'resolved'|'cancelled'; createdAt:string; dyingPlayerId?:string; dyingKillerId?:string; responderQueue?:string[] };
+export type ResponseWindow = { windowId:string; type:'attack_dodge'|'dying_heal'|'mass_dodge'|'mass_attack'|'multi_attack'|'coerce_attack'|'harvest_pick'|'duel_attack'|'negate'; sourceActionId:string; requiredPlayerIds:string[]; currentResponderId:string|null; allowedResponseEffectKeys:string[]; responses:ResponseRecord[]; status:'open'|'resolved'|'cancelled'; createdAt:string; dyingPlayerId?:string; dyingKillerId?:string; responderQueue?:string[]; attackDamage?:number; duelResponderAttacks?:number };
 export type CurrentAction = { actionId:string; actorId:string; card:CardInstance|null; effectKey:string; targetIds:string[]; status:'declared'|'resolving'|'resolved'|'cancelled'; createdAt:string };
 export type TargetRules = { minTargets:number; maxTargets:number; allowSelf?:boolean; maxDistance?:number|'attack' };
 export type TargetedCardAction = { action:CurrentAction; actor:Player; card:Card; targets:Player[] };
@@ -23,15 +23,19 @@ export type TriggerTiming = 'on_play'|'on_response'|'on_judgment'|'on_damage'|'a
 export type EquipmentSlot = 'weapon'|'armor'|'offensive_mount'|'defensive_mount';
 export type EffectParams = Record<string,unknown>;
 export type Card = { id:string; name:string; type:string; cardType:CardType; suit:string; number:string; image:string|null; description:string|null; effect:string|null; effectParams:EffectParams; triggerTiming:TriggerTiming; equipmentSlot:EquipmentSlot|null; createsResponseWindow:boolean; conditions:unknown };
-export type Character = { id:string; name:string; hp:number; faction:string; kingdomTh?:string; skills: { name:string; description:string; condition?:string|null }[]; image?:string };
+export type Character = { id:string; name:string; hp:number; faction:string; kingdomTh?:string; gender?:string; skills: { name:string; description:string; condition?:string|null }[]; image?:string };
 export type ConnectionStatus = 'online'|'disconnected';
 export type Player = { id:string; username:string; seatIndex:number; connectionStatus:ConnectionStatus; joinedAt:string; lastSeenAt:string; role?:Role; roleRevealed:boolean; character?:Character; characterOptions:Character[]; hand:Card[]; equipment:EquipmentSlots<Card>; decisionArea:Card[]; ready:boolean; confirmedCharacter:boolean; alive:boolean; hp?:number; maxHp?:number };
 export type GamePhase = 'waiting'|'role-vote'|'character-select'|'direction-select'|'playing'|'ended';
-export type PendingAction = { id:string; kind:'attack'; actorId:string; targetId:string; cardId:string; responseKey:'dodge'; damage:number };
+export type PendingAction = { id:string; kind:'attack'; actorId:string; targetId:string; cardId:string; responseKey:'dodge'; damage:number; dodgesRequired?:number };
 export type GameEventName = 'before_attack'|'after_attack'|'before_damage'|'after_damage'|'before_judgment'|'after_judgment'|'before_heal'|'after_heal';
 export type GameEvent = { name:GameEventName; actorId?:string; targetId?:string; card?:Card; amount?:number; cancelled?:boolean; metadata?:Record<string,unknown> };
 export type EventSubscriber = { id:string; event:GameEventName; priority?:number; handle:(state:GameState,event:GameEvent)=>void };
-export const dispatchGameEvent=(state:GameState,event:GameEvent,subscribers:EventSubscriber[]=[])=>([...subscribers].filter(subscriber=>subscriber.event===event.name).sort((a,b)=>(b.priority||0)-(a.priority||0)).forEach(subscriber=>subscriber.handle(state,event)),event);
+export function dispatchGameEvent(state:GameState,event:GameEvent,subscribers:EventSubscriber[]=[]):GameEvent{
+  [...subscribers].filter(subscriber=>subscriber.event===event.name).sort((a,b)=>(b.priority||0)-(a.priority||0)).forEach(subscriber=>subscriber.handle(state,event));
+  runSkillEventHandlers(state,event); // character-skill subscribers, built from the current players
+  return event;
+}
 export type EffectResolverContext = { state:GameState; actor:Player; card:Card; target?:Player; targetId?:string; subscribers?:EventSubscriber[] };
 export type EffectResolver = (context:EffectResolverContext)=>boolean;
 export type Spectator = { id:string; username:string; connectionStatus:ConnectionStatus; joinedAt:string; lastSeenAt:string };
@@ -43,7 +47,13 @@ export type WinningSide = 'emperor_loyalists'|'rebels'|'traitor';
 export type PendingRepeatAttack = { attackerId:string; targetId:string; weaponName:string };
 export type PendingDestroyMount = { attackerId:string; targetId:string };
 export type PendingForceAttackDamage = { attackerId:string; targetId:string };
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string} };
+export type PendingReplaceDamage = { attackerId:string; targetId:string; damage:number; weaponName:string };
+export type PendingTwinSwords = { attackerId:string; targetId:string; actionId:string; attackCardId:string; damage:number; weaponName:string };
+export type PendingCoerce = { actorId:string; weaponHolderId:string; victimId:string; trickName:string };
+export type PendingHarvest = { revealed:Card[] };
+export type PendingJudgment = { playerId:string; trickEffect:'delayed_skip_play_phase'|'delayed_lightning_judgment'; trickName:string; trickCardId:string; stage:'awaiting_draw'|'revealed'; revealed?:Card };
+export type PendingFankui = { playerId:string; damagerId:string };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingDraws?:Record<string,number>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -69,6 +79,48 @@ export function getBaseDistanceBetweenPlayers(state:GameState,fromPlayerId:strin
   if(fromIndex<0||toIndex<0)return null;
   const clockwise=Math.abs(fromIndex-toIndex);return Math.min(clockwise,players.length-clockwise);
 }
+// ── Character skills ──────────────────────────────────────────────────────
+// Machine-readable keys for the character skills the engine implements, mapped by character id.
+// The Thai skill names/descriptions live in the character data; this maps them to engine behavior.
+export const CHARACTER_SKILLS:Record<string,string[]>={
+  CHAR001:['discard_then_draw_equal'],     // ซุนกวน — ถ่วงดุล: 1 ครั้ง/รอบ ทิ้งการ์ดกี่ใบก็ได้ แล้วจั่วเท่าที่ทิ้ง
+  CHAR003:['skip_discard_if_no_attack'],   // ลิบอง — ยับยั้งชั่งใจ: ถ้าไม่ได้ใช้ "โจมตี" ในรอบนี้ ข้ามช่วงทิ้งไพ่ได้
+  CHAR004:['self_damage_draw'],            // อุยกาย — พลีชีพ: จ่าย 1 พลังชีวิต จั่ว 2 ใบ
+  CHAR005:['draw_phase_plus_one'],         // จิวยี่ — ยอดวีรชน: จั่วเพิ่ม 1 ใบในเฟสจั่วของคุณ
+  CHAR007:['immune_indulgence','immune_steal'], // ลกซุน — อ่อนน้อมถ่อมตน: ตกเป็นเป้า "มีสุขลืมเมือง"/"ลอบขโมย" ไม่ได้
+  CHAR010:['red_as_attack'],                // กวนอู — เทพสงคราม: ใช้การ์ด ♥/♦ เป็น "โจมตี" ได้
+  CHAR022:['black_as_dodge'],               // เอียนสี — สาวงามล่มเมือง: ใช้การ์ด ♣/♠ เป็น "หลบ" ได้
+  CHAR023:['red_as_heal'],                  // ฮัวโต๋ — ปฐมพยาบาล: ใช้การ์ด ♥/♦ เป็น "เสบียง" ได้ (นอกตาตัวเอง)
+  CHAR011:['unlimited_attack'],            // เตียวหุย — คำราม: ใช้ "โจมตี" ได้ไม่จำกัดจำนวนครั้ง
+  CHAR012:['immune_attack_when_handless'], // จูกัดเหลียง — กลยุทธ์เมืองว่าง: ถ้าไม่มีไพ่บนมือ ตกเป็นเป้า "โจมตี" ไม่ได้
+  CHAR013:['attack_dodge_swap'],           // จูล่ง — กล้าหาญ: ใช้ "โจมตี" แทน "หลบ" และ "หลบ" แทน "โจมตี" ได้
+  CHAR014:['outgoing_distance_minus_one'], // ม้าเฉียว — ทหารม้า: ระยะจากคุณถึงเป้าหมายอื่น -1 เสมอ
+  CHAR015:['draw_on_instant_trick','trick_ignore_distance'], // หวงเย่อิง — คลังปัญญา (ใช้อุบายไม่รอเวลา จั่ว 1) + ผู้วิเศษ (อุบายไม่จำกัดระยะ)
+  CHAR016:['gain_damage_card'],            // โจโฉ — ไม่ยอมให้โลกทรยศ: เมื่อได้รับความเสียหาย ได้การ์ดที่ทำดาเมจ
+  CHAR017:['replace_judgment','take_card_from_damager'], // สุมาอี้ — กำหนดชะตา + กลยุทธ์โต้กลับ (หยิบไพ่คนที่ทำดาเมจ)
+  CHAR021:['draw_on_damage'],              // กุยแก — คำสั่งเสีย: เมื่อได้รับความเสียหาย ได้สิทธิ์จั่ว 2 ใบต่อ 1 ดาเมจ
+  CHAR024:['attack_needs_two_dodges'],     // ลิโป้ — ไร้เทียมทาน: เป้าหมายต้องใช้ "หลบ" 2 ใบจึงจะหลบได้
+  CHAR025:['draw_on_turn_end'],            // เตียวเสี้ยน — งามกลบแสงจันทร์: จบเทิร์นของคุณ ได้สิทธิ์จั่ว 1 ใบ
+  CHAR027:['must_be_targeted_when_loaded'],// อ้วนสุด — ศัตรูหมายหัว: ถ้าไพ่บนมือ > พลังชีวิต ผู้ที่ระยะถึงต้องเลือกโจมตีคุณเท่านั้น
+};
+export const hasCharacterSkill=(state:GameState,playerId:string,key:string)=>{const player=getPlayerById(state,playerId);return Boolean(player?.character&&CHARACTER_SKILLS[player.character.id]?.includes(key));};
+// Suit-based card conversions (กวนอู/เอียนสี/ฮัวโต๋): a card of a given suit may act as another card type.
+const CARD_CONVERSIONS:Record<string,{suits:string[];as:string}>={
+  red_as_attack:{suits:['♥','♦'],as:'attack'},
+  black_as_dodge:{suits:['♠','♣'],as:'dodge'},
+  red_as_heal:{suits:['♥','♦'],as:'heal'},
+};
+/** True if `card` counts as `asEffect` for this player (its own effect, จูล่ง's attack⇄dodge swap, or a suit conversion). */
+export const cardActsAs=(state:GameState,playerId:string,card:Card,asEffect:string):boolean=>{
+  if(card.effect===asEffect)return true;
+  if(hasCharacterSkill(state,playerId,'attack_dodge_swap')&&((asEffect==='dodge'&&card.effect==='attack')||(asEffect==='attack'&&card.effect==='dodge')))return true;
+  const keys=CHARACTER_SKILLS[getPlayerById(state,playerId)?.character?.id??'']??[];
+  return keys.some(key=>{const conv=CARD_CONVERSIONS[key];return Boolean(conv&&conv.as===asEffect&&conv.suits.includes(card.suit));});
+};
+/** จูกัดเหลียง กลยุทธ์เมืองว่าง: a handless holder of this skill cannot be targeted by Attack. */
+export const isImmuneToAttack=(state:GameState,targetId:string)=>{const t=getPlayerById(state,targetId);return Boolean(t&&t.hand.length===0&&hasCharacterSkill(state,targetId,'immune_attack_when_handless'));};
+/** ลิโป้ ไร้เทียมทาน: how many หลบ the target must play to fully dodge this attacker's Attack. */
+export const attackDodgesRequired=(state:GameState,attackerId:string)=>hasCharacterSkill(state,attackerId,'attack_needs_two_dodges')?2:1;
 /**
  * Distance used by effects. It deliberately remains separate from the base
  * seat distance so the UI can show both values for debugging.
@@ -79,7 +131,7 @@ export function getEffectiveDistanceBetweenPlayers(state:GameState,fromPlayerId:
   if(fromPlayerId===toPlayerId)return 0;
   const from=getPlayerById(state,fromPlayerId),to=getPlayerById(state,toPlayerId);
   if(!from||!to)return null;
-  const outgoingModifier=from.equipment.offensiveMount?1:0;
+  const outgoingModifier=(from.equipment.offensiveMount?1:0)+(hasCharacterSkill(state,from.id,'outgoing_distance_minus_one')?1:0);
   const incomingModifier=to.equipment.defensiveMount?1:0;
   return Math.max(1,baseDistance-outgoingModifier+incomingModifier);
 }
@@ -89,14 +141,24 @@ export function getAttackRange(state:GameState,playerId:string){
   return typeof range==='number'&&Number.isFinite(range)&&range>0?range:1;
 }
 export const hasUnlimitedAttackPerTurn=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='unlimited_attack_per_turn';
+/** True if the player ignores the one-attack-per-turn limit (Crossbow weapon or เตียวหุย's คำราม skill). */
+export const hasUnlimitedAttack=(state:GameState,playerId:string)=>hasUnlimitedAttackPerTurn(state,playerId)||hasCharacterSkill(state,playerId,'unlimited_attack');
 export const hasRepeatAttackAfterDodge=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='repeat_attack_after_dodge';
 export const attackIgnoresTargetArmor=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='ignore_target_armor';
 export const hasDamageDestroyTargetMount=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='damage_destroy_target_mount';
 export const hasDiscardTwoForceAttackDamage=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='discard_two_force_attack_damage';
+export const hasReplaceDamageWithDiscardTwo=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='replace_damage_with_discard_two';
+export const hasDiscardTwoAsAttack=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='discard_two_as_attack';
+export const hasOppositeGenderAttackChoice=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='opposite_gender_attack_choice';
+const areOppositeGenders=(a:Player,b:Player)=>Boolean(a.character?.gender&&b.character?.gender&&a.character.gender!==b.character.gender);
+const playerHasAnyCard=(player:Player)=>player.hand.length>0||Object.values(player.equipment).some(Boolean);
 export function canTargetWithAttack(state:GameState,attackerId:string,targetId:string){
   const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,targetId),distance=getEffectiveDistanceBetweenPlayers(state,attackerId,targetId);
-  return Boolean(attacker&&target&&attacker.alive&&target.alive&&attackerId!==targetId&&distance!==null&&distance<=getAttackRange(state,attackerId));
+  return Boolean(attacker&&target&&attacker.alive&&target.alive&&attackerId!==targetId&&!isImmuneToAttack(state,targetId)&&distance!==null&&distance<=getAttackRange(state,attackerId));
 }
+/** อ้วนสุด ศัตรูหมายหัว: any reachable อ้วนสุด whose hand size exceeds their HP must be chosen as the attack target. */
+export const forcedAttackTargets=(state:GameState,attackerId:string):string[]=>state.players.filter(p=>p.alive&&p.id!==attackerId&&hasCharacterSkill(state,p.id,'must_be_targeted_when_loaded')&&p.hp!==undefined&&p.hand.length>p.hp&&canTargetWithAttack(state,attackerId,p.id)).map(p=>p.id);
+const assertForcedAttackTarget=(state:GameState,attackerId:string,targetIds:string[])=>{const forced=forcedAttackTargets(state,attackerId);if(forced.length&&!forced.some(id=>targetIds.includes(id)))throw new Error('ต้องเลือกโจมตี อ้วนสุด ก่อน (ศัตรูหมายหัว)');};
 export const getTopDiscardCard=(state:GameState)=>state.discardPile.at(-1)??null;
 export const getCurrentActionSummary=(state:GameState)=>state.currentAction?{actorId:state.currentAction.actorId,targetIds:state.currentAction.targetIds,effectKey:state.currentAction.effectKey,cardName:state.currentAction.card?.name??null,status:state.currentAction.status}:null;
 export type PublicCardView = Pick<Card,'id'|'name'|'type'|'cardType'|'suit'|'number'|'image'|'description'|'effect'|'equipmentSlot'>;
@@ -153,6 +215,39 @@ export function draw(state:GameState, playerId:string, count=1) {
   const player = state.players.find(p=>p.id===playerId); if (!player) throw new Error('Unknown player');
   for(let i=0;i<count;i++) { if(!state.deck.length && state.discard.length) state.deck=shuffled(state.discard.splice(0)); const card=state.deck.pop(); if(card) player.hand.push(card); }
 }
+/** Records cards a player is owed from an effect; they draw them manually via drawPendingCard. */
+export const owedDraws=(state:GameState,playerId:string)=>state.pendingDraws?.[playerId]??0;
+function grantDraws(state:GameState,playerId:string,count:number){if(count<=0)return;state.pendingDraws={...state.pendingDraws,[playerId]:owedDraws(state,playerId)+count};}
+// ── Character-skill event handlers ────────────────────────────────────────
+// Keyed by the skill key in CHARACTER_SKILLS. dispatchGameEvent runs the matching handler for every alive holder.
+type SkillEventHandler={event:GameEventName;handle:(state:GameState,event:GameEvent,ownerId:string)=>void};
+const SKILL_EVENT_HANDLERS:Record<string,SkillEventHandler>={
+  // กุยแก คำสั่งเสีย: on taking damage, gain 2 draws per point of damage (drawn manually).
+  draw_on_damage:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId)return;const dmg=Math.max(1,event.amount||1);grantDraws(state,ownerId,2*dmg);logAction(state,'skill-draw-on-damage',`${characterName(getPlayerById(state,ownerId)!)} ใช้ คำสั่งเสีย ได้สิทธิ์จั่ว ${2*dmg} ใบ`,ownerId);}},
+  // โจโฉ ไม่ยอมให้โลกทรยศ: on taking damage from a card, take that card into hand (instead of it being discarded).
+  gain_damage_card:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.card)return;const owner=getPlayerById(state,ownerId);if(!owner)return;owner.hand.push(event.card);if(state.lastPlayedCard===event.card)state.lastPlayedCard=undefined;logAction(state,'skill-gain-damage-card',`${characterName(owner)} ใช้ ไม่ยอมให้โลกทรยศ เก็บ ${event.card.name} เข้ามือ`,ownerId,undefined,event.card.id);}},
+  // สุมาอี้ กลยุทธ์โต้กลับ: on taking damage from someone, may take one of their cards (opens a pending decision).
+  take_card_from_damager:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;if(damager.hand.length===0&&!Object.values(damager.equipment).some(Boolean))return;state.pendingFankui={playerId:ownerId,damagerId:event.actorId};logAction(state,'fankui-window',`${characterName(getPlayerById(state,ownerId)!)} อาจใช้ กลยุทธ์โต้กลับ หยิบไพ่จาก ${characterName(damager)}`,ownerId,event.actorId);}},
+};
+function runSkillEventHandlers(state:GameState,event:GameEvent){
+  for(const player of state.players){
+    if(!player.alive||!player.character)continue;
+    for(const key of CHARACTER_SKILLS[player.character.id]??[]){const handler=SKILL_EVENT_HANDLERS[key];if(handler&&handler.event===event.name)handler.handle(state,event,player.id);}
+  }
+}
+/** Draws one owed card for the player and decrements the owed count. */
+export function drawPendingCard(state:GameState,playerId:string){
+  if(owedDraws(state,playerId)<=0)throw new Error('คุณไม่มีไพ่ที่ต้องจั่ว');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const card=state.deck.pop();
+  if(card){player.hand.push(card);logAction(state,'pending-draw',`${characterName(player)} จั่วไพ่ที่ได้รับ 1 ใบ`,player.id);}
+  else logAction(state,'draw-pile-empty','กองจั่วและกองทิ้งมีไพ่ไม่พอ');
+  const remaining=owedDraws(state,playerId)-1;
+  const next={...state.pendingDraws};if(remaining>0)next[playerId]=remaining;else delete next[playerId];
+  state.pendingDraws=Object.keys(next).length?next:undefined;
+  synchronizeGameState(state);
+}
 const numberParam=(card:Card,key:string,fallback:number)=>{const value=card.effectParams[key];return typeof value==='number'?value:fallback};
 const characterName=(player:Player)=>player.character?.name||player.username;
 const findHandCard=(player:Player,cardInstanceId:string)=>player.hand.find((card,index)=>card.id===cardInstanceId||toCardInstance(card,index).instanceId===cardInstanceId);
@@ -192,7 +287,9 @@ export function resolveTargetedCardAction(state:GameState,actionId:string){
   if(state.lastPlayedCard)moveToDiscard(state,state.lastPlayedCard);action.status='resolved';state.currentAction=null;return action;
 }
 
-export const getDiscardRequirement=(state:GameState,playerId:string)=>{const player=getPlayerById(state,playerId);return player?.hp===undefined?0:Math.max(0,player.hand.length-player.hp)};
+export const getDiscardRequirement=(state:GameState,playerId:string)=>{const player=getPlayerById(state,playerId);if(!player||player.hp===undefined)return 0;
+  if(state.currentPlayerId===playerId&&state.attacksThisTurn===0&&hasCharacterSkill(state,playerId,'skip_discard_if_no_attack'))return 0; // ลิบอง ยับยั้งชั่งใจ
+  return Math.max(0,player.hand.length-player.hp);};
 export function getNextAlivePlayer(state:GameState,currentPlayerId:string){
   const players=getPlayersInSeatOrder(state),currentIndex=players.findIndex(player=>player.id===currentPlayerId); if(currentIndex<0)return undefined;
   for(let step=1;step<=players.length;step++){const index=(currentIndex+step*state.direction+players.length)%players.length; if(players[index].alive)return players[index];}
@@ -207,10 +304,79 @@ export function canPlayCardNow(state:GameState,playerId:string,card:Card){
   if(card.effect==='heal'&&state.responseWindow?.type==='dying_heal')return state.responseWindow.currentResponderId===playerId&&state.responseWindow.status==='open';
   return (card.effect==='attack'||card.effect==='duel_attack_response'||card.effect==='all_others_dodge_or_damage'||card.effect==='all_others_attack_or_damage'||card.effect==='heal'||card.effect==='draw_cards'||card.effect==='heal_all_living'||card.effect==='discard_target_card'||card.effect==='steal_target_card_in_range'||isEquipmentCard(card))&&canPlayerAct(state,playerId);
 }
+/** Reveals the top draw-pile card for a judgment, logs it, and moves it to the discard pile. */
+/** Records the latest judgment outcome so every client can flash it. */
+const recordJudgment=(state:GameState,playerId:string,trickName:string,judged:Card|null,result:string)=>{state.lastJudgment={playerId,trickName,cardName:judged?.name??'—',cardNumber:judged?.number??'',cardSuit:judged?.suit??'',result,at:new Date().toISOString()};};
+/** Sets up the next unresolved delayed trick as a pending (manual) judgment. Returns false if none remain. */
+function beginNextJudgment(state:GameState,player:Player):boolean{
+  const trick=player.decisionArea.find(card=>card.effect==='delayed_skip_play_phase'||card.effect==='delayed_lightning_judgment');
+  if(!trick)return false;
+  state.pendingJudgment={playerId:player.id,trickEffect:trick.effect as PendingJudgment['trickEffect'],trickName:trick.name,trickCardId:trick.id,stage:'awaiting_draw'};
+  logAction(state,'judgment-pending',`${characterName(player)} ต้องเปิดไพ่ตัดสิน ${trick.name}`,player.id);
+  return true;
+}
+/** Applies the revealed judgment's outcome (skip play / lightning), retires the delayed trick, then queues the next judgment or moves to the draw phase. */
+function applyJudgmentOutcome(state:GameState,player:Player,pending:PendingJudgment){
+  const judged=pending.revealed??null,trick=player.decisionArea.find(card=>card.id===pending.trickCardId);
+  if(trick)player.decisionArea=player.decisionArea.filter(card=>card!==trick);
+  if(pending.trickEffect==='delayed_skip_play_phase'){
+    if(trick)moveToDiscard(state,trick,false);
+    const skipped=judged?.suit!=='♥';
+    if(skipped){state.skipPlayPhase=true;logAction(state,'indulgence-skip',`${characterName(player)} ถูกข้ามช่วงเล่นไพ่ (มีสุขลืมเมือง)`,player.id);}
+    else logAction(state,'indulgence-passed',`${characterName(player)} ผ่านการตัดสินมีสุขลืมเมือง`,player.id);
+    recordJudgment(state,player.id,pending.trickName,judged,skipped?'ถูกข้ามช่วงเล่นไพ่':'ผ่าน (♥) เล่นได้ตามปกติ');
+  }else{
+    const rank=judged?parseInt(judged.number,10):NaN,struck=judged?.suit==='♠'&&rank>=2&&rank<=9;
+    if(struck){if(trick)moveToDiscard(state,trick,false);logAction(state,'lightning-strike',`${characterName(player)} ถูกฟ้าผ่า เสีย 3 หน่วยพลังชีวิต`,player.id);recordJudgment(state,player.id,pending.trickName,judged,'ฟ้าผ่า! เสีย 3 พลังชีวิต');applyDamage(state,player.id,3);}
+    else{const next=getNextAlivePlayer(state,player.id);if(trick&&next&&next.id!==player.id&&!next.decisionArea.some(c=>c.effect==='delayed_lightning_judgment')){next.decisionArea.push(trick);logAction(state,'lightning-move',`ฟ้าลงโทษเคลื่อนไปยัง ${characterName(next)}`,player.id,next.id);recordJudgment(state,player.id,pending.trickName,judged,`ปลอดภัย → ฟ้าลงโทษเลื่อนไปยัง ${characterName(next)}`);}else{if(trick)moveToDiscard(state,trick,false);recordJudgment(state,player.id,pending.trickName,judged,'ปลอดภัย');}}
+  }
+  state.pendingJudgment=undefined;
+  if(player.alive&&!state.responseWindow&&beginNextJudgment(state,player)){synchronizeGameState(state);return;}
+  if(player.alive)state.turn.phase='draw'; // a dying window (if any) still blocks the draw until it resolves
+  synchronizeGameState(state);
+}
+/** Player manually reveals the top draw-pile card as their judgment. Everyone then sees it. */
+export function drawJudgmentCard(state:GameState,playerId:string){
+  const pending=state.pendingJudgment;if(!pending||pending.playerId!==playerId||pending.stage!=='awaiting_draw')throw new Error('ยังไม่ถึงเวลาเปิดไพ่ตัดสิน');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const card=state.deck.pop()??undefined;
+  pending.revealed=card;pending.stage='revealed';
+  if(card)logAction(state,'judgment-reveal',`ไพ่ตัดสินของ ${characterName(getPlayerById(state,playerId)!)}: ${card.name} (${card.number}${card.suit})`,playerId,undefined,card.id);
+  else logAction(state,'judgment-no-card','ไม่มีไพ่สำหรับการตัดสิน',playerId);
+  synchronizeGameState(state);
+}
+/** Keep the revealed judgment card into the player's hand (character ability), then apply the judgment. */
+export function keepJudgmentCard(state:GameState,playerId:string){
+  const pending=state.pendingJudgment;if(!pending||pending.playerId!==playerId||pending.stage!=='revealed')throw new Error('ยังไม่มีไพ่ตัดสินให้เก็บ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(pending.revealed){player.hand.push(pending.revealed);logAction(state,'judgment-kept',`${characterName(player)} เก็บไพ่ตัดสิน ${pending.revealed.name} เข้ามือ`,playerId,undefined,pending.revealed.id);}
+  applyJudgmentOutcome(state,player,pending);
+}
+/** Let the revealed judgment card resolve normally (goes to discard), then apply the judgment. */
+export function resolveJudgmentCard(state:GameState,playerId:string){
+  const pending=state.pendingJudgment;if(!pending||pending.playerId!==playerId||pending.stage!=='revealed')throw new Error('ยังไม่มีไพ่ตัดสินให้ดำเนินการ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(pending.revealed)moveToDiscard(state,pending.revealed,true);
+  applyJudgmentOutcome(state,player,pending);
+}
+/** สุมาอี้ กำหนดชะตา: any holder replaces the revealed judgment card with one of their hand cards (the old one is discarded). */
+export function replaceJudgmentCard(state:GameState,playerId:string,cardInstanceId:string){
+  const pending=state.pendingJudgment;if(!pending||pending.stage!=='revealed')throw new Error('ยังไม่มีไพ่ตัดสินให้เปลี่ยน');
+  if(!hasCharacterSkill(state,playerId,'replace_judgment'))throw new Error('ไม่มีทักษะกำหนดชะตา');
+  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Unknown player');
+  const card=findHandCard(player,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  player.hand=player.hand.filter(item=>item!==card);
+  if(pending.revealed)moveToDiscard(state,pending.revealed,true); // old judgment card to discard
+  pending.revealed=card;
+  logAction(state,'skill-replace-judgment',`${characterName(player)} ใช้ กำหนดชะตา เปลี่ยนไพ่ตัดสินเป็น ${card.name} (${card.number}${card.suit})`,player.id,pending.playerId,card.id);
+  synchronizeGameState(state);
+}
 export function startTurn(state:GameState,playerId:string){
   const player=getPlayerById(state,playerId); if(!player||!player.alive)throw new Error('Cannot start a turn for this player');
-  state.currentPlayerId=playerId; state.hasDrawnThisTurn=false; state.attacksThisTurn=0; state.turn={activePlayerId:playerId,phase:'draw',direction:state.direction===1?'clockwise':'counterclockwise',turnNumber:Math.max(1,state.turn.turnNumber),attackUsedThisTurn:0,drawnThisTurn:0};
-  logAction(state,'turn-start',`${characterName(player)} เริ่มเทิร์น`,player.id); synchronizeGameState(state);
+  state.currentPlayerId=playerId; state.hasDrawnThisTurn=false; state.attacksThisTurn=0; state.skipPlayPhase=false; state.skillsUsedThisTurn=[]; state.turn={activePlayerId:playerId,phase:'judgment',direction:state.direction===1?'clockwise':'counterclockwise',turnNumber:Math.max(1,state.turn.turnNumber),attackUsedThisTurn:0,drawnThisTurn:0};
+  logAction(state,'turn-start',`${characterName(player)} เริ่มเทิร์น`,player.id);
+  if(!beginNextJudgment(state,player))state.turn.phase='draw'; // no delayed tricks → straight to draw
+  synchronizeGameState(state);
 }
 /** Keeps the visible top discard card on the table and shuffles older discards. TODO: seeded RNG for replay. */
 export function reshuffleDiscardIntoDrawPile(state:GameState){
@@ -220,20 +386,25 @@ export function reshuffleDiscardIntoDrawPile(state:GameState){
   logAction(state,'draw-pile-reshuffled','กองจั่วหมด จึงสับกองทิ้งเป็นกองจั่วใหม่');synchronizeGameState(state);return recycled.length;
 }
 export function drawCards(state:GameState,playerId:string,amount:number){
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อนจั่วไพ่');
   if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('It is not the draw phase for this player');
   const player=getPlayerById(state,playerId); if(!player)throw new Error('Unknown player'); let drawn=0;
   for(let index=0;index<amount;index++){if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);const card=state.deck.pop();if(!card){if(index===0||drawn<amount)logAction(state,'draw-pile-empty','กองจั่วและกองทิ้งมีไพ่ไม่พอสำหรับการจั่ว');break;}player.hand.push(card);drawn++;}
-  state.hasDrawnThisTurn=true; state.turn.phase='play'; state.turn.drawnThisTurn=drawn; logAction(state,'turn-draw',`${characterName(player)} จั่วการ์ด ${drawn} ใบ`,player.id); logAction(state,'turn-play',`${characterName(player)} เข้าสู่ช่วงเล่นไพ่`,player.id); synchronizeGameState(state); return drawn;
+  state.hasDrawnThisTurn=true; state.turn.drawnThisTurn=drawn; logAction(state,'turn-draw',`${characterName(player)} จั่วการ์ด ${drawn} ใบ`,player.id);
+  if(state.skipPlayPhase){state.turn.phase='discard';state.skipPlayPhase=false;logAction(state,'play-phase-skipped',`${characterName(player)} ถูกข้ามช่วงเล่นไพ่`,player.id);}else{state.turn.phase='play';logAction(state,'turn-play',`${characterName(player)} เข้าสู่ช่วงเล่นไพ่`,player.id);}
+  synchronizeGameState(state); return drawn;
 }
 /** Draw exactly one card from the deck. Advances to play phase only after `allowance` cards have been drawn this turn (default 2). */
 export function drawOneTurnCard(state:GameState,playerId:string,allowance=2):void{
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อนจั่วไพ่');
   if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ยังไม่ถึงเวลาจั่วไพ่');
   const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const need=allowance+(hasCharacterSkill(state,playerId,'draw_phase_plus_one')?1:0); // จิวยี่ ยอดวีรชน: +1 ใบในเฟสจั่ว
   if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
   const card=state.deck.pop();
-  if(card){player.hand.push(card);state.turn.drawnThisTurn=(state.turn.drawnThisTurn||0)+1;logAction(state,'turn-draw-one',`${characterName(player)} จั่วการ์ด 1 ใบ (${state.turn.drawnThisTurn}/${allowance})`,player.id);}
-  else{logAction(state,'draw-pile-empty','กองจั่วและกองทิ้งมีไพ่ไม่พอ');state.turn.drawnThisTurn=allowance;}
-  if(state.turn.drawnThisTurn>=allowance){state.hasDrawnThisTurn=true;state.turn.phase='play';logAction(state,'turn-play',`${characterName(player)} เข้าสู่ช่วงเล่นไพ่`,player.id);}
+  if(card){player.hand.push(card);state.turn.drawnThisTurn=(state.turn.drawnThisTurn||0)+1;logAction(state,'turn-draw-one',`${characterName(player)} จั่วการ์ด 1 ใบ (${state.turn.drawnThisTurn}/${need})`,player.id);}
+  else{logAction(state,'draw-pile-empty','กองจั่วและกองทิ้งมีไพ่ไม่พอ');state.turn.drawnThisTurn=need;}
+  if(state.turn.drawnThisTurn>=need){state.hasDrawnThisTurn=true;if(state.skipPlayPhase){state.turn.phase='discard';state.skipPlayPhase=false;logAction(state,'play-phase-skipped',`${characterName(player)} ถูกข้ามช่วงเล่นไพ่`,player.id);}else{state.turn.phase='play';logAction(state,'turn-play',`${characterName(player)} เข้าสู่ช่วงเล่นไพ่`,player.id);}}
   synchronizeGameState(state);
 }
 export function advancePhase(state:GameState){
@@ -256,10 +427,58 @@ function openDyingRescueWindow(state:GameState,dyingPlayerId:string,killerId?:st
 }
 
 /** Damage opens a dying-heal window at 0 HP; death waits until every responder declines. */
-export function applyDamage(state:GameState,targetId:string,amount:number,killerId?:string){
+export function applyDamage(state:GameState,targetId:string,amount:number,killerId?:string,sourceCard?:Card){
   const target=getPlayerById(state,targetId); if(!target||!target.alive||target.hp===undefined) throw new Error('Choose a living target');
   target.hp=Math.max(0,target.hp-amount); logAction(state,'damage',`${characterName(target)} เสีย ${amount} HP`,undefined,target.id);
-  if(target.hp===0)openDyingRescueWindow(state,target.id,killerId);
+  dispatchGameEvent(state,{name:'after_damage',targetId,actorId:killerId,amount,card:sourceCard}); // character-skill triggers (โจโฉ/กุยแก ฯลฯ)
+  if(target.alive&&target.hp===0)openDyingRescueWindow(state,target.id,killerId);
+}
+// ── Active character skills (player-triggered during their play phase) ─────
+const markSkillUsed=(state:GameState,key:string)=>{state.skillsUsedThisTurn=[...(state.skillsUsedThisTurn??[]),key];};
+/** อุยกาย พลีชีพ: lose 1 HP to gain 2 draws. May put you into a dying state. */
+export function useSelfDamageDraw(state:GameState,playerId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'self_damage_draw'))throw new Error('ไม่มีทักษะพลีชีพ');
+  const player=getPlayerById(state,playerId);if(!player||player.hp===undefined)throw new Error('Unknown player');
+  player.hp=Math.max(0,player.hp-1);
+  logAction(state,'skill-self-damage-draw',`${characterName(player)} ใช้ พลีชีพ เสีย 1 พลังชีวิต ได้สิทธิ์จั่ว 2 ใบ`,playerId);
+  grantDraws(state,playerId,2);
+  if(player.hp===0)openDyingRescueWindow(state,playerId,playerId);
+  synchronizeGameState(state);
+}
+/** ซุนกวน ถ่วงดุล: once per turn, discard any number of hand cards then gain that many draws. */
+export function useDiscardThenDraw(state:GameState,playerId:string,cardInstanceIds:string[]){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'discard_then_draw_equal'))throw new Error('ไม่มีทักษะถ่วงดุล');
+  if(state.skillsUsedThisTurn?.includes('discard_then_draw_equal'))throw new Error('ใช้ถ่วงดุลได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const ids=[...new Set(cardInstanceIds)];if(ids.length!==cardInstanceIds.length)throw new Error('ไพ่ต้องไม่ซ้ำกัน');
+  if(!ids.length)throw new Error('เลือกไพ่อย่างน้อย 1 ใบ');
+  const cards=ids.map(id=>findHandCard(player,id));if(cards.some(c=>!c))throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  for(const card of cards as Card[]){player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,false);}
+  markSkillUsed(state,'discard_then_draw_equal');
+  logAction(state,'skill-balance',`${characterName(player)} ใช้ ถ่วงดุล ทิ้งไพ่ ${cards.length} ใบ ได้สิทธิ์จั่ว ${cards.length} ใบ`,playerId);
+  grantDraws(state,playerId,cards.length);
+  synchronizeGameState(state);
+}
+/** สุมาอี้ กลยุทธ์โต้กลับ: take the chosen card from the damager (hidden hand position or visible equipment). */
+export function takeCardFromDamager(state:GameState,playerId:string,selection:TargetCardSelection){
+  const pending=state.pendingFankui;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีกลยุทธ์โต้กลับที่ค้างอยู่');
+  const sima=getPlayerById(state,playerId),damager=getPlayerById(state,pending.damagerId);if(!sima||!damager)throw new Error('ผู้เล่นหาย');
+  let chosen:Card|undefined,slot:RuntimeEquipmentSlot|undefined;
+  if(selection.zone==='hand'){chosen=damager.hand[selection.handIndex];}
+  else if(selection.zone==='equipment'){for(const key of Object.keys(damager.equipment) as RuntimeEquipmentSlot[]){const e=damager.equipment[key];if(e&&(e.id===selection.cardInstanceId||toCardInstance(e).instanceId===selection.cardInstanceId)){chosen=e;slot=key;break;}}}
+  else throw new Error('Decision-area selection is not supported');
+  if(!chosen)throw new Error('ไพ่ที่เลือกไม่มีอยู่');
+  if(slot)damager.equipment[slot]=null;else damager.hand=damager.hand.filter(c=>c!==chosen);
+  sima.hand.push(chosen);state.pendingFankui=undefined;
+  logAction(state,'skill-fankui',`${characterName(sima)} ใช้ กลยุทธ์โต้กลับ หยิบไพ่ 1 ใบจาก ${characterName(damager)}`,sima.id,damager.id);
+  synchronizeGameState(state);
+}
+export function declineFankui(state:GameState,playerId:string){
+  const pending=state.pendingFankui;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีกลยุทธ์โต้กลับที่ค้างอยู่');
+  state.pendingFankui=undefined;logAction(state,'skill-fankui-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ใช้ กลยุทธ์โต้กลับ`,playerId);
+  synchronizeGameState(state);
 }
 
 function discardPlayerZones(state:GameState,player:Player,includeDecisionArea=true){
@@ -277,7 +496,7 @@ function checkWinCondition(state:GameState,dead:Player){
 export function resolvePlayerDeath(state:GameState,playerId:string,killerId?:string){
   const dead=getPlayerById(state,playerId);if(!dead||!dead.alive)throw new Error('Player is not alive');const killer=killerId?getPlayerById(state,killerId):undefined;
   dead.roleRevealed=true;discardPlayerZones(state,dead);dead.alive=false;logAction(state,'player-died',`${characterName(dead)} ตาย และเปิดเผยบทบาท ${dead.role||'ไม่ทราบ'}`,undefined,dead.id);
-  if(killer?.alive&&dead.role==='rebel'){draw(state,killer.id,3);logAction(state,'rebel-kill-reward',`${characterName(killer)} กำจัดกบฏ จั่วการ์ด 3 ใบ`,killer.id,dead.id);}
+  if(killer?.alive&&dead.role==='rebel'){grantDraws(state,killer.id,3);logAction(state,'rebel-kill-reward',`${characterName(killer)} กำจัดกบฏ ได้รับสิทธิ์จั่วการ์ด 3 ใบ`,killer.id,dead.id);}
   if(killer?.alive&&killer.role==='emperor'&&dead.role==='loyalist'){discardPlayerZones(state,killer,false);logAction(state,'emperor-loyalist-penalty',`${characterName(killer)} กำจัดผู้ภักดี จึงทิ้งไพ่บนมือและอุปกรณ์ทั้งหมด`,killer.id,dead.id);}
   if(checkWinCondition(state,dead)){synchronizeGameState(state);return;}
   if(state.turn.activePlayerId===dead.id){const next=getNextAlivePlayer(state,dead.id);if(next){state.turn.turnNumber++;startTurn(state,next.id);}}
@@ -304,26 +523,78 @@ export function declineResponse(state:GameState,playerId:string){
 
 export function playAttack(state:GameState,attackerId:string,targetId:string,cardInstanceId:string){
   const initiatingCard=getPlayerById(state,attackerId)&&findHandCard(getPlayerById(state,attackerId)!,cardInstanceId);if(initiatingCard?.effect==='duel_attack_response')return playDuel(state,attackerId,targetId,cardInstanceId);
-  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttackPerTurn(state,attackerId)) throw new Error('You may only use one attack per turn');
+  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttack(state,attackerId)) throw new Error('You may only use one attack per turn');
+  if(isImmuneToAttack(state,targetId))throw new Error('เป้าหมายมือว่างและไม่สามารถถูกโจมตีได้ (กลยุทธ์เมืองว่าง)');
+  assertForcedAttackTarget(state,attackerId,[targetId]);
   const prepared=createTargetedCardAction(state,attackerId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false,maxDistance:'attack'},'attack');
   const attacker=prepared.actor,target=prepared.targets[0]!;
-  const card=prepared.card,actionId=prepared.action.actionId;if(card.effect!=='attack')throw new Error('Attack card is not in your hand');
+  const card=prepared.card,actionId=prepared.action.actionId;if(!cardActsAs(state,attacker.id,card,'attack'))throw new Error('Attack card is not in your hand');
   if(target.equipment.armor?.effect==='black_attack_immunity'&&['♠','♣'].includes(card.suit)&&!attackIgnoresTargetArmor(state,attacker.id)){logAction(state,'armor-blocked-attack',`${characterName(target)} ใช้เกราะป้องกันการโจมตีสีดำ`,target.id,attacker.id);resolveTargetedCardAction(state,actionId);synchronizeGameState(state);return;}
+  // Twin Swords: attacking an opposite-gender target pauses for the target to discard a card or let the attacker draw, before the normal dodge window opens.
+  if(hasOppositeGenderAttackChoice(state,attacker.id)&&areOppositeGenders(attacker,target)){state.pendingTwinSwords={attackerId:attacker.id,targetId:target.id,actionId,attackCardId:card.id,damage:numberParam(card,'damage',1),weaponName:attacker.equipment.weapon?.name||'อาวุธ'};logAction(state,'twin-swords-choice',`${characterName(attacker)} ใช้ ${attacker.equipment.weapon?.name||'อาวุธ'} — ${characterName(target)} ต้องเลือกทิ้งไพ่ หรือให้ผู้โจมตีจั่ว`,attacker.id,target.id);synchronizeGameState(state);return;}
+  openAttackDodgeWindow(state,attacker,target,actionId,card.id,numberParam(card,'damage',1));
+}
+/** Increments the per-turn attack counters and opens the standard attack-dodge window. */
+function openAttackDodgeWindow(state:GameState,attacker:Player,target:Player,actionId:string,cardId:string,damage:number){
   state.attacksThisTurn++; state.turn.attackUsedThisTurn++;
   state.responseWindow={windowId:crypto.randomUUID(),type:'attack_dodge',sourceActionId:actionId,requiredPlayerIds:[target.id],currentResponderId:target.id,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:new Date().toISOString()};
-  state.pendingAction={id:actionId,kind:'attack',actorId:attacker.id,targetId:target.id,cardId:card.id,responseKey:'dodge',damage:numberParam(card,'damage',1)};
+  state.pendingAction={id:actionId,kind:'attack',actorId:attacker.id,targetId:target.id,cardId,responseKey:'dodge',damage,dodgesRequired:attackDodgesRequired(state,attacker.id)};
+  synchronizeGameState(state);
+}
+/** Twin Swords choice — target discards one hand card, then the attack proceeds. */
+export function resolveTwinSwordsDiscard(state:GameState,targetId:string,cardInstanceId:string){
+  const pending=state.pendingTwinSwords;if(!pending||pending.targetId!==targetId)throw new Error('No twin-swords choice is pending');
+  const attacker=getPlayerById(state,pending.attackerId),target=getPlayerById(state,targetId);if(!attacker||!target)throw new Error('Participant is missing');
+  const card=findHandCard(target,cardInstanceId);if(!card)throw new Error('Card is not in your hand');
+  target.hand=target.hand.filter(c=>c!==card);moveToDiscard(state,card,false);
+  logAction(state,'twin-swords-discard',`${characterName(target)} ทิ้งไพ่ 1 ใบจากผลของ ${pending.weaponName}`,target.id);
+  state.pendingTwinSwords=undefined;openAttackDodgeWindow(state,attacker,target,pending.actionId,pending.attackCardId,pending.damage);
+}
+/** Twin Swords choice — target lets the attacker draw one card, then the attack proceeds. */
+export function resolveTwinSwordsLetDraw(state:GameState,targetId:string){
+  const pending=state.pendingTwinSwords;if(!pending||pending.targetId!==targetId)throw new Error('No twin-swords choice is pending');
+  const attacker=getPlayerById(state,pending.attackerId),target=getPlayerById(state,targetId);if(!attacker||!target)throw new Error('Participant is missing');
+  grantDraws(state,attacker.id,1);
+  logAction(state,'twin-swords-draw',`${characterName(target)} ให้ ${characterName(attacker)} ได้รับสิทธิ์จั่ว 1 ใบ`,attacker.id);
+  state.pendingTwinSwords=undefined;openAttackDodgeWindow(state,attacker,target,pending.actionId,pending.attackCardId,pending.damage);
+}
+
+/** Snake Spear: discard exactly two hand cards to launch a virtual attack. The combined attack counts as black only when both cards are black. */
+export function useDiscardTwoAsAttack(state:GameState,attackerId:string,cardIds:string[],targetId:string){
+  const attacker=getPlayerById(state,attackerId);if(!attacker)throw new Error('Unknown player');
+  if(!hasDiscardTwoAsAttack(state,attackerId))throw new Error('You do not have a weapon that converts cards into an attack');
+  if(!Array.isArray(cardIds)||cardIds.length!==2||cardIds[0]===cardIds[1])throw new Error('Choose exactly two different hand cards');
+  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttack(state,attackerId))throw new Error('You may only use one attack per turn');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive||target.id===attackerId)throw new Error('Choose a living opponent');
+  const card1=findHandCard(attacker,cardIds[0]!),card2=findHandCard(attacker,cardIds[1]!);if(!card1||!card2)throw new Error('Both cards must be in your hand');
+  const bothBlack=['♠','♣'].includes(card1.suit)&&['♠','♣'].includes(card2.suit);
+  // card1 becomes the representative attack card (removed from hand, discarded at resolution); card2 is discarded immediately.
+  const prepared=createTargetedCardAction(state,attackerId,cardIds[0]!,[targetId],{minTargets:1,maxTargets:1,allowSelf:false,maxDistance:'attack'},'attack');
+  const actionId=prepared.action.actionId;
+  attacker.hand=attacker.hand.filter(c=>c!==card2);moveToDiscard(state,card2,false);
+  logAction(state,'snake-spear-attack',`${characterName(attacker)} ทิ้งไพ่ 2 ใบใช้เป็นการโจมตีใส่ ${characterName(target)}`,attacker.id,target.id);
+  if(target.equipment.armor?.effect==='black_attack_immunity'&&bothBlack&&!attackIgnoresTargetArmor(state,attacker.id)){logAction(state,'armor-blocked-attack',`${characterName(target)} ใช้เกราะป้องกันการโจมตีสีดำ`,target.id,attacker.id);resolveTargetedCardAction(state,actionId);synchronizeGameState(state);return;}
+  state.attacksThisTurn++;state.turn.attackUsedThisTurn++;
+  state.responseWindow={windowId:crypto.randomUUID(),type:'attack_dodge',sourceActionId:actionId,requiredPlayerIds:[target.id],currentResponderId:target.id,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:new Date().toISOString()};
+  state.pendingAction={id:actionId,kind:'attack',actorId:attacker.id,targetId:target.id,cardId:card1.id,responseKey:'dodge',damage:numberParam(card1,'damage',1),dodgesRequired:attackDodgesRequired(state,attacker.id)};
   synchronizeGameState(state);
 }
 
 export function playDuel(state:GameState,actorId:string,targetId:string,cardInstanceId:string){
+  if(isImmuneToAttack(state,targetId))throw new Error('เป้าหมายมือว่างและไม่สามารถถูกท้าสู้ได้ (กลยุทธ์เมืองว่าง)'); // จูกัดเหลียง กลยุทธ์เมืองว่าง
   const prepared=createTargetedCardAction(state,actorId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false},'duel_attack_response');const target=prepared.targets[0]!;
   if(prepared.card.effect!=='duel_attack_response')throw new Error('Duel card is not in your hand');
   state.responseWindow={windowId:crypto.randomUUID(),type:'duel_attack',sourceActionId:prepared.action.actionId,requiredPlayerIds:[actorId,targetId],currentResponderId:targetId,allowedResponseEffectKeys:['attack'],responses:[],status:'open',createdAt:new Date().toISOString()};
   synchronizeGameState(state);
 }
 export function playAttackResponse(state:GameState,playerId:string,cardInstanceId:string){
-  const window=state.responseWindow,action=state.currentAction;if(!window||!action||window.type!=='duel_attack'||window.currentResponderId!==playerId)throw new Error('You cannot respond to this duel now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId);if(!player||!card||card.effect!=='attack')throw new Error('Attack card is not in your hand');
-  player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'duel-attack-response',`${characterName(player)} ตอบโต้ด้วย โจมตี`,player.id);window.currentResponderId=playerId===action.actorId?action.targetIds[0]!:action.actorId;synchronizeGameState(state);
+  const window=state.responseWindow,action=state.currentAction;if(!window||!action||window.type!=='duel_attack'||window.currentResponderId!==playerId)throw new Error('You cannot respond to this duel now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId);if(!player||!card||!cardActsAs(state,playerId,card,'attack'))throw new Error('Attack card is not in your hand');
+  player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'duel-attack-response',`${characterName(player)} ตอบโต้ด้วย โจมตี`,player.id);
+  const opponent=playerId===action.actorId?action.targetIds[0]!:action.actorId;
+  const attacksNeeded=hasCharacterSkill(state,opponent,'attack_needs_two_dodges')?2:1; // ลิโป้ ไร้เทียมทาน: ต้องใช้ "โจมตี" 2 ใบในดวล
+  const provided=(window.duelResponderAttacks??0)+1;
+  if(provided<attacksNeeded){window.duelResponderAttacks=provided;logAction(state,'duel-need-more-attack',`${characterName(player)} ต้องใช้ โจมตี อีก ${attacksNeeded-provided} ใบ (ไร้เทียมทาน)`,player.id);synchronizeGameState(state);return;}
+  window.duelResponderAttacks=0;window.currentResponderId=opponent;synchronizeGameState(state);
 }
 export function resolveDuel(state:GameState,failedPlayerId:string){
   const action=state.currentAction,window=state.responseWindow;if(!action||!window||window.type!=='duel_attack'||window.currentResponderId!==failedPlayerId)throw new Error('Duel is not awaiting this player');const failed=getPlayerById(state,failedPlayerId),killerId=failedPlayerId===action.actorId?action.targetIds[0]:action.actorId;if(!failed)throw new Error('Duel participant is missing');window.status='resolved';state.responseWindow=null;applyDamage(state,failedPlayerId,1,killerId);resolveTargetedCardAction(state,action.actionId);synchronizeGameState(state);
@@ -335,18 +606,140 @@ function playMassTrick(state:GameState,actorId:string,cardInstanceId:string,effe
 }
 export const playMassDodgeOrDamage=(state:GameState,actorId:string,cardInstanceId:string)=>playMassTrick(state,actorId,cardInstanceId,'all_others_dodge_or_damage');
 export const playMassAttackOrDamage=(state:GameState,actorId:string,cardInstanceId:string)=>playMassTrick(state,actorId,cardInstanceId,'all_others_attack_or_damage');
-export function advanceMassResponseQueue(state:GameState){const window=state.responseWindow,action=state.currentAction;if(!window||!action||(window.type!=='mass_dodge'&&window.type!=='mass_attack'))return;if(state.status==='finished')return;const queue=window.responderQueue||[],next=queue.find(id=>{const player=getPlayerById(state,id);return player?.alive&&!window.responses.some(response=>response.playerId===id);});if(next){window.currentResponderId=next;synchronizeGameState(state);return;}window.status='resolved';state.responseWindow=null;resolveTargetedCardAction(state,action.actionId);logAction(state,'mass-trick-finished',`การ์ด ${action.card?.name||''} จบการทำงาน`);synchronizeGameState(state);}
-export function playMassResponseCard(state:GameState,playerId:string,cardInstanceId:string){const window=state.responseWindow;if(!window||(window.type!=='mass_dodge'&&window.type!=='mass_attack')||window.currentResponderId!==playerId)throw new Error('You cannot respond to this mass trick now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId),required=window.type==='mass_dodge'?'dodge':'attack';if(!player||!card||card.effect!==required)throw new Error('Required response card is not in your hand');player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'mass-response',`${characterName(player)} ใช้ ${card.name}`,player.id);advanceMassResponseQueue(state);}
-export function declineMassResponse(state:GameState,playerId:string){const window=state.responseWindow,action=state.currentAction;if(!window||!action||(window.type!=='mass_dodge'&&window.type!=='mass_attack')||window.currentResponderId!==playerId)throw new Error('You cannot decline this mass trick now');window.responses.push({playerId,response:'decline',createdAt:new Date().toISOString()});const actorId=action.actorId;logAction(state,'mass-response-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ตอบสนองและเสีย 1 HP`,playerId);applyDamage(state,playerId,1,actorId);if(state.responseWindow?.type==='dying_heal'){state.suspendedResponseWindow=window;return;}advanceMassResponseQueue(state);}
+export const hasLastHandMultiTargetAttack=(state:GameState,playerId:string)=>getPlayerById(state,playerId)?.equipment.weapon?.effect==='last_hand_multi_target_attack';
+/** Zhangba Spear: when the Attack is your last hand card, target up to 3 players; each dodges independently or takes the damage. */
+export function playLastHandMultiAttack(state:GameState,attackerId:string,cardInstanceId:string,targetIds:string[]){
+  const attacker=getPlayerById(state,attackerId);if(!attacker)throw new Error('Unknown player');
+  if(!hasLastHandMultiTargetAttack(state,attackerId))throw new Error('You do not have a multi-target weapon');
+  const card=findHandCard(attacker,cardInstanceId);if(!card||card.effect!=='attack')throw new Error('Choose an Attack card');
+  if(attacker.hand.length!==1)throw new Error('การ์ดโจมตีต้องเป็นไพ่ใบสุดท้ายบนมือ');
+  const unique=[...new Set(targetIds)];if(unique.length!==targetIds.length)throw new Error('เป้าหมายต้องไม่ซ้ำกัน');
+  if(unique.length<1||unique.length>3)throw new Error('เลือกเป้าหมาย 1–3 คน');
+  if(unique.includes(attackerId))throw new Error('โจมตีตัวเองไม่ได้');
+  if(unique.some(id=>isImmuneToAttack(state,id)))throw new Error('เป้าหมายมือว่างและไม่สามารถถูกโจมตีได้ (กลยุทธ์เมืองว่าง)');
+  assertForcedAttackTarget(state,attackerId,unique);
+  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttack(state,attackerId))throw new Error('You may only use one attack per turn');
+  const damage=numberParam(card,'damage',1);
+  const prepared=createTargetedCardAction(state,attackerId,cardInstanceId,unique,{minTargets:1,maxTargets:3,allowSelf:false,maxDistance:'attack'},'attack');
+  if(prepared.card.effect!=='attack')throw new Error('Attack card is not in your hand');
+  state.attacksThisTurn++;state.turn.attackUsedThisTurn++;
+  state.responseWindow={windowId:crypto.randomUUID(),type:'multi_attack',sourceActionId:prepared.action.actionId,requiredPlayerIds:unique,currentResponderId:unique[0]!,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:new Date().toISOString(),responderQueue:unique,attackDamage:damage};
+  logAction(state,'multi-attack',`${characterName(attacker)} ใช้ ${prepared.card.name} โจมตี ${unique.map(id=>characterName(getPlayerById(state,id)!)).join(', ')}`,attacker.id);
+  synchronizeGameState(state);
+}
+/** Borrowed Knife: coerce a weapon-holding player to Attack a legal victim; if they refuse or cannot, the actor takes their weapon. */
+export function playCoerceAttack(state:GameState,actorId:string,cardInstanceId:string,weaponHolderId:string,victimId:string){
+  if(!canPlayerAct(state,actorId))throw new Error('เล่นการ์ดได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  const actor=getPlayerById(state,actorId);if(!actor)throw new Error('Unknown player');
+  const card=findHandCard(actor,cardInstanceId);if(!card||card.effect!=='coerce_attack_or_take_weapon')throw new Error('ไม่ใช่การ์ดยืมมือสังหาร');
+  const holder=getPlayerById(state,weaponHolderId),victim=getPlayerById(state,victimId);
+  if(!holder||!holder.alive||holder.id===actorId)throw new Error('เลือกขุนพลอื่นที่มีอาวุธ');
+  if(!holder.equipment.weapon)throw new Error('เป้าหมายต้องมีอาวุธติดตั้งอยู่');
+  if(!victim||!victim.alive||victim.id===holder.id)throw new Error('เลือกเหยื่อที่ถูกต้อง');
+  if(!canTargetWithAttack(state,holder.id,victim.id))throw new Error('เหยื่ออยู่นอกระยะโจมตีของเป้าหมาย');
+  actor.hand=actor.hand.filter(item=>item!==card);state.lastPlayedCard=card;
+  state.currentAction={actionId:crypto.randomUUID(),actorId,card:toCardInstance(card),effectKey:'coerce_attack_or_take_weapon',targetIds:[weaponHolderId,victimId],status:'declared',createdAt:new Date().toISOString()};
+  state.pendingTrickResolution={effectKey:'coerce',weaponHolderId,victimId};
+  logAction(state,'trick-declared',`${characterName(actor)} ประกาศใช้ ${card.name} บังคับ ${characterName(holder)} ให้โจมตี ${characterName(victim)}`,actor.id,holder.id,card.id);
+  openNegateWindowForTrick(state,actorId);
+}
+export function resolveCoerceWithAttack(state:GameState,weaponHolderId:string,attackCardInstanceId:string){
+  const pending=state.pendingCoerce,window=state.responseWindow;
+  if(!pending||!window||window.type!=='coerce_attack'||window.currentResponderId!==weaponHolderId||pending.weaponHolderId!==weaponHolderId)throw new Error('ไม่มีการบังคับโจมตีที่ค้างอยู่');
+  const holder=getPlayerById(state,weaponHolderId),victim=getPlayerById(state,pending.victimId);
+  if(!holder||!victim||!victim.alive)throw new Error('เป้าหมายไม่พร้อม');
+  const card=findHandCard(holder,attackCardInstanceId);if(!card||card.effect!=='attack')throw new Error('เลือกไพ่โจมตี');
+  holder.hand=holder.hand.filter(item=>item!==card);state.lastPlayedCard=card;
+  const actionId=crypto.randomUUID();
+  state.currentAction={actionId,actorId:holder.id,card:toCardInstance(card),effectKey:'attack',targetIds:[victim.id],status:'declared',createdAt:new Date().toISOString()};
+  state.responseWindow={windowId:crypto.randomUUID(),type:'attack_dodge',sourceActionId:actionId,requiredPlayerIds:[victim.id],currentResponderId:victim.id,allowedResponseEffectKeys:['dodge'],responses:[],status:'open',createdAt:new Date().toISOString()};
+  state.pendingAction={id:actionId,kind:'attack',actorId:holder.id,targetId:victim.id,cardId:card.id,responseKey:'dodge',damage:numberParam(card,'damage',1),dodgesRequired:attackDodgesRequired(state,holder.id)};
+  state.pendingCoerce=undefined;
+  logAction(state,'coerce-attack',`${characterName(holder)} ถูกบังคับใช้โจมตีใส่ ${characterName(victim)}`,holder.id,victim.id,card.id);
+  synchronizeGameState(state);
+}
+export function declineCoerce(state:GameState,weaponHolderId:string){
+  const pending=state.pendingCoerce,window=state.responseWindow;
+  if(!pending||!window||window.type!=='coerce_attack'||window.currentResponderId!==weaponHolderId||pending.weaponHolderId!==weaponHolderId)throw new Error('ไม่มีการบังคับโจมตีที่ค้างอยู่');
+  const holder=getPlayerById(state,weaponHolderId),actor=getPlayerById(state,pending.actorId);if(!holder||!actor)throw new Error('ผู้เล่นหาย');
+  const weapon=holder.equipment.weapon;
+  if(weapon){holder.equipment.weapon=null;actor.hand.push(weapon);logAction(state,'coerce-take-weapon',`${characterName(holder)} ไม่โจมตี ${characterName(actor)} จึงยึด ${weapon.name}`,actor.id,holder.id,weapon.id);}
+  else logAction(state,'coerce-no-weapon',`${characterName(holder)} ไม่มีอาวุธให้ยึด`,actor.id,holder.id);
+  state.pendingCoerce=undefined;state.responseWindow=null;
+  synchronizeGameState(state);
+}
+/** Harvest: reveal one card per living player; the actor then each player in turn order takes one; leftovers are discarded. */
+export function playHarvest(state:GameState,actorId:string,cardInstanceId:string){
+  if(!canPlayerAct(state,actorId))throw new Error('เล่นการ์ดได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  const actor=getPlayerById(state,actorId);if(!actor)throw new Error('Unknown player');
+  const card=findHandCard(actor,cardInstanceId);if(!card||card.effect!=='reveal_and_draft_cards')throw new Error('ไม่ใช่การ์ดเก็บเกี่ยวยุ้งฉาง');
+  actor.hand=actor.hand.filter(item=>item!==card);state.lastPlayedCard=card;
+  state.currentAction={actionId:crypto.randomUUID(),actorId,card:toCardInstance(card),effectKey:'reveal_and_draft_cards',targetIds:[],status:'declared',createdAt:new Date().toISOString()};
+  state.pendingTrickResolution={effectKey:'harvest'};
+  logAction(state,'trick-declared',`${characterName(actor)} ประกาศใช้ ${card.name}`,actor.id,undefined,card.id);
+  openNegateWindowForTrick(state,actorId);
+}
+/** Reveals the harvest pool and opens the drafting window. Called after the negate window passes. */
+function executeHarvest(state:GameState,actorId:string,trickCard:Card){
+  const actor=getPlayerById(state,actorId);if(!actor)return;
+  moveToDiscard(state,trickCard);
+  const order=[actor.id,...massQueue(state,actorId)];
+  const revealed:Card[]=[];
+  for(let index=0;index<order.length;index++){if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);const drawn=state.deck.pop();if(!drawn)break;revealed.push(drawn);}
+  if(!revealed.length){logAction(state,'harvest-empty','ไม่มีไพ่ให้เปิดเผย',actor.id);return;}
+  state.pendingHarvest={revealed};
+  state.responseWindow={windowId:crypto.randomUUID(),type:'harvest_pick',sourceActionId:`harvest:${crypto.randomUUID()}`,requiredPlayerIds:order,currentResponderId:order[0]!,allowedResponseEffectKeys:[],responses:[],status:'open',createdAt:new Date().toISOString(),responderQueue:order};
+  logAction(state,'harvest-played',`${characterName(actor)} ใช้ ${trickCard.name} เปิดไพ่ ${revealed.length} ใบให้เลือก`,actor.id);
+}
+/** Opens the coerce window. Called after the negate window passes. */
+function executeCoerce(state:GameState,actorId:string,weaponHolderId:string,victimId:string,trickCard:Card){
+  moveToDiscard(state,trickCard);
+  const holder=getPlayerById(state,weaponHolderId),victim=getPlayerById(state,victimId),actor=getPlayerById(state,actorId);
+  if(!holder||!holder.alive||!victim||!victim.alive||!actor){logAction(state,'coerce-fizzle','ยืมมือสังหารไม่มีผล');return;}
+  state.pendingCoerce={actorId,weaponHolderId,victimId,trickName:trickCard.name};
+  state.responseWindow={windowId:crypto.randomUUID(),type:'coerce_attack',sourceActionId:`coerce:${crypto.randomUUID()}`,requiredPlayerIds:[weaponHolderId],currentResponderId:weaponHolderId,allowedResponseEffectKeys:['attack'],responses:[],status:'open',createdAt:new Date().toISOString()};
+  logAction(state,'coerce-active',`${characterName(holder)} ต้องเลือกโจมตี ${characterName(victim)} หรือเสียอาวุธ`,actor.id,holder.id);
+}
+function finishHarvest(state:GameState){
+  const harvest=state.pendingHarvest;
+  if(harvest){if(harvest.revealed.length){logAction(state,'harvest-discard',`ไพ่ที่เหลือ ${harvest.revealed.length} ใบถูกทิ้ง`);for(const leftover of harvest.revealed)moveToDiscard(state,leftover,false);}}
+  state.pendingHarvest=undefined;state.responseWindow=null;synchronizeGameState(state);
+}
+function advanceHarvest(state:GameState){
+  const harvest=state.pendingHarvest,window=state.responseWindow;
+  if(!harvest||!window||window.type!=='harvest_pick')return;
+  if(!harvest.revealed.length)return finishHarvest(state);
+  const next=(window.responderQueue||[]).find(id=>!window.responses.some(response=>response.playerId===id)&&getPlayerById(state,id)?.alive);
+  if(next){window.currentResponderId=next;synchronizeGameState(state);return;}
+  finishHarvest(state);
+}
+export function pickHarvestCard(state:GameState,playerId:string,cardInstanceId:string){
+  const harvest=state.pendingHarvest,window=state.responseWindow;
+  if(!harvest||!window||window.type!=='harvest_pick'||window.currentResponderId!==playerId)throw new Error('ยังไม่ถึงตาคุณเลือกไพ่');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const index=harvest.revealed.findIndex(revealed=>revealed.id===cardInstanceId||toCardInstance(revealed).instanceId===cardInstanceId);
+  if(index<0)throw new Error('ไพ่ที่เลือกไม่มีในกองที่เปิดเผย');
+  const [chosen]=harvest.revealed.splice(index,1);player.hand.push(chosen!);
+  window.responses.push({playerId,response:'card',createdAt:new Date().toISOString()});
+  logAction(state,'harvest-pick',`${characterName(player)} เลือก ${chosen!.name} จากยุ้งฉาง`,player.id,undefined,chosen!.id);
+  advanceHarvest(state);
+}
+const isQueuedResponseWindow=(type:string)=>type==='mass_dodge'||type==='mass_attack'||type==='multi_attack';
+export function advanceMassResponseQueue(state:GameState){const window=state.responseWindow,action=state.currentAction;if(!window||!action||!isQueuedResponseWindow(window.type))return;if(state.status==='finished')return;const queue=window.responderQueue||[],next=queue.find(id=>{const player=getPlayerById(state,id);return player?.alive&&!window.responses.some(response=>response.playerId===id);});if(next){window.currentResponderId=next;synchronizeGameState(state);return;}window.status='resolved';state.responseWindow=null;resolveTargetedCardAction(state,action.actionId);logAction(state,'mass-trick-finished',`การ์ด ${action.card?.name||''} จบการทำงาน`);synchronizeGameState(state);}
+export function playMassResponseCard(state:GameState,playerId:string,cardInstanceId:string){const window=state.responseWindow;if(!window||!isQueuedResponseWindow(window.type)||window.currentResponderId!==playerId)throw new Error('You cannot respond to this mass trick now');const player=getPlayerById(state,playerId),card=player&&findHandCard(player,cardInstanceId),required=window.type==='mass_attack'?'attack':'dodge';if(!player||!card||!cardActsAs(state,playerId,card,required))throw new Error('Required response card is not in your hand');player.hand=player.hand.filter(item=>item!==card);moveToDiscard(state,card,false);window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});logAction(state,'mass-response',`${characterName(player)} ใช้ ${card.name}`,player.id);advanceMassResponseQueue(state);}
+export function declineMassResponse(state:GameState,playerId:string){const window=state.responseWindow,action=state.currentAction;if(!window||!action||!isQueuedResponseWindow(window.type)||window.currentResponderId!==playerId)throw new Error('You cannot decline this mass trick now');window.responses.push({playerId,response:'decline',createdAt:new Date().toISOString()});const actorId=action.actorId,damage=window.attackDamage??1;logAction(state,'mass-response-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ตอบสนองและเสีย ${damage} หน่วยพลังชีวิต`,playerId);applyDamage(state,playerId,damage,actorId);if(state.responseWindow?.type==='dying_heal'){state.suspendedResponseWindow=window;return;}advanceMassResponseQueue(state);}
 
 export function resolveCurrentAction(state:GameState){
   const action=state.currentAction; if(!action) throw new Error('There is no current action to resolve');
   if(action.effectKey!=='attack') throw new Error('Only attack resolution is supported');
   const targetId=action.targetIds[0],target=getPlayerById(state,targetId),attacker=getPlayerById(state,action.actorId); if(!target||!attacker) throw new Error('Action participant is missing');
-  const attackWindow=state.responseWindow,response=attackWindow?.responses.find(item=>item.playerId===targetId);
-  if(!response) throw new Error('Attack response is still required');
-  if(response?.response==='card') logAction(state,'attack-cancelled','โจมตีถูกยกเลิก',attacker.id,target.id,action.card?.definitionKey);
-  else {applyDamage(state,target.id,numberParam(state.lastPlayedCard||{effectParams:{} as EffectParams} as Card,'damage',1),attacker.id);if(target.alive&&hasDamageDestroyTargetMount(state,attacker.id)&&(target.equipment.offensiveMount||target.equipment.defensiveMount))state.pendingDestroyMount={attackerId:attacker.id,targetId:target.id};}
+  const attackWindow=state.responseWindow;
+  if(!attackWindow?.responses.some(item=>item.playerId===targetId)) throw new Error('Attack response is still required');
+  const dodgesProvided=attackWindow.responses.filter(item=>item.playerId===targetId&&item.response==='card').length,dodgesNeeded=state.pendingAction?.dodgesRequired??1;
+  if(dodgesProvided>=dodgesNeeded) logAction(state,'attack-cancelled','โจมตีถูกยกเลิก',attacker.id,target.id,action.card?.definitionKey);
+  else {const damage=numberParam(state.lastPlayedCard||{effectParams:{} as EffectParams} as Card,'damage',1);
+    if(hasReplaceDamageWithDiscardTwo(state,attacker.id)&&playerHasAnyCard(target)){const weaponName=attacker.equipment.weapon?.name||'อาวุธ';state.pendingReplaceDamage={attackerId:attacker.id,targetId:target.id,damage,weaponName};logAction(state,'replace-damage-window',`${characterName(attacker)} อาจใช้ ${weaponName} ทิ้งไพ่ของ ${characterName(target)} แทนความเสียหาย`,attacker.id,target.id);}
+    else {applyDamage(state,target.id,damage,attacker.id,state.lastPlayedCard);if(target.alive&&hasDamageDestroyTargetMount(state,attacker.id)&&(target.equipment.offensiveMount||target.equipment.defensiveMount))state.pendingDestroyMount={attackerId:attacker.id,targetId:target.id};}}
   if(attackWindow)attackWindow.status='resolved';resolveTargetedCardAction(state,action.actionId);if(state.responseWindow===attackWindow)state.responseWindow=null;state.pendingAction=undefined;
   synchronizeGameState(state);
 }
@@ -355,13 +748,39 @@ export function declineDestroyTargetMount(state:GameState,attackerId:string){if(
 
 export function playDodge(state:GameState,playerId:string,cardInstanceId:string){
   const window=state.responseWindow,action=state.currentAction; if(!window||!action||window.type!=='attack_dodge'||window.status!=='open'||window.currentResponderId!==playerId) throw new Error('You cannot dodge now');
-  const player=getPlayerById(state,playerId); if(!player) throw new Error('Unknown player'); const card=findHandCard(player,cardInstanceId); if(!card||card.effect!=='dodge') throw new Error('Dodge card is not in your hand');
+  const player=getPlayerById(state,playerId); if(!player) throw new Error('Unknown player'); const card=findHandCard(player,cardInstanceId); if(!card||!cardActsAs(state,playerId,card,'dodge')) throw new Error('Dodge card is not in your hand');
   const attacker=getPlayerById(state,action.actorId),canRepeat=Boolean(attacker&&hasRepeatAttackAfterDodge(state,attacker.id)&&player.alive&&canTargetWithAttack(state,attacker.id,player.id));player.hand=player.hand.filter(item=>item!==card); moveToDiscard(state,card,false); window.responses.push({playerId,response:'card',cardInstanceId:toCardInstance(card).instanceId,createdAt:new Date().toISOString()});
-  logAction(state,'attack-dodged',`${characterName(player)} ใช้ หลบ`,player.id,action.actorId,card.id); resolveCurrentAction(state);if(canRepeat&&attacker)state.pendingRepeatAttack={attackerId:attacker.id,targetId:player.id,weaponName:attacker.equipment.weapon?.name||'อาวุธ'};if(attacker&&hasDiscardTwoForceAttackDamage(state,attacker.id)){const discardable=attacker.hand.length+Object.values(attacker.equipment).filter(Boolean).length;if(discardable>=2)state.pendingForceAttackDamage={attackerId:attacker.id,targetId:player.id};
+  logAction(state,'attack-dodged',`${characterName(player)} ใช้ หลบ`,player.id,action.actorId,card.id);
+  const dodgesNeeded=state.pendingAction?.dodgesRequired??1,dodgesProvided=window.responses.filter(r=>r.playerId===playerId&&r.response==='card').length;
+  if(dodgesProvided<dodgesNeeded){logAction(state,'attack-need-more-dodge',`${characterName(player)} ต้องใช้ หลบ อีก ${dodgesNeeded-dodgesProvided} ใบ (ไร้เทียมทาน)`,player.id);synchronizeGameState(state);return;}
+  resolveCurrentAction(state);if(canRepeat&&attacker)state.pendingRepeatAttack={attackerId:attacker.id,targetId:player.id,weaponName:attacker.equipment.weapon?.name||'อาวุธ'};if(attacker&&hasDiscardTwoForceAttackDamage(state,attacker.id)){const discardable=attacker.hand.length+Object.values(attacker.equipment).filter(Boolean).length;if(discardable>=2)state.pendingForceAttackDamage={attackerId:attacker.id,targetId:player.id};
   }
 }
 export function forceAttackDamageByDiscardingTwo(state:GameState,attackerId:string,cardRefs:string[]){const pending=state.pendingForceAttackDamage;if(!pending||pending.attackerId!==attackerId||cardRefs.length!==2||new Set(cardRefs).size!==2)throw new Error('Choose exactly two cards');const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,pending.targetId);if(!attacker||!target?.alive)throw new Error('Force attack target is unavailable');const discarded:Card[]=[];for(const ref of cardRefs){let card=findHandCard(attacker,ref);if(card)attacker.hand=attacker.hand.filter(item=>item!==card);else for(const slot of Object.keys(attacker.equipment) as RuntimeEquipmentSlot[]){const equipped=attacker.equipment[slot];if(equipped&&equipped.id===ref){card=equipped;attacker.equipment[slot]=null;break;}}if(!card)throw new Error('Selected card is not yours');discarded.push(card);}discarded.forEach(card=>moveToDiscard(state,card,false));state.pendingForceAttackDamage=undefined;logAction(state,'force-attack-damage',`${characterName(attacker)} ทิ้งไพ่ 2 ใบบังคับให้โจมตีโดน`,attacker.id,target.id);applyDamage(state,target.id,1,attacker.id);synchronizeGameState(state);}
 export function declineForceAttackDamage(state:GameState,attackerId:string){if(state.pendingForceAttackDamage?.attackerId!==attackerId)throw new Error('No forced damage is pending');state.pendingForceAttackDamage=undefined;logAction(state,'force-attack-damage-declined',`${characterName(getPlayerById(state,attackerId)!)} ไม่บังคับให้โจมตีโดน`,attackerId);synchronizeGameState(state);}
+/** Ice Sword: instead of dealing attack damage, discard one or two of the target's cards. Selections are hidden hand positions or visible equipment. */
+export function replaceAttackDamageByDiscarding(state:GameState,attackerId:string,selections:TargetCardSelection[]){
+  const pending=state.pendingReplaceDamage;if(!pending||pending.attackerId!==attackerId)throw new Error('No damage-replacement decision is pending');
+  const attacker=getPlayerById(state,attackerId),target=getPlayerById(state,pending.targetId);if(!attacker||!target)throw new Error('Participant is missing');
+  if(!Array.isArray(selections)||selections.length<1||selections.length>2)throw new Error('Choose one or two cards to discard');
+  const available=target.hand.length+Object.values(target.equipment).filter(Boolean).length;if(selections.length>available)throw new Error('Target does not have that many cards');
+  const chosen:{card:Card;slot?:RuntimeEquipmentSlot}[]=[];const seenHand=new Set<number>();
+  for(const sel of selections){
+    if(sel.zone==='hand'){if(seenHand.has(sel.handIndex))throw new Error('Duplicate hand selection');seenHand.add(sel.handIndex);const card=target.hand[sel.handIndex];if(!card)throw new Error('Selected hand card is missing');chosen.push({card});}
+    else if(sel.zone==='equipment'){let found:{card:Card;slot:RuntimeEquipmentSlot}|undefined;for(const slot of Object.keys(target.equipment) as RuntimeEquipmentSlot[]){const e=target.equipment[slot];if(e&&(e.id===sel.cardInstanceId||toCardInstance(e).instanceId===sel.cardInstanceId)){found={card:e,slot};break;}}if(!found)throw new Error('Selected equipment is missing');if(chosen.some(c=>c.card===found!.card))throw new Error('Duplicate equipment selection');chosen.push(found);}
+    else throw new Error('Decision-area selection is not supported');
+  }
+  for(const {card,slot} of chosen){if(slot)target.equipment[slot]=null;else target.hand=target.hand.filter(c=>c!==card);moveToDiscard(state,card,false);}
+  state.pendingReplaceDamage=undefined;
+  logAction(state,'replace-damage-used',`${characterName(attacker)} ใช้ ${pending.weaponName} ทิ้งไพ่ ${chosen.length} ใบของ ${characterName(target)} แทนความเสียหาย`,attacker.id,target.id);
+  synchronizeGameState(state);
+}
+export function declineReplaceAttackDamage(state:GameState,attackerId:string){
+  const pending=state.pendingReplaceDamage;if(!pending||pending.attackerId!==attackerId)throw new Error('No damage-replacement decision is pending');
+  state.pendingReplaceDamage=undefined;applyDamage(state,pending.targetId,pending.damage,attackerId);
+  logAction(state,'replace-damage-declined',`${characterName(getPlayerById(state,attackerId)!)} เลือกให้เกิดความเสียหายตามปกติ`,attackerId,pending.targetId);
+  synchronizeGameState(state);
+}
 export function continueRepeatAttackAfterDodge(state:GameState,attackerId:string,attackCardInstanceId:string){const pending=state.pendingRepeatAttack;if(!pending||pending.attackerId!==attackerId)throw new Error('No repeat attack is pending');const target=getPlayerById(state,pending.targetId),attacker=getPlayerById(state,attackerId);if(!target?.alive||!attacker||!canTargetWithAttack(state,attackerId,target.id))throw new Error('Repeat target is no longer legal');const card=findHandCard(attacker,attackCardInstanceId);if(!card||card.effect!=='attack')throw new Error('Choose another Attack card');state.pendingRepeatAttack=undefined;const prior=state.turn.attackUsedThisTurn;state.turn.attackUsedThisTurn=0;state.attacksThisTurn=0;playAttack(state,attackerId,target.id,attackCardInstanceId);state.turn.attackUsedThisTurn=Math.max(prior+1,state.turn.attackUsedThisTurn);state.attacksThisTurn=state.turn.attackUsedThisTurn;}
 export function declineRepeatAttackAfterDodge(state:GameState,attackerId:string){if(state.pendingRepeatAttack?.attackerId!==attackerId)throw new Error('No repeat attack is pending');state.pendingRepeatAttack=undefined;logAction(state,'repeat-attack-declined',`${characterName(getPlayerById(state,attackerId)!)} ไม่โจมตีซ้ำ`,attackerId);synchronizeGameState(state);}
 export function useArmorJudgment(state:GameState,playerId:string){
@@ -371,7 +790,7 @@ export function useArmorJudgment(state:GameState,playerId:string){
 }
 
 export function playHeal(state:GameState,playerId:string,cardInstanceId:string){
-  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Choose a living player');const card=findHandCard(player,cardInstanceId);if(!card||card.effect!=='heal')throw new Error('Heal card is not in your hand');
+  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Choose a living player');const card=findHandCard(player,cardInstanceId);if(!card||!cardActsAs(state,playerId,card,'heal'))throw new Error('Heal card is not in your hand');
   const window=state.responseWindow;
   if(window?.type==='dying_heal'){
     if(window.status!=='open'||window.currentResponderId!==playerId)throw new Error('You cannot use Heal in this rescue window');
@@ -438,10 +857,12 @@ export function playDiscardTargetCard(state:GameState,actorId:string,targetId:st
 /** Targeted trick: transfer a selected hidden hand position or visible equipment card to the actor. */
 export function playStealTargetCard(state:GameState,actorId:string,targetId:string,selection:TargetCardSelection|string,cardInstanceId:string){
   const actor=getPlayerById(state,actorId),trick=actor?findHandCard(actor,cardInstanceId):undefined,target=getPlayerById(state,targetId);if(!actor||!trick||trick.effect!=='steal_target_card_in_range')throw new Error('Steal-target card is not in your hand');if(!target)throw new Error('Target is missing');
+  if(hasCharacterSkill(state,targetId,'immune_steal'))throw new Error('เป้าหมายไม่สามารถถูกลอบขโมยได้ (อ่อนน้อมถ่อมตน)');
   if(typeof selection!=='string'&&selection.zone==='decision_area')throw new Error('Decision-area selection is not implemented yet');if(typeof selection!=='string'&&selection.zone==='hand')validateHiddenHandIndex(state,{targetPlayerId:targetId,handIndex:selection.handIndex});
   // Eagerly validate the target card exists before locking in the action
   else {const tId=typeof selection==='string'?selection:selection.cardInstanceId;if(!Object.values(target.equipment).some(e=>e&&(e.id===tId||toCardInstance(e).instanceId===tId)))throw new Error('Selected target equipment is not available');}
-  const prepared=createTargetedCardAction(state,actorId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false,maxDistance:1},'steal_target_card_in_range');
+  const stealRange=hasCharacterSkill(state,actorId,'trick_ignore_distance')?undefined:1; // หวงเย่อิง ผู้วิเศษ ignores trick range
+  const prepared=createTargetedCardAction(state,actorId,cardInstanceId,[targetId],{minTargets:1,maxTargets:1,allowSelf:false,maxDistance:stealRange},'steal_target_card_in_range');
   state.pendingTrickResolution={effectKey:'steal_target_card_in_range',targetId,selection};
   logAction(state,'trick-declared',`${characterName(prepared.actor)} ประกาศใช้ ${prepared.card.name} ใส่ ${characterName(target)}`,actorId,targetId,prepared.card.id);
   openNegateWindowForTrick(state,actorId);
@@ -465,8 +886,8 @@ function resolveTrickEffect(state:GameState):void{
   const actor=getPlayerById(state,action.actorId),trickCard=state.lastPlayedCard;
   if(!actor||!trickCard){action.status='resolved';state.currentAction=null;state.pendingTrickResolution=undefined;synchronizeGameState(state);return;}
   if(params?.effectKey==='draw_cards'){
-    const amount=numberParam(trickCard,'amount',2),before=actor.hand.length;draw(state,actor.id,amount);const drawn=actor.hand.length-before;
-    moveToDiscard(state,trickCard);logAction(state,'draw-cards-played',`${characterName(actor)} ใช้ ${trickCard.name} จั่วการ์ด ${drawn} ใบ`,actor.id,undefined,trickCard.id);
+    const amount=numberParam(trickCard,'amount',2);grantDraws(state,actor.id,amount);
+    moveToDiscard(state,trickCard);logAction(state,'draw-cards-played',`${characterName(actor)} ใช้ ${trickCard.name} ได้รับสิทธิ์จั่วการ์ด ${amount} ใบ`,actor.id,undefined,trickCard.id);
   }else if(params?.effectKey==='heal_all_living'){
     let healed=0;for(const t of getAlivePlayers(state)){if(t.hp===undefined||t.maxHp===undefined)continue;const r=Math.min(1,t.maxHp-t.hp);t.hp+=r;if(r>0)healed++;}
     moveToDiscard(state,trickCard);logAction(state,'heal-all-living-played',`${characterName(actor)} ใช้ ${trickCard.name} ฟื้นฟูพลังชีวิตให้ขุนพล ${healed} คน`,actor.id,undefined,trickCard.id);
@@ -487,6 +908,14 @@ function resolveTrickEffect(state:GameState):void{
       }
     }
     moveToDiscard(state,trickCard);
+  }else if(params?.effectKey==='delayed_trick'&&params.targetId){
+    const target=getPlayerById(state,params.targetId);
+    if(target&&target.alive&&!target.decisionArea.some(existing=>existing.effect===trickCard.effect)){target.decisionArea.push(trickCard);logAction(state,'delayed-trick-placed',`${characterName(actor)} วาง ${trickCard.name} บนพื้นที่ตัดสินของ ${characterName(target)}`,actor.id,target.id,trickCard.id);}
+    else moveToDiscard(state,trickCard);
+  }else if(params?.effectKey==='coerce'&&params.weaponHolderId&&params.victimId){
+    executeCoerce(state,actor.id,params.weaponHolderId,params.victimId,trickCard);
+  }else if(params?.effectKey==='harvest'){
+    executeHarvest(state,actor.id,trickCard);
   }else{moveToDiscard(state,trickCard);}
   action.status='resolved';state.currentAction=null;state.pendingTrickResolution=undefined;synchronizeGameState(state);
 }
@@ -533,16 +962,36 @@ const effectResolvers:Record<string,EffectResolver>={
   attack:({state,actor,card,target,targetId,subscribers=[]})=>{if(!targetId||!target||target.id===actor.id||!target.alive)throw new Error('Choose a living opponent to attack');if(state.attacksThisTurn>=1)throw new Error('You may only use one attack per turn');const event=dispatchGameEvent(state,{name:'before_attack',actorId:actor.id,targetId:target.id,card,amount:numberParam(card,'damage',1)},subscribers);if(event.cancelled)return true;state.attacksThisTurn++;state.discard.push(card);state.pendingAction={id:crypto.randomUUID(),kind:'attack',actorId:actor.id,targetId:target.id,cardId:card.id,responseKey:'dodge',damage:event.amount||1};state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'attack-pending',actorId:actor.id,targetId:target.id,cardId:card.id,message:`${actor.username} ใช้โจมตีใส่ ${target.username} กำลังรอการตอบโต้`});dispatchGameEvent(state,{name:'after_attack',actorId:actor.id,targetId:target.id,card,amount:event.amount},subscribers);return true},
   heal:({state,actor,card,target,subscribers=[]})=>{const recipient=target||actor;if(!recipient.alive||recipient.hp===undefined||recipient.maxHp===undefined)throw new Error('Choose a living player');if(recipient.id===actor.id&&recipient.hp>=recipient.maxHp)throw new Error('You can only heal yourself while wounded');if(recipient.id!==actor.id&&recipient.hp>0)throw new Error('You can only heal another player during a dying window');const amount=numberParam(card,'heal_amount',1),event=dispatchGameEvent(state,{name:'before_heal',actorId:actor.id,targetId:recipient.id,card,amount},subscribers);if(event.cancelled)return true;recipient.hp=Math.min(recipient.maxHp,recipient.hp+(event.amount||amount));state.discard.push(card);state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'healed',actorId:actor.id,targetId:recipient.id,cardId:card.id,message:`${actor.username} ใช้เสบียงฟื้นฟูพลังชีวิตให้ ${recipient.username}`});dispatchGameEvent(state,{name:'after_heal',actorId:actor.id,targetId:recipient.id,card,amount:event.amount},subscribers);return true}
 };
+/** Declares a delayed trick. After the negate window passes it is placed in the target's decision area, resolving at their next judgment phase. */
+export function playDelayedTrick(state:GameState,actorId:string,cardInstanceId:string,targetId:string){
+  if(!canPlayerAct(state,actorId))throw new Error('เล่นการ์ดได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  const actor=getPlayerById(state,actorId);if(!actor)throw new Error('Unknown player');
+  const card=findHandCard(actor,cardInstanceId);if(!card||(card.effect!=='delayed_skip_play_phase'&&card.effect!=='delayed_lightning_judgment'))throw new Error('ไม่ใช่การ์ดหน่วงเวลา');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive)throw new Error('เลือกเป้าหมายที่ยังมีชีวิต');
+  if(card.effect==='delayed_skip_play_phase'&&target.id===actor.id)throw new Error('มีสุขลืมเมืองใช้กับตัวเองไม่ได้');
+  if(card.effect==='delayed_skip_play_phase'&&hasCharacterSkill(state,target.id,'immune_indulgence'))throw new Error('เป้าหมายไม่สามารถถูกวางมีสุขลืมเมืองได้ (อ่อนน้อมถ่อมตน)');
+  if(card.effect==='delayed_lightning_judgment'&&target.id!==actor.id)throw new Error('ฟ้าลงโทษวางบนตัวเองเท่านั้น');
+  if(target.decisionArea.some(existing=>existing.effect===card.effect))throw new Error('เป้าหมายมีการ์ดหน่วงเวลานี้อยู่แล้ว');
+  actor.hand=actor.hand.filter(item=>item!==card);state.lastPlayedCard=card;
+  state.currentAction={actionId:crypto.randomUUID(),actorId,card:toCardInstance(card),effectKey:card.effect,targetIds:[targetId],status:'declared',createdAt:new Date().toISOString()};
+  state.pendingTrickResolution={effectKey:'delayed_trick',targetId};
+  logAction(state,'trick-declared',`${characterName(actor)} ประกาศใช้ ${card.name} ใส่ ${characterName(target)}`,actor.id,target.id,card.id);
+  openNegateWindowForTrick(state,actorId);
+}
 export function playCard(state:GameState, actorId:string, cardId:string, targetId?:string, subscribers:EventSubscriber[]=[]){
   if(state.phase!=='playing'||state.currentPlayerId!==actorId)throw new Error('It is not your turn');if(!state.hasDrawnThisTurn)throw new Error('ต้องจั่วไพ่ก่อนเล่นการ์ด');if(state.pendingAction)throw new Error('Resolve the pending response first');
   const actor=state.players.find(player=>player.id===actorId);if(!actor)throw new Error('Unknown player');const card=actor.hand.find(item=>item.id===cardId);if(!card)throw new Error('Card is not in your hand');const target=targetId?state.players.find(player=>player.id===targetId):undefined;
-  if(card.effect==='attack'){if(!targetId)throw new Error('Choose a target');return playAttack(state,actorId,targetId,cardId);}
+  if(card.cardType==='instant_trick'&&hasCharacterSkill(state,actorId,'draw_on_instant_trick')){grantDraws(state,actorId,1);logAction(state,'skill-genius',`${characterName(actor)} ใช้ คลังปัญญา ได้สิทธิ์จั่ว 1 ใบ`,actorId);} // หวงเย่อิง คลังปัญญา (ก่อนถูกยกเลิกผล)
+  if(card.effect==='attack'||(card.effect==='dodge'&&cardActsAs(state,actorId,card,'attack'))){if(!targetId)throw new Error('Choose a target');return playAttack(state,actorId,targetId,cardId);} // จูล่ง/กวนอู: ใช้ "หลบ"/ไพ่แดง เป็น "โจมตี"
   if(card.effect==='duel_attack_response'){if(!targetId)throw new Error('Choose a target');return playDuel(state,actorId,targetId,cardId);}
   if(card.effect==='all_others_dodge_or_damage')return playMassDodgeOrDamage(state,actorId,cardId);
   if(card.effect==='all_others_attack_or_damage')return playMassAttackOrDamage(state,actorId,cardId);
   if(card.effect==='heal') return playHeal(state,actorId,cardId);
   if(card.effect==='draw_cards') return playDrawCardsTrick(state,actorId,cardId);
   if(card.effect==='heal_all_living') return playHealAllLiving(state,actorId,cardId);
+  if(card.effect==='reveal_and_draft_cards') return playHarvest(state,actorId,cardId);
+  if(card.effect==='delayed_skip_play_phase'){if(!targetId)throw new Error('Choose a target');return playDelayedTrick(state,actorId,cardId,targetId);}
+  if(card.effect==='delayed_lightning_judgment') return playDelayedTrick(state,actorId,cardId,actorId);
   if(isEquipmentCard(card)) return playEquipment(state,actorId,cardId);
   actor.hand=actor.hand.filter(item=>item.id!==cardId);state.lastPlayedCard=card;
   if(card.effect==='dodge')throw new Error('Dodge can only be used in response to an attack');
@@ -564,12 +1013,15 @@ export function respondToAttack(state:GameState, responderId:string, cardId?:str
 export function endTurn(state:GameState, playerId=state.turn.activePlayerId||''){
   if(state.turn.activePlayerId){
     if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
+    if(state.pendingJudgment)throw new Error('ต้องเปิดไพ่ตัดสินให้เสร็จก่อนจบเทิร์น');
     if(state.turn.activePlayerId!==playerId)throw new Error('Only the active player can end this turn');
     const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
     if(state.turn.phase==='draw')throw new Error('Draw cards before ending the turn');
+    if(owedDraws(state,playerId)>0)throw new Error('ต้องจั่วไพ่ที่ได้รับก่อนจบเทิร์น');
     if(state.turn.phase==='play'){state.turn.phase='discard';logAction(state,'turn-discard-phase',`${characterName(player)} เข้าสู่ช่วงทิ้งไพ่`,player.id);}
     const required=getDiscardRequirement(state,playerId);if(required>0){logAction(state,'hand-limit-required',`${characterName(player)} ต้องทิ้งไพ่ ${required} ใบ`,player.id);synchronizeGameState(state);return;}
     state.turn.phase='end';logAction(state,'turn-end',`${characterName(player)} จบเทิร์น`,player.id);
+    if(hasCharacterSkill(state,playerId,'draw_on_turn_end')){grantDraws(state,playerId,1);logAction(state,'skill-turn-end-draw',`${characterName(player)} ใช้ งามกลบแสงจันทร์ ได้สิทธิ์จั่ว 1 ใบ`,player.id);} // เตียวเสี้ยน
     const next=getNextAlivePlayer(state,playerId);if(!next)throw new Error('No alive player can take the next turn');
     state.turn.turnNumber++;startTurn(state,next.id);return;
   }
@@ -604,7 +1056,7 @@ export function createPublicGameState(state:GameState, viewerId:string):PublicGa
   const { drawPile, deck, responseWindow, players, ...publicState }=state;
   const publicResponseWindow=responseWindow?{...responseWindow,responses:responseWindow.responses.map(({cardInstanceId:_cardInstanceId,...response})=>response)}:null;
   return {...publicState, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
-    role:p.id===viewerId||p.roleRevealed?p.role:undefined,
+    role:p.id===viewerId||p.roleRevealed||p.role==='emperor'?p.role:undefined,
     character:p.id===viewerId||p.role==='emperor'||allCharactersChosen?p.character:undefined,
     characterOptions:p.id===viewerId?p.characterOptions:[],
     hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot})):[], handCount:p.hand.length
