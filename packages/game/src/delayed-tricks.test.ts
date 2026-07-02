@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   createGame, createSeatedPlayer, dealRoles, beginPlayAfterCharacters,
   playCard, startTurn, drawOneTurnCard, declineNegate, endTurn,
-  drawJudgmentCard, resolveJudgmentCard, keepJudgmentCard,
+  drawJudgmentCard, resolveJudgmentCard, keepJudgmentCard, negateLightningJudgment,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
 
@@ -144,6 +144,30 @@ describe('Judgment phase – Lightning (delayed_lightning_judgment)', () => {
     assert.equal(game.lastJudgment?.playerId, 'p1');
     assert.equal(game.lastJudgment?.cardSuit, '♠');
     assert.ok(game.lastJudgment?.result.includes('ฟ้าผ่า'));
+  });
+
+  it('lightning placement opens no negate window (cannot be negated on placement)', () => {
+    const game = makePlayingGame();
+    game.players.find(p => p.id === 'p0')!.hand = [lightning('lig1')];
+    playCard(game, 'p0', 'lig1');
+    assert.equal(game.responseWindow, null, 'no negate window on placement');
+    assert.ok(game.players.find(p => p.id === 'p0')!.decisionArea.some(c => c.id === 'lig1'), 'placed directly');
+  });
+
+  it('คงกระพันชาตรี cancels the lightning judgment — no strike, discarded, does not move on', () => {
+    const game = makePlayingGame();
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p1.decisionArea = [lightning('lig')];
+    p1.hp = 4;
+    p1.hand = [makeCard('neg', 'negate_trick_effect', 'instant_trick', '♦', 'K')];
+    game.deck = [plain('judge', '♠', '5')]; // would strike if not negated
+    startTurn(game, 'p1');
+    assert.equal(game.pendingJudgment?.trickEffect, 'delayed_lightning_judgment');
+    negateLightningJudgment(game, 'p1', 'neg');
+    assert.equal(p1.hp, 4, 'no lightning damage');
+    assert.equal(game.pendingJudgment, undefined, 'judgment resolved');
+    assert.ok(!p1.decisionArea.some(c => c.id === 'lig'), 'lightning removed');
+    assert.equal(game.players.filter(p => p.decisionArea.some(c => c.id === 'lig')).length, 0, 'lightning discarded, not moved on');
   });
 
   it('a non-strike judgment moves the lightning to the next player', () => {

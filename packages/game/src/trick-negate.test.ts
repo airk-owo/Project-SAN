@@ -60,12 +60,12 @@ describe('Negate integration – newly-routed tricks open a negate window', () =
     assert.equal(game.responseWindow, null);
   });
 
-  it('negating Lightning prevents it from entering the decision area', () => {
+  it('Lightning placement cannot be negated — it enters the decision area directly', () => {
     const game = makeGame();
     game.players.find(p => p.id === 'p0')!.hand = [lightning('lig')];
     playCard(game, 'p0', 'lig');
-    negateWith(game, 'neg');
-    assert.ok(!game.players.find(p => p.id === 'p0')!.decisionArea.some(c => c.id === 'lig'));
+    assert.equal(game.responseWindow, null, 'no negate window on lightning placement');
+    assert.ok(game.players.find(p => p.id === 'p0')!.decisionArea.some(c => c.id === 'lig'), 'placed directly (negatable only at judgment)');
   });
 
   it('negating Harvest reveals nothing and opens no pick window', () => {

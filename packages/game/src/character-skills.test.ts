@@ -4,11 +4,12 @@ import {
   createGame, createSeatedPlayer, dealRoles, beginPlayAfterCharacters,
   playAttack, playDuel, respondToAttack, getEffectiveDistanceBetweenPlayers, getDiscardRequirement,
   forcedAttackTargets, hasCharacterSkill,
-  playCard, playStealTargetCard, playDodge, playMassDodgeOrDamage, playMassResponseCard,
+  playCard, playStealTargetCard, playDiscardTargetCard, playDelayedTrick, declineNegate, cardActsAs, playDodge, playMassDodgeOrDamage, playMassResponseCard,
   applyDamage, owedDraws, drawOneTurnCard, endTurn, playAttackResponse, declineResponse,
-  useSelfDamageDraw, useDiscardThenDraw, playHeal,
+  useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, playHeal,
   startTurn, drawJudgmentCard, resolveJudgmentCard, replaceJudgmentCard,
-  takeCardFromDamager, declineFankui,
+  takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, redirectAttack,
+  requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, synchronizeGameState,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
 const suited = (id: string, effect: string, cardType: string, suit: string, number: string): Card => ({
@@ -669,5 +670,842 @@ describe('Character skill – หวงเย่อิง คลังปัญ�
     p0.hand = [suited('t1', 'none', 'instant_trick', '♠', '5')];
     playCard(game, 'p0', 't1');
     assert.equal(owedDraws(game, 'p0'), 0);
+  });
+});
+
+describe('Character skill – ฮัวโต๋ ยาสวรรค์ (discard 1 to heal any wounded general)', () => {
+  it('discards a card and restores 1 HP to a wounded ally', () => {
+    const game = makeGame({ p0: 'CHAR023' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1')];
+    p1.hp = 5;
+    useMiracleMedicine(game, 'p0', 'c1', 'p1');
+    assert.equal(p1.hp, 6, 'target healed 1 HP');
+    assert.equal(p0.hand.length, 0, 'discarded the paid card');
+    assert.ok(game.discard.some(c => c.id === 'c1'), 'paid card went to discard');
+  });
+
+  it('can heal ฮัวโต๋ himself', () => {
+    const game = makeGame({ p0: 'CHAR023' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hp = 5;
+    p0.hand = [attackCard('c1')];
+    useMiracleMedicine(game, 'p0', 'c1', 'p0');
+    assert.equal(p0.hp, 6);
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR023' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1'), attackCard('c2')];
+    p1.hp = 5;
+    useMiracleMedicine(game, 'p0', 'c1', 'p1');
+    assert.throws(() => useMiracleMedicine(game, 'p0', 'c2', 'p1'), /1 ครั้งต่อรอบ/);
+  });
+
+  it('cannot target a general already at full HP', () => {
+    const game = makeGame({ p0: 'CHAR023' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1')];
+    p1.hp = p1.maxHp!; // full
+    assert.throws(() => useMiracleMedicine(game, 'p0', 'c1', 'p1'), /เต็ม/);
+  });
+
+  it('a non-ฮัวโต๋ cannot use ยาสวรรค์', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1')];
+    p1.hp = 5;
+    assert.throws(() => useMiracleMedicine(game, 'p0', 'c1', 'p1'), /ยาสวรรค์/);
+  });
+});
+
+describe('Character skill – ซุนซ่างเซียง แผนแต่งงาน (discard 2 to heal a male ally and self)', () => {
+  it('discards 2 cards and heals a wounded male general and ซุนซ่างเซียง 1 HP each', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 5; p0.hand = [attackCard('c1'), attackCard('c2')];
+    p1.hp = 5; p1.character!.gender = 'ชาย';
+    useMarriage(game, 'p0', ['c1', 'c2'], 'p1');
+    assert.equal(p1.hp, 6, 'male ally healed');
+    assert.equal(p0.hp, 6, 'ซุนซ่างเซียง healed too');
+    assert.equal(p0.hand.length, 0, 'both cards discarded');
+  });
+
+  it('requires exactly 2 cards', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1')];
+    p1.hp = 5; p1.character!.gender = 'ชาย';
+    assert.throws(() => useMarriage(game, 'p0', ['c1'], 'p1'), /2 ใบ/);
+  });
+
+  it('cannot target a female general', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1'), attackCard('c2')];
+    p1.hp = 5; p1.character!.gender = 'หญิง';
+    assert.throws(() => useMarriage(game, 'p0', ['c1', 'c2'], 'p1'), /ชาย/);
+  });
+
+  it('cannot target a male already at full HP', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1'), attackCard('c2')];
+    p1.hp = p1.maxHp!; p1.character!.gender = 'ชาย';
+    assert.throws(() => useMarriage(game, 'p0', ['c1', 'c2'], 'p1'), /เต็ม/);
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1'), attackCard('c2'), attackCard('c3'), attackCard('c4')];
+    p1.hp = 4; p1.character!.gender = 'ชาย';
+    useMarriage(game, 'p0', ['c1', 'c2'], 'p1');
+    assert.throws(() => useMarriage(game, 'p0', ['c3', 'c4'], 'p1'), /1 ครั้งต่อรอบ/);
+  });
+
+  it('a non-ซุนซ่างเซียง cannot use แผนแต่งงาน', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('c1'), attackCard('c2')];
+    p1.hp = 5; p1.character!.gender = 'ชาย';
+    assert.throws(() => useMarriage(game, 'p0', ['c1', 'c2'], 'p1'), /แผนแต่งงาน/);
+  });
+});
+
+describe('Character skill – เตียวเลี้ยว จู่โจมฉับพลัน (raid instead of drawing)', () => {
+  const drawPhase = (game: GameState) => { game.turn.phase = 'draw'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false; };
+
+  it('takes one hand card from each of two chosen players, then enters play phase', () => {
+    const game = makeGame({ p0: 'CHAR019' });
+    drawPhase(game);
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p2 = game.players.find(p => p.id === 'p2')!;
+    p0.hand = []; p1.hand = [attackCard('a1')]; p2.hand = [attackCard('b1')];
+    useRaid(game, 'p0', ['p1', 'p2']);
+    assert.equal(p0.hand.length, 2, 'เตียวเลี้ยว took a card from each');
+    assert.equal(p1.hand.length, 0);
+    assert.equal(p2.hand.length, 0);
+    assert.equal(game.turn.phase, 'play', 'draw phase completed');
+    assert.equal(game.hasDrawnThisTurn, true);
+  });
+
+  it('may target just one player', () => {
+    const game = makeGame({ p0: 'CHAR019' });
+    drawPhase(game);
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    game.players.find(p => p.id === 'p1')!.hand = [attackCard('a1')];
+    useRaid(game, 'p0', ['p1']);
+    assert.equal(p0.hand.length, 1);
+  });
+
+  it('cannot be used after already drawing', () => {
+    const game = makeGame({ p0: 'CHAR019' });
+    drawPhase(game); game.turn.drawnThisTurn = 1;
+    game.players.find(p => p.id === 'p1')!.hand = [attackCard('a1')];
+    assert.throws(() => useRaid(game, 'p0', ['p1']), /ก่อนเริ่มจั่ว/);
+  });
+
+  it('rejects a target with no hand cards', () => {
+    const game = makeGame({ p0: 'CHAR019' });
+    drawPhase(game);
+    game.players.find(p => p.id === 'p1')!.hand = [];
+    assert.throws(() => useRaid(game, 'p0', ['p1']), /มีไพ่บนมือ/);
+  });
+
+  it('cannot target more than two players', () => {
+    const game = makeGame({ p0: 'CHAR019' });
+    drawPhase(game);
+    for (const id of ['p1', 'p2', 'p3']) game.players.find(p => p.id === id)!.hand = [attackCard(`${id}c`)];
+    assert.throws(() => useRaid(game, 'p0', ['p1', 'p2', 'p3']), /1–2/);
+  });
+
+  it('a non-เตียวเลี้ยว cannot use จู่โจมฉับพลัน', () => {
+    const game = makeGame(); // p0 no skill
+    drawPhase(game);
+    game.players.find(p => p.id === 'p1')!.hand = [attackCard('a1')];
+    assert.throws(() => useRaid(game, 'p0', ['p1']), /จู่โจมฉับพลัน/);
+  });
+});
+
+describe('Character skill – กุยแก คาดการณ์แม่นยำ (keep every judgment card)', () => {
+  it('keeps the revealed judgment card into hand instead of discarding', () => {
+    const game = makeGame({ p0: 'CHAR021' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.decisionArea = [suited('ind', 'delayed_skip_play_phase', 'delayed_trick', '♠', 'K')];
+    p0.hand = [];
+    game.deck = [attackCard('x1'), attackCard('x2'), suited('judge', 'attack', 'basic', '♠', 'K')];
+    startTurn(game, 'p0');
+    drawJudgmentCard(game, 'p0');
+    assert.equal(game.pendingJudgment?.revealed?.id, 'judge');
+    resolveJudgmentCard(game, 'p0');
+    assert.ok(p0.hand.some(c => c.id === 'judge'), 'กุยแก kept the judgment card');
+    assert.ok(!game.discard.some(c => c.id === 'judge'), 'judgment not discarded');
+  });
+
+  it('a normal character discards the judgment card as usual', () => {
+    const game = makeGame(); // p0 no keep skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.decisionArea = [suited('ind', 'delayed_skip_play_phase', 'delayed_trick', '♠', 'K')];
+    p0.hand = [];
+    game.deck = [attackCard('x1'), attackCard('x2'), suited('judge', 'attack', 'basic', '♠', 'K')];
+    startTurn(game, 'p0');
+    drawJudgmentCard(game, 'p0');
+    resolveJudgmentCard(game, 'p0');
+    assert.ok(!p0.hand.some(c => c.id === 'judge'), 'not kept');
+    assert.ok(game.discard.some(c => c.id === 'judge'), 'discarded');
+  });
+});
+
+describe('Character skill – เคาทู ฆ่าเสือมือเปล่า (draw one for +1 damage)', () => {
+  const drawPhase = (game: GameState) => { game.turn.phase = 'draw'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false; };
+
+  it('drawing only one card adds +1 to Attack damage this turn', () => {
+    const game = makeGame({ p0: 'CHAR020' });
+    drawPhase(game);
+    game.deck = [attackCard('d1')];
+    useUnarmedHunt(game, 'p0');
+    assert.equal(game.unarmedPowerActive, true);
+    assert.equal(game.turn.phase, 'play');
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')]; p1.hp = 5;
+    playAttack(game, 'p0', 'p1', 'atk');
+    respondToAttack(game, 'p1'); // no dodge → takes damage
+    assert.equal(p1.hp, 3, 'took 2 damage (1 base + 1 ฆ่าเสือมือเปล่า)');
+  });
+
+  it('a normal draw deals base damage only', () => {
+    const game = makeGame({ p0: 'CHAR020' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')]; p1.hp = 5;
+    playAttack(game, 'p0', 'p1', 'atk');
+    respondToAttack(game, 'p1');
+    assert.equal(p1.hp, 4, 'base 1 damage without the skill bonus');
+  });
+
+  it('the power bonus resets at the start of the next turn', () => {
+    const game = makeGame({ p0: 'CHAR020' });
+    game.unarmedPowerActive = true;
+    startTurn(game, 'p1');
+    assert.equal(game.unarmedPowerActive, false);
+  });
+});
+
+describe('Character skill – เอียนสี พึ่งวาสนา (fortune judgment)', () => {
+  const drawPhase = (game: GameState) => { game.turn.phase = 'draw'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false; };
+
+  it('keeps a black revealed card, then stops when a red one appears', () => {
+    const game = makeGame({ p0: 'CHAR022' });
+    drawPhase(game);
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [];
+    game.deck = [suited('r1', 'none', 'basic', '♥', '5'), suited('b1', 'none', 'basic', '♠', '7')]; // pops b1 first
+    useFortune(game, 'p0');
+    assert.ok(p0.hand.some(c => c.id === 'b1'), 'kept the black card');
+    assert.ok(!game.skillsUsedThisTurn?.includes('fortune_done'), 'may continue after black');
+    useFortune(game, 'p0');
+    assert.ok(!p0.hand.some(c => c.id === 'r1'), 'red card not kept');
+    assert.ok(game.skillsUsedThisTurn?.includes('fortune_done'), 'stops after a red reveal');
+  });
+
+  it('cannot be used again after revealing a red card', () => {
+    const game = makeGame({ p0: 'CHAR022' });
+    drawPhase(game);
+    game.deck = [suited('r1', 'none', 'basic', '♥', '5')];
+    useFortune(game, 'p0');
+    assert.throws(() => useFortune(game, 'p0'), /จบลงแล้ว/);
+  });
+
+  it('a non-เอียนสี cannot use พึ่งวาสนา', () => {
+    const game = makeGame(); // p0 no skill
+    drawPhase(game);
+    game.deck = [suited('b1', 'none', 'basic', '♠', '7')];
+    assert.throws(() => useFortune(game, 'p0'), /พึ่งวาสนา/);
+  });
+});
+
+describe('Character skill – เล่าปี่ เมตตาธรรม (gift cards, heal when giving 2+)', () => {
+  it('transfers cards to another general', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('g1')]; p1.hand = [];
+    useBenevolence(game, 'p0', ['g1'], 'p1');
+    assert.ok(p1.hand.some(c => c.id === 'g1'), 'recipient got the card');
+    assert.equal(p0.hand.length, 0);
+  });
+
+  it('heals 1 HP once total giving reaches 2 cards this turn', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hp = 3; p0.hand = [attackCard('g1'), attackCard('g2'), attackCard('g3')];
+    useBenevolence(game, 'p0', ['g1'], 'p1'); // 1 given → no heal yet
+    assert.equal(p0.hp, 3);
+    useBenevolence(game, 'p0', ['g2'], 'p2'); // 2 total → heal
+    assert.equal(p0.hp, 4, 'healed after giving a 2nd card');
+    useBenevolence(game, 'p0', ['g3'], 'p1'); // still capped at one heal/turn
+    assert.equal(p0.hp, 4, 'heal only once per turn');
+  });
+
+  it('cannot give to itself', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    game.players.find(p => p.id === 'p0')!.hand = [attackCard('g1')];
+    assert.throws(() => useBenevolence(game, 'p0', ['g1'], 'p0'), /ตัวเอง/);
+  });
+
+  it('a non-เล่าปี่ cannot use เมตตาธรรม', () => {
+    const game = makeGame(); // p0 no skill
+    game.players.find(p => p.id === 'p0')!.hand = [attackCard('g1')];
+    assert.throws(() => useBenevolence(game, 'p0', ['g1'], 'p1'), /เมตตาธรรม/);
+  });
+});
+
+describe('Character skill – ซุนกวน ค้ำจุน (emperor rescue heal +1)', () => {
+  it('recovers +1 when rescued with a WU ally present', () => {
+    const game = makeGame({ p1: 'CHAR001' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p2 = game.players.find(p => p.id === 'p2')!;
+    p1.role = 'emperor';
+    p0.character!.kingdom = 'WU'; // living WU ally
+    p1.hp = 1; p1.hand = [];
+    p2.hand = [suited('rh', 'heal', 'basic', '♥', '5')];
+    applyDamage(game, 'p1', 1, 'p3'); // p1 → 0, dying window
+    assert.equal(game.responseWindow?.type, 'dying_heal');
+    declineResponse(game, 'p1'); // dying emperor can't heal itself
+    assert.equal(game.responseWindow?.currentResponderId, 'p2');
+    playHeal(game, 'p2', 'rh');
+    assert.equal(p1.hp, 2, 'base 1 + ค้ำจุน 1');
+  });
+
+  it('gives no bonus without a WU ally', () => {
+    const game = makeGame({ p1: 'CHAR001' });
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p2 = game.players.find(p => p.id === 'p2')!;
+    p1.role = 'emperor'; // no WU allies set anywhere
+    p1.hp = 1; p1.hand = [];
+    p2.hand = [suited('rh', 'heal', 'basic', '♥', '5')];
+    applyDamage(game, 'p1', 1, 'p3');
+    declineResponse(game, 'p1');
+    playHeal(game, 'p2', 'rh');
+    assert.equal(p1.hp, 1, 'base heal only');
+  });
+});
+
+describe('Character skill – อ้วนสุด จองหอง (emperor arrogance)', () => {
+  const drawPhase = (game: GameState) => { game.turn.phase = 'draw'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false; };
+
+  it('lets the emperor draw one extra and lowers the hand limit by 1', () => {
+    const game = makeGame({ p0: 'CHAR027' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.role = 'emperor'; p0.hp = 4; p0.hand = [];
+    drawPhase(game);
+    game.deck = [attackCard('e1')];
+    useArrogance(game, 'p0');
+    assert.equal(p0.hand.length, 1, 'drew one extra');
+    assert.equal(game.arrogancePenalty, true);
+    p0.hand = [attackCard('a'), attackCard('b'), attackCard('c'), attackCard('d')];
+    assert.equal(getDiscardRequirement(game, 'p0'), 1, 'hand limit is hp-1 = 3');
+  });
+
+  it('cannot be used by a non-emperor', () => {
+    const game = makeGame({ p0: 'CHAR027' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.role = 'rebel';
+    drawPhase(game); game.deck = [attackCard('e1')];
+    assert.throws(() => useArrogance(game, 'p0'), /จักรพรรดิ/);
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR027' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.role = 'emperor';
+    drawPhase(game); game.deck = [attackCard('e1'), attackCard('e2')];
+    useArrogance(game, 'p0');
+    assert.throws(() => useArrogance(game, 'p0'), /1 ครั้งต่อรอบ/);
+  });
+});
+
+describe('Character skill – ม้าเฉียว ม้าคะนองศึก (attack judgment blocks dodge)', () => {
+  it('a red judgment stops the target from dodging', () => {
+    const game = makeGame({ p0: 'CHAR014' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')];
+    p1.hand = [dodgeCard('dg')]; p1.hp = 5;
+    game.deck = [suited('j1', 'none', 'basic', '♥', '5')]; // red judgment
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.equal(game.pendingAction?.noDodge, true);
+    assert.throws(() => respondToAttack(game, 'p1', 'dg'), /หลบไม่ได้/);
+    respondToAttack(game, 'p1'); // forced to take the hit
+    assert.equal(p1.hp, 4);
+  });
+
+  it('a black judgment lets the target dodge normally', () => {
+    const game = makeGame({ p0: 'CHAR014' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')];
+    p1.hand = [dodgeCard('dg')]; p1.hp = 5;
+    game.deck = [suited('j2', 'none', 'basic', '♠', '5')]; // black judgment
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.equal(game.pendingAction?.noDodge, false);
+    assert.doesNotThrow(() => respondToAttack(game, 'p1', 'dg'));
+    assert.equal(p1.hp, 5, 'dodge succeeded, no damage');
+  });
+
+  it('a normal attacker performs no judgment and the target may dodge', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')];
+    p1.hand = [dodgeCard('dg')]; p1.hp = 5;
+    game.deck = [suited('j3', 'none', 'basic', '♥', '5')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.ok(!game.pendingAction?.noDodge);
+    assert.equal(game.deck.length, 1, 'no judgment card was drawn');
+  });
+});
+
+describe('Character skill – แฮหัวตุ้น ย้อนรอยศัตรู (retaliate on damage)', () => {
+  it('a non-♥ judgment makes the damager choose; discarding two resolves it', () => {
+    const game = makeGame({ p0: 'CHAR018' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 5;
+    p1.hand = [attackCard('c1'), attackCard('c2'), attackCard('c3')];
+    game.deck = [suited('j', 'none', 'basic', '♠', '5')]; // black → not ♥
+    applyDamage(game, 'p0', 1, 'p1');
+    assert.equal(game.pendingRetaliate?.damagerId, 'p1');
+    retaliateDiscard(game, 'p1', ['c1', 'c2']);
+    assert.equal(p1.hand.length, 1, 'damager discarded two');
+    assert.equal(game.pendingRetaliate, undefined);
+  });
+
+  it('the damager may instead take 1 damage', () => {
+    const game = makeGame({ p0: 'CHAR018' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 5; p1.hp = 5; p1.hand = [attackCard('c1')];
+    game.deck = [suited('j', 'none', 'basic', '♣', '5')];
+    applyDamage(game, 'p0', 1, 'p1');
+    retaliateTakeDamage(game, 'p1');
+    assert.equal(p1.hp, 4);
+    assert.equal(game.pendingRetaliate, undefined);
+  });
+
+  it('a ♥ judgment triggers nothing', () => {
+    const game = makeGame({ p0: 'CHAR018' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 5; p1.hand = [attackCard('c1'), attackCard('c2')];
+    game.deck = [suited('j', 'none', 'basic', '♥', '5')];
+    applyDamage(game, 'p0', 1, 'p1');
+    assert.equal(game.pendingRetaliate, undefined);
+  });
+
+  it('does not trigger if แฮหัวตุ้น is left dying (0 HP)', () => {
+    const game = makeGame({ p0: 'CHAR018' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 1; p1.hand = [attackCard('c1')];
+    game.deck = [suited('j', 'none', 'basic', '♠', '5')];
+    applyDamage(game, 'p0', 1, 'p1'); // p0 → 0
+    assert.equal(game.pendingRetaliate, undefined);
+  });
+
+  it('a non-แฮหัวตุ้น does not retaliate', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hp = 5; p1.hand = [attackCard('c1')];
+    game.deck = [suited('j', 'none', 'basic', '♠', '5')];
+    applyDamage(game, 'p0', 1, 'p1');
+    assert.equal(game.pendingRetaliate, undefined);
+  });
+});
+
+describe('Character skill – ไต้เกี้ยว ระเหเร่ร่อน (redirect attack)', () => {
+  it('redirects the attack to another general in range for the cost of a card', () => {
+    const game = makeGame({ p1: 'CHAR006' }); // p1 = ไต้เกี้ยว
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p2 = game.players.find(p => p.id === 'p2')!;
+    p0.hand = [attackCard('atk')];
+    p1.hand = [attackCard('pay')];
+    p2.hp = 5;
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.equal(game.pendingAction?.targetId, 'p1');
+    redirectAttack(game, 'p1', 'pay', 'p2');
+    assert.equal(game.pendingAction?.targetId, 'p2', 'attack redirected to p2');
+    assert.equal(p1.hand.length, 0, 'paid a card');
+    respondToAttack(game, 'p2'); // p2 takes the hit from the original attacker
+    assert.equal(p2.hp, 4);
+  });
+
+  it('cannot redirect onto the attacker', () => {
+    const game = makeGame({ p1: 'CHAR006' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')]; p1.hand = [attackCard('pay')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.throws(() => redirectAttack(game, 'p1', 'pay', 'p0'), /ผู้โจมตี/);
+  });
+
+  it('cannot redirect to a target outside ไต้เกี้ยว range', () => {
+    const game = makeGame({ p1: 'CHAR006' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')]; p1.hand = [attackCard('pay')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.throws(() => redirectAttack(game, 'p1', 'pay', 'p3'), /ระยะ/); // p3 is distance 2
+  });
+
+  it('a non-ไต้เกี้ยว target cannot redirect', () => {
+    const game = makeGame(); // p1 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('atk')]; p1.hand = [attackCard('pay')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.throws(() => redirectAttack(game, 'p1', 'pay', 'p2'), /ระเหเร่ร่อน/);
+  });
+});
+
+const clearNegateWindow = (game: GameState) => { let guard = 0; while (game.responseWindow?.type === 'negate' && game.responseWindow.currentResponderId && guard++ < 10) declineNegate(game, game.responseWindow.currentResponderId); };
+
+describe('Card conversion – กำเหลง บ้าบิ่น (♠/♣ as ถอนสะพาน)', () => {
+  it('lets กำเหลง use a black card to dismantle a target card', () => {
+    const game = makeGame({ p0: 'CHAR002' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [suited('bd', 'attack', 'basic', '♠', '7')];
+    p1.hand = [attackCard('t1'), attackCard('t2')];
+    assert.ok(cardActsAs(game, 'p0', p0.hand[0], 'discard_target_card'));
+    playDiscardTargetCard(game, 'p0', 'p1', 'bd', { zone: 'hand', handIndex: 0 });
+    clearNegateWindow(game);
+    assert.equal(p1.hand.length, 1, 'target lost a card to ถอนสะพาน');
+  });
+
+  it('a non-กำเหลง cannot dismantle with a plain black card', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [suited('bd', 'attack', 'basic', '♠', '7')];
+    p1.hand = [attackCard('t1')];
+    assert.throws(() => playDiscardTargetCard(game, 'p0', 'p1', 'bd', { zone: 'hand', handIndex: 0 }), /Discard-target/);
+  });
+});
+
+describe('Card conversion – ไต้เกี้ยว โปรยเสน่ห์ (♦ as มีสุขลืมเมือง)', () => {
+  it('lets ไต้เกี้ยว place an Indulgence using a ♦ card', () => {
+    const game = makeGame({ p0: 'CHAR006' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [suited('sd', 'attack', 'basic', '♦', '7')];
+    playDelayedTrick(game, 'p0', 'sd', 'p1');
+    clearNegateWindow(game);
+    assert.ok(p1.decisionArea.some(c => c.effect === 'delayed_skip_play_phase'), 'มีสุขลืมเมือง placed on the target');
+  });
+
+  it('a non-ไต้เกี้ยว cannot seduce with a ♦ card', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [suited('sd', 'attack', 'basic', '♦', '7')];
+    assert.throws(() => playDelayedTrick(game, 'p0', 'sd', 'p1'), /หน่วงเวลา/);
+  });
+});
+
+describe('Character skill – ลกซุน เชื่อมค่ายทดแทน (draw when the last hand card is lost)', () => {
+  it('grants one draw when the hand drops from 1 to 0', () => {
+    const game = makeGame({ p0: 'CHAR007' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [attackCard('c1')];
+    synchronizeGameState(game); // seed snapshot at hand=1
+    p0.hand = [];
+    synchronizeGameState(game); // 1 → 0
+    assert.equal(owedDraws(game, 'p0'), 1);
+  });
+
+  it('does not grant while cards remain', () => {
+    const game = makeGame({ p0: 'CHAR007' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [attackCard('c1'), attackCard('c2')];
+    synchronizeGameState(game);
+    p0.hand = [attackCard('c2')]; // still holding one
+    synchronizeGameState(game);
+    assert.equal(owedDraws(game, 'p0'), 0);
+  });
+
+  it('does not grant for a non-ลกซุน', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [attackCard('c1')];
+    synchronizeGameState(game);
+    p0.hand = [];
+    synchronizeGameState(game);
+    assert.equal(owedDraws(game, 'p0'), 0);
+  });
+});
+
+describe('Character skill – ซุนซ่างเซียง องค์หญิงน้อย (draw 2 per equipment lost)', () => {
+  it('grants two draws when an equipment card is lost', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.equipment.weapon = suited('w1', 'none', 'weapon', '♠', 'K');
+    synchronizeGameState(game);
+    p0.equipment.weapon = null;
+    synchronizeGameState(game);
+    assert.equal(owedDraws(game, 'p0'), 2);
+  });
+
+  it('also triggers when equipment is replaced (old card lost)', () => {
+    const game = makeGame({ p0: 'CHAR008' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.equipment.weapon = suited('wA', 'none', 'weapon', '♠', 'K');
+    synchronizeGameState(game);
+    p0.equipment.weapon = suited('wB', 'none', 'weapon', '♥', '2'); // swap
+    synchronizeGameState(game);
+    assert.equal(owedDraws(game, 'p0'), 2);
+  });
+
+  it('does not grant for a non-ซุนซ่างเซียง', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.equipment.weapon = suited('w1', 'none', 'weapon', '♠', 'K');
+    synchronizeGameState(game);
+    p0.equipment.weapon = null;
+    synchronizeGameState(game);
+    assert.equal(owedDraws(game, 'p0'), 0);
+  });
+});
+
+describe('Character skill – จูกัดเหลียง หยั่งรู้ฟ้าดิน (peek and reorder the draw pile)', () => {
+  const drawPhase = (game: GameState) => { game.turn.phase = 'draw'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false; };
+  const deck5 = () => ['a', 'b', 'c', 'd', 'e'].map((id, i) => suited(id, 'none', 'basic', '♠', String(i + 2)));
+
+  it('peeks the top X cards and reorders a chosen card to the top', () => {
+    const game = makeGame({ p0: 'CHAR012' });
+    drawPhase(game);
+    game.deck = deck5();
+    usePeek(game, 'p0');
+    assert.equal(game.pendingPeek?.cards.length, 4, 'X = 4 living generals');
+    const peeked = game.pendingPeek!.cards.map(c => c.id);
+    resolvePeek(game, 'p0', [peeked[3]], [peeked[0], peeked[1], peeked[2]]); // one on top, rest to bottom
+    assert.equal(game.pendingPeek, undefined);
+    assert.equal(game.deck.length, 5, 'all cards returned');
+    assert.equal(game.deck[game.deck.length - 1].id, peeked[3], 'chosen card is now on top');
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR012' });
+    drawPhase(game);
+    game.deck = deck5();
+    usePeek(game, 'p0');
+    const peeked = game.pendingPeek!.cards.map(c => c.id);
+    resolvePeek(game, 'p0', peeked, []);
+    assert.throws(() => usePeek(game, 'p0'), /1 ครั้งต่อรอบ/);
+  });
+
+  it('resolvePeek must account for every peeked card', () => {
+    const game = makeGame({ p0: 'CHAR012' });
+    drawPhase(game);
+    game.deck = deck5();
+    usePeek(game, 'p0');
+    const peeked = game.pendingPeek!.cards.map(c => c.id);
+    assert.throws(() => resolvePeek(game, 'p0', [peeked[0]], []), /ครบทุกใบ/);
+  });
+
+  it('a non-จูกัดเหลียง cannot use หยั่งรู้ฟ้าดิน', () => {
+    const game = makeGame(); // p0 no skill
+    drawPhase(game);
+    game.deck = deck5();
+    assert.throws(() => usePeek(game, 'p0'), /หยั่งรู้ฟ้าดิน/);
+  });
+});
+
+describe('Character skill – จิวยี่ บาดหมาง (suit guess)', () => {
+  it('a wrong suit guess costs the target 1 HP but they still get the card', () => {
+    const game = makeGame({ p0: 'CHAR005' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [suited('c1', 'none', 'basic', '♠', '5')]; // the only card is ♠
+    p1.hp = 4; p1.hand = [];
+    useDischord(game, 'p0', 'p1');
+    assert.equal(game.pendingDischord?.targetId, 'p1');
+    pickDischordSuit(game, 'p1', '♥'); // wrong (card is ♠)
+    assert.equal(p1.hp, 3, 'lost 1 HP');
+    assert.ok(p1.hand.some(c => c.id === 'c1'), 'took the card anyway');
+    assert.equal(p0.hand.length, 0);
+  });
+
+  it('a correct suit guess deals no damage', () => {
+    const game = makeGame({ p0: 'CHAR005' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [suited('c1', 'none', 'basic', '♠', '5')];
+    p1.hp = 4;
+    useDischord(game, 'p0', 'p1');
+    pickDischordSuit(game, 'p1', '♠'); // correct
+    assert.equal(p1.hp, 4, 'no HP loss');
+    assert.ok(p1.hand.some(c => c.id === 'c1'));
+  });
+
+  it('requires จิวยี่ to hold at least one card', () => {
+    const game = makeGame({ p0: 'CHAR005' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [];
+    assert.throws(() => useDischord(game, 'p0', 'p1'), /อย่างน้อย 1 ใบ/);
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR005' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [suited('c1', 'none', 'basic', '♠', '5'), suited('c2', 'none', 'basic', '♥', '5')];
+    useDischord(game, 'p0', 'p1');
+    pickDischordSuit(game, 'p1', '♠');
+    assert.throws(() => useDischord(game, 'p0', 'p2'), /1 ครั้งต่อรอบ/);
+  });
+
+  it('a non-จิวยี่ cannot use บาดหมาง', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [suited('c1', 'none', 'basic', '♠', '5')];
+    assert.throws(() => useDischord(game, 'p0', 'p1'), /บาดหมาง/);
+  });
+});
+
+describe('Character skill – เตียวเสี้ยน สาวงามยุยง (force two males to duel)', () => {
+  const makeMale = (game: GameState, id: string) => { game.players.find(p => p.id === id)!.character!.gender = 'ชาย'; };
+
+  it('forces two male generals to duel; the loser (no Attack) takes 1 damage', () => {
+    const game = makeGame({ p0: 'CHAR025' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p2 = game.players.find(p => p.id === 'p2')!;
+    p0.hand = [attackCard('pay')];
+    makeMale(game, 'p1'); p1.hand = [attackCard('a1')]; p1.hp = 4;
+    makeMale(game, 'p2'); p2.hand = []; p2.hp = 4; // p2 cannot answer
+    useIncite(game, 'p0', 'pay', 'p1', 'p2'); // p1 attacks first
+    assert.equal(game.responseWindow?.type, 'duel_attack');
+    assert.equal(game.responseWindow?.currentResponderId, 'p1');
+    playAttackResponse(game, 'p1', 'a1');
+    assert.equal(game.responseWindow?.currentResponderId, 'p2');
+    declineResponse(game, 'p2'); // p2 loses
+    assert.equal(p2.hp, 3, 'the loser took 1 damage');
+    assert.equal(p0.hand.length, 0, 'เตียวเสี้ยน paid a card');
+  });
+
+  it('rejects a non-male participant', () => {
+    const game = makeGame({ p0: 'CHAR025' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [attackCard('pay')];
+    makeMale(game, 'p1');
+    game.players.find(p => p.id === 'p2')!.character!.gender = 'หญิง';
+    assert.throws(() => useIncite(game, 'p0', 'pay', 'p1', 'p2'), /ชาย/);
+  });
+
+  it('can only be used once per turn', () => {
+    const game = makeGame({ p0: 'CHAR025' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p0.hand = [attackCard('pay'), attackCard('pay2')];
+    makeMale(game, 'p1'); p1.hand = [attackCard('a1')]; p1.hp = 4;
+    makeMale(game, 'p2'); game.players.find(p => p.id === 'p2')!.hand = []; game.players.find(p => p.id === 'p2')!.hp = 4;
+    useIncite(game, 'p0', 'pay', 'p1', 'p2');
+    playAttackResponse(game, 'p1', 'a1'); declineResponse(game, 'p2'); // resolve the duel
+    assert.throws(() => useIncite(game, 'p0', 'pay2', 'p1', 'p2'), /1 ครั้งต่อรอบ/);
+  });
+
+  it('a non-เตียวเสี้ยน cannot use สาวงามยุยง', () => {
+    const game = makeGame(); // p0 no skill
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [attackCard('pay')];
+    makeMale(game, 'p1'); makeMale(game, 'p2');
+    assert.throws(() => useIncite(game, 'p0', 'pay', 'p1', 'p2'), /สาวงามยุยง/);
+  });
+});
+
+describe('Emperor skill – เล่าปี่ คุณธรรมสามัคคี (SHU ally attacks for you)', () => {
+  it('a SHU ally plays an Attack counted as เล่าปี่ against the chosen target', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p3 = game.players.find(p => p.id === 'p3')!;
+    p0.role = 'emperor';
+    p1.hp = 4; p1.hand = [];
+    p3.character!.kingdom = 'SHU'; p3.hand = [attackCard('a1')];
+    requestUnityAttack(game, 'p0', 'p1', 'p3');
+    assert.equal(game.pendingAllyAssist?.allyId, 'p3');
+    allyAssist(game, 'p3', 'a1');
+    assert.equal(game.pendingAction?.actorId, 'p0', 'attack counted as เล่าปี่');
+    assert.equal(game.pendingAction?.targetId, 'p1');
+    respondToAttack(game, 'p1');
+    assert.equal(p1.hp, 3);
+    assert.equal(p3.hand.length, 0, 'ally paid the attack card');
+  });
+
+  it('rejects a non-SHU ally', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.role = 'emperor';
+    const p3 = game.players.find(p => p.id === 'p3')!;
+    p3.character!.kingdom = 'WEI'; p3.hand = [attackCard('a1')];
+    assert.throws(() => requestUnityAttack(game, 'p0', 'p1', 'p3'), /จ๊กก๊ก/);
+  });
+
+  it('the ally can decline, leaving the emperor to act', () => {
+    const game = makeGame({ p0: 'CHAR009' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.role = 'emperor';
+    const p3 = game.players.find(p => p.id === 'p3')!;
+    p3.character!.kingdom = 'SHU'; p3.hand = [attackCard('a1')];
+    requestUnityAttack(game, 'p0', 'p1', 'p3');
+    declineAllyAssist(game, 'p3');
+    assert.equal(game.pendingAllyAssist, undefined);
+    assert.equal(p3.hand.length, 1, 'ally kept their card');
+  });
+});
+
+describe('Emperor skill – โจโฉ ปกป้องราชันย์ (WEI ally dodges for you)', () => {
+  it('a WEI ally plays a Dodge that saves โจโฉ from the attack', () => {
+    const game = makeGame({ p1: 'CHAR016' }); // p1 = โจโฉ
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p3 = game.players.find(p => p.id === 'p3')!;
+    p1.role = 'emperor'; p1.hp = 4; p1.hand = [];
+    p0.hand = [attackCard('atk')];
+    p3.character!.kingdom = 'WEI'; p3.hand = [dodgeCard('dg')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.equal(game.responseWindow?.currentResponderId, 'p1');
+    requestGuardianDodge(game, 'p1', 'p3');
+    assert.equal(game.pendingAllyAssist?.allyId, 'p3');
+    allyAssist(game, 'p3', 'dg');
+    assert.equal(p1.hp, 4, 'โจโฉ took no damage (dodged by ally)');
+    assert.equal(p3.hand.length, 0, 'ally paid the dodge card');
+  });
+
+  it('rejects a non-WEI ally', () => {
+    const game = makeGame({ p1: 'CHAR016' });
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    const p3 = game.players.find(p => p.id === 'p3')!;
+    p1.role = 'emperor'; p0.hand = [attackCard('atk')];
+    p3.character!.kingdom = 'SHU'; p3.hand = [dodgeCard('dg')];
+    playAttack(game, 'p0', 'p1', 'atk');
+    assert.throws(() => requestGuardianDodge(game, 'p1', 'p3'), /วุยก๊ก/);
   });
 });
