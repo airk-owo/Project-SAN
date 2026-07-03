@@ -1143,6 +1143,22 @@ describe('Character skill – แฮหัวตุ้น ย้อนรอย�
   });
 });
 
+describe('Judgment – ฟ้าลงโทษเลื่อนข้ามคนที่มีอยู่แล้ว (lightning skips occupied seats)', () => {
+  it('moves to the next player without a lightning instead of being discarded', () => {
+    const game = makeGame();
+    const byId = (id: string) => game.players.find(p => p.id === id)!;
+    byId('p0').decisionArea = [suited('L1', 'delayed_lightning_judgment', 'delayed_trick', '♥', '5')]; // ♥ → safe, must move
+    byId('p1').decisionArea = [suited('Lb', 'delayed_lightning_judgment', 'delayed_trick', '♠', '3')];
+    byId('p3').decisionArea = [suited('Ld', 'delayed_lightning_judgment', 'delayed_trick', '♠', '4')];
+    game.deck = [suited('judge', 'attack', 'basic', '♥', '6')];
+    startTurn(game, 'p0');
+    drawJudgmentCard(game, 'p0');
+    resolveJudgmentCard(game, 'p0');
+    assert.ok(!game.discard.some(c => c.id === 'L1'), 'lightning must not be discarded when the next seat already holds one');
+    assert.ok(byId('p2').decisionArea.some(c => c.id === 'L1'), 'lightning skipped the occupied seats and landed on the only free player');
+  });
+});
+
 describe('Character skill – ไต้เกี้ยว ระเหเร่ร่อน (redirect attack)', () => {
   it('redirects the attack to another general in range for the cost of a card', () => {
     const game = makeGame({ p1: 'CHAR006' }); // p1 = ไต้เกี้ยว

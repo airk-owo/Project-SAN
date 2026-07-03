@@ -365,7 +365,7 @@ function applyJudgmentOutcome(state:GameState,player:Player,pending:PendingJudgm
   }else{
     const rank=judged?parseInt(judged.number,10):NaN,struck=judged?.suit==='♠'&&rank>=2&&rank<=9;
     if(struck){if(trick)moveToDiscard(state,trick,false);logAction(state,'lightning-strike',`${characterName(player)} ถูกฟ้าผ่า เสีย 3 หน่วยพลังชีวิต`,player.id);recordJudgment(state,player.id,pending.trickName,judged,'ฟ้าผ่า! เสีย 3 พลังชีวิต');applyDamage(state,player.id,3);}
-    else{const next=getNextAlivePlayer(state,player.id);if(trick&&next&&next.id!==player.id&&!next.decisionArea.some(c=>c.effect==='delayed_lightning_judgment')){next.decisionArea.push(trick);logAction(state,'lightning-move',`ฟ้าลงโทษเคลื่อนไปยัง ${characterName(next)}`,player.id,next.id);recordJudgment(state,player.id,pending.trickName,judged,`ปลอดภัย → ฟ้าลงโทษเลื่อนไปยัง ${characterName(next)}`);}else{if(trick)moveToDiscard(state,trick,false);recordJudgment(state,player.id,pending.trickName,judged,'ปลอดภัย');}}
+    else{const order=getPlayersInSeatOrder(state),ci=order.findIndex(p=>p.id===player.id);let next:Player|undefined;for(let step=1;ci>=0&&step<order.length;step++){const cand=order[(ci+step*state.direction+order.length)%order.length];if(cand.alive&&!cand.decisionArea.some(c=>c.effect==='delayed_lightning_judgment')){next=cand;break;}} /* กฎ: ฟ้าลงโทษเลื่อนไปคนถัดไปที่ "ยังไม่มี" ฟ้าลงโทษ — ข้ามคนที่มีอยู่แล้ว ไม่ใช่ทิ้ง */ if(trick&&next){next.decisionArea.push(trick);logAction(state,'lightning-move',`ฟ้าลงโทษเคลื่อนไปยัง ${characterName(next)}`,player.id,next.id);recordJudgment(state,player.id,pending.trickName,judged,`ปลอดภัย → ฟ้าลงโทษเลื่อนไปยัง ${characterName(next)}`);}else{if(trick)moveToDiscard(state,trick,false);recordJudgment(state,player.id,pending.trickName,judged,'ปลอดภัย');}}
   }
   state.pendingJudgment=undefined;
   if(player.alive&&!state.responseWindow&&beginNextJudgment(state,player)){synchronizeGameState(state);return;}
@@ -532,6 +532,7 @@ export function revealRetaliateJudgment(state:GameState,ownerId:string){
   moveToDiscard(state,judge,false);
   const isHeart=judge.suit==='♥';
   logAction(state,'skill-retaliate',`${characterName(owner)} ใช้ ย้อนรอยศัตรู เปิดตัดสิน ${judge.name} (${judge.number}${judge.suit}) — ${isHeart?'♥ ไม่มีผล':'ผู้ทำดาเมจต้องเลือก ทิ้ง 2 ใบ หรือ รับ 1 ดาเมจ'}`,ownerId,damager?.id,judge.id);
+  recordJudgment(state,ownerId,'ย้อนรอยศัตรู',judge,isHeart?'♥ ไม่มีผล — ปลอดภัย':`ไม่ใช่ ♥ → ${damager?.username??'ผู้ทำดาเมจ'} ต้องทิ้ง 2 ใบ หรือรับ 1 ดาเมจ`); // ประกาศผลไพ่ให้ทุกคนเห็น (แบนเนอร์) ก่อนคนโดนตัดสินใจ
   if(!isHeart&&damager&&damager.alive)state.pendingRetaliate={damagerId:damager.id,victimId:ownerId};
   synchronizeGameState(state);
 }
