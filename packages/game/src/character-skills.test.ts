@@ -941,6 +941,16 @@ describe('Character skill – เอียนสี พึ่งวาสนา 
     assert.ok(game.skillsUsedThisTurn?.includes('fortune_done'), 'stops after a red reveal');
   });
 
+  it('can be used in the judgment phase, before revealing a delayed trick (e.g. Lightning)', () => {
+    const game = makeGame({ p0: 'CHAR022' });
+    game.turn.phase = 'judgment'; game.turn.drawnThisTurn = 0; game.hasDrawnThisTurn = false;
+    const p0 = game.players.find(p => p.id === 'p0')!;
+    p0.hand = [];
+    game.deck = [suited('r1', 'none', 'basic', '♥', '5'), suited('b1', 'none', 'basic', '♠', '7')];
+    useFortune(game, 'p0'); // ช่วงเตรียมการมาก่อนตัดสิน — ต้องใช้ได้แม้ยังอยู่ phase judgment
+    assert.ok(p0.hand.some(c => c.id === 'b1'), 'usable during the prep/judgment phase');
+  });
+
   it('cannot be used again after revealing a red card', () => {
     const game = makeGame({ p0: 'CHAR022' });
     drawPhase(game);

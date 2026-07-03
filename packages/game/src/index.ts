@@ -779,7 +779,8 @@ export function resolvePeek(state:GameState,playerId:string,topIds:string[],bott
 /** เอียนสี พึ่งวาสนา: in your prep/draw phase, reveal the top card; keep it if black, and you may repeat until you reveal a red one. */
 export function useFortune(state:GameState,playerId:string){
   if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
-  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนจั่วไพ่)');
+  // ช่วงเตรียมการ = ก่อนตัดสิน (judgment) และก่อนจั่ว (draw) — พึ่งวาสนาใช้ได้ก่อนเปิดไพ่ตัดสิน (เช่น ฟ้าลงโทษ)
+  if(state.turn.activePlayerId!==playerId||(state.turn.phase!=='draw'&&state.turn.phase!=='judgment'))throw new Error('ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนตัดสิน/ก่อนจั่วไพ่)');
   if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
   if(!hasCharacterSkill(state,playerId,'fortune_judgment'))throw new Error('ไม่มีทักษะพึ่งวาสนา');
   if(state.skillsUsedThisTurn?.includes('fortune_done'))throw new Error('พึ่งวาสนาจบลงแล้วในรอบนี้ (เปิดได้ดอกสีแดง)');
