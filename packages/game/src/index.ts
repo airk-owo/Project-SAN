@@ -803,6 +803,16 @@ export function resolvePlayerDeath(state:GameState,playerId:string,killerId?:str
   if(state.turn.activePlayerId===dead.id){const next=getNextAlivePlayer(state,dead.id);if(next){state.turn.turnNumber++;startTurn(state,next.id);}}
   synchronizeGameState(state);
 }
+/** Voluntary surrender: the player forces their own death so a game isn't blocked when someone has to step away. */
+export function surrenderPlayer(state:GameState,playerId:string){
+  const p=getPlayerById(state,playerId);if(!p||!p.alive)throw new Error('ผู้เล่นไม่อยู่ในเกมหรือถูกกำจัดแล้ว');
+  logAction(state,'surrender',`${characterName(p)} ยอมแพ้ (บังคับตนเองตาย)`,playerId);
+  const rw=state.responseWindow,act=state.currentAction,pa=state.pendingAction;
+  const involved=Boolean((rw&&(rw.currentResponderId===playerId||rw.requiredPlayerIds?.includes(playerId)||rw.dyingPlayerId===playerId))||(act&&(act.actorId===playerId||act.targetIds?.includes(playerId)))||(pa&&(pa.actorId===playerId||pa.targetId===playerId)));
+  if(involved){state.responseWindow=null;state.suspendedResponseWindow=undefined;state.currentAction=null;state.pendingAction=undefined;}
+  if(state.pendingJudgment?.playerId===playerId)state.pendingJudgment=undefined;
+  resolvePlayerDeath(state,playerId);
+}
 
 export function healPlayer(state:GameState,playerId:string,amount:number){
   const player=getPlayerById(state,playerId); if(!player||!player.alive||player.hp===undefined||player.maxHp===undefined) throw new Error('Choose a living player');

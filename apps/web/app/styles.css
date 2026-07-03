@@ -62,7 +62,7 @@ input,button{font:inherit;padding:10px 12px;margin:4px;border-radius:8px;border:
 .local-notice{position:sticky;top:12px;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:14px;max-width:540px;margin:0 auto 12px;padding:10px 14px;border:2px solid var(--danger);border-radius:10px;background:#fff7e8;color:var(--danger);box-shadow:0 6px 18px #3e2f2233;font-weight:700}.local-notice button{margin:0;padding:0 7px;border:0;background:transparent;color:var(--danger);font-size:1.35rem;line-height:1}
 .local-equipment-confirm{max-width:390px;text-align:center}.local-equipment-confirm h2{margin-top:0;color:var(--danger)}.local-equipment-confirm p{line-height:1.65}.local-equipment-confirm .mock-response-actions{display:flex;justify-content:center;margin-top:16px}.local-equipment-confirm .mock-response-actions button{min-width:96px}
 /* A hidden-hand picker contains only enabled face-down card buttons: no names or card metadata are rendered. */
-.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)){display:flex;align-items:flex-end;justify-content:center;gap:0;padding:12px 6px 18px;overflow-x:auto}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button{display:grid;place-items:center;align-content:center;flex:none;width:74px;height:104px;margin-left:-12px;padding:7px;border:2px solid #e0ba67;border-radius:8px;background:repeating-linear-gradient(135deg,#8b2e2e 0 6px,#e0ba67 6px 8px);box-shadow:3px 4px 0 #3e2f2260;color:#fff;font-size:1.15rem;text-align:center;transition:transform .15s ease,box-shadow .15s ease}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:first-child{margin-left:0;transform:rotate(-4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(2){transform:rotate(-1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(3){transform:rotate(1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(4){transform:rotate(4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:hover{position:relative;z-index:2;transform:translateY(-12px) rotate(0deg);box-shadow:5px 9px 14px #3e2f2266}
+.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)){display:flex;align-items:flex-end;justify-content:center;gap:0;padding:12px 6px 18px;overflow-x:auto}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button{display:grid;place-items:center;align-content:center;flex:none;width:74px;height:104px;margin-left:-12px;padding:7px;border:2px solid #994638;border-radius:8px;background:repeating-linear-gradient(135deg,#7a2016 0 6px,#994638 6px 8px);box-shadow:3px 4px 0 #3e2f2260;color:#fff;font-size:1.15rem;text-align:center;transition:transform .15s ease,box-shadow .15s ease}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:first-child{margin-left:0;transform:rotate(-4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(2){transform:rotate(-1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(3){transform:rotate(1.5deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:nth-child(4){transform:rotate(4deg)}.local-equipment-picker:not(:has(.local-empty-slot)):not(:has(button:disabled)) button:hover{position:relative;z-index:2;transform:translateY(-12px) rotate(0deg);box-shadow:5px 9px 14px #3e2f2266}
 /* Turn status below title */
 .mock-game-header .local-turn-status{margin:4px 0 0;display:inline-flex;gap:10px;align-items:center;padding:4px 10px;border:1px solid var(--border);border-radius:8px;background:#faf8efcc;font-size:.78rem}.mock-game-header .local-turn-status b{color:var(--danger)}
 /* Header right: role counts above restart button */
@@ -167,7 +167,8 @@ small.mock-role{font-weight:700}
 .mock-card-suit-red .mock-card-rank{color:#c0392b}
 .mock-card-suit-black .mock-card-rank{color:#2c2c2c}
 .mock-card-name{font-family:Baozi,BaiJamjuree,sans-serif;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block;text-align:center;color:var(--text)}
-img.mock-card-art{width:100%;flex:1;margin:7px 0;object-fit:cover;border-radius:5px}
+.mock-card .mock-card-art{aspect-ratio:5/3;flex:none;height:auto;width:100%;margin:6px 0}
+img.mock-card-art{object-fit:cover;border-radius:5px}
 
 /* Turn indicator in the hand panel */
 .local-turn-mine{color:#2e8b3f!important;font-weight:800;font-size:1.03rem}
@@ -185,20 +186,28 @@ img.mock-card-art{width:100%;flex:1;margin:7px 0;object-fit:cover;border-radius:
 .local-faction-shu{border-color:#c0392b}
 .local-faction-wu{border-color:#2e8b3f}
 .local-faction-qun{border-color:#8a8a8a}
-.local-general-portrait{width:100%;height:112px;object-fit:cover;border-radius:8px;margin-bottom:8px}
-.card-detail-art{width:100%;max-height:220px;object-fit:contain;border-radius:8px;margin:6px 0}
+.local-general-portrait{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;margin-bottom:8px}
+.card-detail-art{width:100%;aspect-ratio:5/3;object-fit:cover;margin:6px 0;-webkit-mask-image:radial-gradient(ellipse 82% 84% at 50% 50%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 82% 84% at 50% 50%,#000 52%,transparent 100%)}
 .mock-portrait{overflow:hidden}
 .mock-portrait img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Navbar (top-right) + slide-in panels — replaces the left side asides so nothing covers the hand */
 .mock-match-layout{display:block;grid-template-columns:none;max-width:1320px;margin:0 auto}
-.local-navbar{display:flex;gap:6px}
+.local-navbar{position:sticky;top:0;z-index:140;display:flex;align-items:center;gap:10px;padding:7px 14px;background:#170f0aef;border-bottom:1px solid #c8b58a55;box-shadow:0 3px 14px #0006;backdrop-filter:blur(3px)}
+.local-navbar-left{flex:1;min-width:0;overflow:hidden}
+.local-nav-turn{color:#faf8ef;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.local-nav-turn b{color:#f5d994}
+.local-nav-turn em{color:#c8b58a;font-style:normal}
+.local-nav-title{color:#f5d994;font-weight:700;font-family:Baozi,BaiJamjuree,sans-serif;font-size:1.05rem}
+.local-navbar .local-role-counts{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.local-navbar-right{display:flex;gap:6px;margin-left:auto}
 .local-nav-btn{width:38px;height:38px;padding:0;display:grid;place-items:center;font-size:1.12rem;border-radius:9px;background:var(--card,#f8f2df);border:2px solid var(--border);cursor:pointer;line-height:1}
 .local-nav-btn:hover{border-color:var(--primary)}
 .local-nav-btn.active{border-color:var(--primary);background:#b88a3b22}
 .local-pregame-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .local-pregame-header .local-navbar{margin-left:auto}
-.local-navpanel{position:fixed;top:56px;right:12px;z-index:130;width:330px;max-width:calc(100vw - 24px);max-height:76vh;display:flex;flex-direction:column;gap:6px;padding:10px;background:var(--card,#f8f2df);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 36px #0006}
+.local-navpanel{position:fixed;top:52px;right:12px;z-index:130;width:330px;max-width:calc(100vw - 24px);max-height:76vh;display:flex;flex-direction:column;gap:6px;padding:12px;background:#170f0af5;border:1px solid #c8b58a80;border-radius:12px;box-shadow:0 12px 36px #0008;animation:navpanelpop .16s ease}
+@keyframes navpanelpop{from{opacity:0;transform:translateY(-8px)}to{opacity:1}}
 .local-navpanel .local-tab-bar{display:flex;align-items:center;gap:4px;margin:0}
 .local-navpanel-title{flex:1;font-weight:700;color:var(--primary);font-size:.95rem}
 .local-navpanel .local-log-scroll,.local-navpanel .local-chat-scroll{flex:1;overflow-y:auto;max-height:58vh}
@@ -226,3 +235,22 @@ img.mock-card-art{width:100%;flex:1;margin:7px 0;object-fit:cover;border-radius:
 .local-countdown-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#1a120b99;backdrop-filter:blur(2px);cursor:pointer}
 .local-countdown-num{font-family:Baozi,BaiJamjuree,sans-serif;font-size:9rem;font-weight:800;color:#f8f2df;text-shadow:0 4px 24px #000,0 0 40px #b88a3b;animation:countpop .8s ease}
 @keyframes countpop{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.1);opacity:1}100%{transform:scale(1);opacity:.9}}
+
+/* ── Feedback batch 1: warning popup, hp+hand line, discard suit colour, no-copy images ── */
+.local-warn-overlay{position:fixed;inset:0;z-index:180;display:flex;align-items:center;justify-content:center;background:#00000044;cursor:pointer;padding:16px}
+.local-warn-box{max-width:430px;padding:18px 22px;background:#7a2016;border:2px solid #e0a89a;border-radius:14px;box-shadow:0 14px 40px #000a;color:#fff;text-align:center;font-size:1.05rem;font-weight:600;animation:warnpop .22s ease}
+.local-warn-box small{display:block;margin-top:8px;color:#ffd9cf;font-weight:400;font-size:.78rem}
+@keyframes warnpop{from{opacity:0;transform:scale(.85)}to{opacity:1}}
+.local-hp-hand{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.local-hp-hand .mock-hand-count{margin:0}
+.mock-discard.local-suit-red{color:#c0392b}
+.mock-discard.local-suit-black{color:#1a1a1a}
+/* prevent long-press image save / drag on mobile; clicks pass through to the parent card */
+img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;pointer-events:none}
+
+/* ── Group 2: desktop layout — character info on the left, hand on the right ── */
+@media(min-width:1000px){
+  .mock-current-player{display:grid;grid-template-columns:268px minmax(0,1fr);column-gap:18px;align-items:start}
+  .mock-current-player>.mock-self{grid-column:1;align-self:start}
+  .mock-current-player>:not(.mock-self){grid-column:2}
+}

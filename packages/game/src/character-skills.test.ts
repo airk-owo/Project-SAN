@@ -9,7 +9,7 @@ import {
   useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, playHeal,
   startTurn, drawJudgmentCard, resolveJudgmentCard, replaceJudgmentCard,
   takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, redirectAttack,
-  requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, synchronizeGameState,
+  requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, surrenderPlayer, synchronizeGameState,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
 const suited = (id: string, effect: string, cardType: string, suit: string, number: string): Card => ({
@@ -1507,5 +1507,22 @@ describe('Emperor skill – โจโฉ ปกป้องราชันย์
     p3.character!.kingdom = 'SHU'; p3.hand = [dodgeCard('dg')];
     playAttack(game, 'p0', 'p1', 'atk');
     assert.throws(() => requestGuardianDodge(game, 'p1', 'p3'), /วุยก๊ก/);
+  });
+});
+
+describe('Surrender', () => {
+  it('forces the player to die and reveals their role', () => {
+    const game = makeGame();
+    const p1 = game.players.find(p => p.id === 'p1')!;
+    p1.role = 'rebel'; // avoid ending the game via a win condition
+    surrenderPlayer(game, 'p1');
+    assert.equal(p1.alive, false, 'surrendered player is dead');
+    assert.equal(p1.roleRevealed, true, 'role revealed');
+  });
+
+  it('cannot surrender a player who is already dead', () => {
+    const game = makeGame();
+    game.players.find(p => p.id === 'p1')!.alive = false;
+    assert.throws(() => surrenderPlayer(game, 'p1'), /ถูกกำจัด|ไม่อยู่/);
   });
 });
