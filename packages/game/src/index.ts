@@ -344,7 +344,8 @@ export function canPlayCardNow(state:GameState,playerId:string,card:Card){
 const recordJudgment=(state:GameState,playerId:string,trickName:string,judged:Card|null,result:string)=>{state.lastJudgment={playerId,trickName,cardName:judged?.name??'—',cardNumber:judged?.number??'',cardSuit:judged?.suit??'',result,at:new Date().toISOString()};};
 /** Sets up the next unresolved delayed trick as a pending (manual) judgment. Returns false if none remain. */
 function beginNextJudgment(state:GameState,player:Player):boolean{
-  const trick=player.decisionArea.find(card=>card.effect==='delayed_skip_play_phase'||card.effect==='delayed_lightning_judgment');
+  const tricks=player.decisionArea.filter(card=>card.effect==='delayed_skip_play_phase'||card.effect==='delayed_lightning_judgment');
+  const trick=tricks[tricks.length-1]; // กฎ: ตัดสินใบที่วางล่าสุดก่อน (LIFO) — วางทีหลังผลก่อน
   if(!trick)return false;
   state.pendingJudgment={playerId:player.id,trickEffect:trick.effect as PendingJudgment['trickEffect'],trickName:trick.name,trickCardId:trick.id,stage:'awaiting_draw'};
   logAction(state,'judgment-pending',`${characterName(player)} ต้องเปิดไพ่ตัดสิน ${trick.name}`,player.id);

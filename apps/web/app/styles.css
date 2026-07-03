@@ -310,3 +310,7 @@ img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-tou
 .local-peek-list button{display:flex;align-items:baseline;gap:6px}
 .local-peek-list button em{margin-left:auto;font-style:normal;font-size:.72rem;color:#c8a24a}
 .local-peek-list button.selected-card em{color:#e07070}
+
+/* Prevent accidental text selection/copy while playing (esp. mobile long-press) */
+body{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
