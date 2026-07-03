@@ -1424,7 +1424,7 @@ export function createPublicGameState(state:GameState, viewerId:string):PublicGa
     role:p.id===viewerId||p.roleRevealed||p.role==='emperor'?p.role:undefined,
     character:p.id===viewerId||p.role==='emperor'||allCharactersChosen?p.character:undefined,
     characterOptions:p.id===viewerId?p.characterOptions:[],
-    hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot})):[], handCount:p.hand.length
+    hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot,...(card.cardType==='weapon'&&card.effectParams?.range?{effectParams:{range:card.effectParams.range}}:{})})):[], handCount:p.hand.length
   }))};
 }
 /** @deprecated Use createPublicGameState for new server code. */

@@ -314,3 +314,6 @@ img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-tou
 /* Prevent accidental text selection/copy while playing (esp. mobile long-press) */
 body{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
+
+/* Weapon attack-range badge in the card detail modal (a bit big, prominent) */
+.card-detail-range{font-size:1.2rem;font-weight:800;color:#c0392b;margin:8px 0;padding:7px 10px;border:2px solid #c0392b66;border-radius:9px;background:#c0392b14;text-align:center;letter-spacing:.5px}

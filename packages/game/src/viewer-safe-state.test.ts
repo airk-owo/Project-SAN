@@ -149,6 +149,15 @@ describe('viewer-safe state – hand visibility', () => {
     assert.ok(!('effectParams' in card), 'effectParams should not be in public hand view');
   });
 
+  it('a weapon in hand exposes only its attack range', () => {
+    const game = makeCharacterSelectGame(4);
+    const viewer = game.players[0]!;
+    viewer.hand = [{ ...makeCard('w1'), cardType: 'weapon', equipmentSlot: 'weapon', effectParams: { range: 3 } }];
+    const view = createPublicGameState(game, viewer.id);
+    const card = view.players.find(p => p.id === viewer.id)!.hand[0] as Record<string, any>;
+    assert.equal(card.effectParams?.range, 3, 'weapon attack range is visible for the detail view');
+  });
+
   it("other players' hands are empty arrays", () => {
     const game = makeCharacterSelectGame(4);
     const viewer = game.players[0]!;
