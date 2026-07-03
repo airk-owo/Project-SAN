@@ -82,8 +82,8 @@ function PlayerPanel({ player, distance, current }: { player: MockPlayer; distan
 }
 
 function HandCard({ card }: { card: MockCard }) {
-  return <article className={`mock-card mock-card-${card.accent}`}>
-    <header><span>{card.number}</span><span>{card.suit}</span></header><div className="mock-card-art">WTK</div><b>{card.name}</b><small>{card.type}</small>
+  return <article className={` -${card.accent}`}>
+    <header><span>{card.number}</span><span>{card.suit}</span></header><div className="-art">WTK</div><b>{card.name}</b><small>{card.type}</small>
   </article>;
 }
 
