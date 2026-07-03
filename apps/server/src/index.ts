@@ -19,10 +19,11 @@ const roleAliveCounts=(game:GameState)=>({emperor:game.players.filter(p=>p.role=
 const emitGame=(game:GameState)=>{const deadline=refreshTimeout(game);allMembers(game).forEach(member=>{const socketId=connections.get(member.id);if(socketId){const viewerId=member.id;const distances:Record<string,number|null>={};if(game.phase==='playing')game.players.forEach(p=>{if(p.id!==viewerId)try{distances[p.id]=getBaseDistanceBetweenPlayers(game,viewerId,p.id);}catch{distances[p.id]=null;}});io.to(socketId).emit('game:state',{...publicState(game,member.id),roleDefinitions:rules.roles,roleAliveCounts:roleAliveCounts(game),distances,responseDeadline:deadline,characterSkillKeys:CHARACTER_SKILLS})}})};
 // --- Auto-skip: any player who must respond/decide has 15s before the server skips them (treated as "decline / don't use"). ---
 const TIMEOUT_MS=15000;
+const PEEK_TIMEOUT_MS=60000; // หยั่งรู้ฟ้าดิน: จัดเรียงกองจั่วต้องใช้เวลาคิด ให้ 60 วิ
 type ActiveTimeout={key:string;deadline:number;timer:ReturnType<typeof setTimeout>};
 const gameTimeouts=new Map<string,ActiveTimeout>();
 // Identify who the game is currently waiting on and the "decline" action to take if they run out of time.
-function pendingTimeoutFor(game:GameState):{key:string;run:()=>void}|null{
+function pendingTimeoutFor(game:GameState):{key:string;run:()=>void;ms?:number}|null{
  const rw=game.responseWindow;
  if(rw&&rw.status==='open'&&rw.currentResponderId){
   const r=rw.currentResponderId;
@@ -43,7 +44,7 @@ function pendingTimeoutFor(game:GameState):{key:string;run:()=>void}|null{
  if(game.pendingTwinSwords)return{key:`twin:${game.pendingTwinSwords.targetId}`,run:()=>resolveTwinSwordsLetDraw(game,game.pendingTwinSwords!.targetId)};
  if(game.pendingFankui)return{key:`fankui:${game.pendingFankui.playerId}`,run:()=>declineFankui(game,game.pendingFankui!.playerId)};
  if(game.pendingRetaliate)return{key:`retaliate:${game.pendingRetaliate.damagerId}`,run:()=>retaliateTakeDamage(game,game.pendingRetaliate!.damagerId)};
- if(game.pendingPeek)return{key:`peek:${game.pendingPeek.playerId}`,run:()=>resolvePeek(game,game.pendingPeek!.playerId,game.pendingPeek!.cards.map(c=>c.id),[])};
+ if(game.pendingPeek)return{key:`peek:${game.pendingPeek.playerId}`,run:()=>resolvePeek(game,game.pendingPeek!.playerId,game.pendingPeek!.cards.map(c=>c.id),[]),ms:PEEK_TIMEOUT_MS};
  if(game.pendingDischord)return{key:`dischord:${game.pendingDischord.targetId}`,run:()=>pickDischordSuit(game,game.pendingDischord!.targetId,'♠')};
  if(game.pendingAllyAssist)return{key:`ally:${game.pendingAllyAssist.allyId}`,run:()=>declineAllyAssist(game,game.pendingAllyAssist!.allyId)};
  return null;
@@ -54,8 +55,9 @@ function refreshTimeout(game:GameState):number|null{
  if(!target){if(existing){clearTimeout(existing.timer);gameTimeouts.delete(game.id);}return null;}
  if(existing&&existing.key===target.key)return existing.deadline; // same responder — keep the running clock
  if(existing)clearTimeout(existing.timer);
- const deadline=Date.now()+TIMEOUT_MS;
- const timer=setTimeout(()=>{gameTimeouts.delete(game.id);if(!games.has(game.id))return;try{target.run();}catch{}emitGame(game);},TIMEOUT_MS);
+ const ms=target.ms??TIMEOUT_MS;
+ const deadline=Date.now()+ms;
+ const timer=setTimeout(()=>{gameTimeouts.delete(game.id);if(!games.has(game.id))return;try{target.run();}catch{}emitGame(game);},ms);
  gameTimeouts.set(game.id,{key:target.key,deadline,timer});
  return deadline;
 }

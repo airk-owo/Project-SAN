@@ -55,7 +55,7 @@ input,button{font:inherit;padding:10px 12px;margin:4px;border-radius:8px;border:
 @media(max-width:760px){.mock-side-panels{position:relative;left:auto;bottom:auto;width:auto;margin:0 0 12px}.mock-chat{display:none}}
 
 /* Local combat prototype interactions. */
-.local-targetable{cursor:crosshair;outline:3px solid var(--primary);outline-offset:3px}.local-targetable:hover{transform:translateY(-6px)}.local-dead{opacity:.48;filter:grayscale(.8)}.local-hand-card{cursor:pointer}.local-card-disabled{cursor:not-allowed;opacity:.52;filter:grayscale(.55)}.local-action-empty{position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);color:#f5d994aa;font-weight:700}.local-cancel{margin:0 0 8px}.local-error{margin:0 0 10px;padding:8px 12px;border:1px solid var(--danger);border-radius:8px;background:#8b2e2e18;color:var(--danger);font-weight:700}.local-demo-actions button{font-size:.68rem}
+.local-targetable{cursor:crosshair;outline:3px solid var(--primary);outline-offset:3px}.local-targetable:hover{transform:translateY(-6px)}.local-dead{opacity:.48;filter:grayscale(.8)}.local-hand-card{cursor:pointer}.local-card-disabled{cursor:not-allowed;opacity:.52;filter:grayscale(.55)}.local-action-empty{position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);color:#f5d994aa;font-weight:700}.local-cancel{margin:0 0 8px;background:var(--danger)!important;border-color:var(--danger)!important;color:#fff!important}.local-cancel:hover{filter:brightness(1.09)}.local-error{margin:0 0 10px;padding:8px 12px;border:1px solid var(--danger);border-radius:8px;background:#8b2e2e18;color:var(--danger);font-weight:700}.local-demo-actions button{font-size:.68rem}
 .local-turn-status{display:grid;gap:1px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:#faf8efcc;font-size:.78rem}.local-turn-status b{color:var(--danger)}.local-turn-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:0 0 8px}.local-turn-controls button{margin:0;font-size:.78rem}
 .local-out-of-range{opacity:.5;filter:grayscale(.7)}.local-range-hint{color:var(--danger);font-weight:700;font-size:.62rem}
 .local-target-picker{max-width:420px}.local-equipment-picker{display:grid;gap:8px;margin:14px 0}.local-equipment-picker button{display:grid;gap:2px;margin:0;text-align:left}.local-equipment-picker button small{color:#f5d994}.local-empty-slot{padding:9px 10px;border:1px dashed var(--border);border-radius:7px;color:#8d7962;font-size:.85rem}
@@ -88,7 +88,7 @@ input,button{font:inherit;padding:10px 12px;margin:4px;border-radius:8px;border:
 .local-mass-card-played{position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:4}
 .local-armor-judgment{position:fixed;right:30px;bottom:190px;z-index:12;display:grid;gap:8px;padding:12px 14px;border:2px solid var(--primary);border-radius:10px;background:var(--card);box-shadow:0 8px 20px #3e2f2266;color:var(--text);font-size:.85rem}.local-armor-judgment button{margin:0}
 .local-repeat-attack{position:fixed;right:30px;bottom:285px;z-index:13;display:grid;gap:10px;max-width:350px;padding:14px;border:2px solid var(--primary);border-radius:11px;background:var(--card);box-shadow:0 8px 22px #3e2f2266;color:var(--text)}.local-repeat-attack div{display:flex;gap:7px}.local-repeat-attack button{margin:0}
-.local-force-cards{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.local-force-cards button{padding:4px 10px;font-size:.78rem;margin:0;border:1px solid var(--border);background:transparent;color:var(--text)}.local-force-cards button.selected-card{border-color:var(--danger);background:#8b2e2e33;color:#e07070}
+.local-force-cards{display:flex;flex-direction:column;gap:6px;margin:6px 0;max-height:46vh;overflow-y:auto}.local-force-cards button{display:block;width:100%;text-align:left;padding:7px 12px;font-size:.82rem;margin:0;border:1px solid var(--border);background:transparent;color:var(--text)}.local-force-cards button.selected-card{border-color:var(--danger);background:#8b2e2e33;color:#e07070}
 .local-name-row{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
 .local-countdown{display:inline-block;margin-left:auto;padding:2px 10px;border-radius:12px;font-size:.85rem;font-weight:700;font-variant-numeric:tabular-nums;background:#355c7d22;color:var(--info);border:1px solid var(--info)}
 .local-countdown-urgent{background:#8b2e2e22;color:var(--danger);border-color:var(--danger);animation:local-countdown-pulse .6s ease-in-out infinite}
@@ -286,3 +286,27 @@ img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-tou
 
 /* Breathing room below the sticky navbar so the top player's info isn't covered */
 .mock-table-stage{margin-top:46px}
+
+/* Log panel: cap ~8 lines and scroll the rest */
+.mock-log>div{max-height:11rem;overflow-y:auto}
+/* Equipment slots & delayed-trick cards are tappable → open their description */
+.local-inspectable{cursor:pointer}
+.local-inspectable:hover{filter:brightness(1.14)}
+.mock-hearts{font-variant-emoji:text}
+
+/* Harvest face-down card → draw-pile stripe back (no "ไพ่ปิด" text) */
+.local-harvest-pool .local-harvest-hidden{background:repeating-linear-gradient(135deg,#355c7d 0 6px,#e0ba67 6px 8px);border:3px solid #e0ba67;box-shadow:0 0 0 3px #355c7d55,3px 4px 0 #3e2f2233}
+
+/* Judgment card: colour text + border by suit (black/red) */
+.local-judgment-card.local-suit-red{border-color:#c0392b}
+.local-judgment-card.local-suit-red span,.local-judgment-card.local-suit-red b{color:#c0392b}
+.local-judgment-card.local-suit-black{border-color:#1a1a1a}
+.local-judgment-card.local-suit-black span,.local-judgment-card.local-suit-black b{color:#1a1a1a}
+/* iOS/Safari: force card-suit glyphs to text presentation instead of colour emoji */
+.mock-card-rank,.card-rank,.card-tip-type,.local-judgment-card span,.local-force-cards button,.mock-discard,.local-seat-play{font-variant-emoji:text}
+
+/* หยั่งรู้ฟ้าดิน reorder list: show final top→bottom draw order */
+.local-peek-hint{display:block;color:#c8b58a;font-size:.72rem;margin:2px 0 4px}
+.local-peek-list button{display:flex;align-items:baseline;gap:6px}
+.local-peek-list button em{margin-left:auto;font-style:normal;font-size:.72rem;color:#c8a24a}
+.local-peek-list button.selected-card em{color:#e07070}
