@@ -1403,7 +1403,7 @@ export function endTurn(state:GameState, playerId=state.turn.activePlayerId||'')
   if(state.phase!=='playing'||state.currentPlayerId!==playerId||state.pendingAction) throw new Error('Cannot end this turn');
   if(!state.hasDrawnThisTurn) throw new Error('ต้องจั่วไพ่ก่อนจบเทิร์น');
   const player=state.players.find(p=>p.id===playerId); if(!player) throw new Error('Unknown player');
-  if(player.hp!==undefined&&player.hand.length>player.hp) throw new Error('ต้องทิ้งไพ่บนมือให้ไม่เกินพลังชีวิตก่อนจบเทิร์น');
+  if(getDiscardRequirement(state,playerId)>0) throw new Error('ต้องทิ้งไพ่บนมือให้ไม่เกินพลังชีวิตก่อนจบเทิร์น'); // เคารพ ลิบอง ยับยั้งชั่งใจ / อ้วนสุด จองหอง
   const current=state.players.findIndex(p=>p.id===playerId); for(let step=1;step<=state.players.length;step++){const next=state.players[(current+step*state.direction+state.players.length*10)%state.players.length];if(next.alive){state.currentPlayerId=next.id;state.attacksThisTurn=0;state.hasDrawnThisTurn=false;state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'turn-start',actorId:next.id,message:`เริ่มเทิร์นของ ${next.username}`});return;}}
 }
 export function drawForTurn(state:GameState, playerId:string){

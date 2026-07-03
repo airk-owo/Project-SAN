@@ -250,7 +250,7 @@ export default function Home(){
  const pj=game.pendingJudgment;
  const myJudgmentDraw=Boolean(pj&&pj.playerId===game.viewerId&&pj.stage==='awaiting_draw');
  const myJudgmentAct=Boolean(pj&&pj.playerId===game.viewerId&&pj.stage==='revealed');
- const requiredDiscard=Math.max(0,(myPlayer?.hand.length||0)-(myPlayer?.hp||0));
+ const requiredDiscard=((game.characterSkillKeys?.[game.viewerId]||[]).includes('skip_discard_if_no_attack')&&(game.turn?.attackUsedThisTurn??0)===0)?0:Math.max(0,(myPlayer?.hand.length||0)-(myPlayer?.hp||0)); // ลิบอง ยับยั้งชั่งใจ: ถ้าไม่ได้โจมตีในรอบนี้ ไม่ต้องทิ้งไพ่
  const toggleDiscardLimit=(id:string)=>setDiscardLimitSelected(prev=>prev.includes(id)?prev.filter(x=>x!==id):[...prev,id]);
  const cancelDiscardLimit=()=>{setDiscardLimitMode(false);setDiscardLimitSelected([]);setDiscardLimitConfirming(false);};
  const hasSnakeSpear=myPlayer?.equipment.weapon?.effect==='discard_two_as_attack';
