@@ -54,10 +54,11 @@ export type PendingHarvest = { revealed:Card[] };
 export type PendingJudgment = { playerId:string; trickEffect:'delayed_skip_play_phase'|'delayed_lightning_judgment'; trickName:string; trickCardId:string; stage:'awaiting_draw'|'revealed'; revealed?:Card };
 export type PendingFankui = { playerId:string; damagerId:string };
 export type PendingRetaliate = { damagerId:string; victimId:string };
+export type PendingRetaliateJudgment = { ownerId:string; damagerId:string };
 export type PendingPeek = { playerId:string; cards:Card[] };
 export type PendingDischord = { jiuyiId:string; targetId:string };
 export type PendingAllyAssist = { emperorId:string; allyId:string; kind:'attack'|'dodge'; targetId?:string };
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -261,7 +262,7 @@ const SKILL_EVENT_HANDLERS:Record<string,SkillEventHandler>={
   // สุมาอี้ กลยุทธ์โต้กลับ: on taking damage from someone, may take one of their cards (opens a pending decision).
   take_card_from_damager:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;if(damager.hand.length===0&&!Object.values(damager.equipment).some(Boolean))return;state.pendingFankui={playerId:ownerId,damagerId:event.actorId};logAction(state,'fankui-window',`${characterName(getPlayerById(state,ownerId)!)} อาจใช้ กลยุทธ์โต้กลับ หยิบไพ่จาก ${characterName(damager)}`,ownerId,event.actorId);}},
   // แฮหัวตุ้น ย้อนรอยศัตรู: on taking damage (and surviving), reveal a judgment; if it is not ♥, the damager must discard 2 or take 1 damage.
-  retaliate_judgment:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive||owner.hp===undefined||owner.hp<=0)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);const judge=state.deck.pop();if(!judge)return;moveToDiscard(state,judge,false);const isHeart=judge.suit==='♥';logAction(state,'skill-retaliate',`${characterName(owner)} ใช้ ย้อนรอยศัตรู เปิดตัดสิน ${judge.name} (${judge.number}${judge.suit}) — ${isHeart?'♥ ไม่มีผล':'ผู้ทำดาเมจต้องเลือก ทิ้ง 2 ใบ หรือ รับ 1 ดาเมจ'}`,ownerId,damager.id,judge.id);if(!isHeart)state.pendingRetaliate={damagerId:damager.id,victimId:ownerId};}},
+  retaliate_judgment:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive||owner.hp===undefined||owner.hp<=0)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;state.pendingRetaliateJudgment={ownerId,damagerId:damager.id};logAction(state,'skill-retaliate',`${characterName(owner)} จะใช้ ย้อนรอยศัตรู — รอเปิดไพ่ตัดสิน`,ownerId,damager.id);}},
 };
 function runSkillEventHandlers(state:GameState,event:GameEvent){
   for(const player of state.players){
@@ -518,6 +519,20 @@ export function takeCardFromDamager(state:GameState,playerId:string,selection:Ta
 export function declineFankui(state:GameState,playerId:string){
   const pending=state.pendingFankui;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีกลยุทธ์โต้กลับที่ค้างอยู่');
   state.pendingFankui=undefined;logAction(state,'skill-fankui-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ใช้ กลยุทธ์โต้กลับ`,playerId);
+  synchronizeGameState(state);
+}
+/** แฮหัวตุ้น ย้อนรอยศัตรู: the owner manually reveals the judgment card; a non-♥ result makes the damager pay (discard 2 / take 1 damage). */
+export function revealRetaliateJudgment(state:GameState,ownerId:string){
+  const pending=state.pendingRetaliateJudgment;if(!pending||pending.ownerId!==ownerId)throw new Error('ไม่มีย้อนรอยศัตรูที่รอเปิดไพ่');
+  const owner=getPlayerById(state,ownerId),damager=getPlayerById(state,pending.damagerId);
+  state.pendingRetaliateJudgment=undefined;
+  if(!owner||!owner.alive||owner.hp===undefined||owner.hp<=0){synchronizeGameState(state);return;} // owner no longer eligible
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const judge=state.deck.pop();if(!judge){synchronizeGameState(state);return;}
+  moveToDiscard(state,judge,false);
+  const isHeart=judge.suit==='♥';
+  logAction(state,'skill-retaliate',`${characterName(owner)} ใช้ ย้อนรอยศัตรู เปิดตัดสิน ${judge.name} (${judge.number}${judge.suit}) — ${isHeart?'♥ ไม่มีผล':'ผู้ทำดาเมจต้องเลือก ทิ้ง 2 ใบ หรือ รับ 1 ดาเมจ'}`,ownerId,damager?.id,judge.id);
+  if(!isHeart&&damager&&damager.alive)state.pendingRetaliate={damagerId:damager.id,victimId:ownerId};
   synchronizeGameState(state);
 }
 /** แฮหัวตุ้น ย้อนรอยศัตรู: the damager pays by discarding two of their own hand cards. */
@@ -1355,6 +1370,7 @@ export function endTurn(state:GameState, playerId=state.turn.activePlayerId||'')
   if(state.turn.activePlayerId){
     if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
     if(state.pendingJudgment)throw new Error('ต้องเปิดไพ่ตัดสินให้เสร็จก่อนจบเทิร์น');
+    if(state.pendingRetaliateJudgment)throw new Error('ต้องเปิดไพ่ตัดสิน ย้อนรอยศัตรู ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingRetaliate)throw new Error('ต้องจัดการ ย้อนรอยศัตรู ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingPeek)throw new Error('ต้องจัดเรียงกองจั่ว (หยั่งรู้ฟ้าดิน) ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingDischord)throw new Error('ต้องจัดการ บาดหมาง ให้เสร็จก่อนจบเทิร์น');

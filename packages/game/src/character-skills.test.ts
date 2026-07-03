@@ -8,7 +8,7 @@ import {
   applyDamage, owedDraws, drawOneTurnCard, endTurn, playAttackResponse, declineResponse,
   useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, playHeal,
   startTurn, drawJudgmentCard, resolveJudgmentCard, replaceJudgmentCard,
-  takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, redirectAttack,
+  takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, revealRetaliateJudgment, redirectAttack,
   requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, surrenderPlayer, synchronizeGameState,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
@@ -1090,6 +1090,8 @@ describe('Character skill – แฮหัวตุ้น ย้อนรอย�
     p1.hand = [attackCard('c1'), attackCard('c2'), attackCard('c3')];
     game.deck = [suited('j', 'none', 'basic', '♠', '5')]; // black → not ♥
     applyDamage(game, 'p0', 1, 'p1');
+    assert.equal(game.pendingRetaliateJudgment?.ownerId, 'p0', 'owner must reveal the judgment first');
+    revealRetaliateJudgment(game, 'p0');
     assert.equal(game.pendingRetaliate?.damagerId, 'p1');
     retaliateDiscard(game, 'p1', ['c1', 'c2']);
     assert.equal(p1.hand.length, 1, 'damager discarded two');
@@ -1103,6 +1105,7 @@ describe('Character skill – แฮหัวตุ้น ย้อนรอย�
     p0.hp = 5; p1.hp = 5; p1.hand = [attackCard('c1')];
     game.deck = [suited('j', 'none', 'basic', '♣', '5')];
     applyDamage(game, 'p0', 1, 'p1');
+    revealRetaliateJudgment(game, 'p0');
     retaliateTakeDamage(game, 'p1');
     assert.equal(p1.hp, 4);
     assert.equal(game.pendingRetaliate, undefined);
@@ -1115,6 +1118,7 @@ describe('Character skill – แฮหัวตุ้น ย้อนรอย�
     p0.hp = 5; p1.hand = [attackCard('c1'), attackCard('c2')];
     game.deck = [suited('j', 'none', 'basic', '♥', '5')];
     applyDamage(game, 'p0', 1, 'p1');
+    revealRetaliateJudgment(game, 'p0'); // ♥ → no penalty
     assert.equal(game.pendingRetaliate, undefined);
   });
 

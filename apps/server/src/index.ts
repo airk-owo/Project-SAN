@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import { readFile } from 'node:fs/promises';
-import { beginPlayAfterCharacters, createGame, createSeatedPlayer, dealEmperorOptions, dealRoles, discardForHandLimit, drawForTurn, drawOneTurnCard, endTurn, playCard, publicState, respondToAttack, selectCharacter, respondWithNegate, declineNegate, playNegateInMassWindow, playMassResponseCard, declineMassResponse, playHeal, declineResponse, useArmorJudgment, continueRepeatAttackAfterDodge, declineRepeatAttackAfterDodge, destroyTargetMountAfterDamage, declineDestroyTargetMount, forceAttackDamageByDiscardingTwo, declineForceAttackDamage, replaceAttackDamageByDiscarding, declineReplaceAttackDamage, useDiscardTwoAsAttack, resolveTwinSwordsDiscard, resolveTwinSwordsLetDraw, playLastHandMultiAttack, playCoerceAttack, resolveCoerceWithAttack, declineCoerce, pickHarvestCard, drawPendingCard, drawJudgmentCard, keepJudgmentCard, resolveJudgmentCard, replaceJudgmentCard, negateLightningJudgment, takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, redirectAttack, surrenderPlayer, playAttackResponse, useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, playDelayedTrick, playDiscardTargetCard, playStealTargetCard, getBaseDistanceBetweenPlayers, CHARACTER_SKILLS, type Card, type Character, type GameState, type RoleComposition, type Spectator, type TargetCardSelection } from '@wtk/game';
+import { beginPlayAfterCharacters, createGame, createSeatedPlayer, dealEmperorOptions, dealRoles, discardForHandLimit, drawForTurn, drawOneTurnCard, endTurn, playCard, publicState, respondToAttack, selectCharacter, respondWithNegate, declineNegate, playNegateInMassWindow, playMassResponseCard, declineMassResponse, playHeal, declineResponse, useArmorJudgment, continueRepeatAttackAfterDodge, declineRepeatAttackAfterDodge, destroyTargetMountAfterDamage, declineDestroyTargetMount, forceAttackDamageByDiscardingTwo, declineForceAttackDamage, replaceAttackDamageByDiscarding, declineReplaceAttackDamage, useDiscardTwoAsAttack, resolveTwinSwordsDiscard, resolveTwinSwordsLetDraw, playLastHandMultiAttack, playCoerceAttack, resolveCoerceWithAttack, declineCoerce, pickHarvestCard, drawPendingCard, drawJudgmentCard, keepJudgmentCard, resolveJudgmentCard, replaceJudgmentCard, negateLightningJudgment, takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, revealRetaliateJudgment, redirectAttack, surrenderPlayer, playAttackResponse, useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, playDelayedTrick, playDiscardTargetCard, playStealTargetCard, getBaseDistanceBetweenPlayers, CHARACTER_SKILLS, type Card, type Character, type GameState, type RoleComposition, type Spectator, type TargetCardSelection } from '@wtk/game';
 
 const app=express(),http=createServer(app),io=new Server(http,{cors:{origin:process.env.WEB_ORIGIN||'http://localhost:3000'}});
 app.use(cors());
@@ -18,12 +18,19 @@ const memberFor=(game:GameState,userId:string)=>allMembers(game).find(member=>me
 const roleAliveCounts=(game:GameState)=>({emperor:game.players.filter(p=>p.role==='emperor'&&p.alive).length,loyalist:game.players.filter(p=>p.role==='loyalist'&&p.alive).length,rebel:game.players.filter(p=>p.role==='rebel'&&p.alive).length,traitor:game.players.filter(p=>p.role==='traitor'&&p.alive).length});
 const emitGame=(game:GameState)=>{const deadline=refreshTimeout(game);allMembers(game).forEach(member=>{const socketId=connections.get(member.id);if(socketId){const viewerId=member.id;const distances:Record<string,number|null>={};if(game.phase==='playing')game.players.forEach(p=>{if(p.id!==viewerId)try{distances[p.id]=getBaseDistanceBetweenPlayers(game,viewerId,p.id);}catch{distances[p.id]=null;}});io.to(socketId).emit('game:state',{...publicState(game,member.id),roleDefinitions:rules.roles,roleAliveCounts:roleAliveCounts(game),distances,responseDeadline:deadline,characterSkillKeys:CHARACTER_SKILLS})}})};
 // --- Auto-skip: any player who must respond/decide has 15s before the server skips them (treated as "decline / don't use"). ---
-const TIMEOUT_MS=15000;
-const PEEK_TIMEOUT_MS=60000; // หยั่งรู้ฟ้าดิน: จัดเรียงกองจั่วต้องใช้เวลาคิด ให้ 60 วิ
+// ⏱ เวลาตัดสินใจของแต่ละสถานการณ์ (หน่วยวินาที) — อยากปรับเวลา แก้ที่นี่ที่เดียวจบ
+const DECISION_SECONDS={
+ default:15,          // ตอบโต้/ตัดสินใจทั่วไป (หลบ, ตอบสนอง, ท้าดวล, ตัดสิน ฯลฯ)
+ peek:60,             // หยั่งรู้ฟ้าดิน — จัดเรียงกองจั่ว
+ retaliateReveal:60,  // ย้อนรอยศัตรู — แฮหัวตุ้นเปิดไพ่ตัดสินเอง
+ retaliate:60,        // ย้อนรอยศัตรู — คนโดนเลือก ทิ้ง 2 ใบ / รับดาเมจ
+} as const;
+type DecisionKind=keyof typeof DECISION_SECONDS;
+const timeoutMsFor=(kind:DecisionKind='default')=>(DECISION_SECONDS[kind]??DECISION_SECONDS.default)*1000;
 type ActiveTimeout={key:string;deadline:number;timer:ReturnType<typeof setTimeout>};
 const gameTimeouts=new Map<string,ActiveTimeout>();
 // Identify who the game is currently waiting on and the "decline" action to take if they run out of time.
-function pendingTimeoutFor(game:GameState):{key:string;run:()=>void;ms?:number}|null{
+function pendingTimeoutFor(game:GameState):{key:string;run:()=>void;kind?:DecisionKind}|null{
  const rw=game.responseWindow;
  if(rw&&rw.status==='open'&&rw.currentResponderId){
   const r=rw.currentResponderId;
@@ -43,8 +50,9 @@ function pendingTimeoutFor(game:GameState):{key:string;run:()=>void;ms?:number}|
  if(game.pendingReplaceDamage)return{key:`ice:${game.pendingReplaceDamage.attackerId}`,run:()=>declineReplaceAttackDamage(game,game.pendingReplaceDamage!.attackerId)};
  if(game.pendingTwinSwords)return{key:`twin:${game.pendingTwinSwords.targetId}`,run:()=>resolveTwinSwordsLetDraw(game,game.pendingTwinSwords!.targetId)};
  if(game.pendingFankui)return{key:`fankui:${game.pendingFankui.playerId}`,run:()=>declineFankui(game,game.pendingFankui!.playerId)};
- if(game.pendingRetaliate)return{key:`retaliate:${game.pendingRetaliate.damagerId}`,run:()=>retaliateTakeDamage(game,game.pendingRetaliate!.damagerId)};
- if(game.pendingPeek)return{key:`peek:${game.pendingPeek.playerId}`,run:()=>resolvePeek(game,game.pendingPeek!.playerId,game.pendingPeek!.cards.map(c=>c.id),[]),ms:PEEK_TIMEOUT_MS};
+ if(game.pendingRetaliateJudgment)return{key:`retal-reveal:${game.pendingRetaliateJudgment.ownerId}`,run:()=>revealRetaliateJudgment(game,game.pendingRetaliateJudgment!.ownerId),kind:'retaliateReveal'};
+ if(game.pendingRetaliate)return{key:`retaliate:${game.pendingRetaliate.damagerId}`,run:()=>retaliateTakeDamage(game,game.pendingRetaliate!.damagerId),kind:'retaliate'};
+ if(game.pendingPeek)return{key:`peek:${game.pendingPeek.playerId}`,run:()=>resolvePeek(game,game.pendingPeek!.playerId,game.pendingPeek!.cards.map(c=>c.id),[]),kind:'peek'};
  if(game.pendingDischord)return{key:`dischord:${game.pendingDischord.targetId}`,run:()=>pickDischordSuit(game,game.pendingDischord!.targetId,'♠')};
  if(game.pendingAllyAssist)return{key:`ally:${game.pendingAllyAssist.allyId}`,run:()=>declineAllyAssist(game,game.pendingAllyAssist!.allyId)};
  return null;
@@ -55,7 +63,7 @@ function refreshTimeout(game:GameState):number|null{
  if(!target){if(existing){clearTimeout(existing.timer);gameTimeouts.delete(game.id);}return null;}
  if(existing&&existing.key===target.key)return existing.deadline; // same responder — keep the running clock
  if(existing)clearTimeout(existing.timer);
- const ms=target.ms??TIMEOUT_MS;
+ const ms=timeoutMsFor(target.kind);
  const deadline=Date.now()+ms;
  const timer=setTimeout(()=>{gameTimeouts.delete(game.id);if(!games.has(game.id))return;try{target.run();}catch{}emitGame(game);},ms);
  gameTimeouts.set(game.id,{key:target.key,deadline,timer});
@@ -94,6 +102,7 @@ io.on('connection',socket=>{
  socket.on('game:surrender',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');surrenderPlayer(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('fankui:take',({gameId,selection})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');takeCardFromDamager(game,userId,selection as TargetCardSelection);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('fankui:decline',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');declineFankui(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
+ socket.on('retaliate:reveal',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');revealRetaliateJudgment(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('retaliate:discard',({gameId,cardIds})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');retaliateDiscard(game,userId,Array.isArray(cardIds)?cardIds.map(String):[]);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('retaliate:damage',({gameId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');retaliateTakeDamage(game,userId);emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
  socket.on('redirect:attack',({gameId,cardId,targetId})=>{try{const game=games.get(gameId),userId=requireUser(socket.id,socket.data.userId);if(!game)throw Error('Game not found');redirectAttack(game,userId,String(cardId||''),String(targetId||''));emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});
