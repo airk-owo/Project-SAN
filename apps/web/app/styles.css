@@ -353,3 +353,14 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 /* Pre-game start countdown box (V) */
 .local-start-count{display:flex;flex-direction:column;align-items:center;gap:14px}
 .local-start-count p{margin:0;color:#f5d994;font-size:1.1rem;font-weight:700}
+
+/* Center-table announcement banner (Z6) — พึ่งวาสนา / ร่วมสาบาน / คำสั่งเสีย ฯลฯ */
+.local-table-flash{position:fixed;top:13%;left:50%;transform:translateX(-50%);z-index:23;display:flex;align-items:center;gap:12px;max-width:min(92vw,440px);padding:12px 20px;background:#241812f2;border:2px solid #e0ba67;border-radius:14px;box-shadow:0 12px 34px #0008;color:#f8f2df;text-align:left;animation:local-judgment-pop .3s cubic-bezier(.2,.9,.3,1.4)}
+.local-table-flash-icon{font-size:1.8rem;flex:none;line-height:1}
+.local-table-flash-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.local-table-flash-body b{color:#f5d994;font-size:1.05rem}
+.local-table-flash-body span{color:#e8dcc0;font-size:.85rem}
+/* Z3: weapon attack-range badge — gold instead of red so it's not too loud */
+.card-detail-range{color:#caa63c;border-color:#caa63c55;background:#caa63c12;font-size:1.05rem;font-weight:700}
+/* Z4: card detail image — clean rounded corners instead of the hard oval mask */
+.card-detail-art{border-radius:14px;box-shadow:0 5px 16px #0007;-webkit-mask-image:none;mask-image:none}

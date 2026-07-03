@@ -59,7 +59,7 @@ export type PendingLegacy = { ownerId:string; cards:Card[] };
 export type PendingPeek = { playerId:string; cards:Card[] };
 export type PendingDischord = { jiuyiId:string; targetId:string };
 export type PendingAllyAssist = { emperorId:string; allyId:string; kind:'attack'|'dodge'; targetId?:string };
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingLegacy?:PendingLegacy; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingLegacy?:PendingLegacy; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; tableFlash?:{icon:string;title:string;detail?:string;card?:{name:string;number:string;suit:string};at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -258,7 +258,9 @@ export function assignLegacyCard(state:GameState,ownerId:string,cardId:string,ta
   const idx=pending.cards.findIndex(c=>c.id===cardId);if(idx<0)throw new Error('ไพ่ไม่อยู่ในคำสั่งเสีย');
   const target=getPlayerById(state,targetId);if(!target||!target.alive)throw new Error('ต้องมอบให้ผู้เล่นที่มีชีวิต');
   const [card]=pending.cards.splice(idx,1);target.hand.push(card);
-  logAction(state,'legacy-give',`${characterName(getPlayerById(state,ownerId)!)} มอบ ${card.name} ให้ ${target.username} (คำสั่งเสีย)`,ownerId,targetId,card.id);
+  const owner=getPlayerById(state,ownerId);
+  logAction(state,'legacy-give',`${characterName(owner!)} มอบ ${card.name} ให้ ${target.username} (คำสั่งเสีย)`,ownerId,targetId,card.id);
+  flashTable(state,'📜','คำสั่งเสีย',`${owner?.username??'ผู้เล่น'} มอบการ์ดให้ ${target.username}`); // ไม่โชว์หน้าไพ่ (เป็นความลับ)
   if(!pending.cards.length)state.pendingLegacy=undefined;
   synchronizeGameState(state);
 }
@@ -354,6 +356,8 @@ export function canPlayCardNow(state:GameState,playerId:string,card:Card){
 /** Reveals the top draw-pile card for a judgment, logs it, and moves it to the discard pile. */
 /** Records the latest judgment outcome so every client can flash it. */
 const recordJudgment=(state:GameState,playerId:string,trickName:string,judged:Card|null,result:string)=>{state.lastJudgment={playerId,trickName,cardName:judged?.name??'—',cardNumber:judged?.number??'',cardSuit:judged?.suit??'',result,at:new Date().toISOString()};};
+/** ประกาศเหตุการณ์กลางโต๊ะให้ทุกคนเห็น (แบนเนอร์ชั่วคราว) — ใครทำอะไรสำคัญก็เรียกอันนี้ */
+const flashTable=(state:GameState,icon:string,title:string,detail?:string,card?:{name:string;number:string;suit:string})=>{state.tableFlash={icon,title,detail,card:card?{name:card.name,number:card.number,suit:card.suit}:undefined,at:new Date().toISOString()};};
 /** Sets up the next unresolved delayed trick as a pending (manual) judgment. Returns false if none remain. */
 function beginNextJudgment(state:GameState,player:Player):boolean{
   const tricks=player.decisionArea.filter(card=>card.effect==='delayed_skip_play_phase'||card.effect==='delayed_lightning_judgment');
@@ -789,6 +793,7 @@ export function useFortune(state:GameState,playerId:string){
   const card=state.deck.pop();if(!card)throw new Error('กองจั่วไม่มีไพ่');
   if(['♠','♣'].includes(card.suit)){player.hand.push(card);logAction(state,'skill-fortune',`${characterName(player)} ใช้ พึ่งวาสนา เปิด ${card.name} (${card.number}${card.suit}) ดอกดำ — เก็บเข้ามือ`,playerId,undefined,card.id);}
   else{moveToDiscard(state,card,false);markSkillUsed(state,'fortune_done');logAction(state,'skill-fortune-end',`${characterName(player)} ใช้ พึ่งวาสนา เปิด ${card.name} (${card.number}${card.suit}) ดอกแดง — จบการใช้ทักษะ`,playerId,undefined,card.id);}
+  flashTable(state,'🔮','พึ่งวาสนา',`${player.username} เปิดได้ ${['♠','♣'].includes(card.suit)?'ดอกดำ — เก็บเข้ามือ':'ดอกแดง — จบ'}`,card);
   synchronizeGameState(state);
 }
 /** เล่าปี่ เมตตาธรรม: give hand cards to another general; once you have given 2+ cards this turn, heal yourself 1 HP (max once/turn). */
@@ -1241,6 +1246,7 @@ function resolveTrickEffect(state:GameState):void{
   }else if(params?.effectKey==='heal_all_living'){
     let healed=0;for(const t of getAlivePlayers(state)){if(t.hp===undefined||t.maxHp===undefined)continue;const r=Math.min(1,t.maxHp-t.hp);t.hp+=r;if(r>0)healed++;}
     moveToDiscard(state,trickCard);logAction(state,'heal-all-living-played',`${characterName(actor)} ใช้ ${trickCard.name} ฟื้นฟูพลังชีวิตให้ขุนพล ${healed} คน`,actor.id,undefined,trickCard.id);
+    flashTable(state,'🍑','ร่วมสาบาน',`ขุนพลที่มีชีวิตทุกคนได้รับการฟื้นฟู (${healed} คน)`);
   }else if((params?.effectKey==='discard_target_card'||params?.effectKey==='steal_target_card_in_range')&&params?.targetId&&params?.selection!==undefined){
     const target=getPlayerById(state,params.targetId),sel=params.selection;
     if(target){
