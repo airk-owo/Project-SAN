@@ -815,7 +815,7 @@ function discardPlayerZones(state:GameState,player:Player,includeDecisionArea=tr
   for(const slot of Object.keys(player.equipment) as RuntimeEquipmentSlot[]){const card=player.equipment[slot];if(card){player.equipment[slot]=null;moveToDiscard(state,card,false);}}
   if(includeDecisionArea)for(const card of player.decisionArea.splice(0))moveToDiscard(state,card,false);
 }
-function finishGame(state:GameState,winner:WinningSide){state.winner=winner;state.phase='ended';state.status='finished';state.currentPlayerId=undefined;state.turn.activePlayerId=null;state.turn.phase='inactive';logAction(state,'game-finished',winner==='traitor'?'คนทรยศชนะ':winner==='rebels'?'กบฏชนะ':'จักรพรรดิและผู้ภักดีชนะ');}
+function finishGame(state:GameState,winner:WinningSide){state.winner=winner;state.phase='ended';state.status='finished';state.currentPlayerId=undefined;state.turn.activePlayerId=null;state.turn.phase='inactive';state.players.forEach(p=>{p.roleRevealed=true;});logAction(state,'game-finished',winner==='traitor'?'คนทรยศชนะ':winner==='rebels'?'กบฏชนะ':'จักรพรรดิและผู้ภักดีชนะ');}
 function checkWinCondition(state:GameState,dead:Player){
   if(dead.role==='emperor'){const living=state.players.filter(player=>player.alive);finishGame(state,living.length>0&&living.every(player=>player.role==='traitor')?'traitor':'rebels');return true;}
   if(!state.players.some(player=>player.alive&&(player.role==='rebel'||player.role==='traitor'))){finishGame(state,'emperor_loyalists');return true;}

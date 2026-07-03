@@ -327,3 +327,25 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 .local-legacy-card.local-suit-red{color:#c0392b}
 .local-legacy-targets{display:flex;flex-wrap:wrap;gap:5px}
 .local-legacy-targets button{margin:0;padding:5px 11px;font-size:.8rem}
+
+/* End-game result screen (R) */
+.local-endgame{z-index:200}
+.local-endgame-card{max-width:min(94vw,460px);width:100%;display:flex;flex-direction:column;gap:12px;padding:22px;text-align:center;background:linear-gradient(160deg,#241812,#160f0a);border:3px double #f5d994;border-radius:16px;box-shadow:0 18px 48px #000a;color:#f8f2df}
+.local-endgame-title{margin:0;font-family:Baozi,BaiJamjuree,sans-serif;font-size:2rem;color:#f5d994;text-shadow:0 2px 10px #000}
+.local-endgame-you{margin:0;font-size:1.15rem;font-weight:800}
+.local-endgame-you.win{color:#7ed07e}
+.local-endgame-you.lose{color:#e08a8a}
+.local-endgame-roles{display:flex;flex-direction:column;gap:5px;max-height:46vh;overflow-y:auto;text-align:left}
+.local-endgame-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;background:#00000030;border-left:4px solid #c8b58a}
+.local-endgame-row b{color:#fff}
+.local-endgame-row span{color:#e8c46a;font-size:.86rem}
+.local-endgame-row small{color:#c8b58a;font-size:.78rem}
+.local-endgame-row.local-role-emperor{border-left-color:#e0ba67}
+.local-endgame-row.local-role-loyalist{border-left-color:#4f83c2}
+.local-endgame-row.local-role-rebel{border-left-color:#c0392b}
+.local-endgame-row.local-role-traitor{border-left-color:#9b59b6}
+/* Spectator name list in the room panel (S) */
+.local-spectator-names{margin-top:4px;font-size:.8rem;color:#e0ba67;line-height:1.4}
+/* Card-played "drop onto table" effect on the discard pile (T) */
+@keyframes local-card-drop{0%{transform:translateY(-58px) scale(1.45) rotate(-7deg);opacity:0}55%{opacity:1}100%{transform:translateY(0) scale(1) rotate(0);opacity:1}}
+.mock-discard.local-card-played{animation:local-card-drop .42s cubic-bezier(.2,.8,.3,1.25)}

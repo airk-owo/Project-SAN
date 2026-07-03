@@ -147,6 +147,7 @@ export default function Home(){
  const prevJudgmentAt=useRef<string|undefined>(undefined);
  const judgmentTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  const prevHandIds=useRef<string|undefined>(undefined);
+ const countingRef=useRef(false); // true ระหว่างนับ 1-2-3 เปิดเกม — กัน draw-preview เด้งซ้อน
  const drawNoticeTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  const lastTurn=useRef<string|undefined>(undefined);
  const revealedRole=useRef<Role|undefined>(undefined);
@@ -166,8 +167,8 @@ export default function Home(){
  useEffect(()=>{const reconnect=()=>{if(joinedRoom&&userId)socket.emit('room:join',{gameId:joinedRoom,username:name,userId})};socket.on('connect',reconnect);return()=>{socket.off('connect',reconnect)}},[joinedRoom,userId,name]);
  useEffect(()=>{const turn=game?.currentPlayerId;if(soundOn&&turn&&turn===game?.viewerId&&lastTurn.current!==turn){try{const ctx=new AudioContext(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(660,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(880,ctx.currentTime+.16);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.02);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.24);osc.connect(gain).connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.25)}catch{}}lastTurn.current=turn},[game?.currentPlayerId,game?.viewerId,soundOn]);
  useEffect(()=>{const role=game?.players.find(p=>p.id===game.viewerId)?.role;if(role&&revealedRole.current!==role){revealedRole.current=role;setShowRole(true)}},[game?.players,game?.viewerId]);
- useEffect(()=>{const ph=game?.phase;if(ph==='playing'&&prevPhaseRef.current&&prevPhaseRef.current!=='playing')setStartCountdown(3);if(ph&&ph!==prevPhaseRef.current)setOpenPanel(ph==='waiting'?'room':null);if(game)prevPhaseRef.current=ph;},[game?.phase]);
- useEffect(()=>{if(startCountdown===null)return;if(startCountdown<=0){const t=setTimeout(()=>{setStartCountdown(null);const hand=game?.players.find(p=>p.id===game.viewerId)?.hand;if(hand?.length){setDrawPreview(hand);if(drawNoticeTimer.current)clearTimeout(drawNoticeTimer.current);drawNoticeTimer.current=setTimeout(()=>setDrawPreview(null),3000);}},700);return()=>clearTimeout(t);}const t=setTimeout(()=>setStartCountdown(c=>(c??1)-1),850);return()=>clearTimeout(t);},[startCountdown]);
+ useEffect(()=>{const ph=game?.phase;if(ph==='playing'&&prevPhaseRef.current&&prevPhaseRef.current!=='playing'){setStartCountdown(3);countingRef.current=true;}if(ph&&ph!==prevPhaseRef.current)setOpenPanel(ph==='waiting'?'room':null);if(game)prevPhaseRef.current=ph;},[game?.phase]);
+ useEffect(()=>{if(startCountdown===null){countingRef.current=false;return;}if(startCountdown<=0){const t=setTimeout(()=>{setStartCountdown(null);const hand=game?.players.find(p=>p.id===game.viewerId)?.hand;if(hand?.length){setDrawPreview(hand);if(drawNoticeTimer.current)clearTimeout(drawNoticeTimer.current);drawNoticeTimer.current=setTimeout(()=>setDrawPreview(null),3000);}},700);return()=>clearTimeout(t);}const t=setTimeout(()=>setStartCountdown(c=>(c??1)-1),850);return()=>clearTimeout(t);},[startCountdown]);
  useEffect(()=>{if(logChatTab==='chat')chatEndRef.current?.scrollIntoView({behavior:'smooth'});},[chat,logChatTab]);
  useEffect(()=>{if(logChatTab==='log')logEndRef.current?.scrollIntoView({behavior:'smooth'});},[game?.log?.length,logChatTab]);
  // Re-runs when phase changes to 'playing' so handRef.current is populated by then
@@ -205,6 +206,7 @@ export default function Home(){
   if(!hand){prevHandIds.current=undefined;return;}
   const prev=prevHandIds.current;
   prevHandIds.current=hand.map(c=>c.id).join(',');
+  if(countingRef.current)return; // ระหว่างนับ 1-2-3 ไพ่เปิดเกมถูกโชว์โดย countdown effect — ไม่ต้อง preview ซ้ำ
   const prevSet=new Set(prev?prev.split(','):[]);
   // The opening hand is revealed after the 3-2-1 countdown (see the countdown effect); here we only preview later draws.
   const added=prev===undefined?[]:hand.filter(c=>!prevSet.has(c.id));
@@ -314,6 +316,7 @@ export default function Home(){
  const roomContent=<section className="mock-log local-navpanel">
    <h2 className="local-tab-bar"><span className="local-navpanel-title">ห้อง: {joinedRoom}</span><button className="local-chat-collapse" onClick={()=>setOpenPanel(null)} title="ปิด">✕</button></h2>
    <div className="local-lobby-players">ผู้เล่น {game.players.length} คน{game.spectators.length>0?` · ผู้ชม ${game.spectators.length} คน`:''}</div>
+   {game.spectators.length>0&&<div className="local-spectator-names">👁 ผู้ชม: {game.spectators.map(s=>s.username).join(', ')}</div>}
    <div className="local-lobby-controls">
     {waiting&&!myPlayer&&!game.isSpectator&&<button onClick={()=>emit('seat:random')}>นั่งที่นั่งสุ่ม</button>}
     {waiting&&myPlayer&&<div className="local-ready-row"><button className={myPlayer.ready?'secondary':''} onClick={()=>emit('player:ready',{ready:!myPlayer.ready})}>{myPlayer.ready?'✓ ยกเลิกพร้อม':'พร้อมแล้ว'}</button><button className="secondary local-spectate-btn" onClick={()=>emit('seat:spectate')}>ดูเฉย ๆ</button></div>}
@@ -340,6 +343,7 @@ export default function Home(){
 
  return <>{navbar}<main className={isPlaying?`mock-game-page local-game-page mock-count-${game.players.length}`:'game-page'}>
   {navPanels}
+  {game.winner&&(()=>{const label=game.winner==='traitor'?'คนทรยศชนะ':game.winner==='rebels'?'กบฏชนะ':'จักรพรรดิและผู้ภักดีชนะ';const me=game.players.find(p=>p.id===game.viewerId);const iWin=!!me&&((game.winner==='traitor'&&me.role==='traitor')||(game.winner==='rebels'&&me.role==='rebel')||(game.winner==='emperor_loyalists'&&(me.role==='emperor'||me.role==='loyalist')));return <div className="modal-backdrop local-endgame"><section className="local-endgame-card"><h1 className="local-endgame-title">🏆 {label}</h1>{me&&<p className={`local-endgame-you ${iWin?'win':'lose'}`}>{iWin?'🎉 คุณชนะ!':'😔 คุณพ่ายแพ้'}</p>}<div className="local-endgame-roles">{[...game.players].sort((a,b)=>a.seatIndex-b.seatIndex).map(p=><div key={p.id} className={`local-endgame-row local-role-${p.role||'unknown'}`}><b>{p.username}</b><span>{p.character?.name?`${p.character.name} · `:''}{ROLE_LABEL[p.role||'']||p.role||'—'}</span><small>{p.alive?'✅ รอด':'💀 ตาย'}</small></div>)}</div><div className="mock-response-actions"><button onClick={()=>{emit('room:leave');setGame(undefined);setJoinedRoom('');loadRooms();}}>ออกจากห้อง</button></div></section></div>;})()}
   {error&&<div className="local-warn-overlay" onClick={()=>setError(undefined)}><div className="local-warn-box" role="alert"><span>⚠️ {error}</span><small>แตะเพื่อปิด</small></div></div>}
   {drawPreview&&drawPreview.length>0&&<div className="local-draw-preview" role="status" onClick={()=>setDrawPreview(null)}>
     <div className="local-draw-preview-fan" style={{'--n':drawPreview.length} as CSSProperties}>{drawPreview.map((c,i)=><article key={c.id} className={`mock-card mock-card-suit-${suitColor(c.suit)} local-preview-card`} style={{'--i':i} as CSSProperties}><header><span className="mock-card-rank">{c.number}{suitTx(c.suit)}</span></header>{c.image?<img className="mock-card-art" src={c.image} alt={c.name}/>:<div className="mock-card-art">WTK</div>}<b className="mock-card-name">{c.name}</b><small>{cardTypeLabel(c)}</small></article>)}</div>
@@ -393,7 +397,7 @@ export default function Home(){
    <section className="mock-table-stage" data-density="large"><div className="mock-table-surface"><div className="mock-table-pattern">三國</div>
     <section className="mock-piles">
      <button className={`mock-pile${isDrawPhase||myOwedDraws>0||myJudgmentDraw?' local-draw-pile-active':''}`} onClick={isDrawPhase?()=>emit('turn:draw-one'):myOwedDraws>0?()=>emit('pending:draw'):myJudgmentDraw?()=>emit('judgment:draw'):undefined} title={isDrawPhase?'คลิกเพื่อจั่วไพ่ทีละใบ':myOwedDraws>0?'คลิกเพื่อจั่วไพ่ที่ได้รับ':myJudgmentDraw?'คลิกเพื่อเปิดไพ่ตัดสิน':undefined}><div className="mock-deck">{isDrawPhase?`จั่ว ${game.turn?.drawnThisTurn??0}/2`:myOwedDraws>0?`รับ +${myOwedDraws}`:myJudgmentDraw?'⚖':'🂠'}</div><b>กองจั่ว</b><small>{game.deck.length} ใบ</small></button>
-     <article className="mock-pile"><div className={`mock-discard${topDiscard?' local-suit-'+suitColor(topDiscard.suit):''}`}>{topDiscard?<>{topDiscard.name}<br/><span>{topDiscard.number} {suitTx(topDiscard.suit)}</span></>:'—'}</div><b>กองทิ้ง</b><small>{game.discard.length} ใบ</small></article>
+     <article className="mock-pile"><div key={topDiscard?.id||'empty'} className={`mock-discard${topDiscard?' local-suit-'+suitColor(topDiscard.suit)+' local-card-played':''}`}>{topDiscard?<>{topDiscard.name}<br/><span>{topDiscard.number} {suitTx(topDiscard.suit)}</span></>:'—'}</div><b>กองทิ้ง</b><small>{game.discard.length} ใบ</small></article>
     </section>
     <p className="local-action-empty">{isDrawPhase?'⬆ กดกองจั่วเพื่อจั่วไพ่':myOwedDraws>0?`⬆ กดกองจั่วเพื่อรับไพ่ที่ได้รับ (${myOwedDraws} ใบ)`:rw?`กำลังรอ ${responder?.username??'ผู้เล่น'} ตอบสนอง`:'—'}</p>
    </div>
