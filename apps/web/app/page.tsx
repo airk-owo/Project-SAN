@@ -15,7 +15,7 @@ type Turn={activePlayerId:string|null;phase:string;attackUsedThisTurn:number;dra
 type RoleAliveCounts={emperor:number;loyalist:number;rebel:number;traitor:number};
 type RoleSet={emperor:number;loyalist:number;rebel:number;traitor:number};
 type Room={id:string;playerCount:number;spectatorCount:number;host:string;status:string;hasPassword:boolean};
-type Game={viewerId:string;hostId:string;isSpectator:boolean;phase:string;currentPlayerId?:string;hasDrawnThisTurn:boolean;lastPlayedCard?:Card;pendingAction?:{kind:'attack';actorId:string;targetId:string;dodgesRequired?:number;noDodge?:boolean}|null;players:Player[];spectators:Member[];roleDefinitions?:RoleDefinition[];deck:{length:number};discard:{length:number};log:{id:string;message:string;at:string}[];turn:Turn|null;responseWindow:ResponseWindow|null;winner?:string;pendingRepeatAttack?:{attackerId:string;weaponName:string}|null;pendingDestroyMount?:{attackerId:string;targetId:string}|null;pendingForceAttackDamage?:{attackerId:string}|null;pendingReplaceDamage?:{attackerId:string;targetId:string;damage:number;weaponName:string}|null;pendingTwinSwords?:{attackerId:string;targetId:string;weaponName:string}|null;pendingCoerce?:{actorId:string;weaponHolderId:string;victimId:string;trickName:string}|null;pendingHarvest?:{revealed:Card[]}|null;pendingJudgment?:{playerId:string;trickEffect:string;trickName:string;stage:'awaiting_draw'|'revealed';revealed?:Card}|null;pendingFankui?:{playerId:string;damagerId:string}|null;pendingRetaliate?:{damagerId:string;victimId:string}|null;pendingRetaliateJudgment?:{ownerId:string;damagerId:string}|null;pendingLegacy?:{ownerId:string;cards:Card[]}|null;pendingPeek?:{playerId:string;cards:Card[]}|null;pendingDischord?:{jiuyiId:string;targetId:string}|null;pendingAllyAssist?:{emperorId:string;allyId:string;kind:'attack'|'dodge';targetId?:string}|null;pendingDraws?:Record<string,number>;lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string};roleAliveCounts?:RoleAliveCounts;distances?:Record<string,number|null>;responseDeadline?:number|null;characterSkillKeys?:Record<string,string[]>;skillsUsedThisTurn?:string[]};
+type Game={viewerId:string;hostId:string;isSpectator:boolean;phase:string;currentPlayerId?:string;hasDrawnThisTurn:boolean;lastPlayedCard?:Card;pendingAction?:{kind:'attack';actorId:string;targetId:string;dodgesRequired?:number;noDodge?:boolean}|null;players:Player[];spectators:Member[];roleDefinitions?:RoleDefinition[];deck:{length:number};discard:{length:number};log:{id:string;message:string;at:string}[];turn:Turn|null;responseWindow:ResponseWindow|null;winner?:string;pendingRepeatAttack?:{attackerId:string;weaponName:string}|null;pendingDestroyMount?:{attackerId:string;targetId:string}|null;pendingForceAttackDamage?:{attackerId:string}|null;pendingReplaceDamage?:{attackerId:string;targetId:string;damage:number;weaponName:string}|null;pendingTwinSwords?:{attackerId:string;targetId:string;weaponName:string}|null;pendingCoerce?:{actorId:string;weaponHolderId:string;victimId:string;trickName:string}|null;pendingHarvest?:{revealed:Card[]}|null;pendingJudgment?:{playerId:string;trickEffect:string;trickName:string;stage:'awaiting_draw'|'revealed';revealed?:Card}|null;pendingFankui?:{playerId:string;damagerId:string}|null;pendingRetaliate?:{damagerId:string;victimId:string}|null;pendingRetaliateJudgment?:{ownerId:string;damagerId:string}|null;pendingLegacy?:{ownerId:string;cards:Card[]}|null;pendingPeek?:{playerId:string;cards:Card[]}|null;pendingDischord?:{jiuyiId:string;targetId:string}|null;pendingAllyAssist?:{emperorId:string;allyId:string;kind:'attack'|'dodge';targetId?:string}|null;pendingDraws?:Record<string,number>;lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string};roleAliveCounts?:RoleAliveCounts;distances?:Record<string,number|null>;responseDeadline?:number|null;startDeadline?:number|null;characterSkillKeys?:Record<string,string[]>;skillsUsedThisTurn?:string[]};
 type IceSelection={zone:'hand';handIndex:number}|{zone:'equipment';cardInstanceId:string};
 
 const ROLE_LABEL:Record<string,string>={emperor:'จักรพรรดิ',rebel:'กบฏ',loyalist:'ผู้ภักดี',traitor:'ทรยศ'};
@@ -141,6 +141,7 @@ export default function Home(){
  const [openPanel,setOpenPanel]=useState<'room'|'logchat'|null>(null);
  const [roleVisible,setRoleVisible]=useState(false);
  const [nowTs,setNowTs]=useState(()=>Date.now());
+ const [confirmStart,setConfirmStart]=useState(false);
  const [drawPreview,setDrawPreview]=useState<Card[]|null>(null);
  const [equipConfirmCard,setEquipConfirmCard]=useState<Card>();
  const [judgmentBanner,setJudgmentBanner]=useState<Game['lastJudgment']>();
@@ -179,7 +180,7 @@ export default function Home(){
   return()=>el.removeEventListener('wheel',handler);
  },[game?.phase]);
  // Tick once per second while a response/decision countdown is active (display only; server enforces the skip)
- useEffect(()=>{if(!game?.responseDeadline)return;setNowTs(Date.now());const id=setInterval(()=>setNowTs(Date.now()),500);return()=>clearInterval(id);},[game?.responseDeadline]);
+ useEffect(()=>{if(!game?.responseDeadline&&!game?.startDeadline)return;setNowTs(Date.now());const id=setInterval(()=>setNowTs(Date.now()),300);return()=>clearInterval(id);},[game?.responseDeadline,game?.startDeadline]);
  useEffect(()=>{if(!error)return;const t=setTimeout(()=>setError(undefined),10000);return()=>clearTimeout(t);},[error]);
  // Close the hand-limit discard menu once the debt is cleared or it's not the viewer's turn; close play-phase selection modes outside the play phase
  useEffect(()=>{
@@ -303,6 +304,7 @@ export default function Home(){
  const emperor=game.players.find(p=>p.role==='emperor');
  const roleCounts=game.roleAliveCounts;
  const readyCount=game.players.filter(p=>p.ready).length;
+ const startSecondsLeft=game.startDeadline?Math.max(0,Math.ceil((game.startDeadline-nowTs)/1000)):null;
 
  // Plain JSX element (not a component) so it is not remounted on every keystroke —
  // a nested component definition would lose input focus after each character.
@@ -320,7 +322,7 @@ export default function Home(){
    <div className="local-lobby-controls">
     {waiting&&!myPlayer&&!game.isSpectator&&<button onClick={()=>emit('seat:random')}>นั่งที่นั่งสุ่ม</button>}
     {waiting&&myPlayer&&<div className="local-ready-row"><button className={myPlayer.ready?'secondary':''} onClick={()=>emit('player:ready',{ready:!myPlayer.ready})}>{myPlayer.ready?'✓ ยกเลิกพร้อม':'พร้อมแล้ว'}</button><button className="secondary local-spectate-btn" onClick={()=>emit('seat:spectate')}>ดูเฉย ๆ</button></div>}
-    {isHost&&waiting&&<button onClick={()=>emit('game:start')} disabled={readyCount<game.players.length}>เริ่มเกม ({readyCount}/{game.players.length})</button>}
+    {isHost&&waiting&&(game.startDeadline?<button className="danger" onClick={()=>emit('game:cancel-start')}>✕ ยกเลิกการเริ่ม ({startSecondsLeft})</button>:<button onClick={()=>setConfirmStart(true)} disabled={readyCount<game.players.length}>เริ่มเกม ({readyCount}/{game.players.length})</button>)}
     {myPlayer?.role&&<button className="role-button" onClick={()=>setShowRole(true)}>บทบาทของฉัน</button>}
     {isPlaying&&myPlayer?.alive&&<button className="danger" onClick={()=>{setOpenPanel(null);setConfirmSurrender(true);}}>🏳️ ยอมแพ้</button>}
     <button className="danger" onClick={()=>{emit('room:leave');setGame(undefined);setJoinedRoom('');loadRooms();}}>ออกจากห้อง</button>
@@ -500,6 +502,8 @@ export default function Home(){
   {equipConfirmCard&&<div className="modal-backdrop" onClick={()=>setEquipConfirmCard(undefined)}><section className="card-detail local-target-picker" onClick={e=>e.stopPropagation()}><h2>ติดตั้งอุปกรณ์?</h2><p><b>{equipConfirmCard.name}</b> <small>({equipConfirmCard.number}{suitTx(equipConfirmCard.suit)})</small></p><p>{cardInfo(equipConfirmCard)?.desc||equipConfirmCard.description||equipConfirmCard.type}</p>{(()=>{const slot=equipConfirmCard.equipmentSlot;const slotKey=slot==='weapon'?'weapon':slot==='armor'?'armor':slot?.includes('offensive')?'offensiveMount':slot?.includes('defensive')?'defensiveMount':undefined;const current=slotKey?myPlayer?.equipment[slotKey as keyof EquipmentSlots]:undefined;return current?<p className="local-equip-replace">จะแทนที่ <b>{current.name}</b> ที่ติดตั้งอยู่ (ทิ้งลงกองทิ้ง)</p>:null;})()}<div className="mock-response-actions"><button onClick={()=>{emit('card:play',{cardId:equipConfirmCard.id});setEquipConfirmCard(undefined);}}>ยืนยันติดตั้ง</button><button className="mock-muted-button" onClick={()=>setEquipConfirmCard(undefined)}>ยกเลิก</button></div></section></div>}
   {judgmentBanner&&(()=>{const jp=game.players.find(p=>p.id===judgmentBanner.playerId);return <div className="local-judgment-banner" role="status"><span className="local-judgment-title">⚖ การตัดสิน — {judgmentBanner.trickName}</span><div className="local-judgment-card"><span>{judgmentBanner.cardNumber} {judgmentBanner.cardSuit}</span><b>{judgmentBanner.cardName}</b></div><span className="local-judgment-result">{charName(jp)}: {judgmentBanner.result}</span></div>;})()}
   {startCountdown!==null&&<div className="local-countdown-overlay" onClick={()=>setStartCountdown(null)}><span className="local-countdown-num" key={startCountdown}>{startCountdown>0?startCountdown:'เริ่ม!'}</span></div>}
+  {game.startDeadline&&startSecondsLeft!==null&&<div className="local-countdown-overlay"><div className="local-start-count"><span className="local-countdown-num" key={startSecondsLeft}>{startSecondsLeft>0?startSecondsLeft:'เริ่ม!'}</span><p>⚔ เกมกำลังจะเริ่ม…</p>{isHost&&<button className="danger" onClick={()=>emit('game:cancel-start')}>✕ ยกเลิกการเริ่มเกม</button>}</div></div>}
+  {confirmStart&&<div className="modal-backdrop" onClick={()=>setConfirmStart(false)}><section className="card-detail local-target-picker" onClick={e=>e.stopPropagation()}><h2>เริ่มเกม?</h2><p>ผู้เล่น {game.players.length} คนพร้อมแล้ว — จะเริ่มนับถอยหลัง 5 วินาทีเข้าสู่เกม</p><div className="mock-response-actions"><button onClick={()=>{emit('game:start');setConfirmStart(false);}}>ยืนยัน เริ่มเลย</button><button className="mock-muted-button" onClick={()=>setConfirmStart(false)}>ยกเลิก</button></div></section></div>}
 
  </main></>;
 }
