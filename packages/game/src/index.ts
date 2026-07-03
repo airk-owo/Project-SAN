@@ -55,10 +55,11 @@ export type PendingJudgment = { playerId:string; trickEffect:'delayed_skip_play_
 export type PendingFankui = { playerId:string; damagerId:string };
 export type PendingRetaliate = { damagerId:string; victimId:string };
 export type PendingRetaliateJudgment = { ownerId:string; damagerId:string };
+export type PendingLegacy = { ownerId:string; cards:Card[] };
 export type PendingPeek = { playerId:string; cards:Card[] };
 export type PendingDischord = { jiuyiId:string; targetId:string };
 export type PendingAllyAssist = { emperorId:string; allyId:string; kind:'attack'|'dodge'; targetId?:string };
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingLegacy?:PendingLegacy; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -251,12 +252,22 @@ export function draw(state:GameState, playerId:string, count=1) {
 /** Records cards a player is owed from an effect; they draw them manually via drawPendingCard. */
 export const owedDraws=(state:GameState,playerId:string)=>state.pendingDraws?.[playerId]??0;
 function grantDraws(state:GameState,playerId:string,count:number){if(count<=0)return;state.pendingDraws={...state.pendingDraws,[playerId]:owedDraws(state,playerId)+count};}
+/** กุยแก คำสั่งเสีย (遗计): the owner hands one revealed card to any living player; the window closes once all are distributed. */
+export function assignLegacyCard(state:GameState,ownerId:string,cardId:string,targetId:string){
+  const pending=state.pendingLegacy;if(!pending||pending.ownerId!==ownerId)throw new Error('ไม่มีคำสั่งเสียที่ค้างอยู่');
+  const idx=pending.cards.findIndex(c=>c.id===cardId);if(idx<0)throw new Error('ไพ่ไม่อยู่ในคำสั่งเสีย');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive)throw new Error('ต้องมอบให้ผู้เล่นที่มีชีวิต');
+  const [card]=pending.cards.splice(idx,1);target.hand.push(card);
+  logAction(state,'legacy-give',`${characterName(getPlayerById(state,ownerId)!)} มอบ ${card.name} ให้ ${target.username} (คำสั่งเสีย)`,ownerId,targetId,card.id);
+  if(!pending.cards.length)state.pendingLegacy=undefined;
+  synchronizeGameState(state);
+}
 // ── Character-skill event handlers ────────────────────────────────────────
 // Keyed by the skill key in CHARACTER_SKILLS. dispatchGameEvent runs the matching handler for every alive holder.
 type SkillEventHandler={event:GameEventName;handle:(state:GameState,event:GameEvent,ownerId:string)=>void};
 const SKILL_EVENT_HANDLERS:Record<string,SkillEventHandler>={
   // กุยแก คำสั่งเสีย: on taking damage, gain 2 draws per point of damage (drawn manually).
-  draw_on_damage:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId)return;const dmg=Math.max(1,event.amount||1);grantDraws(state,ownerId,2*dmg);logAction(state,'skill-draw-on-damage',`${characterName(getPlayerById(state,ownerId)!)} ใช้ คำสั่งเสีย ได้สิทธิ์จั่ว ${2*dmg} ใบ`,ownerId);}},
+  draw_on_damage:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive)return;const n=2*Math.max(1,event.amount||1);if(state.deck.length<n)reshuffleDiscardIntoDrawPile(state);const take=Math.min(n,state.deck.length);if(take<=0)return;const revealed=state.deck.splice(state.deck.length-take,take).reverse();const existing=state.pendingLegacy&&state.pendingLegacy.ownerId===ownerId?state.pendingLegacy.cards:[];state.pendingLegacy={ownerId,cards:[...existing,...revealed]};logAction(state,'skill-legacy',`${characterName(owner)} ใช้ คำสั่งเสีย เปิดไพ่ ${take} ใบ เพื่อมอบให้ผู้เล่น`,ownerId);}},
   // โจโฉ ไม่ยอมให้โลกทรยศ: on taking damage from a card, take that card into hand (instead of it being discarded).
   gain_damage_card:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.card)return;const owner=getPlayerById(state,ownerId);if(!owner)return;owner.hand.push(event.card);if(state.lastPlayedCard===event.card)state.lastPlayedCard=undefined;logAction(state,'skill-gain-damage-card',`${characterName(owner)} ใช้ ไม่ยอมให้โลกทรยศ เก็บ ${event.card.name} เข้ามือ`,ownerId,undefined,event.card.id);}},
   // สุมาอี้ กลยุทธ์โต้กลับ: on taking damage from someone, may take one of their cards (opens a pending decision).
@@ -1371,6 +1382,7 @@ export function endTurn(state:GameState, playerId=state.turn.activePlayerId||'')
   if(state.turn.activePlayerId){
     if(state.responseWindow||state.currentAction)throw new Error('Resolve the current action first');
     if(state.pendingJudgment)throw new Error('ต้องเปิดไพ่ตัดสินให้เสร็จก่อนจบเทิร์น');
+    if(state.pendingLegacy)throw new Error('ต้องมอบไพ่ คำสั่งเสีย ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingRetaliateJudgment)throw new Error('ต้องเปิดไพ่ตัดสิน ย้อนรอยศัตรู ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingRetaliate)throw new Error('ต้องจัดการ ย้อนรอยศัตรู ให้เสร็จก่อนจบเทิร์น');
     if(state.pendingPeek)throw new Error('ต้องจัดเรียงกองจั่ว (หยั่งรู้ฟ้าดิน) ให้เสร็จก่อนจบเทิร์น');
@@ -1415,12 +1427,13 @@ export function discardForHandLimit(state:GameState, playerId:string, cardIds:st
 export function createPublicGameState(state:GameState, viewerId:string):PublicGameState {
   synchronizeGameState(state);
   const allCharactersChosen=state.players.every(p=>p.confirmedCharacter);
-  const { drawPile, deck, responseWindow, players, pendingPeek, pendingHarvest, ...publicState }=state;
+  const { drawPile, deck, responseWindow, players, pendingPeek, pendingHarvest, pendingLegacy, ...publicState }=state;
+  const publicPendingLegacy=pendingLegacy?(pendingLegacy.ownerId===viewerId?pendingLegacy:{ownerId:pendingLegacy.ownerId,cards:[]}):undefined; // คำสั่งเสีย: only กุยแก sees the revealed cards
   const publicResponseWindow=responseWindow?{...responseWindow,responses:responseWindow.responses.map(({cardInstanceId:_cardInstanceId,...response})=>response)}:null;
   const publicPendingPeek=pendingPeek?(pendingPeek.playerId===viewerId?pendingPeek:{playerId:pendingPeek.playerId,cards:[]}):undefined; // peeked cards only visible to จูกัดเหลียง
   // เก็บเกี่ยวยุ้งฉาง: only the current picker sees the remaining cards; others see face-down placeholders.
   const publicPendingHarvest=pendingHarvest?(responseWindow?.currentResponderId===viewerId?pendingHarvest:{...pendingHarvest,revealed:pendingHarvest.revealed.map(c=>({id:c.id,name:'ไพ่ปิด',type:c.type,cardType:c.cardType,suit:'?',number:'',image:null,description:null,effect:'hidden_harvest',equipmentSlot:null} as unknown as Card))}):undefined;
-  return {...publicState, pendingPeek:publicPendingPeek, pendingHarvest:publicPendingHarvest, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
+  return {...publicState, pendingPeek:publicPendingPeek, pendingHarvest:publicPendingHarvest, pendingLegacy:publicPendingLegacy, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
     role:p.id===viewerId||p.roleRevealed||p.role==='emperor'?p.role:undefined,
     character:p.id===viewerId||p.role==='emperor'||allCharactersChosen?p.character:undefined,
     characterOptions:p.id===viewerId?p.characterOptions:[],

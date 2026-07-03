@@ -317,3 +317,13 @@ input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:tex
 
 /* Weapon attack-range badge in the card detail modal (a bit big, prominent) */
 .card-detail-range{font-size:1.2rem;font-weight:800;color:#c0392b;margin:8px 0;padding:7px 10px;border:2px solid #c0392b66;border-radius:9px;background:#c0392b14;text-align:center;letter-spacing:.5px}
+
+/* กุยแก คำสั่งเสีย (遗计) — distribute revealed cards to players */
+.local-legacy{flex-direction:column;align-items:stretch;max-width:min(94vw,560px)}
+.local-legacy-body{width:100%}
+.local-legacy-list{display:flex;flex-direction:column;gap:8px;margin-top:6px;max-height:52vh;overflow-y:auto}
+.local-legacy-row{display:flex;flex-direction:column;gap:5px;padding:8px 10px;border:1px solid #c8b58a66;border-radius:8px;background:#00000010}
+.local-legacy-card{font-family:Baozi,BaiJamjuree,sans-serif;font-size:1.02rem;color:#1a1a1a}
+.local-legacy-card.local-suit-red{color:#c0392b}
+.local-legacy-targets{display:flex;flex-wrap:wrap;gap:5px}
+.local-legacy-targets button{margin:0;padding:5px 11px;font-size:.8rem}

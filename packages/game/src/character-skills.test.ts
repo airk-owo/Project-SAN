@@ -7,8 +7,8 @@ import {
   playCard, playStealTargetCard, playDiscardTargetCard, playDelayedTrick, declineNegate, cardActsAs, playDodge, playMassDodgeOrDamage, playMassResponseCard,
   applyDamage, owedDraws, drawOneTurnCard, endTurn, playAttackResponse, declineResponse,
   useSelfDamageDraw, useDiscardThenDraw, useMiracleMedicine, useMarriage, useRaid, useUnarmedHunt, useFortune, useBenevolence, useArrogance, usePeek, resolvePeek, useDischord, pickDischordSuit, useIncite, playHeal,
-  startTurn, drawJudgmentCard, resolveJudgmentCard, replaceJudgmentCard,
-  takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, revealRetaliateJudgment, redirectAttack,
+  startTurn, drawJudgmentCard, resolveJudgmentCard, replaceJudgmentCard, createPublicGameState,
+  takeCardFromDamager, declineFankui, retaliateDiscard, retaliateTakeDamage, revealRetaliateJudgment, assignLegacyCard, redirectAttack,
   requestUnityAttack, requestGuardianDodge, allyAssist, declineAllyAssist, surrenderPlayer, synchronizeGameState,
   type Card, type Character, type GameState, type Spectator,
 } from './index.js';
@@ -277,26 +277,45 @@ describe('Character skill – ลิโป้ ไร้เทียมทาน 
 });
 
 describe('Character skill – กุยแก คำสั่งเสีย (draw_on_damage, event)', () => {
-  it('grants 2 owed draws per point of damage taken', () => {
+  it('reveals 2 cards per point of damage to distribute', () => {
     const game = makeGame({ p1: 'CHAR021' });
+    game.deck = [attackCard('d1'), attackCard('d2'), attackCard('d3'), attackCard('d4'), attackCard('d5'), attackCard('d6')];
     applyDamage(game, 'p1', 1);
-    assert.equal(owedDraws(game, 'p1'), 2, '1 damage → 2 draws');
+    assert.equal(game.pendingLegacy?.ownerId, 'p1');
+    assert.equal(game.pendingLegacy?.cards.length, 2, '1 damage → 2 cards to give');
+    // resolve the first window, then a 2-damage hit reveals 4 more
+    assignLegacyCard(game, 'p1', game.pendingLegacy!.cards[0]!.id, 'p1');
+    assignLegacyCard(game, 'p1', game.pendingLegacy!.cards[0]!.id, 'p1');
     applyDamage(game, 'p1', 2);
-    assert.equal(owedDraws(game, 'p1'), 6, '+2 damage → +4 draws (total 6)');
+    assert.equal(game.pendingLegacy?.cards.length, 4, '2 damage → 4 cards');
   });
 
-  it('fires when กุยแก takes attack damage', () => {
+  it('gives each revealed card to any chosen player', () => {
     const game = makeGame({ p1: 'CHAR021' });
-    game.players.find(p => p.id === 'p0')!.hand = [attackCard('a1')];
-    playAttack(game, 'p0', 'p1', 'a1');
-    respondToAttack(game, 'p1'); // take the hit
-    assert.equal(owedDraws(game, 'p1'), 2);
+    game.deck = [attackCard('d1'), attackCard('d2')];
+    applyDamage(game, 'p1', 1);
+    const ids = game.pendingLegacy!.cards.map(c => c.id);
+    assignLegacyCard(game, 'p1', ids[0]!, 'p0');
+    assignLegacyCard(game, 'p1', ids[1]!, 'p1');
+    assert.ok(game.players.find(p => p.id === 'p0')!.hand.some(c => c.id === ids[0]), 'first card handed to p0');
+    assert.ok(game.players.find(p => p.id === 'p1')!.hand.some(c => c.id === ids[1]), 'second kept by กุยแก');
+    assert.equal(game.pendingLegacy, undefined, 'window closes once all are distributed');
+  });
+
+  it('other players see the count but not the card faces', () => {
+    const game = makeGame({ p1: 'CHAR021' });
+    game.deck = [attackCard('d1'), attackCard('d2')];
+    applyDamage(game, 'p1', 1);
+    const ownerView = createPublicGameState(game, 'p1');
+    const otherView = createPublicGameState(game, 'p0');
+    assert.equal(ownerView.pendingLegacy?.cards.length, 2, 'กุยแก sees the revealed cards');
+    assert.equal(otherView.pendingLegacy?.cards.length, 0, 'others see no card faces');
   });
 
   it('does not fire for a character without the skill', () => {
     const game = makeGame();
     applyDamage(game, 'p1', 2);
-    assert.equal(owedDraws(game, 'p1'), 0);
+    assert.equal(game.pendingLegacy, undefined);
   });
 });
 
