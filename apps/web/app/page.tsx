@@ -125,6 +125,7 @@ export default function Home(){
  const [dischordMode,setDischordMode]=useState(false);
  const [confirmSelfDamage,setConfirmSelfDamage]=useState(false);
  const [confirmSurrender,setConfirmSurrender]=useState(false);
+ const [confirmCharacter,setConfirmCharacter]=useState<Character|undefined>();
  const [inciteMode,setInciteMode]=useState(false);
  const [inciteCard,setInciteCard]=useState<string>();
  const [inciteFirst,setInciteFirst]=useState<string>();
@@ -161,7 +162,7 @@ export default function Home(){
  useEffect(()=>{const turn=game?.currentPlayerId;if(soundOn&&turn&&turn===game?.viewerId&&lastTurn.current!==turn){try{const ctx=new AudioContext(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(660,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(880,ctx.currentTime+.16);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.02);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.24);osc.connect(gain).connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.25)}catch{}}lastTurn.current=turn},[game?.currentPlayerId,game?.viewerId,soundOn]);
  useEffect(()=>{const role=game?.players.find(p=>p.id===game.viewerId)?.role;if(role&&revealedRole.current!==role){revealedRole.current=role;setShowRole(true)}},[game?.players,game?.viewerId]);
  useEffect(()=>{const ph=game?.phase;if(ph==='playing'&&prevPhaseRef.current&&prevPhaseRef.current!=='playing')setStartCountdown(3);if(ph&&ph!==prevPhaseRef.current)setOpenPanel(ph==='waiting'?'room':null);if(game)prevPhaseRef.current=ph;},[game?.phase]);
- useEffect(()=>{if(startCountdown===null)return;if(startCountdown<=0){const t=setTimeout(()=>setStartCountdown(null),700);return()=>clearTimeout(t);}const t=setTimeout(()=>setStartCountdown(c=>(c??1)-1),850);return()=>clearTimeout(t);},[startCountdown]);
+ useEffect(()=>{if(startCountdown===null)return;if(startCountdown<=0){const t=setTimeout(()=>{setStartCountdown(null);const hand=game?.players.find(p=>p.id===game.viewerId)?.hand;if(hand?.length){setDrawPreview(hand);if(drawNoticeTimer.current)clearTimeout(drawNoticeTimer.current);drawNoticeTimer.current=setTimeout(()=>setDrawPreview(null),3000);}},700);return()=>clearTimeout(t);}const t=setTimeout(()=>setStartCountdown(c=>(c??1)-1),850);return()=>clearTimeout(t);},[startCountdown]);
  useEffect(()=>{if(logChatTab==='chat')chatEndRef.current?.scrollIntoView({behavior:'smooth'});},[chat,logChatTab]);
  useEffect(()=>{if(logChatTab==='log')logEndRef.current?.scrollIntoView({behavior:'smooth'});},[game?.log?.length,logChatTab]);
  // Re-runs when phase changes to 'playing' so handRef.current is populated by then
@@ -200,8 +201,8 @@ export default function Home(){
   const prev=prevHandIds.current;
   prevHandIds.current=hand.map(c=>c.id).join(',');
   const prevSet=new Set(prev?prev.split(','):[]);
-  // First population (initial deal) previews the whole hand; afterwards only the newly-added cards.
-  const added=prev===undefined?(game?.phase==='playing'?hand:[]):hand.filter(c=>!prevSet.has(c.id));
+  // The opening hand is revealed after the 3-2-1 countdown (see the countdown effect); here we only preview later draws.
+  const added=prev===undefined?[]:hand.filter(c=>!prevSet.has(c.id));
   if(!added.length)return;
   setDrawPreview(added);
   if(drawNoticeTimer.current)clearTimeout(drawNoticeTimer.current);
@@ -308,9 +309,8 @@ export default function Home(){
    <h2 className="local-tab-bar"><span className="local-navpanel-title">ห้อง: {joinedRoom}</span><button className="local-chat-collapse" onClick={()=>setOpenPanel(null)} title="ปิด">✕</button></h2>
    <div className="local-lobby-players">ผู้เล่น {game.players.length} คน{game.spectators.length>0?` · ผู้ชม ${game.spectators.length} คน`:''}</div>
    <div className="local-lobby-controls">
-    {waiting&&myPlayer&&<button className={myPlayer.ready?'secondary':''} onClick={()=>emit('player:ready',{ready:!myPlayer.ready})}>{myPlayer.ready?'✓ ยกเลิกพร้อม':'พร้อมแล้ว'}</button>}
     {waiting&&!myPlayer&&!game.isSpectator&&<button onClick={()=>emit('seat:random')}>นั่งที่นั่งสุ่ม</button>}
-    {waiting&&myPlayer&&<button className="secondary" onClick={()=>emit('seat:spectate')}>ดูเฉยๆ</button>}
+    {waiting&&myPlayer&&<div className="local-ready-row"><button className={myPlayer.ready?'secondary':''} onClick={()=>emit('player:ready',{ready:!myPlayer.ready})}>{myPlayer.ready?'✓ ยกเลิกพร้อม':'พร้อมแล้ว'}</button><button className="secondary local-spectate-btn" onClick={()=>emit('seat:spectate')}>ดูเฉย ๆ</button></div>}
     {isHost&&waiting&&<button onClick={()=>emit('game:start')} disabled={readyCount<game.players.length}>เริ่มเกม ({readyCount}/{game.players.length})</button>}
     {myPlayer?.role&&<button className="role-button" onClick={()=>setShowRole(true)}>บทบาทของฉัน</button>}
     {isPlaying&&myPlayer?.alive&&<button className="danger" onClick={()=>{setOpenPanel(null);setConfirmSurrender(true);}}>🏳️ ยอมแพ้</button>}
@@ -319,7 +319,7 @@ export default function Home(){
   </section>;
  const activePlayer=game.players.find(p=>p.id===game.turn?.activePlayerId);
  const navbar=<nav className="local-navbar">
-   <div className="local-navbar-left">{isPlaying?<span className="local-nav-turn"><b>ตา: {activePlayer?.username||'—'}</b> <em>{PHASE_LABEL[game.turn?.phase||'']||game.turn?.phase}{isDrawPhase&&(game.turn?.drawnThisTurn??0)>0?` ${game.turn?.drawnThisTurn}/2`:''}</em></span>:<span className="local-nav-title">ยุทธพิชัยสามก๊ก{game.isSpectator?' · ผู้ชม':''}</span>}</div>
+   <div className="local-navbar-left"><span className="local-nav-title">ยุทธพิชัยสามก๊ก</span>{isPlaying&&<span className="local-nav-turn"><b>ตา: {activePlayer?.username||'—'}</b> <em>{PHASE_LABEL[game.turn?.phase||'']||game.turn?.phase}{isDrawPhase&&(game.turn?.drawnThisTurn??0)>0?` ${game.turn?.drawnThisTurn}/2`:''}</em></span>}{game.isSpectator&&<span className="local-nav-turn">· ผู้ชม</span>}</div>
    {isPlaying&&<div className="local-role-counts">{(['emperor','rebel','loyalist','traitor'] as const).map(role=>{const alive=roleCounts?roleCounts[role]:game.players.filter(p=>p.role===role&&p.alive).length;return <span key={role} className={`local-role-count local-role-${role}${alive===0?' local-role-dead':''}`}>{ROLE_LABEL[role]} {alive}</span>;})}</div>}
    <div className="local-navbar-right">
     <button className={`local-nav-btn${openPanel==='room'?' active':''}`} onClick={()=>setOpenPanel(p=>p==='room'?null:'room')} title="ห้อง">🏠</button>
@@ -332,8 +332,7 @@ export default function Home(){
  const secondsLeft=game.responseDeadline?Math.max(0,Math.ceil((game.responseDeadline-nowTs)/1000)):null;
  const countdownBadge=secondsLeft!=null?<span className={`local-countdown${secondsLeft<=5?' local-countdown-urgent':''}`}>⏳ {secondsLeft} วิ</span>:null;
 
- return <main className={isPlaying?`mock-game-page local-game-page mock-count-${game.players.length}`:'game-page'}>
-  {navbar}
+ return <>{navbar}<main className={isPlaying?`mock-game-page local-game-page mock-count-${game.players.length}`:'game-page'}>
   {navPanels}
   {error&&<div className="local-warn-overlay" onClick={()=>setError(undefined)}><div className="local-warn-box" role="alert"><span>⚠️ {error}</span><small>แตะเพื่อปิด</small></div></div>}
   {drawPreview&&drawPreview.length>0&&<div className="local-draw-preview" role="status" onClick={()=>setDrawPreview(null)}>
@@ -342,15 +341,16 @@ export default function Home(){
    </div>}
   {game.isSpectator&&<p className="spectator-banner">คุณกำลังรับชมเกมนี้ในฐานะ Spectator</p>}
 
+
   {/* Pre-game: same table layout as playing but no piles */}
   {!isPlaying&&<section className={`mock-match-layout mock-count-${game.players.length}`}>
    <section className="mock-table-stage" data-density="large">
     <div className="mock-table-surface">
      <div className="mock-table-pattern">三國</div>
-     <div className="local-lobby-status">
-      {waiting&&<p style={{margin:'4px 0',color:'#c8b58a',fontSize:'.82rem'}}>พร้อม {readyCount}/{game.players.length} คน</p>}
-      {game.phase==='character-select'&&<div className="local-select-center">{!emperor?.confirmedCharacter?<>กำลังรอ <b>จักรพรรดิ</b> เลือกขุนพล</>:waitingForCharacter.length?<>กำลังรอ {waitingForCharacter.map((p,i)=><span key={p.id}><b>{p.username}</b>{i<waitingForCharacter.length-1?', ':''}</span>)} เลือกขุนพล</>:<>ผู้เล่นทุกคนเลือกขุนพลแล้ว</>}</div>}
-     </div>
+    </div>
+    <div className="local-lobby-status">
+     {waiting&&<p style={{margin:'4px 0',color:'#c8b58a',fontSize:'.82rem'}}>พร้อม {readyCount}/{game.players.length} คน</p>}
+     {game.phase==='character-select'&&<div className="local-select-center">{!emperor?.confirmedCharacter?<>กำลังรอ <b>จักรพรรดิ</b> เลือกขุนพล</>:waitingForCharacter.length?<>กำลังรอ {waitingForCharacter.map((p,i)=><span key={p.id}><b>{p.username}</b>{i<waitingForCharacter.length-1?', ':''}</span>)} เลือกขุนพล</>:<>ผู้เล่นทุกคนเลือกขุนพลแล้ว</>}</div>}
     </div>
     {/* All 10 seats */}
     {Array.from({length:10},(_,i)=>{
@@ -381,7 +381,7 @@ export default function Home(){
   </section>}
 
   {roleOptions.length>0&&isHost&&<section className="choice"><h2>เลือกชุดบทบาท</h2>{roleOptions.map((r,i)=><button key={i} onClick={()=>{emit('game:start',{composition:r});setRoleOptions([])}}>{roleText(r)}</button>)}</section>}
-  {game.phase==='character-select'&&chooser&&<section className="choice"><h2>เลือกขุนพลของคุณ</h2><div className="character-grid">{chooser.characterOptions.map(c=><article key={c.id} className={`local-general-card local-faction-${KINGDOM_FACTION[c.kingdom||'']||'qun'}`}><header className="local-general-head"><h3 className="general-name">{c.name}</h3><span className="local-general-meta">{c.kingdomTh||'อิสระ'} · HP {c.hp}</span></header>{c.image&&<img className="local-general-portrait" src={c.image} alt={c.name}/>}<div className="local-general-skills">{c.skills.map(s=><p key={s.name}><b>{s.name}</b> — {s.description}</p>)}</div><button onClick={()=>emit('character:select',{characterId:c.id})}>เลือก {c.name}</button></article>)}</div></section>}
+  {game.phase==='character-select'&&chooser&&<section className="choice"><h2>เลือกขุนพลของคุณ (คลิกที่การ์ด)</h2><div className="character-grid">{chooser.characterOptions.map(c=><article key={c.id} tabIndex={0} onClick={()=>setConfirmCharacter(c)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setConfirmCharacter(c);}}} className={`local-general-card local-faction-${KINGDOM_FACTION[c.kingdom||'']||'qun'}`}>{c.image?<img className="local-general-bg" src={c.image} alt=""/>:<div className="local-general-bg local-general-bg-ph">WTK</div>}<div className="local-general-info"><div className="local-general-head"><h3 className="general-name">{c.name}</h3><span className="local-general-meta">{c.kingdomTh||'อิสระ'} · HP {c.hp}</span></div><div className="local-general-skills">{c.skills.map(s=><p key={s.name}><b>{s.name}</b> — {s.description}</p>)}</div></div></article>)}</div></section>}
 
   {isPlaying&&<section className="mock-match-layout">
    <section className="mock-table-stage" data-density="large"><div className="mock-table-surface"><div className="mock-table-pattern">三國</div>
@@ -479,6 +479,7 @@ export default function Home(){
   {isPlaying&&stealTarget&&selectedStealId&&<div className="modal-backdrop"><section className="card-detail local-target-picker"><h2>เลือกไพ่ของ {charName(stealTarget)}</h2>{!selectedStealZone?<><p>เลือกโซน</p><div className="local-equipment-picker"><button disabled={!stealTarget.handCount} onClick={()=>setSelectedStealZone('hand')}>🂠 มือ ({stealTarget.handCount})</button><button disabled={!Object.values(stealTarget.equipment).some(Boolean)} onClick={()=>setSelectedStealZone('equipment')}>อุปกรณ์</button></div></>:selectedStealZone==='hand'?<><p>เลือกตำแหน่งไพ่บนมือ</p><div className="local-equipment-picker">{Array.from({length:stealTarget.handCount},(_,i)=><button key={i} onClick={()=>{emit('card:steal-target',{cardId:selectedStealId,targetId:stealTarget.id,selection:{zone:'hand',handIndex:i}});cancelSelection();}}>🂠 {i+1}</button>)}</div></>:<><p>เลือกอุปกรณ์</p><div className="local-equipment-picker">{([{key:'weapon',label:'อาวุธ'},{key:'armor',label:'เกราะ'},{key:'offensiveMount',label:'ม้ารุก'},{key:'defensiveMount',label:'ม้ารับ'}] as const).map(({key,label})=>{const eq=stealTarget.equipment[key];return eq?<button key={key} onClick={()=>{emit('card:steal-target',{cardId:selectedStealId,targetId:stealTarget.id,selection:{zone:'equipment',cardInstanceId:eq.id}});cancelSelection();}}><small>{label}</small>{eq.name}</button>:<span key={key} className="local-empty-slot">{label}: ว่าง</span>})}</div></>}<button className="mock-muted-button" onClick={cancelSelection}>ยกเลิก</button></section></div>}
   {confirmSelfDamage&&<div className="modal-backdrop" onClick={()=>setConfirmSelfDamage(false)}><section className="card-detail local-target-picker" onClick={e=>e.stopPropagation()}><h2>ใช้ พลีชีพ?</h2><p>คุณจะเสีย <b>พลังชีวิต 1 หน่วย</b> เพื่อรับสิทธิ์จั่ว <b>2 ใบ</b></p><div className="mock-response-actions"><button onClick={()=>{emit('skill:self-damage-draw');setConfirmSelfDamage(false);}}>ยืนยัน เสีย 1 HP</button><button className="mock-muted-button" onClick={()=>setConfirmSelfDamage(false)}>ยกเลิก</button></div></section></div>}
   {confirmSurrender&&<div className="modal-backdrop" onClick={()=>setConfirmSurrender(false)}><section className="card-detail local-target-picker" onClick={e=>e.stopPropagation()}><h2>🏳️ ยอมแพ้?</h2><p>ตัวละครของคุณจะ <b>ตายทันที</b> และเปิดเผยบทบาท เพื่อให้เกมดำเนินต่อได้ (ใช้เมื่อคุณต้องออกจากเกม)</p><div className="mock-response-actions"><button className="danger" onClick={()=>{emit('game:surrender');setConfirmSurrender(false);}}>ยืนยัน ยอมแพ้</button><button className="mock-muted-button" onClick={()=>setConfirmSurrender(false)}>ยกเลิก</button></div></section></div>}
+  {confirmCharacter&&<div className="modal-backdrop" onClick={()=>setConfirmCharacter(undefined)}><section className="local-skills-modal" onClick={e=>e.stopPropagation()}><h2>{confirmCharacter.name}</h2><p className="local-skills-faction">{confirmCharacter.kingdomTh||'อิสระ'} · HP {confirmCharacter.hp}</p><ul className="local-skills-list">{confirmCharacter.skills.map(s=><li key={s.name}><b>{s.name}</b><p>{s.description}</p>{s.condition&&<small className="local-skill-condition">{s.condition}</small>}</li>)}</ul><div className="mock-response-actions"><button onClick={()=>{emit('character:select',{characterId:confirmCharacter.id});setConfirmCharacter(undefined);}}>ยืนยัน เลือก {confirmCharacter.name}</button><button className="mock-muted-button" onClick={()=>setConfirmCharacter(undefined)}>ยกเลิก</button></div></section></div>}
   {discardLimitConfirming&&<div className="modal-backdrop"><section className="card-detail local-target-picker"><h2>ยืนยันการทิ้งไพ่</h2><ul className="local-discard-confirm-list">{discardLimitSelected.map(id=>{const c=myPlayer?.hand.find(x=>x.id===id);return c?<li key={id}><b>{c.name}</b> <small>{c.number}{c.suit}</small></li>:null;})}</ul><div className="mock-response-actions"><button onClick={()=>{emit('hand:discard',{cardIds:discardLimitSelected});setDiscardLimitSelected([]);setDiscardLimitConfirming(false);}}>ยืนยัน ทิ้งไพ่</button><button className="mock-muted-button" onClick={()=>setDiscardLimitConfirming(false)}>กลับไปเลือกใหม่</button></div></section></div>}
 
   {showRole&&myPlayer?.role&&<div className="modal-backdrop" onClick={()=>setShowRole(false)}><section className="role-reveal" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setShowRole(false)}>×</button><small>บทบาทของคุณ</small><h2>{myRoleInfo?.role_th||ROLE_LABEL[myPlayer.role]||myPlayer.role}</h2><p>{myRoleInfo?.win_condition_th||''}</p></section></div>}
@@ -487,5 +488,6 @@ export default function Home(){
   {equipConfirmCard&&<div className="modal-backdrop" onClick={()=>setEquipConfirmCard(undefined)}><section className="card-detail local-target-picker" onClick={e=>e.stopPropagation()}><h2>ติดตั้งอุปกรณ์?</h2><p><b>{equipConfirmCard.name}</b> <small>({equipConfirmCard.number}{equipConfirmCard.suit})</small></p><p>{cardInfo(equipConfirmCard)?.desc||equipConfirmCard.description||equipConfirmCard.type}</p>{(()=>{const slot=equipConfirmCard.equipmentSlot;const slotKey=slot==='weapon'?'weapon':slot==='armor'?'armor':slot?.includes('offensive')?'offensiveMount':slot?.includes('defensive')?'defensiveMount':undefined;const current=slotKey?myPlayer?.equipment[slotKey as keyof EquipmentSlots]:undefined;return current?<p className="local-equip-replace">จะแทนที่ <b>{current.name}</b> ที่ติดตั้งอยู่ (ทิ้งลงกองทิ้ง)</p>:null;})()}<div className="mock-response-actions"><button onClick={()=>{emit('card:play',{cardId:equipConfirmCard.id});setEquipConfirmCard(undefined);}}>ยืนยันติดตั้ง</button><button className="mock-muted-button" onClick={()=>setEquipConfirmCard(undefined)}>ยกเลิก</button></div></section></div>}
   {judgmentBanner&&(()=>{const jp=game.players.find(p=>p.id===judgmentBanner.playerId);return <div className="local-judgment-banner" role="status"><span className="local-judgment-title">⚖ การตัดสิน — {judgmentBanner.trickName}</span><div className="local-judgment-card"><span>{judgmentBanner.cardNumber} {judgmentBanner.cardSuit}</span><b>{judgmentBanner.cardName}</b></div><span className="local-judgment-result">{charName(jp)}: {judgmentBanner.result}</span></div>;})()}
   {startCountdown!==null&&<div className="local-countdown-overlay" onClick={()=>setStartCountdown(null)}><span className="local-countdown-num" key={startCountdown}>{startCountdown>0?startCountdown:'เริ่ม!'}</span></div>}
- </main>;
+
+ </main></>;
 }
