@@ -709,6 +709,10 @@ export default function Home() {
   const [drawPreview, setDrawPreview] = useState<Card[] | null>(null);
   const [equipConfirmCard, setEquipConfirmCard] = useState<Card>();
   const [judgmentBanner, setJudgmentBanner] = useState<Game["lastJudgment"]>();
+  const [lightningStrike, setLightningStrike] = useState(false); // ฟ้าลงโทษ: เอฟเฟคฟ้าผ่าเต็มจอ
+  const lightningTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   const prevJudgmentAt = useRef<string | undefined>(undefined);
   const judgmentTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
@@ -776,6 +780,13 @@ export default function Home() {
   const playAutoEndChime = () => {
     tone(587, 0, 0.16, 0.13);
     tone(392, 0.15, 0.42, 0.12);
+  };
+  // ฟ้าลงโทษ: a sharp crack over a rolling low rumble — a proper thunderclap.
+  const playThunder = () => {
+    tone(2300, 0, 0.05, 0.18, "square"); // เสียงเปรี้ยงแหลม
+    tone(150, 0.02, 0.85, 0.22, "sawtooth"); // เสียงคำรามต่ำ
+    tone(92, 0.05, 1.15, 0.2, "sawtooth");
+    tone(55, 0.12, 1.4, 0.17, "sine"); // หางเสียงกึกก้อง
   };
 
   const myDecision = isViewerDecisionActive(game);
@@ -1061,6 +1072,19 @@ export default function Home() {
       setBalanceMode(false);
       setBalanceCards([]);
     }
+    // โจโฉ ปกป้องราชันย์ / ระเหเร่ร่อน: โหมดเลือกเป้าเหล่านี้ใช้ได้เฉพาะตอนที่เราเป็น
+    // ผู้ตอบโต้การโจมตีอยู่เท่านั้น หากไม่ใช่ (หน้าต่างปิด/เปลี่ยนคน) ต้องล้างทิ้ง
+    // มิฉะนั้นปุ่มสกิลจะค้างจากการโจมตีครั้งก่อน (โดยเฉพาะสกิลโจโฉ)
+    const rw = game.responseWindow;
+    const iAmAttackResponder =
+      rw?.type === "attack_dodge" &&
+      rw.currentResponderId === game.viewerId &&
+      rw.status === "open";
+    if (!iAmAttackResponder) {
+      setGuardianMode(false);
+      setRedirectMode(false);
+      setRedirectCard(undefined);
+    }
   }, [game]);
   // Show the judgment reveal to everyone for a few seconds whenever a new one occurs
   useEffect(() => {
@@ -1078,7 +1102,15 @@ export default function Home() {
       () => setJudgmentBanner(undefined),
       5000,
     );
-  }, [game?.lastJudgment?.at]);
+    // ฟ้าลงโทษ ผ่า! → เอฟเฟคฟ้าผ่าเต็มจอ + เสียงฟ้าร้อง ให้สมชื่อ
+    if (j.result?.includes("ฟ้าผ่า")) {
+      setLightningStrike(true);
+      if (soundOn) playThunder();
+      if (lightningTimer.current) clearTimeout(lightningTimer.current);
+      lightningTimer.current = setTimeout(() => setLightningStrike(false), 1600);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game?.lastJudgment?.at, soundOn]);
   useEffect(() => {
     const f = game?.tableFlash;
     if (!f) return;
@@ -1264,11 +1296,10 @@ export default function Home() {
     pj && pj.playerId === game.viewerId && pj.stage === "revealed",
   );
   const requiredDiscard =
-    (game.characterSkillKeys?.[game.viewerId] || []).includes(
-      "skip_discard_if_no_attack",
-    ) && (game.turn?.attackUsedThisTurn ?? 0) === 0
+    myKeys.includes("skip_discard_if_no_attack") &&
+    (game.turn?.attackUsedThisTurn ?? 0) === 0
       ? 0
-      : Math.max(0, (myPlayer?.hand.length || 0) - (myPlayer?.hp || 0)); // ลิบอง ยับยั้งชั่งใจ: ถ้าไม่ได้โจมตีในรอบนี้ ไม่ต้องทิ้งไพ่
+      : Math.max(0, (myPlayer?.hand.length || 0) - (myPlayer?.hp || 0)); // ลิบอง ยับยั้งชั่งใจ: ถ้าไม่ได้โจมตีในรอบนี้ ไม่ต้องทิ้งไพ่ (characterSkillKeys คีย์ด้วย character.id ไม่ใช่ viewerId)
   const toggleDiscardLimit = (id: string) =>
     setDiscardLimitSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
@@ -1282,9 +1313,7 @@ export default function Home() {
     myPlayer?.equipment.weapon?.effect === "discard_two_as_attack";
   const hasUnlimitedAttack =
     myPlayer?.equipment.weapon?.effect === "unlimited_attack_per_turn" ||
-    (game.characterSkillKeys?.[game.viewerId] || []).includes(
-      "unlimited_attack",
-    ); // หน้าไม้กล หรือ เตียวหุย คำราม → โจมตีได้ไม่จำกัด
+    myKeys.includes("unlimited_attack"); // หน้าไม้กล หรือ เตียวหุย คำราม → โจมตีได้ไม่จำกัด
   const canSnakeAttack =
     canAct &&
     hasSnakeSpear &&
@@ -1733,13 +1762,63 @@ export default function Home() {
             🎭
           </button>
         )}
-        <button
-          className={`local-nav-btn${confirmBeforePlay ? " active" : ""}`}
-          onClick={() => setShowSettings(true)}
-          title="ตั้งค่าในเกม"
-        >
-          ⚙️
-        </button>
+        <div className="local-settings-anchor">
+          <button
+            className={`local-nav-btn${showSettings ? " active" : ""}`}
+            onClick={() => setShowSettings((v) => !v)}
+            title="ตั้งค่าในเกม"
+            aria-haspopup="dialog"
+            aria-expanded={showSettings}
+          >
+            ⚙️
+          </button>
+          {showSettings && (
+            <>
+              <div
+                className="local-pop-backdrop"
+                onClick={() => setShowSettings(false)}
+              />
+              <div
+                className="local-settings-pop"
+                role="dialog"
+                aria-label="ตั้งค่าในเกม"
+              >
+                <div className="settings-row">
+                  <span className="settings-row-label">
+                    <b>ยืนยันก่อนเล่นการ์ด</b>
+                    <small>
+                      ถามยืนยันทุกครั้งก่อนเล่นการ์ด กันเผลอเล่นผิดใบ
+                    </small>
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={confirmBeforePlay}
+                    className={`settings-switch${confirmBeforePlay ? " on" : ""}`}
+                    onClick={toggleConfirmBeforePlay}
+                  >
+                    <span className="settings-switch-knob" />
+                  </button>
+                </div>
+                <div className="settings-row">
+                  <span className="settings-row-label">
+                    <b>เสียงแจ้งเตือน</b>
+                    <small>เล่นเสียงเมื่อถึงตาของคุณ</small>
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={soundOn}
+                    className={`settings-switch${soundOn ? " on" : ""}`}
+                    onClick={() => setSoundOn((v) => !v)}
+                  >
+                    <span className="settings-switch-knob" />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );
@@ -3126,11 +3205,11 @@ export default function Home() {
             {discardLimitMode && (
               <div className="local-discard-limit-bar">
                 <span>
-                  เลือก <b>{discardLimitSelected.length}</b> ใบ (ต้องทิ้งอีก{" "}
-                  {requiredDiscard} ใบ)
+                  เลือก <b>{discardLimitSelected.length}</b> ใบ (อย่างน้อย{" "}
+                  {requiredDiscard} ใบ — จะทิ้งมากกว่านี้ก็ได้)
                 </span>
                 <button
-                  disabled={discardLimitSelected.length === 0}
+                  disabled={discardLimitSelected.length < requiredDiscard}
                   onClick={() => setDiscardLimitConfirming(true)}
                 >
                   ทิ้งที่เลือก
@@ -5300,55 +5379,6 @@ export default function Home() {
             )}
           </div>
         )}
-        {showSettings && (
-          <div
-            className="modal-backdrop"
-            onClick={() => setShowSettings(false)}
-          >
-            <section
-              className="card-detail settings-menu"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                className="modal-close"
-                onClick={() => setShowSettings(false)}
-              >
-                ×
-              </button>
-              <h2>ตั้งค่าในเกม</h2>
-              <div className="settings-row">
-                <span className="settings-row-label">
-                  <b>ยืนยันก่อนเล่นการ์ด</b>
-                  <small>ถามยืนยันทุกครั้งก่อนเล่นการ์ด กันเผลอเล่นผิดใบ</small>
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={confirmBeforePlay}
-                  className={`settings-switch${confirmBeforePlay ? " on" : ""}`}
-                  onClick={toggleConfirmBeforePlay}
-                >
-                  <span className="settings-switch-knob" />
-                </button>
-              </div>
-              <div className="settings-row">
-                <span className="settings-row-label">
-                  <b>เสียงแจ้งเตือน</b>
-                  <small>เล่นเสียงเมื่อถึงตาของคุณ</small>
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={soundOn}
-                  className={`settings-switch${soundOn ? " on" : ""}`}
-                  onClick={() => setSoundOn((v) => !v)}
-                >
-                  <span className="settings-switch-knob" />
-                </button>
-              </div>
-            </section>
-          </div>
-        )}
         {pendingPlay &&
           (() => {
             const cid =
@@ -5465,6 +5495,26 @@ export default function Home() {
                 </button>
               </div>
             </section>
+          </div>
+        )}
+        {lightningStrike && (
+          <div className="local-lightning" aria-hidden="true">
+            <div className="local-lightning-flash" />
+            <svg
+              className="local-lightning-bolt"
+              viewBox="0 0 200 400"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <polyline points="112,0 78,148 122,158 66,286 104,292 52,400" />
+              <polyline
+                className="local-lightning-branch"
+                points="78,148 36,208"
+              />
+              <polyline
+                className="local-lightning-branch"
+                points="104,292 146,332"
+              />
+            </svg>
           </div>
         )}
         {judgmentBanner &&

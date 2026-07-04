@@ -278,7 +278,12 @@ const SKILL_EVENT_HANDLERS:Record<string,SkillEventHandler>={
   // กุยแก คำสั่งเสีย: on taking damage, gain 2 draws per point of damage (drawn manually).
   draw_on_damage:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive)return;const n=2*Math.max(1,event.amount||1);if(state.deck.length<n)reshuffleDiscardIntoDrawPile(state);const take=Math.min(n,state.deck.length);if(take<=0)return;const revealed=state.deck.splice(state.deck.length-take,take).reverse();const existing=state.pendingLegacy&&state.pendingLegacy.ownerId===ownerId?state.pendingLegacy.cards:[];state.pendingLegacy={ownerId,cards:[...existing,...revealed]};logAction(state,'skill-legacy',`${characterName(owner)} ใช้ คำสั่งเสีย เปิดไพ่ ${take} ใบ เพื่อมอบให้ผู้เล่น`,ownerId);}},
   // โจโฉ ไม่ยอมให้โลกทรยศ: on taking damage from a card, take that card into hand (instead of it being discarded).
-  gain_damage_card:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.card)return;const owner=getPlayerById(state,ownerId);if(!owner)return;owner.hand.push(event.card);if(state.lastPlayedCard===event.card)state.lastPlayedCard=undefined;logAction(state,'skill-gain-damage-card',`${characterName(owner)} ใช้ ไม่ยอมให้โลกทรยศ เก็บ ${event.card.name} เข้ามือ`,ownerId,undefined,event.card.id);}},
+  gain_damage_card:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.card)return;const owner=getPlayerById(state,ownerId);if(!owner)return;const card=event.card;owner.hand.push(card);
+    // ดึงการ์ดที่ทำร้ายออกจากกองทิ้ง (กรณีท้าสู้/สาวงามยุยง การ์ดถูกทิ้งไปแล้ว) ไม่ให้ซ้ำในมือและกองทิ้ง
+    const di=state.discard.lastIndexOf(card);if(di>=0){state.discard.splice(di,1);state.discardPile.splice(di,1);}
+    // อย่าให้กองทิ้งกลางโต๊ะว่างเปล่า — ให้โชว์ไพ่ใบที่ทิ้งก่อนหน้าแทน (ไม่ใช่ undefined)
+    if(state.lastPlayedCard===card)state.lastPlayedCard=state.discard.at(-1);
+    logAction(state,'skill-gain-damage-card',`${characterName(owner)} ใช้ ไม่ยอมให้โลกทรยศ เก็บ ${card.name} เข้ามือ`,ownerId,undefined,card.id);}},
   // สุมาอี้ กลยุทธ์โต้กลับ: on taking damage from someone, may take one of their cards (opens a pending decision).
   take_card_from_damager:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;if(damager.hand.length===0&&!Object.values(damager.equipment).some(Boolean))return;state.pendingFankui={playerId:ownerId,damagerId:event.actorId};logAction(state,'fankui-window',`${characterName(getPlayerById(state,ownerId)!)} อาจใช้ กลยุทธ์โต้กลับ หยิบไพ่จาก ${characterName(damager)}`,ownerId,event.actorId);}},
   // แฮหัวตุ้น ย้อนรอยศัตรู: on taking damage (and surviving), reveal a judgment; if it is not ♥, the damager must discard 2 or take 1 damage.
@@ -339,7 +344,7 @@ export function createTargetedCardAction(state:GameState,actorId:string,cardInst
 
 export function resolveTargetedCardAction(state:GameState,actionId:string){
   const action=state.currentAction;if(!action||action.actionId!==actionId)throw new Error('Targeted action is not active');
-  if(state.lastPlayedCard)moveToDiscard(state,state.lastPlayedCard);action.status='resolved';state.currentAction=null;return action;
+  if(state.lastPlayedCard&&!state.discard.includes(state.lastPlayedCard))moveToDiscard(state,state.lastPlayedCard);action.status='resolved';state.currentAction=null;return action; // กันทิ้งซ้ำ: ถ้าไพ่ที่เล่นล่าสุดอยู่ในกองทิ้งแล้ว (เช่น โจโฉ รีเซ็ต lastPlayed เป็นไพ่ในกองทิ้ง) ไม่ต้องทิ้งอีก
 }
 
 export const getDiscardRequirement=(state:GameState,playerId:string)=>{const player=getPlayerById(state,playerId);if(!player||player.hp===undefined)return 0;
@@ -752,7 +757,7 @@ export function useIncite(state:GameState,playerId:string,cardInstanceId:string,
   if(firstAttackerId===secondPlayerId)throw new Error('ต้องเลือกขุนพล 2 คนที่ต่างกัน');
   if(firstAttackerId===playerId||secondPlayerId===playerId)throw new Error('เลือกตัวเองไม่ได้');
   if(first.character?.gender!=='ชาย'||second.character?.gender!=='ชาย')throw new Error('เลือกได้เฉพาะขุนพลชาย');
-  player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,false);markSkillUsed(state,'incite');
+  player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,true);markSkillUsed(state,'incite'); // ตั้งเป็น lastPlayedCard เพื่อโชว์กลางโต๊ะ และเป็น "ไพ่ต้นเหตุ" ของการท้าสู้ (โจโฉ ไม่ยอมให้โลกทรยศ)
   const actionId=crypto.randomUUID();
   state.currentAction={actionId,actorId:secondPlayerId,card:toCardInstance(card),effectKey:'duel_attack_response',targetIds:[firstAttackerId],status:'declared',createdAt:new Date().toISOString()};
   state.responseWindow={windowId:crypto.randomUUID(),type:'duel_attack',sourceActionId:actionId,requiredPlayerIds:[firstAttackerId,secondPlayerId],currentResponderId:firstAttackerId,allowedResponseEffectKeys:['attack'],responses:[],status:'open',createdAt:new Date().toISOString()};
@@ -955,7 +960,7 @@ export function playAttackResponse(state:GameState,playerId:string,cardInstanceI
   window.duelResponderAttacks=0;window.currentResponderId=opponent;synchronizeGameState(state);
 }
 export function resolveDuel(state:GameState,failedPlayerId:string){
-  const action=state.currentAction,window=state.responseWindow;if(!action||!window||window.type!=='duel_attack'||window.currentResponderId!==failedPlayerId)throw new Error('Duel is not awaiting this player');const failed=getPlayerById(state,failedPlayerId),killerId=failedPlayerId===action.actorId?action.targetIds[0]:action.actorId;if(!failed)throw new Error('Duel participant is missing');window.status='resolved';state.responseWindow=null;applyDamage(state,failedPlayerId,1+(killerId?attackDamageBonus(state,killerId):0),killerId);resolveTargetedCardAction(state,action.actionId);synchronizeGameState(state);
+  const action=state.currentAction,window=state.responseWindow;if(!action||!window||window.type!=='duel_attack'||window.currentResponderId!==failedPlayerId)throw new Error('Duel is not awaiting this player');const failed=getPlayerById(state,failedPlayerId),killerId=failedPlayerId===action.actorId?action.targetIds[0]:action.actorId;if(!failed)throw new Error('Duel participant is missing');window.status='resolved';state.responseWindow=null;const sourceCard=state.lastPlayedCard; /* ไพ่ท้าสู้/สาวงามยุยง ที่ก่อความเสียหาย → โจโฉ ไม่ยอมให้โลกทรยศ เก็บเข้ามือ */ applyDamage(state,failedPlayerId,1+(killerId?attackDamageBonus(state,killerId):0),killerId,sourceCard);resolveTargetedCardAction(state,action.actionId);synchronizeGameState(state);
 }
 
 function massQueue(state:GameState,actorId:string){const alive=getAlivePlayersInSeatOrder(state),index=alive.findIndex(player=>player.id===actorId);return index<0?[]:[...alive.slice(index+1),...alive.slice(0,index)].map(player=>player.id);}
@@ -1430,10 +1435,10 @@ export function discardForHandLimit(state:GameState, playerId:string, cardIds:st
   if(state.phase!=='playing'||state.currentPlayerId!==playerId||state.pendingAction) throw new Error('You cannot discard now');
   if(!state.hasDrawnThisTurn) throw new Error('ต้องจั่วไพ่ก่อนทิ้งไพ่');
   const player=state.players.find(p=>p.id===playerId); if(!player||player.hp===undefined) throw new Error('Unknown player');
-  const required=Math.max(0,player.hand.length-player.hp), unique=[...new Set(cardIds)];
+  const required=getDiscardRequirement(state,playerId), unique=[...new Set(cardIds)];
   if(required===0) throw new Error('You do not need to discard cards');
-  if(unique.length!==required) throw new Error(`You must discard exactly ${required} card(s)`);
-  const selected=player.hand.filter(card=>unique.includes(card.id)); if(selected.length!==required) throw new Error('A selected card is not in your hand');
+  if(unique.length<required) throw new Error(`ต้องทิ้งอย่างน้อย ${required} ใบ`); // ทิ้งได้ตั้งแต่ขั้นต่ำจนถึงทั้งมือ (ตามที่ผู้เล่นต้องการ)
+  const selected=player.hand.filter(card=>unique.includes(card.id)); if(selected.length!==unique.length) throw new Error('A selected card is not in your hand');
   player.hand=player.hand.filter(card=>!unique.includes(card.id));state.discard.push(...selected);state.lastPlayedCard=selected.at(-1);
   state.log.push({id:crypto.randomUUID(),at:new Date().toISOString(),type:'hand-limit-discard',actorId:player.id,message:`${player.username} ทิ้งไพ่ ${selected.length} ใบเพื่อให้จำนวนไพ่บนมือไม่เกินพลังชีวิต`});
   synchronizeGameState(state);

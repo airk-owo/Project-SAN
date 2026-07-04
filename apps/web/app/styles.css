@@ -4572,6 +4572,171 @@ textarea,
   transform: translateX(22px);
 }
 
+/* --- Settings popover (anchored to the ⚙️ navbar button, not a center modal) --- */
+.local-settings-anchor {
+  position: relative;
+  display: inline-flex;
+}
+.local-pop-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: transparent;
+}
+.local-settings-pop {
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 0;
+  z-index: 151;
+  width: min(86vw, 320px);
+  padding: 4px 16px 10px;
+  text-align: left;
+  background: var(--card, #f8f2df);
+  border: 1px solid #c8b58a;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px #000a;
+  animation: settings-pop-in 0.14s ease-out;
+}
+/* caret pointing up toward the gear button */
+.local-settings-pop::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  background: var(--card, #f8f2df);
+  border-left: 1px solid #c8b58a;
+  border-top: 1px solid #c8b58a;
+  transform: rotate(45deg);
+}
+@keyframes settings-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- ฟ้าลงโทษ: dramatic full-screen lightning strike --- */
+.local-lightning {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.local-lightning-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 28%,
+    #f2f7ffee,
+    #a9c8ffb5 32%,
+    #4b6ea800 70%
+  );
+  animation: lightning-flash 1.6s ease-out forwards;
+}
+.local-lightning-bolt {
+  position: relative;
+  width: min(48vw, 280px);
+  height: min(90vh, 540px);
+  filter: drop-shadow(0 0 10px #d6e7ff) drop-shadow(0 0 28px #7fb0ff);
+  animation:
+    lightning-bolt 1.6s steps(1, end) forwards,
+    lightning-shake 0.5s ease-in-out 2;
+}
+.local-lightning-bolt polyline {
+  fill: none;
+  stroke: #f6faff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.local-lightning-bolt .local-lightning-branch {
+  stroke-width: 3;
+  opacity: 0.82;
+}
+@keyframes lightning-flash {
+  0% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0.14;
+  }
+  16% {
+    opacity: 0.92;
+  }
+  26% {
+    opacity: 0.1;
+  }
+  34% {
+    opacity: 0.62;
+  }
+  60% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes lightning-bolt {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.7);
+  }
+  4% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  12% {
+    opacity: 0.18;
+  }
+  18% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.28;
+  }
+  42% {
+    opacity: 0.95;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes lightning-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .local-lightning-bolt {
+    animation: lightning-bolt 1s steps(1, end) forwards;
+  }
+  .local-lightning-flash {
+    animation: lightning-flash 1s ease-out forwards;
+  }
+}
+
 /* --- Card Play Confirmation overlay --- */
 .play-confirm {
   max-width: min(92vw, 380px);
