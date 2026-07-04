@@ -79,6 +79,7 @@ const rooms=()=>[...games.values()].map(game=>({id:game.id,playerCount:game.play
 const requireUser=(socketId:string,userId?:string)=>{if(!userId)throw Error('Session not found');const mapped=connections.get(userId);if(mapped!==socketId)throw Error('Session is not active');return userId};
 app.get('/health',(_,res)=>res.json({ok:true}));app.get('/rooms',(_,res)=>res.json(rooms()));
 app.get('/cards',(_,res)=>res.json(cards)); // full card catalogue for the client-side encyclopedia
+app.get('/characters',(_,res)=>res.json(characters)); // full general/character catalogue for the encyclopedia
 
 io.on('connection',socket=>{
  socket.on('room:join',({gameId,username,userId})=>{try{const roomId=String(gameId||'').trim(),name=String(username||'').trim(),id=String(userId||'').trim();if(!roomId||!name||!id)throw Error('กรุณาระบุชื่อและชื่อห้อง');let game=games.get(roomId);connections.set(id,socket.id);socket.data.userId=id;socket.join(roomId);if(!game){game=createGame(roomId,{id,username:name},cards);games.set(roomId,game)}else{const existing=memberFor(game,id);if(existing){existing.connectionStatus='online';existing.lastSeenAt=now()}else{if(allMembers(game).some(member=>member.username.localeCompare(name,undefined,{sensitivity:'accent'})===0))throw Error('ชื่อนี้ถูกใช้ในห้องแล้ว กรุณาใช้ชื่ออื่น');game.spectators.push({id,username:name,connectionStatus:'online',joinedAt:now(),lastSeenAt:now()});if(game.phase!=='waiting')socket.emit('spectator:joined',{roomId})}}emitGame(game)}catch(error){socket.emit('game:error',(error as Error).message)}});

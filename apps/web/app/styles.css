@@ -4795,31 +4795,50 @@ textarea,
 .ency-search::placeholder {
   color: #f6efdd88;
 }
-.ency-filters {
-  flex: none;
+/* Two-column layout: filter sidebar + card grid */
+.ency-layout {
+  flex: 1 1 auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 16px 8px;
+  min-height: 0;
 }
-.ency-chip {
+.ency-sidebar {
+  flex: none;
+  width: 118px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px 10px 12px;
+  overflow-y: auto;
+}
+.ency-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
-  padding: 6px 14px;
-  border: 1px solid #e0ba6740;
-  border-radius: 999px;
-  background: #ffffff14;
+  padding: 9px 10px;
+  border: 1px solid #e0ba6733;
+  border-radius: 9px;
+  background: #ffffff10;
   color: #f6efdd;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  text-align: left;
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
-.ency-chip:hover {
-  background: #ffffff26;
+.ency-filter:hover {
+  background: #ffffff1f;
 }
-.ency-chip.active {
+.ency-filter.active {
   background: #e0ba67;
   border-color: #e0ba67;
   color: #241812;
   font-weight: 700;
+}
+.ency-filter-icon {
+  font-size: 1.05rem;
+  line-height: 1;
 }
 .ency-body {
   flex: 1 1 auto;
@@ -4832,82 +4851,72 @@ textarea,
   color: #f6efdd99;
 }
 .ency-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+  gap: 10px;
 }
 .ency-card {
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 4px;
   margin: 0;
-  padding: 8px;
+  padding: 8px 6px 10px;
   border: 1px solid #e0ba6733;
   border-radius: 10px;
   background: #ffffff10;
   color: #f6efdd;
-  text-align: left;
   cursor: pointer;
   transition:
+    transform 0.13s ease,
     background 0.15s ease,
     border-color 0.15s ease;
 }
 .ency-card:hover {
+  transform: translateY(-3px);
   background: #ffffff1f;
   border-color: #e0ba6799;
 }
 .ency-card-img {
-  flex: none;
-  width: 46px;
-  height: 64px;
+  width: 100%;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px #0006;
+  border-radius: 7px;
+  box-shadow: 0 3px 8px #0007;
 }
 .ency-card-noimg {
-  flex: none;
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 64px;
-  border-radius: 6px;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 7px;
   background: #ffffff14;
-  font-size: 1.6rem;
-}
-.ency-card-body {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  font-size: 1.8rem;
 }
 .ency-card-name {
   font-family: Baozi, BaiJamjuree, sans-serif;
-  font-size: 1.05rem;
+  font-size: 0.92rem;
+  line-height: 1.15;
+  text-align: center;
   color: #f5d994;
 }
 .ency-card-type {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  text-align: center;
   color: #e0ba67cc;
 }
-.ency-card-desc {
-  font-size: 0.8rem;
-  color: #f6efddbb;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
 .ency-card-count {
-  flex: none;
-  align-self: flex-start;
-  padding: 2px 8px;
-  border: 1px solid #e0ba6744;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 1;
+  padding: 1px 7px;
+  border: 1px solid #e0ba6766;
   border-radius: 999px;
-  background: #e0ba6722;
+  background: #2a1c12dd;
   color: #f5d994;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 /* In-drawer card detail (keeps stacking self-contained above the game board) */
@@ -4960,10 +4969,71 @@ textarea,
   color: #f6efdde0;
   line-height: 1.55;
 }
+/* General (character) skills inside the in-drawer detail */
+.ency-skills {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ency-skills li {
+  padding: 10px 12px;
+  border: 1px solid #e0ba6733;
+  border-left: 3px solid #e0ba67;
+  border-radius: 8px;
+  background: #ffffff0d;
+}
+.ency-skills b {
+  color: #f5d994;
+  font-size: 1.05rem;
+}
+.ency-skills p {
+  margin-top: 4px;
+  color: #f6efddd0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.ency-skills small {
+  display: block;
+  margin-top: 5px;
+  color: #c8b58a;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+/* Top-right nav entry point — gold "scroll" button, accessible at all times */
+.local-nav-ency {
+  background: linear-gradient(160deg, #f3d98a, #d8b44a);
+  border-color: #caa63c;
+}
+.local-nav-ency:hover {
+  border-color: #8b6b1f;
+}
+.local-nav-ency.active {
+  background: #d8b44a;
+  border-color: #8b6b1f;
+}
 /* --- Mobile: full-screen overlay + minimal handle + swipe-from-edge --- */
 @media (max-width: 760px) {
   .ency-tab {
     display: none;
+  }
+  /* Filters become a horizontal scroll strip above the grid */
+  .ency-layout {
+    flex-direction: column;
+  }
+  .ency-sidebar {
+    width: auto;
+    flex-direction: row;
+    gap: 6px;
+    padding: 0 12px 8px;
+    overflow-x: auto;
+  }
+  .ency-filter {
+    flex: none;
+    padding: 7px 12px;
   }
   .ency-handle {
     display: block;
