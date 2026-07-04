@@ -487,6 +487,30 @@ function OpponentPanel({
   );
 }
 
+/** True when the server's decision countdown is waiting on the viewer specifically
+ *  (dodge/heal/negate/duel/etc. or any pending decision the viewer must resolve). */
+function isViewerDecisionActive(game: Game | undefined): boolean {
+  if (!game || game.phase !== "playing" || !game.responseDeadline) return false;
+  const me = game.viewerId;
+  const rw = game.responseWindow;
+  return Boolean(
+    (rw?.status === "open" && rw.currentResponderId === me) ||
+      game.pendingJudgment?.playerId === me ||
+      game.pendingRepeatAttack?.attackerId === me ||
+      game.pendingDestroyMount?.attackerId === me ||
+      game.pendingForceAttackDamage?.attackerId === me ||
+      game.pendingReplaceDamage?.attackerId === me ||
+      game.pendingTwinSwords?.targetId === me ||
+      game.pendingFankui?.playerId === me ||
+      game.pendingLegacy?.ownerId === me ||
+      game.pendingRetaliateJudgment?.ownerId === me ||
+      game.pendingRetaliate?.damagerId === me ||
+      game.pendingPeek?.playerId === me ||
+      game.pendingDischord?.targetId === me ||
+      game.pendingAllyAssist?.allyId === me,
+  );
+}
+
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
   const [startCountdown, setStartCountdown] = useState<number | null>(null);
@@ -606,6 +630,64 @@ export default function Home() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
   const handRef = useRef<HTMLDivElement>(null);
+
+  // --- Audio cues on a shared AudioContext; every call site is gated by `soundOn`. ---
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const tone = (
+    freq: number,
+    start: number,
+    end: number,
+    vol = 0.14,
+    type: OscillatorType = "sine",
+  ) => {
+    try {
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
+      const ctx = audioCtxRef.current;
+      if (ctx.state === "suspended") ctx.resume().catch(() => {});
+      const osc = ctx.createOscillator(),
+        gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(
+        vol,
+        ctx.currentTime + start + 0.015,
+      );
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + end);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + start);
+      osc.stop(ctx.currentTime + end + 0.03);
+    } catch {}
+  };
+  const playDecisionAlert = () => {
+    tone(988, 0, 0.16, 0.17);
+    tone(1319, 0.15, 0.42, 0.15);
+  };
+  const playCountdownTick = (urgent: boolean) =>
+    tone(urgent ? 1650 : 1350, 0, urgent ? 0.13 : 0.07, 0.13, "square");
+
+  const myDecision = isViewerDecisionActive(game);
+  const prevDecisionRef = useRef(false);
+  const lastTickRef = useRef<number | null>(null);
+  // Initial alert: sound the moment a decision falls to the viewer.
+  useEffect(() => {
+    if (myDecision && !prevDecisionRef.current && soundOn) playDecisionAlert();
+    prevDecisionRef.current = myDecision;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myDecision, soundOn]);
+  // Urgent per-second ticking during the final 7 seconds of the viewer's decision.
+  useEffect(() => {
+    if (!myDecision || !game?.responseDeadline) {
+      lastTickRef.current = null;
+      return;
+    }
+    const secs = Math.max(0, Math.ceil((game.responseDeadline - nowTs) / 1000));
+    if (secs >= 1 && secs <= 7 && lastTickRef.current !== secs) {
+      lastTickRef.current = secs;
+      if (soundOn) playCountdownTick(secs <= 3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nowTs, myDecision, soundOn, game?.responseDeadline]);
 
   useEffect(() => {
     let id = localStorage.getItem("wtk-member-id");
@@ -1507,6 +1589,9 @@ export default function Home() {
         ⏳ {secondsLeft} วิ
       </span>
     ) : null;
+  // Feature 2: critical final-7-seconds state for the viewer's own decision.
+  const criticalCountdown =
+    myDecision && secondsLeft != null && secondsLeft <= 7 && secondsLeft >= 1;
 
   const encCategoryOf = (c: Card): "basic" | "trick" | "equip" =>
     c.cardType === "basic"
@@ -5105,6 +5190,15 @@ export default function Home() {
               </div>
             );
           })()}
+        {criticalCountdown && (
+          <>
+            <div className="local-critical-vignette" aria-hidden="true" />
+            <div className="local-critical-countdown" role="alert">
+              <span className="local-critical-label">⚠ ตัดสินใจด่วน!</span>
+              <span className="local-critical-num">{secondsLeft}</span>
+            </div>
+          </>
+        )}
         {turnBanner && (
           <div
             className="local-turn-banner"
