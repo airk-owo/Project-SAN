@@ -512,7 +512,7 @@ export default function Home() {
     "all" | "basic" | "trick" | "equip"
   >("all");
   const [encDetail, setEncDetail] = useState<Card | null>(null);
-  const [confirmBeforePlay, setConfirmBeforePlay] = useState(false);
+  const [confirmBeforePlay, setConfirmBeforePlay] = useState(true); // default ON — opt out via settings
   const [pendingPlay, setPendingPlay] = useState<{
     event: string;
     data?: Record<string, unknown>;
@@ -615,9 +615,11 @@ export default function Home() {
     }
     setUserId(id);
   }, []);
-  // Per-player Card Play Confirmation preference — persists across reloads/matches on this device.
+  // Per-player Card Play Confirmation preference — defaults ON; players opt out in settings.
+  // Persists across reloads/matches on this device (only an explicit "0" turns it off).
   useEffect(() => {
-    setConfirmBeforePlay(localStorage.getItem("wtk-confirm-play") === "1");
+    const stored = localStorage.getItem("wtk-confirm-play");
+    setConfirmBeforePlay(stored === null ? true : stored === "1");
   }, []);
   // Encyclopedia: lazy-load the full card catalogue the first time the drawer opens.
   useEffect(() => {
