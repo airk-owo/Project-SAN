@@ -101,6 +101,7 @@ type Turn = {
   phase: string;
   attackUsedThisTurn: number;
   drawnThisTurn?: number;
+  turnNumber?: number;
 };
 type RoleAliveCounts = {
   emperor: number;
@@ -512,6 +513,62 @@ function isViewerDecisionActive(game: Game | undefined): boolean {
       game.pendingAllyAssist?.allyId === me,
   );
 }
+/** True when it is the viewer's play phase and there is genuinely nothing to do:
+ *  no card is proactively playable AND no character/card ability can be activated
+ *  AND no forced discard/draw/decision is pending. Used to auto-end the turn.
+ *  Deliberately conservative — any doubt (e.g. holding a peach) keeps the turn open. */
+function canAutoEndTurn(game: Game | undefined): boolean {
+  if (!game || game.phase !== "playing") return false;
+  if (game.currentPlayerId !== game.viewerId) return false;
+  if (game.turn?.phase !== "play" || !game.hasDrawnThisTurn) return false;
+  if (game.responseWindow || game.pendingJudgment) return false;
+  if ((game.pendingDraws?.[game.viewerId] ?? 0) > 0) return false;
+  if (
+    game.pendingLegacy || game.pendingPeek || game.pendingDischord ||
+    game.pendingAllyAssist || game.pendingRetaliate || game.pendingRetaliateJudgment ||
+    game.pendingFankui || game.pendingCoerce || game.pendingTwinSwords ||
+    game.pendingForceAttackDamage || game.pendingReplaceDamage ||
+    game.pendingRepeatAttack || game.pendingDestroyMount || game.pendingHarvest
+  )
+    return false;
+  const me = game.players.find((p) => p.id === game.viewerId);
+  if (!me || me.hp === undefined) return false;
+  const keys = (me.character && game.characterSkillKeys?.[me.character.id]) || [];
+  const used = (k: string) => Boolean(game.skillsUsedThisTurn?.includes(k));
+  const attackedThisTurn = game.turn?.attackUsedThisTurn ?? 0;
+  const skipDiscard =
+    keys.includes("skip_discard_if_no_attack") && attackedThisTurn === 0;
+  if (!skipDiscard && me.hand.length - me.hp > 0) return false; // must discard = an action
+  const unlimited =
+    me.equipment.weapon?.effect === "unlimited_attack_per_turn" ||
+    keys.includes("unlimited_attack");
+  const canAttackMore = unlimited || attackedThisTurn < 1;
+  const isRed = (s: string) => s === "♥" || s === "♦";
+  const swap = keys.includes("attack_dodge_swap");
+  const redAsAttack = keys.includes("red_as_attack");
+  const playable = (c: Card): boolean => {
+    if (c.effect === "attack") return canAttackMore;
+    if (c.effect === "dodge")
+      return (swap || (redAsAttack && isRed(c.suit))) && canAttackMore;
+    return true; // tricks / equipment / heal etc. are always proactively playable
+  };
+  if (me.hand.some(playable)) return false;
+  const handN = me.hand.length;
+  const hasSuit = (suits: string[]) => me.hand.some((c) => suits.includes(c.suit));
+  const abilityUsable =
+    (me.equipment.weapon?.effect === "discard_two_as_attack" && canAttackMore) ||
+    (keys.includes("self_damage_draw") && me.hp > 0) ||
+    (keys.includes("discard_then_draw_equal") && !used("discard_then_draw_equal")) ||
+    (keys.includes("miracle_medicine") && !used("miracle_medicine") && handN > 0) ||
+    (keys.includes("marriage_heal") && !used("marriage_heal") && handN >= 2) ||
+    (keys.includes("benevolence_give") && handN > 0) ||
+    (keys.includes("black_as_dismantle") && hasSuit(["♠", "♣"])) ||
+    (keys.includes("diamond_as_indulgence") && hasSuit(["♦"])) ||
+    (keys.includes("dischord") && !used("dischord") && handN > 0) ||
+    (keys.includes("incite_duel") && !used("incite") && handN > 0) ||
+    (keys.includes("ask_shu_attack") && me.role === "emperor");
+  return !abilityUsable;
+}
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -630,6 +687,11 @@ export default function Home() {
   const turnBannerTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
+  const [autoEndBanner, setAutoEndBanner] = useState(false);
+  const autoEndBannerTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const autoEndedTurnRef = useRef<string | undefined>(undefined);
   const revealedRole = useRef<Role | undefined>(undefined);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
@@ -669,6 +731,11 @@ export default function Home() {
   };
   const playCountdownTick = (urgent: boolean) =>
     tone(urgent ? 1650 : 1350, 0, urgent ? 0.13 : 0.07, 0.13, "square");
+  // Gentle descending two-note when the turn auto-ends.
+  const playAutoEndChime = () => {
+    tone(587, 0, 0.16, 0.13);
+    tone(392, 0.15, 0.42, 0.12);
+  };
 
   const myDecision = isViewerDecisionActive(game);
   const prevDecisionRef = useRef(false);
@@ -692,6 +759,24 @@ export default function Home() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nowTs, myDecision, soundOn, game?.responseDeadline]);
+  // Auto-end the turn when the viewer has nothing left to do. Requires the
+  // condition to hold stable for a beat, then ends and shows a chime + banner.
+  useEffect(() => {
+    if (!canAutoEndTurn(game)) return;
+    const sig = `${game!.currentPlayerId}:${game!.turn?.turnNumber}`;
+    if (autoEndedTurnRef.current === sig) return;
+    const t = setTimeout(() => {
+      if (!canAutoEndTurn(game)) return; // re-check after the delay
+      autoEndedTurnRef.current = sig;
+      socket.emit("turn:end", { gameId: joinedRoom });
+      if (soundOn) playAutoEndChime();
+      setAutoEndBanner(true);
+      if (autoEndBannerTimer.current) clearTimeout(autoEndBannerTimer.current);
+      autoEndBannerTimer.current = setTimeout(() => setAutoEndBanner(false), 2600);
+    }, 750);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game, soundOn, joinedRoom]);
 
   useEffect(() => {
     let id = localStorage.getItem("wtk-member-id");
@@ -5346,6 +5431,12 @@ export default function Home() {
             <span className="local-turn-banner-icon">⚔</span>
             <b>ถึงตาคุณแล้ว!</b>
             <span className="local-turn-banner-sub">เริ่มเทิร์นของคุณ</span>
+          </div>
+        )}
+        {autoEndBanner && (
+          <div className="local-autoend-banner" role="status" aria-live="polite">
+            <span className="local-autoend-icon">⏭</span>
+            <span>จบเทิร์นอัตโนมัติ (ไม่มีการ์ด/ทักษะให้ใช้)</span>
           </div>
         )}
         {tableBanner && (

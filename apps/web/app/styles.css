@@ -5119,3 +5119,27 @@ textarea,
   color: #e0ba67cc;
   font-size: 0.85rem;
 }
+
+/* --- Auto-end-turn notification banner --- */
+.local-autoend-banner {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 23;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #241812f2;
+  border: 1px solid #c8b58a99;
+  border-radius: 12px;
+  box-shadow: 0 8px 26px #0009;
+  color: #f6efdd;
+  font-size: 0.95rem;
+  animation: local-judgment-pop 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.local-autoend-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
