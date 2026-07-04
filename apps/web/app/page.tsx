@@ -328,6 +328,42 @@ const KINGDOM_FACTION: Record<string, string> = {
   WU: "wu",
   QUN: "qun",
 };
+// Touch/no-hover device? Used to switch the drop-zone preview to two-step tap.
+const coarsePointer = () =>
+  typeof window !== "undefined" &&
+  !!window.matchMedia &&
+  window.matchMedia("(hover: none)").matches;
+/** A card rendered in the exact face style as the player's hand cards
+ *  (rank / art / name / type). Reused for the drop-zone previews. */
+function CardFace({
+  card,
+  className = "",
+  compact = false,
+}: {
+  card: Card;
+  className?: string;
+  compact?: boolean;
+}) {
+  return (
+    <article
+      className={`mock-card mock-card-suit-${suitColor(card.suit)} ${className}`}
+    >
+      <header>
+        <span className="mock-card-rank">
+          {card.number}
+          {suitTx(card.suit)}
+        </span>
+      </header>
+      {card.image ? (
+        <img className="mock-card-art" src={card.image} alt={card.name} />
+      ) : (
+        <div className="mock-card-art">WTK</div>
+      )}
+      <b className="mock-card-name">{card.name}</b>
+      {!compact && <small>{cardTypeLabel(card)}</small>}
+    </article>
+  );
+}
 
 function EquipmentDisplay({
   eq,
@@ -587,6 +623,11 @@ export default function Home() {
   const [showRole, setShowRole] = useState(false);
   const [detailCard, setDetailCard] = useState<Card>();
   const [showDropZone, setShowDropZone] = useState(false);
+  // Drop-zone inspection: the card whose large name tooltip is showing (hover on PC,
+  // first-tap on mobile). `key` is the unique grid key so a second tap opens details.
+  const [nameTip, setNameTip] = useState<{ key: string; name: string } | null>(
+    null,
+  );
   const [showSettings, setShowSettings] = useState(false);
   const [showEncyclopedia, setShowEncyclopedia] = useState(false);
   const [catalog, setCatalog] = useState<Card[] | null>(null);
@@ -2348,22 +2389,16 @@ export default function Home() {
                     disabled={!game.discard.length}
                     title="ดูไพ่ทั้งหมดในกองทิ้ง"
                   >
-                    <div
-                      key={topDiscard?.id || "empty"}
-                      className={`mock-discard${topDiscard ? " local-suit-" + suitColor(topDiscard.suit) + " local-card-played" : ""}`}
-                    >
-                      {topDiscard ? (
-                        <>
-                          {topDiscard.name}
-                          <br />
-                          <span>
-                            {topDiscard.number} {suitTx(topDiscard.suit)}
-                          </span>
-                        </>
-                      ) : (
-                        "—"
-                      )}
-                    </div>
+                    {topDiscard ? (
+                      <CardFace
+                        key={topDiscard.id}
+                        card={topDiscard}
+                        className="mock-card-pile local-card-played"
+                        compact
+                      />
+                    ) : (
+                      <div className="mock-discard mock-card-pile-empty">—</div>
+                    )}
                     <b>กองทิ้ง</b>
                     <small>
                       {game.discard.length} ใบ
@@ -5177,21 +5212,33 @@ export default function Home() {
         {showDropZone && (
           <div
             className="modal-backdrop"
-            onClick={() => setShowDropZone(false)}
+            onClick={() => {
+              setShowDropZone(false);
+              setNameTip(null);
+            }}
           >
             <section
               className="card-detail dropzone-panel"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setNameTip(null); // tap outside a card closes the name tooltip
+              }}
             >
               <button
                 className="modal-close"
-                onClick={() => setShowDropZone(false)}
+                onClick={() => {
+                  setShowDropZone(false);
+                  setNameTip(null);
+                }}
               >
                 ×
               </button>
               <h2>กองทิ้ง</h2>
               <p className="dropzone-count">
-                ไพ่ทั้งหมด {game.discard.length} ใบ · แตะไพ่เพื่อดูรายละเอียด
+                ไพ่ทั้งหมด {game.discard.length} ใบ ·{" "}
+                {coarsePointer()
+                  ? "แตะ 1 ครั้งดูชื่อ แตะซ้ำเปิดรายละเอียด"
+                  : "ชี้เพื่อดูชื่อ · คลิกดูรายละเอียด"}
               </p>
               {game.discard.length === 0 ? (
                 <p className="dropzone-empty">ยังไม่มีไพ่ในกองทิ้ง</p>
@@ -5200,26 +5247,57 @@ export default function Home() {
                   {game.discard
                     .map((card, i) => ({ card, i }))
                     .reverse()
-                    .map(({ card, i }) => (
-                      <button
-                        type="button"
-                        key={`${card.id}-${i}`}
-                        className={`dropzone-card local-suit-${suitColor(card.suit)}${i === game.discard.length - 1 ? " dropzone-card-top" : ""}`}
-                        onClick={() => setDetailCard(card)}
-                        title={card.name}
-                      >
-                        {i === game.discard.length - 1 && (
-                          <span className="dropzone-card-badge">ล่าสุด</span>
-                        )}
-                        <span className="dropzone-card-rank">
-                          {card.number} {suitTx(card.suit)}
-                        </span>
-                        <span className="dropzone-card-name">{card.name}</span>
-                      </button>
-                    ))}
+                    .map(({ card, i }) => {
+                      const key = `${card.id}-${i}`;
+                      const isTop = i === game.discard.length - 1;
+                      const openDetail = () => {
+                        setNameTip(null);
+                        setDetailCard(card);
+                      };
+                      return (
+                        <div
+                          key={key}
+                          role="button"
+                          tabIndex={0}
+                          className={`dropzone-card-wrap${isTop ? " dropzone-card-top" : ""}${nameTip?.key === key ? " tip-active" : ""}`}
+                          onMouseEnter={() => {
+                            if (!coarsePointer())
+                              setNameTip({ key, name: card.name });
+                          }}
+                          onMouseLeave={() =>
+                            setNameTip((t) => (t?.key === key ? null : t))
+                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Mobile: 1st tap shows the name, 2nd tap opens detail.
+                            if (coarsePointer() && nameTip?.key !== key) {
+                              setNameTip({ key, name: card.name });
+                              return;
+                            }
+                            openDetail();
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              openDetail();
+                            }
+                          }}
+                        >
+                          {isTop && (
+                            <span className="dropzone-card-badge">ล่าสุด</span>
+                          )}
+                          <CardFace card={card} />
+                        </div>
+                      );
+                    })}
                 </div>
               )}
             </section>
+            {nameTip && (
+              <div className="dz-name-tooltip" role="tooltip">
+                {nameTip.name}
+              </div>
+            )}
           </div>
         )}
         {showSettings && (

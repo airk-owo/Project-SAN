@@ -4365,67 +4365,77 @@ textarea,
   padding: 24px 0;
 }
 .dropzone-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-  gap: 10px;
-  max-height: min(58vh, 460px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  max-height: min(62vh, 500px);
   overflow-y: auto;
-  padding: 4px 2px;
+  padding: 10px 2px;
 }
-.dropzone-card {
+/* Each preview is a real hand-card face (CardFace = .mock-card). The wrapper is the
+   click/hover hit-area and anchors the "ล่าสุด" badge. */
+.dropzone-card-wrap {
   position: relative;
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  height: 104px;
-  padding: 10px 6px;
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  color: var(--danger);
+  flex: none;
   cursor: pointer;
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease;
+  border-radius: 11px;
+  transition: transform 0.12s ease;
 }
-.dropzone-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px #0004;
-  background: var(--card);
+.dropzone-card-wrap:hover,
+.dropzone-card-wrap.tip-active {
+  transform: translateY(-4px);
 }
-.dropzone-card.local-suit-red {
-  color: #c0392b;
+.dropzone-card-wrap .mock-card {
+  pointer-events: none; /* the wrapper handles clicks/hover */
 }
-.dropzone-card.local-suit-black {
-  color: #1a1a1a;
+.dropzone-card-wrap.tip-active .mock-card {
+  box-shadow:
+    0 0 0 3px #e0ba67,
+    3px 4px 0 #3e2f2233;
 }
-.dropzone-card-top {
+.dropzone-card-wrap.dropzone-card-top .mock-card {
   border-color: #e0ba67;
-  box-shadow: 0 0 0 2px #e0ba6755;
+  box-shadow:
+    0 0 0 2px #e0ba6755,
+    3px 4px 0 #3e2f2233;
 }
 .dropzone-card-badge {
   position: absolute;
-  top: -8px;
+  top: -9px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1px 8px;
+  z-index: 2;
+  padding: 1px 9px;
   background: #e0ba67;
   color: #241812;
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 700;
   border-radius: 999px;
   white-space: nowrap;
 }
-.dropzone-card-rank {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.dropzone-card-name {
+/* Large, clean name-only tooltip (PC hover / mobile first tap) */
+.dz-name-tooltip {
+  position: fixed;
+  top: 11%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  pointer-events: none;
+  max-width: 90vw;
+  padding: 14px 30px;
+  background: #1c130cf5;
+  border: 2px solid #e0ba67;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px #000a;
+  color: #f8f2df;
   font-family: Baozi, BaiJamjuree, sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.15;
-  color: #3e2f22;
-  word-break: break-word;
+  font-size: 1.9rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: local-judgment-pop 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
 
 /* --- Turn notification: prominent visual cue when it's the viewer's turn --- */
@@ -5142,4 +5152,30 @@ textarea,
 .local-autoend-icon {
   font-size: 1.3rem;
   line-height: 1;
+}
+
+/* --- Drop-zone top card on the board: same face as a hand card, scaled to the pile slot --- */
+.mock-card-pile {
+  width: 92px;
+  height: 132px;
+  padding: 6px;
+  box-shadow: 5px 5px 0 #160f0a;
+}
+.mock-card-pile .mock-card-rank {
+  font-size: 0.82rem;
+}
+.mock-card-pile .mock-card-art {
+  margin: 4px 0;
+  font-size: 1.05rem;
+}
+.mock-card-pile .mock-card-name {
+  font-size: 0.72rem;
+  line-height: 1.05;
+}
+.mock-card-pile.local-card-played {
+  animation: local-card-drop 0.42s cubic-bezier(0.2, 0.8, 0.3, 1.25);
+}
+.mock-card-pile-empty {
+  width: 92px;
+  height: 132px;
 }
