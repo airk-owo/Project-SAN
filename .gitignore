@@ -3,5 +3,7 @@ node_modules/
 dist/
 .env*
 
-# Graphify machine-local cache (graph.json / reports are committed)
+# Graphify machine-local cache/state (graph.json / reports are committed)
 graphify-out/cache/
+graphify-out/.graphify_root
+graphify-out/.graphify_python

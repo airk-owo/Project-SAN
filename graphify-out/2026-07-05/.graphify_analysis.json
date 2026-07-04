@@ -734,8 +734,8 @@
     ],
     "32": [
       "source_image_bg_img",
-      "source_\u0e44\u0e1e\u0e48_doc",
-      "source_\u0e44\u0e1e\u0e48\u0e2b\u0e25\u0e1a\u0e42\u0e08\u0e21\u0e15\u0e35\u0e40\u0e2a\u0e1a\u0e35\u0e22\u0e07_doc"
+      "source_ไพ่_doc",
+      "source_ไพ่หลบโจมตีเสบียง_doc"
     ],
     "33": [
       "apps_web_app_layout",
@@ -913,8 +913,41 @@
       "why": "connects across different repos/directories; peripheral node `publicState` unexpectedly reaches hub `emitGame()`"
     }
   ],
-  "tokens": {
-    "input": 1031,
-    "output": 720
-  }
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `card()` connect `page.tsx` to `page.tsx`?",
+      "why": "High betweenness centrality (0.077) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Home()` connect `page.tsx` to `page.tsx`?",
+      "why": "High betweenness centrality (0.076) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `createSeatedPlayer()` connect `createSeatedPlayer` to `index.ts`, `index.ts`, `basic-combat.scenarios.ts`, `page.tsx`, `beginPlayAfterCharacters`, `dealRoles`, `createGame`, `negate.test.ts`, `trick-negate.test.ts`, `coerce.test.ts`, `delayed-tricks.test.ts`, `snake-spear.test.ts`, `duel.test.ts`, `multi-attack.test.ts`, `twin-swords.test.ts`, `GameState`?",
+      "why": "High betweenness centrality (0.028) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `name`, `private`, `type` to the rest of the system?",
+      "why": "218 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `index.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07966400216772795 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `index.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.028169014084507043 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `basic-combat.scenarios.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.14974937343358397 - nodes in this community are weakly interconnected."
+    }
+  ]
 }
