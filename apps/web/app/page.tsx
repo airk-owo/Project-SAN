@@ -505,6 +505,13 @@ export default function Home() {
   const [detailCard, setDetailCard] = useState<Card>();
   const [showDropZone, setShowDropZone] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showEncyclopedia, setShowEncyclopedia] = useState(false);
+  const [catalog, setCatalog] = useState<Card[] | null>(null);
+  const [encSearch, setEncSearch] = useState("");
+  const [encCategory, setEncCategory] = useState<
+    "all" | "basic" | "trick" | "equip"
+  >("all");
+  const [encDetail, setEncDetail] = useState<Card | null>(null);
   const [confirmBeforePlay, setConfirmBeforePlay] = useState(false);
   const [pendingPlay, setPendingPlay] = useState<{
     event: string;
@@ -612,6 +619,52 @@ export default function Home() {
   useEffect(() => {
     setConfirmBeforePlay(localStorage.getItem("wtk-confirm-play") === "1");
   }, []);
+  // Encyclopedia: lazy-load the full card catalogue the first time the drawer opens.
+  useEffect(() => {
+    if (!showEncyclopedia || catalog) return;
+    fetch(
+      `${process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001"}/cards`,
+    )
+      .then((r) => r.json())
+      .then((c: Card[]) => setCatalog(Array.isArray(c) ? c : []))
+      .catch(() => setCatalog([]));
+  }, [showEncyclopedia, catalog]);
+  // Encyclopedia: "swipe from the left edge" opens the drawer on touch devices
+  // (mobile has no visible edge tab so it doesn't cover the left-side seats).
+  useEffect(() => {
+    if (showEncyclopedia) return;
+    let startX = 0,
+      startY = 0,
+      tracking = false;
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t && t.clientX <= 26) {
+        tracking = true;
+        startX = t.clientX;
+        startY = t.clientY;
+      }
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!tracking) return;
+      const t = e.touches[0];
+      if (!t) return;
+      if (t.clientX - startX > 55 && Math.abs(t.clientY - startY) < 45) {
+        tracking = false;
+        setShowEncyclopedia(true);
+      }
+    };
+    const onEnd = () => {
+      tracking = false;
+    };
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+    };
+  }, [showEncyclopedia]);
   useEffect(() => {
     const onState = (v: Game) => {
       setGame(v);
@@ -1453,9 +1506,189 @@ export default function Home() {
       </span>
     ) : null;
 
+  const encCategoryOf = (c: Card): "basic" | "trick" | "equip" =>
+    c.cardType === "basic"
+      ? "basic"
+      : c.cardType === "instant_trick" || c.cardType === "delayed_trick"
+        ? "trick"
+        : "equip";
+  const encyclopediaDrawer = isPlaying ? (
+    <>
+      {/* Desktop: slim gold sliding tab on the left edge */}
+      <button
+        className={`ency-tab${showEncyclopedia ? " away" : ""}`}
+        onClick={() => setShowEncyclopedia(true)}
+        title="คลังการ์ด / สารานุกรม"
+        aria-label="เปิดคลังการ์ด"
+      >
+        <span className="ency-tab-icon">📖</span>
+        <span className="ency-tab-text">คลังการ์ด</span>
+      </button>
+      {/* Mobile: minimal handle (swipe from the left edge also works) */}
+      <button
+        className={`ency-handle${showEncyclopedia ? " away" : ""}`}
+        onClick={() => setShowEncyclopedia(true)}
+        aria-label="เปิดคลังการ์ด (ปัดจากขอบซ้าย)"
+      />
+      {/* Desktop backdrop — dims the board behind the 40–50% panel */}
+      <div
+        className={`ency-backdrop${showEncyclopedia ? " open" : ""}`}
+        onClick={() => setShowEncyclopedia(false)}
+      />
+      <aside
+        className={`ency-panel${showEncyclopedia ? " open" : ""}`}
+        aria-hidden={!showEncyclopedia}
+      >
+        <header className="ency-header">
+          <h2>📖 คลังการ์ด</h2>
+          <button
+            className="ency-close"
+            onClick={() => setShowEncyclopedia(false)}
+            aria-label="ปิด"
+          >
+            ×
+          </button>
+        </header>
+        {encDetail ? (
+          (() => {
+            const info = cardInfo(encDetail);
+            return (
+              <div className="ency-detail">
+                <button
+                  className="ency-back"
+                  onClick={() => setEncDetail(null)}
+                >
+                  ← กลับไปที่รายการ
+                </button>
+                <span
+                  className={`card-rank mock-card-suit-${suitColor(encDetail.suit)}`}
+                >
+                  {encDetail.number} {suitTx(encDetail.suit)}
+                </span>
+                <h3>{encDetail.name}</h3>
+                {encDetail.image && (
+                  <img
+                    className="ency-detail-art"
+                    src={encDetail.image}
+                    alt={encDetail.name}
+                    loading="lazy"
+                  />
+                )}
+                <p className="ency-detail-type">
+                  <b>ประเภท:</b> {cardTypeLabel(encDetail)}
+                </p>
+                {(encDetail.cardType === "weapon" ||
+                  encDetail.equipmentSlot === "weapon") &&
+                encDetail.effectParams?.range ? (
+                  <p className="card-detail-range">
+                    🎯 ระยะโจมตี {encDetail.effectParams.range}
+                  </p>
+                ) : null}
+                <p>{info?.desc || encDetail.description || "ยังไม่มีคำอธิบาย"}</p>
+                {info?.use && (
+                  <p className="card-detail-use">
+                    <b>เมื่อไหร่:</b> {info.use}
+                  </p>
+                )}
+              </div>
+            );
+          })()
+        ) : (
+          <>
+            <input
+              className="ency-search"
+              value={encSearch}
+              onChange={(e) => setEncSearch(e.target.value)}
+              placeholder="🔍 ค้นหาชื่อการ์ด…"
+            />
+            <div className="ency-filters">
+              {(
+                [
+                  ["all", "ทั้งหมด"],
+                  ["basic", "พื้นฐาน"],
+                  ["trick", "อุบาย"],
+                  ["equip", "อุปกรณ์"],
+                ] as const
+              ).map(([key, label]) => (
+                <button
+                  key={key}
+                  className={`ency-chip${encCategory === key ? " active" : ""}`}
+                  onClick={() => setEncCategory(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="ency-body">
+              {!catalog ? (
+                <p className="ency-empty">กำลังโหลดคลังการ์ด…</p>
+              ) : (
+                (() => {
+                  const byName = new Map<
+                    string,
+                    { card: Card; count: number }
+                  >();
+                  for (const c of catalog) {
+                    const e = byName.get(c.name);
+                    if (e) e.count++;
+                    else byName.set(c.name, { card: c, count: 1 });
+                  }
+                  const q = encSearch.trim().toLowerCase();
+                  const items = [...byName.values()].filter(
+                    ({ card }) =>
+                      (encCategory === "all" ||
+                        encCategoryOf(card) === encCategory) &&
+                      (!q ||
+                        card.name.toLowerCase().includes(q) ||
+                        (card.description || "").toLowerCase().includes(q)),
+                  );
+                  if (!items.length)
+                    return <p className="ency-empty">ไม่พบการ์ด</p>;
+                  return (
+                    <div className="ency-grid">
+                      {items.map(({ card, count }) => (
+                        <button
+                          key={card.name}
+                          className="ency-card"
+                          onClick={() => setEncDetail(card)}
+                        >
+                          {card.image ? (
+                            <img
+                              className="ency-card-img"
+                              src={card.image}
+                              alt={card.name}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <span className="ency-card-noimg">🎴</span>
+                          )}
+                          <span className="ency-card-body">
+                            <b className="ency-card-name">{card.name}</b>
+                            <span className="ency-card-type">
+                              {cardTypeLabel(card)}
+                            </span>
+                            <span className="ency-card-desc">
+                              {cardInfo(card)?.desc || card.description}
+                            </span>
+                          </span>
+                          <span className="ency-card-count">×{count}</span>
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })()
+              )}
+            </div>
+          </>
+        )}
+      </aside>
+    </>
+  ) : null;
+
   return (
     <>
       {navbar}
+      {encyclopediaDrawer}
       <main
         className={
           isPlaying
