@@ -128,7 +128,7 @@ type Game = {
   spectators: Member[];
   roleDefinitions?: RoleDefinition[];
   deck: { length: number };
-  discard: { length: number };
+  discard: Card[];
   log: { id: string; message: string; at: string }[];
   turn: Turn | null;
   responseWindow: ResponseWindow | null;
@@ -491,6 +491,7 @@ export default function Home() {
   const [error, setError] = useState<string>();
   const [showRole, setShowRole] = useState(false);
   const [detailCard, setDetailCard] = useState<Card>();
+  const [showDropZone, setShowDropZone] = useState(false);
   const [skillsCharacter, setSkillsCharacter] = useState<Character>();
   const [logChatTab, setLogChatTab] = useState<"log" | "chat">("log");
   const [soundOn, setSoundOn] = useState(true);
@@ -572,6 +573,10 @@ export default function Home() {
     undefined,
   );
   const lastTurn = useRef<string | undefined>(undefined);
+  const [turnBanner, setTurnBanner] = useState(false);
+  const turnBannerTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   const revealedRole = useRef<Role | undefined>(undefined);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
@@ -623,28 +628,41 @@ export default function Home() {
       socket.off("connect", reconnect);
     };
   }, [joinedRoom, userId, name]);
+  // When it becomes the viewer's turn: flash a visual banner (always) and play a chime (if sound is on).
   useEffect(() => {
     const turn = game?.currentPlayerId;
-    if (
-      soundOn &&
-      turn &&
-      turn === game?.viewerId &&
-      lastTurn.current !== turn
-    ) {
-      try {
-        const ctx = new AudioContext(),
-          osc = ctx.createOscillator(),
-          gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(660, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.16);
-        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.24);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.25);
-      } catch {}
+    const newlyMyTurn =
+      !!turn && turn === game?.viewerId && lastTurn.current !== turn;
+    if (newlyMyTurn) {
+      setTurnBanner(true);
+      if (turnBannerTimer.current) clearTimeout(turnBannerTimer.current);
+      turnBannerTimer.current = setTimeout(() => setTurnBanner(false), 2800);
+      if (soundOn) {
+        try {
+          const ctx = new AudioContext();
+          // Two-tone rising "ding-ding" so the turn cue is unmistakable.
+          const chime = (freq: number, start: number, end: number) => {
+            const osc = ctx.createOscillator(),
+              gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+            gain.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+            gain.gain.exponentialRampToValueAtTime(
+              0.16,
+              ctx.currentTime + start + 0.02,
+            );
+            gain.gain.exponentialRampToValueAtTime(
+              0.0001,
+              ctx.currentTime + end,
+            );
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(ctx.currentTime + start);
+            osc.stop(ctx.currentTime + end + 0.02);
+          };
+          chime(660, 0, 0.22);
+          chime(988, 0.16, 0.5);
+        } catch {}
+      }
     }
     lastTurn.current = turn;
   }, [game?.currentPlayerId, game?.viewerId, soundOn]);
@@ -1731,7 +1749,15 @@ export default function Home() {
                     <b>กองจั่ว</b>
                     <small>{game.deck.length} ใบ</small>
                   </button>
-                  <article className="mock-pile">
+                  <button
+                    type="button"
+                    className="mock-pile mock-pile-btn"
+                    onClick={() =>
+                      game.discard.length && setShowDropZone(true)
+                    }
+                    disabled={!game.discard.length}
+                    title="ดูไพ่ทั้งหมดในกองทิ้ง"
+                  >
                     <div
                       key={topDiscard?.id || "empty"}
                       className={`mock-discard${topDiscard ? " local-suit-" + suitColor(topDiscard.suit) + " local-card-played" : ""}`}
@@ -1749,8 +1775,11 @@ export default function Home() {
                       )}
                     </div>
                     <b>กองทิ้ง</b>
-                    <small>{game.discard.length} ใบ</small>
-                  </article>
+                    <small>
+                      {game.discard.length} ใบ
+                      {game.discard.length > 0 ? " 🔍" : ""}
+                    </small>
+                  </button>
                 </section>
                 <p className="local-action-empty">
                   {isDrawPhase
@@ -4507,7 +4536,7 @@ export default function Home() {
             const info = cardInfo(detailCard);
             return (
               <div
-                className="modal-backdrop"
+                className="modal-backdrop modal-top"
                 onClick={() => setDetailCard(undefined)}
               >
                 <section
@@ -4555,6 +4584,54 @@ export default function Home() {
               </div>
             );
           })()}
+        {showDropZone && (
+          <div
+            className="modal-backdrop"
+            onClick={() => setShowDropZone(false)}
+          >
+            <section
+              className="card-detail dropzone-panel"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="modal-close"
+                onClick={() => setShowDropZone(false)}
+              >
+                ×
+              </button>
+              <h2>กองทิ้ง</h2>
+              <p className="dropzone-count">
+                ไพ่ทั้งหมด {game.discard.length} ใบ · แตะไพ่เพื่อดูรายละเอียด
+              </p>
+              {game.discard.length === 0 ? (
+                <p className="dropzone-empty">ยังไม่มีไพ่ในกองทิ้ง</p>
+              ) : (
+                <div className="dropzone-grid">
+                  {game.discard
+                    .map((card, i) => ({ card, i }))
+                    .reverse()
+                    .map(({ card, i }) => (
+                      <button
+                        type="button"
+                        key={`${card.id}-${i}`}
+                        className={`dropzone-card local-suit-${suitColor(card.suit)}${i === game.discard.length - 1 ? " dropzone-card-top" : ""}`}
+                        onClick={() => setDetailCard(card)}
+                        title={card.name}
+                      >
+                        {i === game.discard.length - 1 && (
+                          <span className="dropzone-card-badge">ล่าสุด</span>
+                        )}
+                        <span className="dropzone-card-rank">
+                          {card.number} {suitTx(card.suit)}
+                        </span>
+                        <span className="dropzone-card-name">{card.name}</span>
+                      </button>
+                    ))}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
         {equipConfirmCard && (
           <div
             className="modal-backdrop"
@@ -4641,6 +4718,18 @@ export default function Home() {
               </div>
             );
           })()}
+        {turnBanner && (
+          <div
+            className="local-turn-banner"
+            role="status"
+            aria-live="assertive"
+            onClick={() => setTurnBanner(false)}
+          >
+            <span className="local-turn-banner-icon">⚔</span>
+            <b>ถึงตาคุณแล้ว!</b>
+            <span className="local-turn-banner-sub">เริ่มเทิร์นของคุณ</span>
+          </div>
+        )}
         {tableBanner && (
           <div className="local-table-flash" role="status">
             <span className="local-table-flash-icon">{tableBanner.icon}</span>
