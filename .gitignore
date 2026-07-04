@@ -2,6 +2,7 @@ node_modules/
 .next/
 dist/
 .env*
+*.tsbuildinfo
 
 # Graphify machine-local cache/state (graph.json / reports are committed)
 graphify-out/cache/
