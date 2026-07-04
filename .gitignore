@@ -2,3 +2,6 @@ node_modules/
 .next/
 dist/
 .env*
+
+# Graphify machine-local cache (graph.json / reports are committed)
+graphify-out/cache/

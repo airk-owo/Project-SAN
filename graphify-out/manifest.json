@@ -1,0 +1,267 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1783201630.4579294,
+    "ast_hash": "598cb075410bcd95220ac90bbb60344a",
+    "semantic_hash": "598cb075410bcd95220ac90bbb60344a"
+  },
+  "apps/server/package.json": {
+    "mtime": 1783022706.4820082,
+    "ast_hash": "91f6d78ac0a1aa3057c9f322c8c5e23e",
+    "semantic_hash": "91f6d78ac0a1aa3057c9f322c8c5e23e"
+  },
+  "apps/server/src/index.ts": {
+    "mtime": 1783188336.4468813,
+    "ast_hash": "aaa81fbf1720b30addcf2536d11f8ff1",
+    "semantic_hash": "aaa81fbf1720b30addcf2536d11f8ff1"
+  },
+  "apps/server/tsconfig.json": {
+    "mtime": 1781894222.970209,
+    "ast_hash": "35a989a27678e0937c168dd6c442a5fa",
+    "semantic_hash": "35a989a27678e0937c168dd6c442a5fa"
+  },
+  "apps/web/app/game/local/page.tsx": {
+    "mtime": 1783078488.9459572,
+    "ast_hash": "f8cfac30f369f4901ac82bfd45884099",
+    "semantic_hash": "f8cfac30f369f4901ac82bfd45884099"
+  },
+  "apps/web/app/game/mock/page.tsx": {
+    "mtime": 1783200910.799652,
+    "ast_hash": "c6dc1476df0a34be64ec220ced2e49a8",
+    "semantic_hash": "c6dc1476df0a34be64ec220ced2e49a8"
+  },
+  "apps/web/app/layout.tsx": {
+    "mtime": 1781894229.100533,
+    "ast_hash": "96caeeaea0f7b6154530f4cff087254b",
+    "semantic_hash": "96caeeaea0f7b6154530f4cff087254b"
+  },
+  "apps/web/app/login/page.tsx": {
+    "mtime": 1781894363.829626,
+    "ast_hash": "69ecf8ba488dd35ce1e822fee5c40849",
+    "semantic_hash": "69ecf8ba488dd35ce1e822fee5c40849"
+  },
+  "apps/web/app/page.tsx": {
+    "mtime": 1783200958.5415697,
+    "ast_hash": "638b1305afcdd0fdd30ba609b09f7e11",
+    "semantic_hash": "638b1305afcdd0fdd30ba609b09f7e11"
+  },
+  "apps/web/components/LobbyTable.tsx": {
+    "mtime": 1782915944.7687871,
+    "ast_hash": "2697adf8843e61c06efd536710d88067",
+    "semantic_hash": "2697adf8843e61c06efd536710d88067"
+  },
+  "apps/web/components/ReadyPanel.tsx": {
+    "mtime": 1781991559.208907,
+    "ast_hash": "89b6f5c00f38f82ba4158c930920a339",
+    "semantic_hash": "89b6f5c00f38f82ba4158c930920a339"
+  },
+  "apps/web/components/SeatButton.tsx": {
+    "mtime": 1781991669.8439577,
+    "ast_hash": "bcdce17414aab0109882a4a706656757",
+    "semantic_hash": "bcdce17414aab0109882a4a706656757"
+  },
+  "apps/web/components/SpectatorList.tsx": {
+    "mtime": 1781991560.081874,
+    "ast_hash": "866ad2f46f4219c76930114e0e978470",
+    "semantic_hash": "866ad2f46f4219c76930114e0e978470"
+  },
+  "apps/web/lib/supabase.ts": {
+    "mtime": 1781894349.9290185,
+    "ast_hash": "f793c3b3bf8f64a4cc9cce992e5369dd",
+    "semantic_hash": "f793c3b3bf8f64a4cc9cce992e5369dd"
+  },
+  "apps/web/lib/tableRotation.ts": {
+    "mtime": 1781991556.790329,
+    "ast_hash": "6a6fed91357bac06312d26a326594660",
+    "semantic_hash": "6a6fed91357bac06312d26a326594660"
+  },
+  "apps/web/next-env.d.ts": {
+    "mtime": 1781910383.2745929,
+    "ast_hash": "90426577ad8f38459f3e566411c85589",
+    "semantic_hash": "90426577ad8f38459f3e566411c85589"
+  },
+  "apps/web/next.config.mjs": {
+    "mtime": 1783023453.4908016,
+    "ast_hash": "592c9f8bafa387f1210bd3ebc8ff7456",
+    "semantic_hash": "592c9f8bafa387f1210bd3ebc8ff7456"
+  },
+  "apps/web/package.json": {
+    "mtime": 1783022722.8623352,
+    "ast_hash": "09b33e11ce6faf0ad8613ab3b7e8181b",
+    "semantic_hash": "09b33e11ce6faf0ad8613ab3b7e8181b"
+  },
+  "apps/web/postcss.config.mjs": {
+    "mtime": 1781894347.5608287,
+    "ast_hash": "222a79a9879c7cd4d9980533b7639465",
+    "semantic_hash": "222a79a9879c7cd4d9980533b7639465"
+  },
+  "apps/web/tailwind.config.ts": {
+    "mtime": 1781894348.423026,
+    "ast_hash": "2f0a033d70aa6969abed96ba8d32f309",
+    "semantic_hash": "2f0a033d70aa6969abed96ba8d32f309"
+  },
+  "apps/web/tsconfig.json": {
+    "mtime": 1781910383.2735925,
+    "ast_hash": "33bfd5384630d8185097bdff5a961ad6",
+    "semantic_hash": "33bfd5384630d8185097bdff5a961ad6"
+  },
+  "data/characters.json": {
+    "mtime": 1781894215.3395052,
+    "ast_hash": "58e0494c51d30eb3494f7c9198986bb9",
+    "semantic_hash": "58e0494c51d30eb3494f7c9198986bb9"
+  },
+  "data/generated/cards.json": {
+    "mtime": 1783188133.2703915,
+    "ast_hash": "47387ef7798574c9a66a79542816989f",
+    "semantic_hash": "47387ef7798574c9a66a79542816989f"
+  },
+  "data/generated/characters.json": {
+    "mtime": 1783188133.2703915,
+    "ast_hash": "947f28afd7242246d7d5f1448cc5d3b0",
+    "semantic_hash": "947f28afd7242246d7d5f1448cc5d3b0"
+  },
+  "data/generated/manual.json": {
+    "mtime": 1781988022.3077266,
+    "ast_hash": "f082d7723dabd4aab41c42fb9fc7b48b",
+    "semantic_hash": "f082d7723dabd4aab41c42fb9fc7b48b"
+  },
+  "data/generated/rules.json": {
+    "mtime": 1783188133.2703915,
+    "ast_hash": "c8546b11c12f17c201d1dc6a203863b3",
+    "semantic_hash": "c8546b11c12f17c201d1dc6a203863b3"
+  },
+  "data/rules.json": {
+    "mtime": 1781894216.261258,
+    "ast_hash": "0221134f3c0203de1d1e2bc286352a34",
+    "semantic_hash": "0221134f3c0203de1d1e2bc286352a34"
+  },
+  "package.json": {
+    "mtime": 1781909781.572393,
+    "ast_hash": "9905667b4ab2d86c94ad0632dcebe9ee",
+    "semantic_hash": "9905667b4ab2d86c94ad0632dcebe9ee"
+  },
+  "packages/game/package.json": {
+    "mtime": 1782959706.178002,
+    "ast_hash": "e380394c29762d8d66abd6ec5c3cb490",
+    "semantic_hash": "e380394c29762d8d66abd6ec5c3cb490"
+  },
+  "packages/game/src/basic-combat.scenarios.ts": {
+    "mtime": 1782076437.3863592,
+    "ast_hash": "0201b9dfea2c191846984d2b7b4e0b43",
+    "semantic_hash": "0201b9dfea2c191846984d2b7b4e0b43"
+  },
+  "packages/game/src/character-skills.test.ts": {
+    "mtime": 1783121831.5086217,
+    "ast_hash": "fe14a4556d52f2f4696917889485650c",
+    "semantic_hash": "fe14a4556d52f2f4696917889485650c"
+  },
+  "packages/game/src/coerce.test.ts": {
+    "mtime": 1782929340.3096035,
+    "ast_hash": "d11a8d0aa473527288bbb81b13c17185",
+    "semantic_hash": "d11a8d0aa473527288bbb81b13c17185"
+  },
+  "packages/game/src/delayed-tricks.test.ts": {
+    "mtime": 1783016355.3580313,
+    "ast_hash": "e9b69a5d1e7caac9a22136cb8238a657",
+    "semantic_hash": "e9b69a5d1e7caac9a22136cb8238a657"
+  },
+  "packages/game/src/duel.test.ts": {
+    "mtime": 1782959697.839594,
+    "ast_hash": "86400091d2a9a80e7812c4a41453b4ef",
+    "semantic_hash": "86400091d2a9a80e7812c4a41453b4ef"
+  },
+  "packages/game/src/harvest.test.ts": {
+    "mtime": 1782929361.7968688,
+    "ast_hash": "f4c322d8aac628b28c687baf4d9e1049",
+    "semantic_hash": "f4c322d8aac628b28c687baf4d9e1049"
+  },
+  "packages/game/src/ice-sword.test.ts": {
+    "mtime": 1782920174.0949812,
+    "ast_hash": "1e2da19bc6e1cb1dd28a3b62016a0ea2",
+    "semantic_hash": "1e2da19bc6e1cb1dd28a3b62016a0ea2"
+  },
+  "packages/game/src/index.ts": {
+    "mtime": 1783200910.803652,
+    "ast_hash": "69cf4b832fc1be1074321f2f98ee710c",
+    "semantic_hash": "69cf4b832fc1be1074321f2f98ee710c"
+  },
+  "packages/game/src/multi-attack.test.ts": {
+    "mtime": 1782927233.737032,
+    "ast_hash": "7583821b9c013aa6b7855bb7865dfc48",
+    "semantic_hash": "7583821b9c013aa6b7855bb7865dfc48"
+  },
+  "packages/game/src/negate.test.ts": {
+    "mtime": 1782932200.8157134,
+    "ast_hash": "40812522f6322e9fc5160ca45c1e3869",
+    "semantic_hash": "40812522f6322e9fc5160ca45c1e3869"
+  },
+  "packages/game/src/pending-draws.test.ts": {
+    "mtime": 1782932241.7324462,
+    "ast_hash": "15e120b97922e99f50f44ce715e7c218",
+    "semantic_hash": "15e120b97922e99f50f44ce715e7c218"
+  },
+  "packages/game/src/reconnect.test.ts": {
+    "mtime": 1782851887.3575156,
+    "ast_hash": "8b72eacf8e4b9615e7de4a91be9231a2",
+    "semantic_hash": "8b72eacf8e4b9615e7de4a91be9231a2"
+  },
+  "packages/game/src/role-distribution.test.ts": {
+    "mtime": 1782851938.2999787,
+    "ast_hash": "2abb8844cc9d3251040a981bd5b050b4",
+    "semantic_hash": "2abb8844cc9d3251040a981bd5b050b4"
+  },
+  "packages/game/src/seat-validation.test.ts": {
+    "mtime": 1782851847.3513997,
+    "ast_hash": "b581ef0e9a2a42d38f31e67b137d056d",
+    "semantic_hash": "b581ef0e9a2a42d38f31e67b137d056d"
+  },
+  "packages/game/src/snake-spear.test.ts": {
+    "mtime": 1782924377.917736,
+    "ast_hash": "2827546b7b0253f5a3f313d2d5adf1c0",
+    "semantic_hash": "2827546b7b0253f5a3f313d2d5adf1c0"
+  },
+  "packages/game/src/trick-negate.test.ts": {
+    "mtime": 1783016429.368208,
+    "ast_hash": "cfad195c764af09bfd994057efdbfbe9",
+    "semantic_hash": "cfad195c764af09bfd994057efdbfbe9"
+  },
+  "packages/game/src/twin-swords.test.ts": {
+    "mtime": 1782932217.3754187,
+    "ast_hash": "7f95cfd3ef66375b686fa84dd3956611",
+    "semantic_hash": "7f95cfd3ef66375b686fa84dd3956611"
+  },
+  "packages/game/src/viewer-safe-state.test.ts": {
+    "mtime": 1783109504.6040976,
+    "ast_hash": "8f3087c7b11ed725e4993028e95f89d5",
+    "semantic_hash": "8f3087c7b11ed725e4993028e95f89d5"
+  },
+  "packages/game/tsconfig.json": {
+    "mtime": 1781894218.5956316,
+    "ast_hash": "84b33b8942aff370fdf819271c326beb",
+    "semantic_hash": "84b33b8942aff370fdf819271c326beb"
+  },
+  "scripts/import-cards.mjs": {
+    "mtime": 1783188301.7714608,
+    "ast_hash": "e1630707e1cedba1648e4d6d48cf7eda",
+    "semantic_hash": "e1630707e1cedba1648e4d6d48cf7eda"
+  },
+  "scripts/import-manual-docx.ps1": {
+    "mtime": 1781909848.699084,
+    "ast_hash": "3963bd195dc69bfb10b3bbb35b822e30",
+    "semantic_hash": "3963bd195dc69bfb10b3bbb35b822e30"
+  },
+  "source/build-cards.js": {
+    "mtime": 1782849932.6567197,
+    "ast_hash": "0988ea5ff8c393134380b345ad25606a",
+    "semantic_hash": "0988ea5ff8c393134380b345ad25606a"
+  },
+  "source/cards.json": {
+    "mtime": 1782849932.6577199,
+    "ast_hash": "2eb57fd77080c642f70ad0ab8ab16384",
+    "semantic_hash": "2eb57fd77080c642f70ad0ab8ab16384"
+  },
+  "supabase/migrations/0001_initial.sql": {
+    "mtime": 1781894233.116493,
+    "ast_hash": "90ce7299f730d9a08e6616cd39854df4",
+    "semantic_hash": "90ce7299f730d9a08e6616cd39854df4"
+  }
+}
