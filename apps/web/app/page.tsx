@@ -5,6 +5,18 @@ const socket = io(
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
   { autoConnect: false },
 );
+// Proactive "play a card" socket events gated by the optional Card Play Confirmation
+// setting. Response-window plays (dodge/negate/heal) are intentionally excluded — they
+// run under the server's response countdown, so a confirm step there could cause timeouts.
+const PLAY_CONFIRM_EVENTS = new Set([
+  "card:play",
+  "card:discard-target",
+  "card:steal-target",
+  "coerce:play",
+  "attack:multi",
+  "weapon:snake-attack",
+  "skill:seduce",
+]);
 
 type Role = "emperor" | "loyalist" | "rebel" | "traitor";
 type RoleDefinition = {
@@ -492,6 +504,12 @@ export default function Home() {
   const [showRole, setShowRole] = useState(false);
   const [detailCard, setDetailCard] = useState<Card>();
   const [showDropZone, setShowDropZone] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [confirmBeforePlay, setConfirmBeforePlay] = useState(false);
+  const [pendingPlay, setPendingPlay] = useState<{
+    event: string;
+    data?: Record<string, unknown>;
+  } | null>(null);
   const [skillsCharacter, setSkillsCharacter] = useState<Character>();
   const [logChatTab, setLogChatTab] = useState<"log" | "chat">("log");
   const [soundOn, setSoundOn] = useState(true);
@@ -589,6 +607,10 @@ export default function Home() {
       localStorage.setItem("wtk-member-id", id);
     }
     setUserId(id);
+  }, []);
+  // Per-player Card Play Confirmation preference — persists across reloads/matches on this device.
+  useEffect(() => {
+    setConfirmBeforePlay(localStorage.getItem("wtk-confirm-play") === "1");
   }, []);
   useEffect(() => {
     const onState = (v: Game) => {
@@ -836,8 +858,25 @@ export default function Home() {
     setJoinedRoom(roomId);
     socket.emit("room:join", { gameId: roomId, username: name, userId });
   };
-  const emit = (event: string, data?: Record<string, unknown>) =>
+  const emitNow = (event: string, data?: Record<string, unknown>) =>
     socket.emit(event, { gameId: joinedRoom, ...data });
+  // Card Play Confirmation: when the per-player setting is ON, defer proactive card
+  // plays behind a confirm/cancel overlay instead of sending them to the server.
+  const emit = (event: string, data?: Record<string, unknown>) => {
+    if (confirmBeforePlay && PLAY_CONFIRM_EVENTS.has(event)) {
+      setPendingPlay({ event, data });
+      return;
+    }
+    emitNow(event, data);
+  };
+  const toggleConfirmBeforePlay = () =>
+    setConfirmBeforePlay((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("wtk-confirm-play", next ? "1" : "0");
+      } catch {}
+      return next;
+    });
 
   if (!game)
     return (
@@ -1105,6 +1144,15 @@ export default function Home() {
     setMultiTargets([]);
     setCoerceCardId(undefined);
     setCoerceHolderId(undefined);
+  };
+  // Card Play Confirmation overlay actions.
+  const confirmPendingPlay = () => {
+    if (pendingPlay) emitNow(pendingPlay.event, pendingPlay.data);
+    setPendingPlay(null);
+  };
+  const cancelPendingPlay = () => {
+    setPendingPlay(null);
+    cancelSelection(); // return the card safely to hand / clear any target selection
   };
   // Opponents in circular seat order starting just after the viewer, wrapping around,
   // so the table mirrors real seat geometry (immediate neighbors sit beside the viewer).
@@ -1378,11 +1426,11 @@ export default function Home() {
           </button>
         )}
         <button
-          className="local-nav-btn"
-          onClick={() => setSoundOn((v) => !v)}
-          title="เปิด/ปิดเสียง"
+          className={`local-nav-btn${confirmBeforePlay ? " active" : ""}`}
+          onClick={() => setShowSettings(true)}
+          title="ตั้งค่าในเกม"
         >
-          {soundOn ? "🔔" : "🔕"}
+          ⚙️
         </button>
       </div>
     </nav>
@@ -4632,6 +4680,108 @@ export default function Home() {
             </section>
           </div>
         )}
+        {showSettings && (
+          <div
+            className="modal-backdrop"
+            onClick={() => setShowSettings(false)}
+          >
+            <section
+              className="card-detail settings-menu"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="modal-close"
+                onClick={() => setShowSettings(false)}
+              >
+                ×
+              </button>
+              <h2>ตั้งค่าในเกม</h2>
+              <div className="settings-row">
+                <span className="settings-row-label">
+                  <b>ยืนยันก่อนเล่นการ์ด</b>
+                  <small>ถามยืนยันทุกครั้งก่อนเล่นการ์ด กันเผลอเล่นผิดใบ</small>
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={confirmBeforePlay}
+                  className={`settings-switch${confirmBeforePlay ? " on" : ""}`}
+                  onClick={toggleConfirmBeforePlay}
+                >
+                  <span className="settings-switch-knob" />
+                </button>
+              </div>
+              <div className="settings-row">
+                <span className="settings-row-label">
+                  <b>เสียงแจ้งเตือน</b>
+                  <small>เล่นเสียงเมื่อถึงตาของคุณ</small>
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={soundOn}
+                  className={`settings-switch${soundOn ? " on" : ""}`}
+                  onClick={() => setSoundOn((v) => !v)}
+                >
+                  <span className="settings-switch-knob" />
+                </button>
+              </div>
+            </section>
+          </div>
+        )}
+        {pendingPlay &&
+          (() => {
+            const cid =
+              typeof pendingPlay.data?.cardId === "string"
+                ? (pendingPlay.data.cardId as string)
+                : undefined;
+            const card = cid
+              ? myPlayer?.hand.find((c) => c.id === cid)
+              : undefined;
+            const tid =
+              typeof pendingPlay.data?.targetId === "string"
+                ? (pendingPlay.data.targetId as string)
+                : undefined;
+            const target = tid
+              ? game.players.find((p) => p.id === tid)
+              : undefined;
+            return (
+              <div
+                className="modal-backdrop modal-top"
+                onClick={cancelPendingPlay}
+              >
+                <section
+                  className="card-detail local-target-picker play-confirm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h2>ยืนยันการเล่นการ์ด?</h2>
+                  {card ? (
+                    <div
+                      className={`play-confirm-card local-suit-${suitColor(card.suit)}`}
+                    >
+                      <span className="card-rank">
+                        {card.number} {suitTx(card.suit)}
+                      </span>
+                      <b>{card.name}</b>
+                    </div>
+                  ) : (
+                    <p>คุณกำลังจะเล่นการ์ด</p>
+                  )}
+                  {target && (
+                    <p className="play-confirm-target">
+                      🎯 เป้าหมาย: <b>{charName(target)}</b>
+                    </p>
+                  )}
+                  <div className="mock-response-actions">
+                    <button onClick={confirmPendingPlay}>✓ ยืนยัน</button>
+                    <button className="danger" onClick={cancelPendingPlay}>
+                      ✕ ยกเลิก
+                    </button>
+                  </div>
+                </section>
+              </div>
+            );
+          })()}
         {equipConfirmCard && (
           <div
             className="modal-backdrop"
@@ -4679,7 +4829,9 @@ export default function Home() {
               <div className="mock-response-actions">
                 <button
                   onClick={() => {
-                    emit("card:play", { cardId: equipConfirmCard.id });
+                    // This modal is itself the confirmation for equipment — bypass the
+                    // Card Play Confirmation gate so it isn't asked twice.
+                    emitNow("card:play", { cardId: equipConfirmCard.id });
                     setEquipConfirmCard(undefined);
                   }}
                 >

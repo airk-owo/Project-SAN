@@ -4490,3 +4490,108 @@ textarea,
     transform: rotate(0) scale(1);
   }
 }
+
+/* --- In-game settings menu (per-player toggles) --- */
+.settings-menu {
+  max-width: min(94vw, 420px);
+  text-align: left;
+}
+.settings-menu h2 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 2px;
+  border-top: 1px solid #c8b58a55;
+}
+.settings-row:first-of-type {
+  border-top: none;
+}
+.settings-row-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.settings-row-label b {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+.settings-row-label small {
+  color: #6b5139;
+  font-size: 0.82rem;
+}
+.settings-switch {
+  flex: none;
+  position: relative;
+  width: 52px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 999px;
+  background: #b8a888;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.settings-switch:hover {
+  background: #a89878;
+}
+.settings-switch.on {
+  background: #5a9e63;
+}
+.settings-switch.on:hover {
+  background: #4f8d58;
+}
+.settings-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px #0005;
+  transition: transform 0.18s ease;
+}
+.settings-switch.on .settings-switch-knob {
+  transform: translateX(22px);
+}
+
+/* --- Card Play Confirmation overlay --- */
+.play-confirm {
+  max-width: min(92vw, 380px);
+  text-align: center;
+}
+.play-confirm-card {
+  display: inline-grid;
+  gap: 4px;
+  margin: 8px auto 10px;
+  padding: 14px 24px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  min-width: 120px;
+}
+.play-confirm-card b {
+  font-family: Baozi, BaiJamjuree, sans-serif;
+  font-size: 1.3rem;
+  color: #3e2f22;
+}
+.play-confirm-card .card-rank {
+  font-size: 1.2rem;
+}
+.play-confirm-card.local-suit-red .card-rank {
+  color: #c0392b;
+}
+.play-confirm-card.local-suit-black .card-rank {
+  color: #1a1a1a;
+}
+.play-confirm-target {
+  color: #6b5139;
+  margin-bottom: 8px;
+}
