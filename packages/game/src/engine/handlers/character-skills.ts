@@ -1,0 +1,456 @@
+// Character-skill handlers: skill registry, event subscribers, and player-triggered skills. Extracted verbatim from index.ts.
+import type { Card, EventSubscriber, GameEvent, GameEventName, GameState, Player, TargetCardSelection } from '../types.js';
+import { characterName, findHandCard, flashTable, getAlivePlayers, getPlayerById, grantDraws, logAction, moveToDiscard, recordJudgment, reshuffleDiscardIntoDrawPile, synchronizeGameState, toCardInstance, type RuntimeEquipmentSlot } from '../state.js';
+import { canPlayerAct } from '../actions.js';
+import { applyDamage, canTargetWithAttack, healPlayer, openDyingRescueWindow, playAttack, playDodge } from './combat.js';
+import { hasUnlimitedAttack } from './equipment.js';
+export function dispatchGameEvent(state:GameState,event:GameEvent,subscribers:EventSubscriber[]=[]):GameEvent{
+  [...subscribers].filter(subscriber=>subscriber.event===event.name).sort((a,b)=>(b.priority||0)-(a.priority||0)).forEach(subscriber=>subscriber.handle(state,event));
+  runSkillEventHandlers(state,event); // character-skill subscribers, built from the current players
+  return event;
+}
+/** ลกซุน เชื่อมค่ายทดแทน (draw on losing last hand card) + ซุนซ่างเซียง องค์หญิงน้อย (draw 2 per equipment lost). Detected by diffing a per-player snapshot each sync — so every card/equipment removal path is covered centrally. Idempotent. */
+export function reconcileLossSkills(state:GameState){
+  if(state.phase!=='playing')return;
+  const track=state.lossTracking??(state.lossTracking={});
+  for(const player of state.players){
+    const equipIds=Object.values(player.equipment).filter((c):c is Card=>Boolean(c)).map(c=>c.id);
+    const prev=track[player.id];
+    if(!prev){track[player.id]={hand:player.hand.length,equip:equipIds};continue;} // first sight: seed only
+    if(player.alive){
+      if(hasCharacterSkill(state,player.id,'draw_on_last_card_lost')&&prev.hand>0&&player.hand.length===0){grantDraws(state,player.id,1);logAction(state,'skill-lianying',`${characterName(player)} ใช้ เชื่อมค่ายทดแทน (มือว่าง) ได้สิทธิ์จั่ว 1 ใบ`,player.id);}
+      if(hasCharacterSkill(state,player.id,'draw_on_equipment_lost')){const lost=prev.equip.filter(id=>!equipIds.includes(id)).length;if(lost>0){grantDraws(state,player.id,2*lost);logAction(state,'skill-princess',`${characterName(player)} ใช้ องค์หญิงน้อย เสียอุปกรณ์ ${lost} ชิ้น ได้สิทธิ์จั่ว ${2*lost} ใบ`,player.id);}}
+    }
+    track[player.id]={hand:player.hand.length,equip:equipIds};
+  }
+}
+// ── Character skills ──────────────────────────────────────────────────────
+// Machine-readable keys for the character skills the engine implements, mapped by character id.
+// The Thai skill names/descriptions live in the character data; this maps them to engine behavior.
+export const CHARACTER_SKILLS:Record<string,string[]>={
+  CHAR001:['discard_then_draw_equal','emperor_rescue_double'], // ซุนกวน — ถ่วงดุล + ค้ำจุน (จักรพรรดิ: ถ้ามีพันธมิตรง่อก๊ก ถูกช่วยตอนใกล้ตายฟื้น +1)
+  CHAR002:['black_as_dismantle'],          // กำเหลง — บ้าบิ่น: ใช้การ์ด ♠/♣ แทน "ถอนสะพาน" ได้
+  CHAR003:['skip_discard_if_no_attack'],   // ลิบอง — ยับยั้งชั่งใจ: ถ้าไม่ได้ใช้ "โจมตี" ในรอบนี้ ข้ามช่วงทิ้งไพ่ได้
+  CHAR004:['self_damage_draw'],            // อุยกาย — พลีชีพ: จ่าย 1 พลังชีวิต จั่ว 2 ใบ
+  CHAR005:['draw_phase_plus_one','dischord'], // จิวยี่ — ยอดวีรชน + บาดหมาง (เป้าเลือกดอก สุ่มหยิบไพ่จิวยี่ ผิดดอกเสีย 1 HP)
+  CHAR008:['marriage_heal','draw_on_equipment_lost'], // ซุนซ่างเซียง — แผนแต่งงาน + องค์หญิงน้อย (เสียอุปกรณ์ 1 ชิ้น จั่ว 2)
+  CHAR009:['benevolence_give','ask_shu_attack'], // เล่าปี่ — เมตตาธรรม + คุณธรรมสามัคคี (จักรพรรดิ: ให้พันธมิตรจ๊กก๊กโจมตีแทน)
+  CHAR019:['raid_draw_phase'],             // เตียวเลี้ยว — จู่โจมฉับพลัน: แทนการจั่ว หยิบไพ่คนละ 1 ใบจากขุนพลอื่นไม่เกิน 2 คน
+  CHAR020:['unarmed_tiger'],               // เคาทู — ฆ่าเสือมือเปล่า: จั่วเฟสจั่วเพียง 1 ใบ เพื่อ +1 ดาเมจ "โจมตี"/"ท้าสู้" ในรอบนั้น
+  CHAR006:['redirect_attack','diamond_as_indulgence'], // ไต้เกี้ยว — ระเหเร่ร่อน + โปรยเสน่ห์ (ใช้ ♦ แทน "มีสุขลืมเมือง")
+  CHAR007:['immune_indulgence','immune_steal','draw_on_last_card_lost'], // ลกซุน — อ่อนน้อมถ่อมตน + เชื่อมค่ายทดแทน (เสียไพ่ใบสุดท้าย จั่ว 1)
+  CHAR010:['red_as_attack'],                // กวนอู — เทพสงคราม: ใช้การ์ด ♥/♦ เป็น "โจมตี" ได้
+  CHAR022:['black_as_dodge','fortune_judgment'], // เอียนสี — สาวงามล่มเมือง (♣/♠ เป็น "หลบ") + พึ่งวาสนา (เปิดดวง เก็บดอกดำ วนจนเจอแดง)
+  CHAR023:['red_as_heal','miracle_medicine'], // ฮัวโต๋ — ปฐมพยาบาล (♥/♦ เป็น "เสบียง" นอกตาตัวเอง) + ยาสวรรค์ (1/รอบ ทิ้ง 1 ใบ ฟื้น 1 HP ให้ใครก็ได้)
+  CHAR011:['unlimited_attack'],            // เตียวหุย — คำราม: ใช้ "โจมตี" ได้ไม่จำกัดจำนวนครั้ง
+  CHAR012:['immune_attack_when_handless','peek_reorder_deck'], // จูกัดเหลียง — กลยุทธ์เมืองว่าง + หยั่งรู้ฟ้าดิน (เปิดดูไพ่บนสุด X จัดเรียงใหม่)
+  CHAR013:['attack_dodge_swap'],           // จูล่ง — กล้าหาญ: ใช้ "โจมตี" แทน "หลบ" และ "หลบ" แทน "โจมตี" ได้
+  CHAR014:['outgoing_distance_minus_one','attack_judgment_no_dodge'], // ม้าเฉียว — ทหารม้า + ม้าคะนองศึก (โจมตีแล้วเปิดตัดสิน ♥/♦ = เป้าหมายหลบไม่ได้)
+  CHAR015:['draw_on_instant_trick','trick_ignore_distance'], // หวงเย่อิง — คลังปัญญา (ใช้อุบายไม่รอเวลา จั่ว 1) + ผู้วิเศษ (อุบายไม่จำกัดระยะ)
+  CHAR016:['gain_damage_card','ask_wei_dodge'], // โจโฉ — ไม่ยอมให้โลกทรยศ + ปกป้องราชันย์ (จักรพรรดิ: ให้พันธมิตรวุยก๊กหลบแทน)
+  CHAR017:['replace_judgment','take_card_from_damager'], // สุมาอี้ — กำหนดชะตา + กลยุทธ์โต้กลับ (หยิบไพ่คนที่ทำดาเมจ)
+  CHAR018:['retaliate_judgment'],          // แฮหัวตุ้น — ย้อนรอยศัตรู: โดนดาเมจแล้วเปิดตัดสิน ไม่ใช่ ♥ → คนทำดาเมจ ทิ้ง 2 ใบ หรือ รับ 1 ดาเมจ
+  CHAR021:['keep_judgment','draw_on_damage'], // กุยแก — คาดการณ์แม่นยำ (เก็บไพ่ตัดสินทุกใบ) + คำสั่งเสีย (โดนดาเมจ ได้สิทธิ์จั่ว 2/ดาเมจ)
+  CHAR024:['attack_needs_two_dodges'],     // ลิโป้ — ไร้เทียมทาน: เป้าหมายต้องใช้ "หลบ" 2 ใบจึงจะหลบได้
+  CHAR025:['draw_on_turn_end','incite_duel'], // เตียวเสี้ยน — งามกลบแสงจันทร์ + สาวงามยุยง (ทิ้ง 1 ใบ บังคับขุนพลชาย 2 คนท้าสู้กัน)
+  CHAR027:['must_be_targeted_when_loaded','emperor_arrogance'], // อ้วนสุด — ศัตรูหมายหัว + จองหอง (จักรพรรดิ: จั่วเพิ่ม 1 แลกกับขีดจำกัดมือ -1)
+};
+export const hasCharacterSkill=(state:GameState,playerId:string,key:string)=>{const player=getPlayerById(state,playerId);return Boolean(player?.character&&CHARACTER_SKILLS[player.character.id]?.includes(key));};
+// Suit-based card conversions (กวนอู/เอียนสี/ฮัวโต๋): a card of a given suit may act as another card type.
+const CARD_CONVERSIONS:Record<string,{suits:string[];as:string}>={
+  red_as_attack:{suits:['♥','♦'],as:'attack'},
+  black_as_dodge:{suits:['♠','♣'],as:'dodge'},
+  red_as_heal:{suits:['♥','♦'],as:'heal'},
+  black_as_dismantle:{suits:['♠','♣'],as:'discard_target_card'},   // กำเหลง บ้าบิ่น: ♠/♣ เป็น ถอนสะพาน
+  diamond_as_indulgence:{suits:['♦'],as:'delayed_skip_play_phase'}, // ไต้เกี้ยว โปรยเสน่ห์: ♦ เป็น มีสุขลืมเมือง
+};
+/** True if `card` counts as `asEffect` for this player (its own effect, จูล่ง's attack⇄dodge swap, or a suit conversion). */
+export const cardActsAs=(state:GameState,playerId:string,card:Card,asEffect:string):boolean=>{
+  if(card.effect===asEffect)return true;
+  if(hasCharacterSkill(state,playerId,'attack_dodge_swap')&&((asEffect==='dodge'&&card.effect==='attack')||(asEffect==='attack'&&card.effect==='dodge')))return true;
+  const keys=CHARACTER_SKILLS[getPlayerById(state,playerId)?.character?.id??'']??[];
+  return keys.some(key=>{const conv=CARD_CONVERSIONS[key];return Boolean(conv&&conv.as===asEffect&&conv.suits.includes(card.suit));});
+};
+/** จูกัดเหลียง กลยุทธ์เมืองว่าง: a handless holder of this skill cannot be targeted by Attack. */
+export const isImmuneToAttack=(state:GameState,targetId:string)=>{const t=getPlayerById(state,targetId);return Boolean(t&&t.hand.length===0&&hasCharacterSkill(state,targetId,'immune_attack_when_handless'));};
+/** ลิโป้ ไร้เทียมทาน: how many หลบ the target must play to fully dodge this attacker's Attack. */
+export const attackDodgesRequired=(state:GameState,attackerId:string)=>hasCharacterSkill(state,attackerId,'attack_needs_two_dodges')?2:1;
+/** เคาทู ฆ่าเสือมือเปล่า: +1 damage on Attack/Duel for the rest of the turn after drawing only one card. */
+export const attackDamageBonus=(state:GameState,attackerId:string)=>hasCharacterSkill(state,attackerId,'unarmed_tiger')&&state.unarmedPowerActive?1:0;
+/** อ้วนสุด ศัตรูหมายหัว: any reachable อ้วนสุด whose hand size exceeds their HP must be chosen as the attack target. */
+export const forcedAttackTargets=(state:GameState,attackerId:string):string[]=>state.players.filter(p=>p.alive&&p.id!==attackerId&&hasCharacterSkill(state,p.id,'must_be_targeted_when_loaded')&&p.hp!==undefined&&p.hand.length>p.hp&&canTargetWithAttack(state,attackerId,p.id)).map(p=>p.id);
+export const assertForcedAttackTarget=(state:GameState,attackerId:string,targetIds:string[])=>{const forced=forcedAttackTargets(state,attackerId);if(forced.length&&!forced.some(id=>targetIds.includes(id)))throw new Error('ต้องเลือกโจมตี อ้วนสุด ก่อน (ศัตรูหมายหัว)');};
+/** กุยแก คำสั่งเสีย (遗计): the owner hands one revealed card to any living player; the window closes once all are distributed. */
+export function assignLegacyCard(state:GameState,ownerId:string,cardId:string,targetId:string){
+  const pending=state.pendingLegacy;if(!pending||pending.ownerId!==ownerId)throw new Error('ไม่มีคำสั่งเสียที่ค้างอยู่');
+  const idx=pending.cards.findIndex(c=>c.id===cardId);if(idx<0)throw new Error('ไพ่ไม่อยู่ในคำสั่งเสีย');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive)throw new Error('ต้องมอบให้ผู้เล่นที่มีชีวิต');
+  const [card]=pending.cards.splice(idx,1);target.hand.push(card);
+  const owner=getPlayerById(state,ownerId);
+  logAction(state,'legacy-give',`${characterName(owner!)} มอบ ${card.name} ให้ ${target.username} (คำสั่งเสีย)`,ownerId,targetId,card.id);
+  flashTable(state,'📜','คำสั่งเสีย',`${owner?.username??'ผู้เล่น'} มอบการ์ดให้ ${target.username}`); // ไม่โชว์หน้าไพ่ (เป็นความลับ)
+  if(!pending.cards.length)state.pendingLegacy=undefined;
+  synchronizeGameState(state);
+}
+// ── Character-skill event handlers ────────────────────────────────────────
+// Keyed by the skill key in CHARACTER_SKILLS. dispatchGameEvent runs the matching handler for every alive holder.
+type SkillEventHandler={event:GameEventName;handle:(state:GameState,event:GameEvent,ownerId:string)=>void};
+const SKILL_EVENT_HANDLERS:Record<string,SkillEventHandler>={
+  // กุยแก คำสั่งเสีย: on taking damage, gain 2 draws per point of damage (drawn manually).
+  draw_on_damage:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive)return;const n=2*Math.max(1,event.amount||1);if(state.deck.length<n)reshuffleDiscardIntoDrawPile(state);const take=Math.min(n,state.deck.length);if(take<=0)return;const revealed=state.deck.splice(state.deck.length-take,take).reverse();const existing=state.pendingLegacy&&state.pendingLegacy.ownerId===ownerId?state.pendingLegacy.cards:[];state.pendingLegacy={ownerId,cards:[...existing,...revealed]};logAction(state,'skill-legacy',`${characterName(owner)} ใช้ คำสั่งเสีย เปิดไพ่ ${take} ใบ เพื่อมอบให้ผู้เล่น`,ownerId);}},
+  // โจโฉ ไม่ยอมให้โลกทรยศ: on taking damage from a card, take that card into hand (instead of it being discarded).
+  gain_damage_card:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.card)return;const owner=getPlayerById(state,ownerId);if(!owner)return;const card=event.card;owner.hand.push(card);
+    // ดึงการ์ดที่ทำร้ายออกจากกองทิ้ง (กรณีท้าสู้/สาวงามยุยง การ์ดถูกทิ้งไปแล้ว) ไม่ให้ซ้ำในมือและกองทิ้ง
+    const di=state.discard.lastIndexOf(card);if(di>=0){state.discard.splice(di,1);state.discardPile.splice(di,1);}
+    // อย่าให้กองทิ้งกลางโต๊ะว่างเปล่า — ให้โชว์ไพ่ใบที่ทิ้งก่อนหน้าแทน (ไม่ใช่ undefined)
+    if(state.lastPlayedCard===card)state.lastPlayedCard=state.discard.at(-1);
+    logAction(state,'skill-gain-damage-card',`${characterName(owner)} ใช้ ไม่ยอมให้โลกทรยศ เก็บ ${card.name} เข้ามือ`,ownerId,undefined,card.id);}},
+  // สุมาอี้ กลยุทธ์โต้กลับ: on taking damage from someone, may take one of their cards (opens a pending decision).
+  take_card_from_damager:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;if(damager.hand.length===0&&!Object.values(damager.equipment).some(Boolean))return;state.pendingFankui={playerId:ownerId,damagerId:event.actorId};logAction(state,'fankui-window',`${characterName(getPlayerById(state,ownerId)!)} อาจใช้ กลยุทธ์โต้กลับ หยิบไพ่จาก ${characterName(damager)}`,ownerId,event.actorId);}},
+  // แฮหัวตุ้น ย้อนรอยศัตรู: on taking damage (and surviving), reveal a judgment; if it is not ♥, the damager must discard 2 or take 1 damage.
+  retaliate_judgment:{event:'after_damage',handle:(state,event,ownerId)=>{if(event.targetId!==ownerId||!event.actorId||event.actorId===ownerId)return;const owner=getPlayerById(state,ownerId);if(!owner||!owner.alive||owner.hp===undefined||owner.hp<=0)return;const damager=getPlayerById(state,event.actorId);if(!damager||!damager.alive)return;state.pendingRetaliateJudgment={ownerId,damagerId:damager.id};logAction(state,'skill-retaliate',`${characterName(owner)} จะใช้ ย้อนรอยศัตรู — รอเปิดไพ่ตัดสิน`,ownerId,damager.id);}},
+};
+function runSkillEventHandlers(state:GameState,event:GameEvent){
+  for(const player of state.players){
+    if(!player.alive||!player.character)continue;
+    for(const key of CHARACTER_SKILLS[player.character.id]??[]){const handler=SKILL_EVENT_HANDLERS[key];if(handler&&handler.event===event.name)handler.handle(state,event,player.id);}
+  }
+}
+/** สุมาอี้ กำหนดชะตา: any holder replaces the revealed judgment card with one of their hand cards (the old one is discarded). */
+export function replaceJudgmentCard(state:GameState,playerId:string,cardInstanceId:string){
+  const pending=state.pendingJudgment;if(!pending||pending.stage!=='revealed')throw new Error('ยังไม่มีไพ่ตัดสินให้เปลี่ยน');
+  if(!hasCharacterSkill(state,playerId,'replace_judgment'))throw new Error('ไม่มีทักษะกำหนดชะตา');
+  const player=getPlayerById(state,playerId);if(!player||!player.alive)throw new Error('Unknown player');
+  const card=findHandCard(player,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  player.hand=player.hand.filter(item=>item!==card);
+  if(pending.revealed)moveToDiscard(state,pending.revealed,true); // old judgment card to discard
+  pending.revealed=card;
+  logAction(state,'skill-replace-judgment',`${characterName(player)} ใช้ กำหนดชะตา เปลี่ยนไพ่ตัดสินเป็น ${card.name} (${card.number}${card.suit})`,player.id,pending.playerId,card.id);
+  synchronizeGameState(state);
+}
+// ── Active character skills (player-triggered during their play phase) ─────
+const markSkillUsed=(state:GameState,key:string)=>{state.skillsUsedThisTurn=[...(state.skillsUsedThisTurn??[]),key];};
+/** อุยกาย พลีชีพ: lose 1 HP to gain 2 draws. May put you into a dying state. */
+export function useSelfDamageDraw(state:GameState,playerId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'self_damage_draw'))throw new Error('ไม่มีทักษะพลีชีพ');
+  const player=getPlayerById(state,playerId);if(!player||player.hp===undefined)throw new Error('Unknown player');
+  player.hp=Math.max(0,player.hp-1);
+  logAction(state,'skill-self-damage-draw',`${characterName(player)} ใช้ พลีชีพ เสีย 1 พลังชีวิต ได้สิทธิ์จั่ว 2 ใบ`,playerId);
+  grantDraws(state,playerId,2);
+  if(player.hp===0)openDyingRescueWindow(state,playerId,playerId);
+  synchronizeGameState(state);
+}
+/** ซุนกวน ถ่วงดุล: once per turn, discard any number of hand cards then gain that many draws. */
+export function useDiscardThenDraw(state:GameState,playerId:string,cardInstanceIds:string[]){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'discard_then_draw_equal'))throw new Error('ไม่มีทักษะถ่วงดุล');
+  if(state.skillsUsedThisTurn?.includes('discard_then_draw_equal'))throw new Error('ใช้ถ่วงดุลได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const ids=[...new Set(cardInstanceIds)];if(ids.length!==cardInstanceIds.length)throw new Error('ไพ่ต้องไม่ซ้ำกัน');
+  if(!ids.length)throw new Error('เลือกไพ่อย่างน้อย 1 ใบ');
+  const cards=ids.map(id=>findHandCard(player,id));if(cards.some(c=>!c))throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  for(const card of cards as Card[]){player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,false);}
+  markSkillUsed(state,'discard_then_draw_equal');
+  logAction(state,'skill-balance',`${characterName(player)} ใช้ ถ่วงดุล ทิ้งไพ่ ${cards.length} ใบ ได้สิทธิ์จั่ว ${cards.length} ใบ`,playerId);
+  grantDraws(state,playerId,cards.length);
+  synchronizeGameState(state);
+}
+/** สุมาอี้ กลยุทธ์โต้กลับ: take the chosen card from the damager (hidden hand position or visible equipment). */
+export function takeCardFromDamager(state:GameState,playerId:string,selection:TargetCardSelection){
+  const pending=state.pendingFankui;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีกลยุทธ์โต้กลับที่ค้างอยู่');
+  const sima=getPlayerById(state,playerId),damager=getPlayerById(state,pending.damagerId);if(!sima||!damager)throw new Error('ผู้เล่นหาย');
+  let chosen:Card|undefined,slot:RuntimeEquipmentSlot|undefined;
+  if(selection.zone==='hand'){chosen=damager.hand[selection.handIndex];}
+  else if(selection.zone==='equipment'){for(const key of Object.keys(damager.equipment) as RuntimeEquipmentSlot[]){const e=damager.equipment[key];if(e&&(e.id===selection.cardInstanceId||toCardInstance(e).instanceId===selection.cardInstanceId)){chosen=e;slot=key;break;}}}
+  else throw new Error('Decision-area selection is not supported');
+  if(!chosen)throw new Error('ไพ่ที่เลือกไม่มีอยู่');
+  if(slot)damager.equipment[slot]=null;else damager.hand=damager.hand.filter(c=>c!==chosen);
+  sima.hand.push(chosen);state.pendingFankui=undefined;
+  logAction(state,'skill-fankui',`${characterName(sima)} ใช้ กลยุทธ์โต้กลับ หยิบไพ่ 1 ใบจาก ${characterName(damager)}`,sima.id,damager.id);
+  synchronizeGameState(state);
+}
+export function declineFankui(state:GameState,playerId:string){
+  const pending=state.pendingFankui;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีกลยุทธ์โต้กลับที่ค้างอยู่');
+  state.pendingFankui=undefined;logAction(state,'skill-fankui-declined',`${characterName(getPlayerById(state,playerId)!)} ไม่ใช้ กลยุทธ์โต้กลับ`,playerId);
+  synchronizeGameState(state);
+}
+/** แฮหัวตุ้น ย้อนรอยศัตรู: the owner manually reveals the judgment card; a non-♥ result makes the damager pay (discard 2 / take 1 damage). */
+export function revealRetaliateJudgment(state:GameState,ownerId:string){
+  const pending=state.pendingRetaliateJudgment;if(!pending||pending.ownerId!==ownerId)throw new Error('ไม่มีย้อนรอยศัตรูที่รอเปิดไพ่');
+  const owner=getPlayerById(state,ownerId),damager=getPlayerById(state,pending.damagerId);
+  state.pendingRetaliateJudgment=undefined;
+  if(!owner||!owner.alive||owner.hp===undefined||owner.hp<=0){synchronizeGameState(state);return;} // owner no longer eligible
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const judge=state.deck.pop();if(!judge){synchronizeGameState(state);return;}
+  moveToDiscard(state,judge,false);
+  const isHeart=judge.suit==='♥';
+  logAction(state,'skill-retaliate',`${characterName(owner)} ใช้ ย้อนรอยศัตรู เปิดตัดสิน ${judge.name} (${judge.number}${judge.suit}) — ${isHeart?'♥ ไม่มีผล':'ผู้ทำดาเมจต้องเลือก ทิ้ง 2 ใบ หรือ รับ 1 ดาเมจ'}`,ownerId,damager?.id,judge.id);
+  recordJudgment(state,ownerId,'ย้อนรอยศัตรู',judge,isHeart?'♥ ไม่มีผล — ปลอดภัย':`ไม่ใช่ ♥ → ${damager?.username??'ผู้ทำดาเมจ'} ต้องทิ้ง 2 ใบ หรือรับ 1 ดาเมจ`); // ประกาศผลไพ่ให้ทุกคนเห็น (แบนเนอร์) ก่อนคนโดนตัดสินใจ
+  if(!isHeart&&damager&&damager.alive)state.pendingRetaliate={damagerId:damager.id,victimId:ownerId};
+  synchronizeGameState(state);
+}
+/** แฮหัวตุ้น ย้อนรอยศัตรู: the damager pays by discarding two of their own hand cards. */
+export function retaliateDiscard(state:GameState,damagerId:string,cardInstanceIds:string[]){
+  const pending=state.pendingRetaliate;if(!pending||pending.damagerId!==damagerId)throw new Error('ไม่มีย้อนรอยศัตรูที่ค้างอยู่');
+  const damager=getPlayerById(state,damagerId);if(!damager)throw new Error('Unknown player');
+  const ids=[...new Set(cardInstanceIds)];if(ids.length!==2)throw new Error('ต้องทิ้งไพ่บนมือ 2 ใบ');
+  const cards=ids.map(id=>findHandCard(damager,id));if(cards.some(c=>!c))throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  for(const card of cards as Card[]){damager.hand=damager.hand.filter(c=>c!==card);moveToDiscard(state,card,false);}
+  state.pendingRetaliate=undefined;logAction(state,'retaliate-discard',`${characterName(damager)} เลือกทิ้งไพ่ 2 ใบ (ย้อนรอยศัตรู)`,damagerId);
+  synchronizeGameState(state);
+}
+/** แฮหัวตุ้น ย้อนรอยศัตรู: the damager instead takes 1 damage. */
+export function retaliateTakeDamage(state:GameState,damagerId:string){
+  const pending=state.pendingRetaliate;if(!pending||pending.damagerId!==damagerId)throw new Error('ไม่มีย้อนรอยศัตรูที่ค้างอยู่');
+  const victimId=pending.victimId;state.pendingRetaliate=undefined;
+  logAction(state,'retaliate-damage',`${characterName(getPlayerById(state,damagerId)!)} เลือกรับความเสียหาย 1 หน่วย (ย้อนรอยศัตรู)`,damagerId,victimId);
+  applyDamage(state,damagerId,1,victimId);
+  synchronizeGameState(state);
+}
+/** ไต้เกี้ยว ระเหเร่ร่อน: while you are the Attack target, discard a card to redirect it to another general within YOUR attack range (not the attacker). */
+export function redirectAttack(state:GameState,redirectorId:string,cardInstanceId:string,newTargetId:string){
+  const window=state.responseWindow,action=state.currentAction,pending=state.pendingAction;
+  if(!window||!action||!pending||window.type!=='attack_dodge'||window.currentResponderId!==redirectorId)throw new Error('ใช้ระเหเร่ร่อนได้เฉพาะตอนตกเป็นเป้าหมายโจมตี');
+  if(!hasCharacterSkill(state,redirectorId,'redirect_attack'))throw new Error('ไม่มีทักษะระเหเร่ร่อน');
+  const redirector=getPlayerById(state,redirectorId);if(!redirector)throw new Error('Unknown player');
+  const card=findHandCard(redirector,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  if(newTargetId===action.actorId)throw new Error('เลือกผู้โจมตีเป็นเป้าหมายใหม่ไม่ได้');
+  if(newTargetId===redirectorId)throw new Error('เลือกตัวเองไม่ได้');
+  const newTarget=getPlayerById(state,newTargetId);if(!newTarget||!newTarget.alive)throw new Error('เป้าหมายไม่ถูกต้อง');
+  if(!canTargetWithAttack(state,redirectorId,newTargetId))throw new Error('เป้าหมายต้องอยู่ในระยะโจมตีของคุณ');
+  redirector.hand=redirector.hand.filter(c=>c!==card);moveToDiscard(state,card,false);
+  action.targetIds=[newTargetId];pending.targetId=newTargetId;pending.noDodge=false;
+  window.requiredPlayerIds=[newTargetId];window.currentResponderId=newTargetId;window.responses=[];window.allowedResponseEffectKeys=['dodge'];
+  logAction(state,'skill-redirect',`${characterName(redirector)} ใช้ ระเหเร่ร่อน เปลี่ยนเป้าหมายโจมตีไปยัง ${characterName(newTarget)}`,redirectorId,newTargetId,card.id);
+  synchronizeGameState(state);
+}
+/** ฮัวโต๋ ยาสวรรค์: once per turn, discard 1 card to restore 1 HP to any wounded (non-dying) general, self included. */
+export function useMiracleMedicine(state:GameState,playerId:string,cardInstanceId:string,targetId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'miracle_medicine'))throw new Error('ไม่มีทักษะยาสวรรค์');
+  if(state.skillsUsedThisTurn?.includes('miracle_medicine'))throw new Error('ใช้ยาสวรรค์ได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const card=findHandCard(player,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive||target.hp===undefined||target.maxHp===undefined)throw new Error('เลือกขุนพลที่ยังมีชีวิต');
+  if(target.hp>=target.maxHp)throw new Error('เป้าหมายพลังชีวิตเต็มแล้ว');
+  player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,false);
+  markSkillUsed(state,'miracle_medicine');
+  healPlayer(state,targetId,1);
+  logAction(state,'skill-miracle',`${characterName(player)} ใช้ ยาสวรรค์ ทิ้งไพ่ 1 ใบ ฟื้นฟู 1 HP ให้ ${characterName(target)}`,playerId,targetId,card.id);
+  synchronizeGameState(state);
+}
+/** ซุนซ่างเซียง แผนแต่งงาน: once per turn, discard 2 cards to heal a wounded male general and herself 1 HP each. */
+export function useMarriage(state:GameState,playerId:string,cardInstanceIds:string[],targetId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'marriage_heal'))throw new Error('ไม่มีทักษะแผนแต่งงาน');
+  if(state.skillsUsedThisTurn?.includes('marriage_heal'))throw new Error('ใช้แผนแต่งงานได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const ids=[...new Set(cardInstanceIds)];if(ids.length!==2)throw new Error('ต้องทิ้งไพ่ 2 ใบที่ไม่ซ้ำกัน');
+  const cards=ids.map(id=>findHandCard(player,id));if(cards.some(c=>!c))throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  const target=getPlayerById(state,targetId);if(!target||!target.alive||target.hp===undefined||target.maxHp===undefined)throw new Error('เลือกขุนพลที่ยังมีชีวิต');
+  if(target.character?.gender!=='ชาย')throw new Error('เลือกได้เฉพาะขุนพลชาย');
+  if(target.hp>=target.maxHp)throw new Error('เป้าหมายพลังชีวิตเต็มแล้ว');
+  for(const card of cards as Card[]){player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,false);}
+  markSkillUsed(state,'marriage_heal');
+  healPlayer(state,targetId,1);healPlayer(state,playerId,1);
+  logAction(state,'skill-marriage',`${characterName(player)} ใช้ แผนแต่งงาน ทิ้งไพ่ 2 ใบ ฟื้นฟู 1 HP ให้ ${characterName(target)} และตนเอง`,playerId,targetId);
+  synchronizeGameState(state);
+}
+/** เตียวเลี้ยว จู่โจมฉับพลัน: in your draw phase, instead of drawing, take one hand card from each of up to 2 other players. */
+export function useRaid(state:GameState,playerId:string,targetIds:string[]){
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
+  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ใช้ได้เฉพาะช่วงจั่วไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'raid_draw_phase'))throw new Error('ไม่มีทักษะจู่โจมฉับพลัน');
+  if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const ids=[...new Set(targetIds)];if(ids.length!==targetIds.length)throw new Error('เป้าหมายต้องไม่ซ้ำกัน');
+  if(ids.length<1||ids.length>2)throw new Error('เลือกเป้าหมาย 1–2 คน');
+  if(ids.includes(playerId))throw new Error('เลือกตัวเองไม่ได้');
+  const targets=ids.map(id=>getPlayerById(state,id));if(targets.some(t=>!t||!t.alive))throw new Error('เป้าหมายต้องยังมีชีวิต');
+  if(targets.some(t=>t!.hand.length===0))throw new Error('เป้าหมายต้องมีไพ่บนมือ');
+  for(const t of targets as Player[]){const idx=Math.floor(Math.random()*t.hand.length);const [card]=t.hand.splice(idx,1);player.hand.push(card!);logAction(state,'skill-raid',`${characterName(player)} ใช้ จู่โจมฉับพลัน หยิบไพ่ 1 ใบจาก ${characterName(t)}`,player.id,t.id);}
+  state.hasDrawnThisTurn=true;
+  state.turn.drawnThisTurn=2+(hasCharacterSkill(state,playerId,'draw_phase_plus_one')?1:0);
+  if(state.skipPlayPhase){state.turn.phase='discard';state.skipPlayPhase=false;logAction(state,'play-phase-skipped',`${characterName(player)} ถูกข้ามช่วงเล่นไพ่`,player.id);}else state.turn.phase='play';
+  synchronizeGameState(state);
+}
+/** เคาทู ฆ่าเสือมือเปล่า: in your draw phase, draw only 1 card to gain +1 Attack/Duel damage for the rest of the turn. */
+export function useUnarmedHunt(state:GameState,playerId:string){
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
+  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ใช้ได้เฉพาะช่วงจั่วไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'unarmed_tiger'))throw new Error('ไม่มีทักษะฆ่าเสือมือเปล่า');
+  if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const card=state.deck.pop();if(card){player.hand.push(card);logAction(state,'skill-unarmed-hunt',`${characterName(player)} ใช้ ฆ่าเสือมือเปล่า จั่วไพ่ 1 ใบ (พลังโจมตี +1 ในรอบนี้)`,player.id);}
+  state.unarmedPowerActive=true;state.hasDrawnThisTurn=true;
+  state.turn.drawnThisTurn=2+(hasCharacterSkill(state,playerId,'draw_phase_plus_one')?1:0);
+  if(state.skipPlayPhase){state.turn.phase='discard';state.skipPlayPhase=false;logAction(state,'play-phase-skipped',`${characterName(player)} ถูกข้ามช่วงเล่นไพ่`,player.id);}else state.turn.phase='play';
+  synchronizeGameState(state);
+}
+/** อ้วนสุด จองหอง: emperor prep phase, draw one extra card at the cost of −1 hand limit this turn. */
+export function useArrogance(state:GameState,playerId:string){
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
+  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนจั่วไพ่)');
+  if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
+  if(!hasCharacterSkill(state,playerId,'emperor_arrogance'))throw new Error('ไม่มีทักษะจองหอง');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(player.role!=='emperor')throw new Error('ใช้ได้เฉพาะจักรพรรดิ');
+  if(state.skillsUsedThisTurn?.includes('arrogance'))throw new Error('ใช้จองหองได้ 1 ครั้งต่อรอบ');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const card=state.deck.pop();if(card){player.hand.push(card);logAction(state,'skill-arrogance',`${characterName(player)} ใช้ จองหอง จั่วเพิ่ม 1 ใบ (ขีดจำกัดไพ่บนมือ -1 ในรอบนี้)`,playerId,undefined,card.id);}
+  state.arrogancePenalty=true;markSkillUsed(state,'arrogance');
+  synchronizeGameState(state);
+}
+/** จิวยี่ บาดหมาง: once per turn, choose a general who must guess a suit; a random card is drawn from จิวยี่'s hand to them, and on a suit mismatch they lose 1 HP. */
+export function useDischord(state:GameState,playerId:string,targetId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'dischord'))throw new Error('ไม่มีทักษะบาดหมาง');
+  if(state.skillsUsedThisTurn?.includes('dischord'))throw new Error('ใช้บาดหมางได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId),target=getPlayerById(state,targetId);
+  if(!player||!target||!target.alive)throw new Error('เลือกขุนพลที่ยังมีชีวิต');
+  if(targetId===playerId)throw new Error('เลือกตัวเองไม่ได้');
+  if(player.hand.length===0)throw new Error('ต้องมีไพ่บนมืออย่างน้อย 1 ใบ');
+  markSkillUsed(state,'dischord');state.pendingDischord={jiuyiId:playerId,targetId};
+  logAction(state,'skill-dischord',`${characterName(player)} ใช้ บาดหมาง กับ ${characterName(target)} — ให้เลือก 1 ดอกไพ่`,playerId,targetId);
+  synchronizeGameState(state);
+}
+/** The chosen general guesses a suit; resolve the random hand-card transfer and any HP loss. */
+export function pickDischordSuit(state:GameState,targetId:string,suit:string){
+  const pending=state.pendingDischord;if(!pending||pending.targetId!==targetId)throw new Error('ไม่มีบาดหมางที่ค้างอยู่');
+  if(!['♠','♥','♦','♣'].includes(suit))throw new Error('เลือกดอกไพ่ไม่ถูกต้อง');
+  const jiuyi=getPlayerById(state,pending.jiuyiId),target=getPlayerById(state,targetId);if(!jiuyi||!target){state.pendingDischord=undefined;return synchronizeGameState(state);}
+  state.pendingDischord=undefined;
+  if(jiuyi.hand.length===0){logAction(state,'skill-dischord-empty',`${characterName(jiuyi)} ไม่มีไพ่ให้หยิบ`,jiuyi.id,targetId);return synchronizeGameState(state);}
+  const idx=Math.floor(Math.random()*jiuyi.hand.length),[card]=jiuyi.hand.splice(idx,1);target.hand.push(card!);
+  const matched=card!.suit===suit;
+  logAction(state,'skill-dischord-reveal',`${characterName(target)} เลือก ${suit} — หยิบได้ ${card!.name} (${card!.suit}) ${matched?'ตรงดอก':'ไม่ตรงดอก'}`,jiuyi.id,targetId,card!.id);
+  if(!matched)applyDamage(state,targetId,1,jiuyi.id);
+  synchronizeGameState(state);
+}
+// ── Emperor "ask an ally to respond for you" skills (เล่าปี่ คุณธรรมสามัคคี / โจโฉ ปกป้องราชันย์) ──
+/** เล่าปี่ คุณธรรมสามัคคี: emperor asks a SHU ally to play an Attack (counted as เล่าปี่'s) against a target in เล่าปี่'s range. */
+export function requestUnityAttack(state:GameState,emperorId:string,targetId:string,allyId:string){
+  if(!canPlayerAct(state,emperorId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  const emperor=getPlayerById(state,emperorId);if(!emperor||emperor.role!=='emperor')throw new Error('ใช้ได้เฉพาะจักรพรรดิ');
+  if(!hasCharacterSkill(state,emperorId,'ask_shu_attack'))throw new Error('ไม่มีทักษะคุณธรรมสามัคคี');
+  if(state.turn.attackUsedThisTurn>=1&&!hasUnlimitedAttack(state,emperorId))throw new Error('ใช้โจมตีได้ครั้งเดียวต่อรอบ');
+  if(!canTargetWithAttack(state,emperorId,targetId))throw new Error('เป้าหมายไม่อยู่ในระยะโจมตีของคุณ');
+  const ally=getPlayerById(state,allyId);if(!ally||!ally.alive||allyId===emperorId)throw new Error('เลือกพันธมิตรที่ยังมีชีวิต');
+  if(ally.character?.kingdom!=='SHU')throw new Error('เลือกได้เฉพาะขุนพลจ๊กก๊ก');
+  if(!ally.hand.some(c=>c.effect==='attack'))throw new Error('พันธมิตรไม่มีการ์ดโจมตี');
+  state.pendingAllyAssist={emperorId,allyId,kind:'attack',targetId};
+  logAction(state,'skill-unity',`${characterName(emperor)} ใช้ คุณธรรมสามัคคี ขอให้ ${characterName(ally)} โจมตี ${characterName(getPlayerById(state,targetId)!)} แทน`,emperorId,allyId);
+  synchronizeGameState(state);
+}
+/** โจโฉ ปกป้องราชันย์: emperor asks a WEI ally to play a Dodge (counted as โจโฉ's) while โจโฉ is the attack target. */
+export function requestGuardianDodge(state:GameState,emperorId:string,allyId:string){
+  const window=state.responseWindow;if(!window||window.type!=='attack_dodge'||window.currentResponderId!==emperorId)throw new Error('ใช้ได้เฉพาะตอนที่คุณตกเป็นเป้าหมายโจมตี');
+  const emperor=getPlayerById(state,emperorId);if(!emperor||emperor.role!=='emperor')throw new Error('ใช้ได้เฉพาะจักรพรรดิ');
+  if(!hasCharacterSkill(state,emperorId,'ask_wei_dodge'))throw new Error('ไม่มีทักษะปกป้องราชันย์');
+  const ally=getPlayerById(state,allyId);if(!ally||!ally.alive||allyId===emperorId)throw new Error('เลือกพันธมิตรที่ยังมีชีวิต');
+  if(ally.character?.kingdom!=='WEI')throw new Error('เลือกได้เฉพาะขุนพลวุยก๊ก');
+  if(!ally.hand.some(c=>c.effect==='dodge'))throw new Error('พันธมิตรไม่มีการ์ดหลบ');
+  state.pendingAllyAssist={emperorId,allyId,kind:'dodge'};
+  logAction(state,'skill-guardian',`${characterName(emperor)} ใช้ ปกป้องราชันย์ ขอให้ ${characterName(ally)} หลบแทน`,emperorId,allyId);
+  synchronizeGameState(state);
+}
+/** The asked ally plays the card on the emperor's behalf: it is moved to the emperor and played as the emperor's own Attack/Dodge. */
+export function allyAssist(state:GameState,allyId:string,cardInstanceId:string){
+  const pending=state.pendingAllyAssist;if(!pending||pending.allyId!==allyId)throw new Error('ไม่มีคำขอช่วยเหลือที่ค้างอยู่');
+  const ally=getPlayerById(state,allyId),emperor=getPlayerById(state,pending.emperorId);if(!ally||!emperor)throw new Error('ผู้เล่นหาย');
+  const card=findHandCard(ally,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  const need=pending.kind;if(card.effect!==need)throw new Error(need==='attack'?'ต้องใช้ไพ่โจมตี':'ต้องใช้ไพ่หลบ');
+  ally.hand=ally.hand.filter(c=>c!==card);emperor.hand.push(card);state.pendingAllyAssist=undefined;
+  logAction(state,'skill-ally-assist',`${characterName(ally)} ช่วย ${characterName(emperor)} ด้วย ${card.name}`,allyId,emperor.id,card.id);
+  if(need==='attack')playAttack(state,pending.emperorId,pending.targetId!,card.id);
+  else playDodge(state,pending.emperorId,card.id);
+}
+export function declineAllyAssist(state:GameState,allyId:string){
+  const pending=state.pendingAllyAssist;if(!pending||pending.allyId!==allyId)throw new Error('ไม่มีคำขอช่วยเหลือที่ค้างอยู่');
+  state.pendingAllyAssist=undefined;logAction(state,'skill-ally-declined',`${characterName(getPlayerById(state,allyId)!)} ปฏิเสธคำขอช่วยเหลือ`,allyId);
+  synchronizeGameState(state);
+}
+/** เตียวเสี้ยน สาวงามยุยง: once per turn, discard a card to force two male generals to duel each other (you pick who attacks first). */
+export function useIncite(state:GameState,playerId:string,cardInstanceId:string,firstAttackerId:string,secondPlayerId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'incite_duel'))throw new Error('ไม่มีทักษะสาวงามยุยง');
+  if(state.skillsUsedThisTurn?.includes('incite'))throw new Error('ใช้สาวงามยุยงได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const card=findHandCard(player,cardInstanceId);if(!card)throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  const first=getPlayerById(state,firstAttackerId),second=getPlayerById(state,secondPlayerId);
+  if(!first||!second||!first.alive||!second.alive)throw new Error('เลือกขุนพลที่ยังมีชีวิต');
+  if(firstAttackerId===secondPlayerId)throw new Error('ต้องเลือกขุนพล 2 คนที่ต่างกัน');
+  if(firstAttackerId===playerId||secondPlayerId===playerId)throw new Error('เลือกตัวเองไม่ได้');
+  if(first.character?.gender!=='ชาย'||second.character?.gender!=='ชาย')throw new Error('เลือกได้เฉพาะขุนพลชาย');
+  player.hand=player.hand.filter(c=>c!==card);moveToDiscard(state,card,true);markSkillUsed(state,'incite'); // ตั้งเป็น lastPlayedCard เพื่อโชว์กลางโต๊ะ และเป็น "ไพ่ต้นเหตุ" ของการท้าสู้ (โจโฉ ไม่ยอมให้โลกทรยศ)
+  const actionId=crypto.randomUUID();
+  state.currentAction={actionId,actorId:secondPlayerId,card:toCardInstance(card),effectKey:'duel_attack_response',targetIds:[firstAttackerId],status:'declared',createdAt:new Date().toISOString()};
+  state.responseWindow={windowId:crypto.randomUUID(),type:'duel_attack',sourceActionId:actionId,requiredPlayerIds:[firstAttackerId,secondPlayerId],currentResponderId:firstAttackerId,allowedResponseEffectKeys:['attack'],responses:[],status:'open',createdAt:new Date().toISOString()};
+  logAction(state,'skill-incite',`${characterName(player)} ใช้ สาวงามยุยง ให้ ${characterName(first)} และ ${characterName(second)} ท้าสู้กัน (${characterName(first)} โจมตีก่อน)`,playerId);
+  synchronizeGameState(state);
+}
+/** จูกัดเหลียง หยั่งรู้ฟ้าดิน: peek the top X cards (X = alive count, max 5) to reorder onto the top and/or bottom of the draw pile. */
+export function usePeek(state:GameState,playerId:string){
+  if(state.responseWindow||state.pendingPeek)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
+  if(state.turn.activePlayerId!==playerId||state.turn.phase!=='draw')throw new Error('ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนจั่วไพ่)');
+  if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
+  if(!hasCharacterSkill(state,playerId,'peek_reorder_deck'))throw new Error('ไม่มีทักษะหยั่งรู้ฟ้าดิน');
+  if(state.skillsUsedThisTurn?.includes('peek'))throw new Error('ใช้หยั่งรู้ฟ้าดินได้ 1 ครั้งต่อรอบ');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  const x=Math.min(getAlivePlayers(state).length,5);
+  if(state.deck.length<x)reshuffleDiscardIntoDrawPile(state);
+  const take=Math.min(x,state.deck.length);if(take===0)throw new Error('กองจั่วไม่มีไพ่');
+  const peeked=state.deck.splice(state.deck.length-take,take).reverse(); // peeked[0] = current topmost
+  state.pendingPeek={playerId,cards:peeked};markSkillUsed(state,'peek');
+  logAction(state,'skill-peek',`${characterName(player)} ใช้ หยั่งรู้ฟ้าดิน เปิดดูไพ่บนสุด ${take} ใบ`,playerId);
+  synchronizeGameState(state);
+}
+/** Places the peeked cards back: topIds on top (topIds[0] drawn first), bottomIds at the bottom. */
+export function resolvePeek(state:GameState,playerId:string,topIds:string[],bottomIds:string[]){
+  const pending=state.pendingPeek;if(!pending||pending.playerId!==playerId)throw new Error('ไม่มีหยั่งรู้ฟ้าดินที่ค้างอยู่');
+  const all=pending.cards,allIds=all.map(c=>c.id),chosen=[...topIds,...bottomIds];
+  if(chosen.length!==all.length||new Set(chosen).size!==all.length||chosen.some(id=>!allIds.includes(id)))throw new Error('ต้องจัดเรียงไพ่ให้ครบทุกใบ');
+  const byId=(id:string)=>all.find(c=>c.id===id)!;
+  for(let i=bottomIds.length-1;i>=0;i--)state.deck.unshift(byId(bottomIds[i])); // bottom of pile
+  for(let i=topIds.length-1;i>=0;i--)state.deck.push(byId(topIds[i]));         // topIds[0] ends up on top (pop)
+  state.pendingPeek=undefined;
+  logAction(state,'skill-peek-resolve',`${characterName(getPlayerById(state,playerId)!)} จัดเรียงกองจั่วใหม่ (บน ${topIds.length} / ล่าง ${bottomIds.length})`,playerId);
+  synchronizeGameState(state);
+}
+/** เอียนสี พึ่งวาสนา: in your prep/draw phase, reveal the top card; keep it if black, and you may repeat until you reveal a red one. */
+export function useFortune(state:GameState,playerId:string){
+  if(state.responseWindow)throw new Error('ต้องแก้ไขสถานะที่ค้างอยู่ก่อน');
+  // ช่วงเตรียมการ = ก่อนตัดสิน (judgment) และก่อนจั่ว (draw) — พึ่งวาสนาใช้ได้ก่อนเปิดไพ่ตัดสิน (เช่น ฟ้าลงโทษ)
+  if(state.turn.activePlayerId!==playerId||(state.turn.phase!=='draw'&&state.turn.phase!=='judgment'))throw new Error('ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนตัดสิน/ก่อนจั่วไพ่)');
+  if((state.turn.drawnThisTurn||0)>0)throw new Error('ต้องใช้ก่อนเริ่มจั่วไพ่');
+  if(!hasCharacterSkill(state,playerId,'fortune_judgment'))throw new Error('ไม่มีทักษะพึ่งวาสนา');
+  if(state.skillsUsedThisTurn?.includes('fortune_done'))throw new Error('พึ่งวาสนาจบลงแล้วในรอบนี้ (เปิดได้ดอกสีแดง)');
+  const player=getPlayerById(state,playerId);if(!player)throw new Error('Unknown player');
+  if(!state.deck.length)reshuffleDiscardIntoDrawPile(state);
+  const card=state.deck.pop();if(!card)throw new Error('กองจั่วไม่มีไพ่');
+  if(['♠','♣'].includes(card.suit)){player.hand.push(card);logAction(state,'skill-fortune',`${characterName(player)} ใช้ พึ่งวาสนา เปิด ${card.name} (${card.number}${card.suit}) ดอกดำ — เก็บเข้ามือ`,playerId,undefined,card.id);}
+  else{moveToDiscard(state,card,false);markSkillUsed(state,'fortune_done');logAction(state,'skill-fortune-end',`${characterName(player)} ใช้ พึ่งวาสนา เปิด ${card.name} (${card.number}${card.suit}) ดอกแดง — จบการใช้ทักษะ`,playerId,undefined,card.id);}
+  flashTable(state,'🔮','พึ่งวาสนา',`${player.username} เปิดได้ ${['♠','♣'].includes(card.suit)?'ดอกดำ — เก็บเข้ามือ':'ดอกแดง — จบ'}`,card);
+  synchronizeGameState(state);
+}
+/** เล่าปี่ เมตตาธรรม: give hand cards to another general; once you have given 2+ cards this turn, heal yourself 1 HP (max once/turn). */
+export function useBenevolence(state:GameState,playerId:string,cardInstanceIds:string[],recipientId:string){
+  if(!canPlayerAct(state,playerId))throw new Error('ใช้ทักษะได้เฉพาะช่วงเล่นไพ่ของคุณ');
+  if(!hasCharacterSkill(state,playerId,'benevolence_give'))throw new Error('ไม่มีทักษะเมตตาธรรม');
+  const player=getPlayerById(state,playerId),recipient=getPlayerById(state,recipientId);
+  if(!player||!recipient||!recipient.alive)throw new Error('เลือกขุนพลอื่นที่ยังมีชีวิต');
+  if(recipientId===playerId)throw new Error('มอบให้ตัวเองไม่ได้');
+  const ids=[...new Set(cardInstanceIds)];if(ids.length!==cardInstanceIds.length)throw new Error('ไพ่ต้องไม่ซ้ำกัน');
+  if(!ids.length)throw new Error('เลือกไพ่อย่างน้อย 1 ใบ');
+  const cards=ids.map(id=>findHandCard(player,id));if(cards.some(c=>!c))throw new Error('ไพ่ที่เลือกไม่อยู่ในมือ');
+  for(const card of cards as Card[]){player.hand=player.hand.filter(c=>c!==card);recipient.hand.push(card);}
+  state.benevolenceGivenThisTurn=(state.benevolenceGivenThisTurn||0)+cards.length;
+  logAction(state,'skill-benevolence',`${characterName(player)} ใช้ เมตตาธรรม มอบไพ่ ${cards.length} ใบให้ ${characterName(recipient)}`,playerId,recipientId);
+  if(state.benevolenceGivenThisTurn>=2&&!state.skillsUsedThisTurn?.includes('benevolence_healed')&&player.hp!==undefined&&player.maxHp!==undefined&&player.hp<player.maxHp){
+    markSkillUsed(state,'benevolence_healed');healPlayer(state,playerId,1);
+    logAction(state,'skill-benevolence-heal',`${characterName(player)} มอบไพ่ 2 ใบขึ้นไป จึงฟื้นฟู 1 HP`,playerId);
+  }
+  synchronizeGameState(state);
+}
