@@ -226,7 +226,110 @@ export default function Home(){
  const join=(roomId=room)=>{if(!userId)return;socket.connect();setJoinedRoom(roomId);socket.emit('room:join',{gameId:roomId,username:name,userId})};
  const emit=(event:string,data?:Record<string,unknown>)=>socket.emit(event,{gameId:joinedRoom,...data});
 
- if(!game)return <main className="lobby"><h1 className="game-title">ยุทธพิชัยสามก๊ก</h1><p>เข้าสู่สมรภูมิและรวมพลสหายของคุณ</p><input value={name} onChange={e=>setName(e.target.value)} placeholder="Username"/><section className="room-browser"><div><h2>ห้องที่เปิดอยู่</h2><button onClick={loadRooms}>รีเฟรช</button></div>{rooms.length?rooms.map(r=><article key={r.id}><b>{r.id}</b><span>{r.status==='waiting'?'กำลังรอผู้เล่น':'กำลังเล่น — Spectator'}</span><small>หัวหน้า: {r.host} · ผู้เล่น {r.playerCount} · ผู้ชม {r.spectatorCount}</small><button disabled={!name||!userId} onClick={()=>join(r.id)}>{r.status==='waiting'?'เข้าห้อง':'เข้าชม'}</button></article>):<p>ยังไม่มีห้องที่เปิดอยู่</p>}</section><section className="create-room"><h2>สร้างห้องใหม่</h2><input value={room} onChange={e=>setRoom(e.target.value)} placeholder="ชื่อห้อง"/><button disabled={!name||!userId} onClick={()=>join()}>สร้าง/เข้าห้อง</button></section></main>;
+ if(!game)return <main className="lobby"><style>{`
+  /* ══════════════════════════════════════════════════════════════════════
+     LOBBY SPACING KNOBS — edit these numbers to pixel-tune the layout yourself.
+     Every value takes normal CSS units (px, rem, em, %…). The defaults below
+     reproduce the current look, so changing one only moves that one thing.
+     (The card position / background knobs --card-x, --card-y, --bg-veil,
+      --fade-height and --fade-intensity live further down, where they're used.)
+     ══════════════════════════════════════════════════════════════════════ */
+  .lobby{
+   --card-padding:clamp(28px,4vw,48px) clamp(22px,3.4vw,40px) 38px; /* inner padding of the whole card: top | left+right | bottom (or use one value, e.g. 32px) */
+   --username-margin-bottom:11px;            /* gap below the Username input field */
+   --rooms-title-margin-top:20px;            /* space above the "ห้องที่เปิดอยู่" active-rooms section (and its title) */
+   --rooms-container-margin-bottom:0px;      /* space below the active-rooms container */
+   --room-item-padding:16px 22px 16px 18px;  /* padding inside each room card — keeps the button off the edges */
+   --create-title-margin-top:20px;           /* space above the "สร้างห้องใหม่" create-room section (and its title) */
+   --create-row-gap:12px;                    /* horizontal gap between the room-name input and the create button */
+  }
+  .lobby{position:relative;display:flex;flex-direction:column;max-width:600px;margin:9vh auto 0;padding:var(--card-padding);text-align:center;color:#5a4432;background:linear-gradient(158deg,#fffdf7ee 0%,#faf5eaee 55%,#f5eeddee 100%);-webkit-backdrop-filter:blur(9px) saturate(1.05);backdrop-filter:blur(9px) saturate(1.05);border:1px solid #d4af5659;border-radius:22px;box-shadow:inset 0 1px 0 #ffffffcc,0 26px 58px -30px #3e2f2255,0 0 0 5px #ffffff33}
+  .lobby::before{content:'';position:absolute;inset:9px;border:1px solid #cdae6a4d;border-radius:15px;pointer-events:none}
+  .lobby>*{position:relative}
+  /* ── Lock the lobby to exactly one screen — no page scrollbar ──
+     Scoped with :has(.lobby) so ONLY the lobby locks height; the in-game
+     screen (no .lobby element) keeps its normal scrolling. */
+  html:has(.lobby),body:has(.lobby){height:100vh;overflow:hidden}
+  /* Fixed, well-proportioned card: the height is locked so the card stays stable and never
+     warps or resizes with the number of rooms. In normal use the active-rooms list (below) is
+     the only thing that scrolls; overflow-y:auto is just a safety net for ultra-short windows. */
+  .lobby{height:min(88vh,760px);overflow-y:auto}
+  /* ── Background framing knob — tweak the two numbers to move the artwork ──
+       background-position: X  Y
+         X → 0%=left   50%=center   100%=right
+         Y → 0%=top    50%=center   100%=bottom
+     This art is tall, so Y matters most: LOWER the Y% to shift the image UP
+     (show more of the top); raise it toward 100% to show more of the bottom. */
+  /* ── BACKGROUND VIBRANCY KNOB — the cream "veil" that tints the artwork ──
+     The dull look came from a cream overlay gradient on <body>. --bg-veil sets its strength:
+       --bg-veil: 0   → NO tint — colours as crisp & vibrant as the original image
+       --bg-veil: .65 → current (a light, elegant wash)
+       --bg-veil: 1   → the old heavy, washed-out look
+     LOWER it toward 0 for more vivid colours; RAISE it toward 1 for a softer background.
+     (The veil is strongest at the top-left behind the card and fades toward the bottom-right
+     where the art shows, so lowering it never hurts the card's legibility.) */
+  /* ── BOTTOM FADE — dissolves the base of the artwork into the page's cream ──
+     --fade-height    : how tall the fade is / how far UP from the bottom it starts.
+                        BIGGER (30vh → 55vh) = taller, longer fade · smaller = shorter.
+     --fade-intensity : opacity of the cream at the very bottom (0–1).
+                        1 = bottom fully melts into solid cream · LOWER = softer, more see-through. */
+  body:has(.lobby){--bg-veil:.6;--fade-height:30vh;--fade-intensity:1;background-size:cover;background-position:50% 72%;background-image:linear-gradient(to top,rgba(244,242,227,var(--fade-intensity)) 0%,transparent var(--fade-height)),linear-gradient(to bottom right,rgba(244,242,227,calc(var(--bg-veil)*.97)) 0%,rgba(244,242,227,calc(var(--bg-veil)*.95)) 40%,rgba(244,242,227,calc(var(--bg-veil)*.69)) 66%,rgba(244,242,227,calc(var(--bg-veil)*.38)) 88%,rgba(244,242,227,calc(var(--bg-veil)*.25)) 100%),url('/assets/bg.png')}
+  .lobby .game-title{color:#7c2222;margin:6px 0 4px;letter-spacing:.01em;text-shadow:0 1px 0 #fff,0 2px 14px #b88a3b26}
+  .lobby .game-title::after{content:'';display:block;width:72px;height:3px;margin:13px auto 0;border-radius:3px;background:linear-gradient(90deg,transparent,#c99a41,#8B2E2E,#c99a41,transparent)}
+  .lobby>p{color:#6e5842;margin:15px 0 24px;font-size:1.03rem;letter-spacing:.01em}
+  .lobby input{display:block;width:100%;margin:11px 0;padding:14px 17px;font-size:1.05rem;color:#3E2F22;background:#fffdf7;border:1px solid #d8c6a0;border-radius:12px;transition:border-color .18s,box-shadow .18s,background .18s}
+  /* Username field = the only direct-child input of .lobby; its bottom gap is the tunable knob. */
+  .lobby>input{margin-bottom:var(--username-margin-bottom)}
+  .lobby input::placeholder{color:#a4906f}
+  .lobby input:focus{outline:none;border-color:#c99a41;background:#fffef9;box-shadow:0 0 0 4px #d4af5640,0 6px 18px -10px #b88a3b80}
+  .lobby button{font-weight:700;border-radius:11px;cursor:pointer;transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s,filter .2s,background .2s}
+  .lobby .create-room button,.lobby .room-browser article button{padding:13px 26px;font-size:1.01rem;letter-spacing:.02em;color:#fdf3df;border:1px solid #9a352e;background:linear-gradient(180deg,#a1352f,#8B2E2E 55%,#722021);box-shadow:0 8px 18px -9px #5c1a1acc,inset 0 1px 0 #ffffff2e}
+  .lobby .create-room button:hover:not(:disabled),.lobby .room-browser article button:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 13px 24px -10px #5c1a1ae0,inset 0 1px 0 #ffffff40}
+  .lobby .create-room button:active:not(:disabled),.lobby .room-browser article button:active:not(:disabled){transform:translateY(0);box-shadow:0 5px 12px -8px #5c1a1acc}
+  .lobby button:disabled{opacity:.42;filter:grayscale(.55);cursor:not-allowed;box-shadow:none;transform:none}
+  /* Create-room: input (left, grows) + compact button (right) on one row. */
+  .lobby .create-room .create-row{display:flex;align-items:stretch;gap:var(--create-row-gap);margin-top:14px}
+  .lobby .create-room .create-row input{flex:1;margin:0}
+  .lobby .create-room button{flex:0 0 auto;width:auto;margin:0;padding:0 22px;font-size:.96rem;white-space:nowrap}
+  /* Section cards. Reduced top padding + margin-top nudge the "ห้องที่เปิดอยู่" / "สร้างห้องใหม่"
+     headings upward and tighten the vertical rhythm a touch. */
+  .lobby .room-browser,.lobby .create-room{padding:16px 22px 20px;text-align:left;background:#fffdf766;border:1px solid #e6dcc2;border-top:2px solid #d4af5640;border-radius:16px}
+  /* Room-browser grows to fill the fixed card so its list is the flexible, scrolling region;
+     create-room stays a fixed block pinned below it. min-height:0 lets the list actually scroll.
+     Per-section top/bottom spacing is driven by the tunable knobs at the top of this block. */
+  .lobby .room-browser{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;margin-top:var(--rooms-title-margin-top);margin-bottom:var(--rooms-container-margin-bottom)}
+  .lobby .create-room{flex:0 0 auto;margin-top:var(--create-title-margin-top)}
+  .lobby h2{margin:0;color:#8B2E2E;font-family:Baozi,BaiJamjuree,sans-serif;font-size:1.2rem;letter-spacing:.01em}
+  .lobby .room-browser>div{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px;padding-bottom:13px;border-bottom:1px solid #e0d5ba}
+  .lobby .room-browser>div>button{padding:8px 15px;font-size:.88rem;font-weight:700;color:#966A24;background:#b88a3b14;border:1px solid #d4af5666;box-shadow:none}
+  .lobby .room-browser>div>button:hover:not(:disabled){transform:translateY(-1px);background:#b88a3b26;border-color:#c99a41}
+  .lobby .room-browser>div>button:active:not(:disabled){transform:translateY(0)}
+  .lobby .room-browser article{display:grid;grid-template-columns:1fr auto;gap:4px 18px;padding:var(--room-item-padding);margin:12px 0;background:#fffdf7;color:#3E2F22;border:1px solid #d8cbaa;border-radius:12px;box-shadow:0 8px 20px -16px #3e2f2288;transition:transform .16s,box-shadow .16s,border-color .16s}
+  .lobby .room-browser article:hover{transform:translateY(-2px);border-color:#c99a41;box-shadow:0 14px 26px -16px #3e2f2299}
+  .lobby .room-browser article b{grid-column:1;font-family:Baozi,BaiJamjuree,sans-serif;font-size:1.22rem;color:#8B2E2E}
+  .lobby .room-browser article span{grid-column:1;color:#4F6F52;font-weight:700;font-size:.86rem}
+  .lobby .room-browser article small{grid-column:1;color:#8d7962;font-size:.8rem}
+  .lobby .room-browser article button{grid-column:2;grid-row:1/4;align-self:center;white-space:nowrap}
+  /* Active-rooms list: a VERTICAL column (flex-direction:column) that grows to fill the card
+     and scrolls internally, so every room renders — flex:0 0 auto on the items stops them from
+     being squeezed/clipped — and extra rooms never push the create-room card off-screen.
+     Negative side margins + matching padding keep the card hover-shadows from being clipped. */
+  .lobby .room-browser .room-list{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:12px;overflow-y:auto;overflow-x:hidden;margin:8px -8px 0;padding:6px 8px;scrollbar-width:thin;scrollbar-color:#d4af5688 transparent}
+  .lobby .room-browser .room-list::-webkit-scrollbar{width:8px}
+  .lobby .room-browser .room-list::-webkit-scrollbar-thumb{background:#d4af5677;border-radius:8px}
+  .lobby .room-browser .room-list::-webkit-scrollbar-thumb:hover{background:#c99a41cc}
+  .lobby .room-browser .room-list>article{flex:0 0 auto;margin:0}
+  .lobby .room-browser .room-list>p{flex:0 0 auto;margin:2px 2px 0;color:#a4906f;font-style:italic}
+  /* ── LOBBY CARD PLACEMENT (desktop, ≥768px) — TWEAK THE TWO VALUES BELOW ──
+     --card-x = distance from the LEFT screen edge.
+                increase it (5rem → 12rem…) to move the card RIGHT · decrease (→ 0) to move it LEFT.
+     --card-y = distance from the TOP screen edge.
+                increase it (9vh → 20vh…) to move the card DOWN · decrease (→ 0) to move it UP.
+     Units are free — try rem/px for X, vh/% for Y. margin-right stays auto so the
+     card stays left-anchored and the artwork keeps the right side of the screen. */
+  @media(min-width:768px){.lobby{--card-x:15rem;--card-y:9vh;margin:var(--card-y) auto 0 var(--card-x)}}
+  @media(max-width:700px){.lobby{margin-top:4vh;border-radius:16px}.lobby .room-browser article button{padding:11px 18px}}
+ `}</style><h1 className="game-title">ยุทธพิชัยสามก๊ก</h1><p>เข้าสู่สมรภูมิและรวมพลสหายของคุณ</p><input value={name} onChange={e=>setName(e.target.value)} placeholder="Username"/><section className="room-browser"><div><h2>ห้องที่เปิดอยู่</h2><button onClick={loadRooms}>รีเฟรช</button></div><div className="room-list">{rooms.length?rooms.map(r=><article key={r.id}><b>{r.id}</b><span>{r.status==='waiting'?'กำลังรอผู้เล่น':'กำลังเล่น — Spectator'}</span><small>หัวหน้า: {r.host} · ผู้เล่น {r.playerCount} · ผู้ชม {r.spectatorCount}</small><button disabled={!name||!userId} onClick={()=>join(r.id)}>{r.status==='waiting'?'เข้าห้อง':'เข้าชม'}</button></article>):<p>ยังไม่มีห้องที่เปิดอยู่</p>}</div></section><section className="create-room"><h2>สร้างห้องใหม่</h2><div className="create-row"><input value={room} onChange={e=>setRoom(e.target.value)} placeholder="ชื่อห้อง"/><button disabled={!name||!userId} onClick={()=>join()}>สร้าง/เข้าห้อง</button></div></section></main>;
 
  const myPlayer=game.players.find(p=>p.id===game.viewerId);
  const myRoleInfo=game.roleDefinitions?.find(r=>r.role_key===myPlayer?.role);
