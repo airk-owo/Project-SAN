@@ -22,7 +22,8 @@ export type CardType = 'basic'|'instant_trick'|'delayed_trick'|'weapon'|'armor'|
 export type TriggerTiming = 'on_play'|'on_response'|'on_judgment'|'on_damage'|'after_damage'|'on_attack_declared'|'on_attack_dodged'|'passive';
 export type EquipmentSlot = 'weapon'|'armor'|'offensive_mount'|'defensive_mount';
 export type EffectParams = Record<string,unknown>;
-export type Card = { id:string; name:string; type:string; cardType:CardType; suit:string; number:string; image:string|null; description:string|null; effect:string|null; effectParams:EffectParams; triggerTiming:TriggerTiming; equipmentSlot:EquipmentSlot|null; createsResponseWindow:boolean; conditions:unknown };
+export type CardNameVersion = 'modern'|'classic';
+export type Card = { id:string; name:string; oldName?:string|null; type:string; cardType:CardType; suit:string; number:string; image:string|null; description:string|null; effect:string|null; effectParams:EffectParams; triggerTiming:TriggerTiming; equipmentSlot:EquipmentSlot|null; createsResponseWindow:boolean; conditions:unknown };
 export type Character = { id:string; name:string; hp:number; faction:string; kingdom?:string; kingdomTh?:string; gender?:string; skills: { name:string; description:string; condition?:string|null }[]; image?:string };
 export type ConnectionStatus = 'online'|'disconnected';
 export type Player = { id:string; username:string; seatIndex:number; connectionStatus:ConnectionStatus; joinedAt:string; lastSeenAt:string; role?:Role; roleRevealed:boolean; character?:Character; characterOptions:Character[]; hand:Card[]; equipment:EquipmentSlots<Card>; decisionArea:Card[]; ready:boolean; confirmedCharacter:boolean; alive:boolean; hp?:number; maxHp?:number };
@@ -59,7 +60,7 @@ export type PendingLegacy = { ownerId:string; cards:Card[] };
 export type PendingPeek = { playerId:string; cards:Card[] };
 export type PendingDischord = { jiuyiId:string; targetId:string };
 export type PendingAllyAssist = { emperorId:string; allyId:string; kind:'attack'|'dodge'; targetId?:string };
-export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingLegacy?:PendingLegacy; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; tableFlash?:{icon:string;title:string;detail?:string;card?:{name:string;number:string;suit:string};at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
+export type GameState = { gameId:string; roomId:string; status:GameStatus; createdAt:string; updatedAt:string; turn:TurnState; drawPile:CardInstance[]; discardPile:CardInstance[]; currentAction:CurrentAction|null; responseWindow:ResponseWindow|null; suspendedResponseWindow?:ResponseWindow; pendingRepeatAttack?:PendingRepeatAttack; pendingDestroyMount?:PendingDestroyMount; pendingForceAttackDamage?:PendingForceAttackDamage; pendingReplaceDamage?:PendingReplaceDamage; pendingTwinSwords?:PendingTwinSwords; pendingCoerce?:PendingCoerce; pendingHarvest?:PendingHarvest; pendingJudgment?:PendingJudgment; pendingFankui?:PendingFankui; pendingRetaliate?:PendingRetaliate; pendingRetaliateJudgment?:PendingRetaliateJudgment; pendingLegacy?:PendingLegacy; pendingPeek?:PendingPeek; pendingDischord?:PendingDischord; pendingAllyAssist?:PendingAllyAssist; pendingDraws?:Record<string,number>; unarmedPowerActive?:boolean; benevolenceGivenThisTurn?:number; arrogancePenalty?:boolean; lossTracking?:Record<string,{hand:number;equip:string[]}>; lastJudgment?:{playerId:string;trickName:string;cardName:string;cardNumber:string;cardSuit:string;result:string;at:string}; tableFlash?:{icon:string;title:string;detail?:string;card?:{name:string;number:string;suit:string};at:string}; skipPlayPhase?:boolean; skillsUsedThisTurn?:string[]; chat:ChatMessage[]; id:string; hostId:string; phase:GamePhase; winner?:WinningSide; cardNameVersion?:CardNameVersion; players:Player[]; spectators:Spectator[]; deck:Card[]; discard:Card[]; lastPlayedCard?:Card; direction:1|-1; currentPlayerId?:string; hasDrawnThisTurn:boolean; log:GameLog[]; pendingRoleComposition?: Record<Role,number>; pendingAction?:PendingAction; attacksThisTurn:number; pendingTrickResolution?:{effectKey:string;targetId?:string;selection?:TargetCardSelection|string;weaponHolderId?:string;victimId?:string} };
 export type GameLog = { id:string; at:string; type:string; actorId?:string; targetId?:string; cardId?:string; message:string };
 export const shuffled = <T>(items:T[]) => { const result=[...items]; for(let index=result.length-1;index>0;index--){const swapIndex=Math.floor(Math.random()*(index+1));[result[index],result[swapIndex]]=[result[swapIndex],result[index]];} return result; };
 export const createEmptyEquipmentSlots=<T=CardInstance>():EquipmentSlots<T>=>({weapon:null,armor:null,offensiveMount:null,defensiveMount:null});
@@ -203,9 +204,15 @@ export type PublicGameState = Omit<GameState,'players'|'deck'|'drawPile'|'respon
 export function createGame(id:string, host:Pick<Spectator,'id'|'username'>, cards:Card[]):GameState {
   const now=new Date().toISOString();
   const deck=shuffled(cards);
-  return { gameId:id, roomId:id, status:'setup', createdAt:now, updatedAt:now, turn:{activePlayerId:null,phase:'inactive',direction:'clockwise',turnNumber:0,attackUsedThisTurn:0,drawnThisTurn:0}, drawPile:deck.map(toCardInstance), discardPile:[], currentAction:null, responseWindow:null, chat:[], id, hostId:host.id, phase:'waiting', players:[], spectators:[{...host,connectionStatus:'online',joinedAt:now,lastSeenAt:now}], deck, discard:[], direction:1, hasDrawnThisTurn:false, log:[], attacksThisTurn:0 };
+  return { gameId:id, roomId:id, status:'setup', createdAt:now, updatedAt:now, turn:{activePlayerId:null,phase:'inactive',direction:'clockwise',turnNumber:0,attackUsedThisTurn:0,drawnThisTurn:0}, drawPile:deck.map(toCardInstance), discardPile:[], currentAction:null, responseWindow:null, chat:[], id, hostId:host.id, phase:'waiting', cardNameVersion:'modern', players:[], spectators:[{...host,connectionStatus:'online',joinedAt:now,lastSeenAt:now}], deck, discard:[], direction:1, hasDrawnThisTurn:false, log:[], attacksThisTurn:0 };
 }
 export const createSeatedPlayer=(member:Spectator,seatIndex:number):Player=>({...member,seatIndex,role:undefined,roleRevealed:false,character:undefined,characterOptions:[],hand:[],equipment:createEmptyEquipmentSlots<Card>(),decisionArea:[],ready:false,confirmedCharacter:false,alive:true});
+/** Room-setup option: choose Classic (old_name_th) vs Modern (name_th) card text. Locked once the game starts. */
+export function setCardNameVersion(state:GameState, version:CardNameVersion){
+  if(state.phase!=='waiting') throw new Error('เลือกเวอร์ชันชื่อการ์ดได้เฉพาะก่อนเริ่มเกม');
+  if(version!=='modern'&&version!=='classic') throw new Error('เวอร์ชันชื่อการ์ดไม่ถูกต้อง');
+  state.cardNameVersion=version;
+}
 export type RoleComposition=Record<Role,number>;
 export function dealRoles(state:GameState, composition:RoleComposition){
   if(state.phase!=='waiting') throw new Error('Roles can only be dealt from the waiting room');
@@ -1440,12 +1447,30 @@ export function createPublicGameState(state:GameState, viewerId:string):PublicGa
   const publicPendingPeek=pendingPeek?(pendingPeek.playerId===viewerId?pendingPeek:{playerId:pendingPeek.playerId,cards:[]}):undefined; // peeked cards only visible to จูกัดเหลียง
   // เก็บเกี่ยวยุ้งฉาง: only the current picker sees the remaining cards; others see face-down placeholders.
   const publicPendingHarvest=pendingHarvest?(responseWindow?.currentResponderId===viewerId?pendingHarvest:{...pendingHarvest,revealed:pendingHarvest.revealed.map(c=>({id:c.id,name:'ไพ่ปิด',type:c.type,cardType:c.cardType,suit:'?',number:'',image:null,description:null,effect:'hidden_harvest',equipmentSlot:null} as unknown as Card))}):undefined;
-  return {...publicState, pendingPeek:publicPendingPeek, pendingHarvest:publicPendingHarvest, pendingLegacy:publicPendingLegacy, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
+  const pub={...publicState, pendingPeek:publicPendingPeek, pendingHarvest:publicPendingHarvest, pendingLegacy:publicPendingLegacy, deck:{length:deck.length}, drawPileCount:drawPile.length, responseWindow:publicResponseWindow, viewerId, isSpectator:state.spectators.some(s=>s.id===viewerId), players: players.map(p=>({...p,
     role:p.id===viewerId||p.roleRevealed||p.role==='emperor'?p.role:undefined,
     character:p.id===viewerId||p.role==='emperor'||allCharactersChosen?p.character:undefined,
     characterOptions:p.id===viewerId?p.characterOptions:[],
-    hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot,...(card.cardType==='weapon'&&card.effectParams?.range?{effectParams:{range:card.effectParams.range}}:{})})):[], handCount:p.hand.length
+    hand:p.id===viewerId?p.hand.map(card=>({id:card.id,name:card.name,oldName:card.oldName??null,type:card.type,cardType:card.cardType,suit:card.suit,number:card.number,image:card.image,description:card.description,effect:card.effect,equipmentSlot:card.equipmentSlot,...(card.cardType==='weapon'&&card.effectParams?.range?{effectParams:{range:card.effectParams.range}}:{})})):[], handCount:p.hand.length
   }))};
+  return state.cardNameVersion==='classic'?applyClassicCardNames(pub):pub;
+}
+/** Classic view: deep-swap every card's display name to its old name. Any object
+ *  carrying both `name` and `oldName` is treated as a card; a truthy oldName
+ *  replaces name (empty/null oldName falls back to the modern name). Clones first
+ *  so the engine's canonical (modern) state is never mutated. */
+function applyClassicCardNames<T>(view:T):T {
+  const clone=JSON.parse(JSON.stringify(view));
+  const walk=(v:unknown):void=>{
+    if(Array.isArray(v)){for(const item of v)walk(item);return;}
+    if(v&&typeof v==='object'){
+      const o=v as Record<string,unknown>;
+      if(typeof o.name==='string'&&'oldName'in o&&o.oldName)o.name=o.oldName as string;
+      for(const k in o)if(k!=='oldName')walk(o[k]);
+    }
+  };
+  walk(clone);
+  return clone as T;
 }
 /** @deprecated Use createPublicGameState for new server code. */
 export const publicState=createPublicGameState;

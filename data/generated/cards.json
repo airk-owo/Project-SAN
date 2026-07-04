@@ -2,6 +2,7 @@
   {
     "id": "C001",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -25,6 +26,7 @@
   {
     "id": "C002",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -48,6 +50,7 @@
   {
     "id": "C003",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -71,6 +74,7 @@
   {
     "id": "C004",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -94,6 +98,7 @@
   {
     "id": "C005",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -117,6 +122,7 @@
   {
     "id": "C006",
     "name": "ถอนสะพาน",
+    "oldName": "เผาทำลาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -140,6 +146,7 @@
   {
     "id": "C007",
     "name": "เกาทัณฑ์พันดอก",
+    "oldName": "เกาทัณฑ์พันดอก",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -163,6 +170,7 @@
   {
     "id": "C008",
     "name": "ร่วมสาบาน",
+    "oldName": "ยาหลวง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -186,6 +194,7 @@
   {
     "id": "C009",
     "name": "ละโมบฉกฉวย",
+    "oldName": "เพิ่มเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -209,6 +218,7 @@
   {
     "id": "C010",
     "name": "ละโมบฉกฉวย",
+    "oldName": "เพิ่มเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -232,6 +242,7 @@
   {
     "id": "C011",
     "name": "ละโมบฉกฉวย",
+    "oldName": "เพิ่มเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -255,6 +266,7 @@
   {
     "id": "C012",
     "name": "ละโมบฉกฉวย",
+    "oldName": "เพิ่มเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -278,6 +290,7 @@
   {
     "id": "C013",
     "name": "ยืมมือสังหาร",
+    "oldName": "ยืมมือสังหาร",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -299,6 +312,7 @@
   {
     "id": "C014",
     "name": "ยืมมือสังหาร",
+    "oldName": "ยืมมือสังหาร",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -320,6 +334,7 @@
   {
     "id": "C015",
     "name": "มีสุขลืมเมือง",
+    "oldName": "มีสุขลืมเมือง",
     "type": "อุบายรอเวลา",
     "cardType": "delayed_trick",
     "suit": "♣",
@@ -344,6 +359,7 @@
   {
     "id": "C016",
     "name": "มีสุขลืมเมือง",
+    "oldName": "มีสุขลืมเมือง",
     "type": "อุบายรอเวลา",
     "cardType": "delayed_trick",
     "suit": "♥",
@@ -368,6 +384,7 @@
   {
     "id": "C017",
     "name": "มีสุขลืมเมือง",
+    "oldName": "มีสุขลืมเมือง",
     "type": "อุบายรอเวลา",
     "cardType": "delayed_trick",
     "suit": "♠",
@@ -392,6 +409,7 @@
   {
     "id": "C018",
     "name": "ลอบขโมย",
+    "oldName": "ปล้นเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -416,6 +434,7 @@
   {
     "id": "C019",
     "name": "ลอบขโมย",
+    "oldName": "ปล้นเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♦",
@@ -440,6 +459,7 @@
   {
     "id": "C020",
     "name": "ลอบขโมย",
+    "oldName": "ปล้นเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♦",
@@ -464,6 +484,7 @@
   {
     "id": "C021",
     "name": "ลอบขโมย",
+    "oldName": "ปล้นเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -488,6 +509,7 @@
   {
     "id": "C022",
     "name": "ลอบขโมย",
+    "oldName": "ปล้นเสบียง",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -512,6 +534,7 @@
   {
     "id": "C023",
     "name": "คงกระพันชาตรี",
+    "oldName": "ยกเลิกอุบาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -533,6 +556,7 @@
   {
     "id": "C024",
     "name": "คงกระพันชาตรี",
+    "oldName": "ยกเลิกอุบาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♦",
@@ -554,6 +578,7 @@
   {
     "id": "C025",
     "name": "คงกระพันชาตรี",
+    "oldName": "ยกเลิกอุบาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -575,6 +600,7 @@
   {
     "id": "C026",
     "name": "คงกระพันชาตรี",
+    "oldName": "ยกเลิกอุบาย",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -596,6 +622,7 @@
   {
     "id": "C027",
     "name": "ท้าสู้",
+    "oldName": "ท้าสู้",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♦",
@@ -617,6 +644,7 @@
   {
     "id": "C028",
     "name": "ท้าสู้",
+    "oldName": "ท้าสู้",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -638,6 +666,7 @@
   {
     "id": "C029",
     "name": "ท้าสู้",
+    "oldName": "ท้าสู้",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -659,6 +688,7 @@
   {
     "id": "C030",
     "name": "คนเถื่อนบุกรุก",
+    "oldName": null,
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♣",
@@ -682,6 +712,7 @@
   {
     "id": "C031",
     "name": "คนเถื่อนบุกรุก",
+    "oldName": null,
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -705,6 +736,7 @@
   {
     "id": "C032",
     "name": "คนเถื่อนบุกรุก",
+    "oldName": null,
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♠",
@@ -728,6 +760,7 @@
   {
     "id": "C033",
     "name": "เก็บเกี่ยวยุ้งฉาง",
+    "oldName": "เก็บเกี่ยวยุ้งข้าว",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -751,6 +784,7 @@
   {
     "id": "C034",
     "name": "เก็บเกี่ยวยุ้งฉาง",
+    "oldName": "เก็บเกี่ยวยุ้งข้าว",
     "type": "อุบาย",
     "cardType": "instant_trick",
     "suit": "♥",
@@ -774,6 +808,7 @@
   {
     "id": "C035",
     "name": "ฟ้าลงโทษ",
+    "oldName": "เรือระเบิดเพลิง",
     "type": "อุบายรอเวลา",
     "cardType": "delayed_trick",
     "suit": "♠",
@@ -808,6 +843,7 @@
   {
     "id": "C036",
     "name": "ฟ้าลงโทษ",
+    "oldName": "เรือระเบิดเพลิง",
     "type": "อุบายรอเวลา",
     "cardType": "delayed_trick",
     "suit": "♥",
@@ -842,6 +878,7 @@
   {
     "id": "C037",
     "name": "เซ็กเธาว์",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "offensive_mount",
     "suit": "♥",
@@ -863,6 +900,7 @@
   {
     "id": "C038",
     "name": "เจ่าหวงเฟยเตี้ยน",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "defensive_mount",
     "suit": "♥",
@@ -884,6 +922,7 @@
   {
     "id": "C039",
     "name": "ต้าหยวน",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "offensive_mount",
     "suit": "♠",
@@ -905,6 +944,7 @@
   {
     "id": "C040",
     "name": "เต๊กเลา",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "defensive_mount",
     "suit": "♣",
@@ -926,6 +966,7 @@
   {
     "id": "C041",
     "name": "เจ่าหยิง",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "defensive_mount",
     "suit": "♠",
@@ -947,6 +988,7 @@
   {
     "id": "C042",
     "name": "ตี้หลู",
+    "oldName": null,
     "type": "อุปกรณ์ / พาหนะ",
     "cardType": "offensive_mount",
     "suit": "♦",
@@ -968,6 +1010,7 @@
   {
     "id": "C043",
     "name": "โล่จักรพรรดิ",
+    "oldName": null,
     "type": "อุปกรณ์ / เกราะ",
     "cardType": "armor",
     "suit": "♣",
@@ -989,6 +1032,7 @@
   {
     "id": "C044",
     "name": "ค่ายกลแปดทิศ",
+    "oldName": null,
     "type": "อุปกรณ์ / เกราะ",
     "cardType": "armor",
     "suit": "♣",
@@ -1010,6 +1054,7 @@
   {
     "id": "C045",
     "name": "ค่ายกลแปดทิศ",
+    "oldName": null,
     "type": "อุปกรณ์ / เกราะ",
     "cardType": "armor",
     "suit": "♠",
@@ -1031,6 +1076,7 @@
   {
     "id": "C046",
     "name": "ทวนกรีดนภา",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♦",
@@ -1055,6 +1101,7 @@
   {
     "id": "C047",
     "name": "ทวนอสรพิษ",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♠",
@@ -1080,6 +1127,7 @@
   {
     "id": "C048",
     "name": "หน้าไม้กล",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♣",
@@ -1103,6 +1151,7 @@
   {
     "id": "C049",
     "name": "หน้าไม้กล",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♦",
@@ -1126,6 +1175,7 @@
   {
     "id": "C050",
     "name": "ธนูกิเลน",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♥",
@@ -1150,6 +1200,7 @@
   {
     "id": "C051",
     "name": "ขวานก้วนสื่อ",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♦",
@@ -1175,6 +1226,7 @@
   {
     "id": "C052",
     "name": "ง้าวมังกรเขียว",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♠",
@@ -1198,6 +1250,7 @@
   {
     "id": "C053",
     "name": "กระบี่ชิงกัง",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♠",
@@ -1221,6 +1274,7 @@
   {
     "id": "C054",
     "name": "กระบี่ชวงกู่",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♠",
@@ -1244,6 +1298,7 @@
   {
     "id": "C055",
     "name": "ดาบห่างปิง",
+    "oldName": null,
     "type": "อุปกรณ์ / อาวุธ",
     "cardType": "weapon",
     "suit": "♠",
@@ -1268,6 +1323,7 @@
   {
     "id": "C056",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1289,6 +1345,7 @@
   {
     "id": "C057",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1310,6 +1367,7 @@
   {
     "id": "C058",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1331,6 +1389,7 @@
   {
     "id": "C059",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1352,6 +1411,7 @@
   {
     "id": "C060",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1373,6 +1433,7 @@
   {
     "id": "C061",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1394,6 +1455,7 @@
   {
     "id": "C062",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1415,6 +1477,7 @@
   {
     "id": "C063",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1436,6 +1499,7 @@
   {
     "id": "C064",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1457,6 +1521,7 @@
   {
     "id": "C065",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1478,6 +1543,7 @@
   {
     "id": "C066",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1499,6 +1565,7 @@
   {
     "id": "C067",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1520,6 +1587,7 @@
   {
     "id": "C068",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1541,6 +1609,7 @@
   {
     "id": "C069",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1562,6 +1631,7 @@
   {
     "id": "C070",
     "name": "หลบ",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1583,6 +1653,7 @@
   {
     "id": "C071",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1606,6 +1677,7 @@
   {
     "id": "C072",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1629,6 +1701,7 @@
   {
     "id": "C073",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1652,6 +1725,7 @@
   {
     "id": "C074",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1675,6 +1749,7 @@
   {
     "id": "C075",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1698,6 +1773,7 @@
   {
     "id": "C076",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1721,6 +1797,7 @@
   {
     "id": "C077",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1744,6 +1821,7 @@
   {
     "id": "C078",
     "name": "เสบียง",
+    "oldName": "ยา",
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1767,6 +1845,7 @@
   {
     "id": "C079",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1790,6 +1869,7 @@
   {
     "id": "C080",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1813,6 +1893,7 @@
   {
     "id": "C081",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♥",
@@ -1836,6 +1917,7 @@
   {
     "id": "C082",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1859,6 +1941,7 @@
   {
     "id": "C083",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1882,6 +1965,7 @@
   {
     "id": "C084",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1905,6 +1989,7 @@
   {
     "id": "C085",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1928,6 +2013,7 @@
   {
     "id": "C086",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1951,6 +2037,7 @@
   {
     "id": "C087",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♦",
@@ -1974,6 +2061,7 @@
   {
     "id": "C088",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -1997,6 +2085,7 @@
   {
     "id": "C089",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2020,6 +2109,7 @@
   {
     "id": "C090",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2043,6 +2133,7 @@
   {
     "id": "C091",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2066,6 +2157,7 @@
   {
     "id": "C092",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2089,6 +2181,7 @@
   {
     "id": "C093",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2112,6 +2205,7 @@
   {
     "id": "C094",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♠",
@@ -2135,6 +2229,7 @@
   {
     "id": "C095",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2158,6 +2253,7 @@
   {
     "id": "C096",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2181,6 +2277,7 @@
   {
     "id": "C097",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2204,6 +2301,7 @@
   {
     "id": "C098",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2227,6 +2325,7 @@
   {
     "id": "C099",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2250,6 +2349,7 @@
   {
     "id": "C100",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2273,6 +2373,7 @@
   {
     "id": "C101",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2296,6 +2397,7 @@
   {
     "id": "C102",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2319,6 +2421,7 @@
   {
     "id": "C103",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2342,6 +2445,7 @@
   {
     "id": "C104",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2365,6 +2469,7 @@
   {
     "id": "C105",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2388,6 +2493,7 @@
   {
     "id": "C106",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2411,6 +2517,7 @@
   {
     "id": "C107",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",
@@ -2434,6 +2541,7 @@
   {
     "id": "C108",
     "name": "โจมตี",
+    "oldName": null,
     "type": "พื้นฐาน",
     "cardType": "basic",
     "suit": "♣",

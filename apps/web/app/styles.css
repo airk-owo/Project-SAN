@@ -5068,3 +5068,54 @@ textarea,
     font-size: 1.25rem;
   }
 }
+
+/* --- Room Setup: card name version (Classic / Modern) toggle --- */
+.local-name-version {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+}
+.local-name-version-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f5d994;
+}
+.local-name-version-opts {
+  display: flex;
+  gap: 6px;
+}
+.local-name-version-btn {
+  flex: 1;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff14;
+  color: #f6efdd;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.local-name-version-btn.active {
+  background: #e0ba67;
+  border-color: #e0ba67;
+  color: #241812;
+  font-weight: 700;
+}
+.local-name-version-btn:disabled {
+  cursor: default;
+  filter: none;
+  opacity: 1;
+}
+.local-name-version-btn:disabled:not(.active) {
+  opacity: 0.5;
+}
+.local-name-version-note {
+  color: #c8b58a;
+  font-size: 0.75rem;
+}
+.ency-detail-altname {
+  margin-top: -2px;
+  color: #e0ba67cc;
+  font-size: 0.85rem;
+}

@@ -39,6 +39,7 @@ type Character = {
 type Card = {
   id: string;
   name: string;
+  oldName?: string | null;
   type: string;
   cardType: string;
   suit: string;
@@ -145,6 +146,7 @@ type Game = {
   turn: Turn | null;
   responseWindow: ResponseWindow | null;
   winner?: string;
+  cardNameVersion?: "modern" | "classic";
   pendingRepeatAttack?: { attackerId: string; weaponName: string } | null;
   pendingDestroyMount?: { attackerId: string; targetId: string } | null;
   pendingForceAttackDamage?: { attackerId: string } | null;
@@ -1463,6 +1465,33 @@ export default function Home() {
             </button>
           </div>
         )}
+        {waiting && (
+          <div className="local-name-version">
+            <span className="local-name-version-label">🃏 เวอร์ชันชื่อการ์ด</span>
+            <div className="local-name-version-opts">
+              {(
+                [
+                  ["modern", "ชื่อใหม่"],
+                  ["classic", "ชื่อเดิม"],
+                ] as const
+              ).map(([v, label]) => (
+                <button
+                  key={v}
+                  className={`local-name-version-btn${(game.cardNameVersion || "modern") === v ? " active" : ""}`}
+                  disabled={!isHost}
+                  onClick={() => emit("room:card-name-version", { version: v })}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {!isHost && (
+              <small className="local-name-version-note">
+                หัวหน้าห้องเป็นผู้เลือก
+              </small>
+            )}
+          </div>
+        )}
         {isHost &&
           waiting &&
           (game.startDeadline ? (
@@ -1609,6 +1638,10 @@ export default function Home() {
   const criticalCountdown =
     myDecision && secondsLeft != null && secondsLeft <= 7 && secondsLeft >= 1;
 
+  // Card name version for the encyclopedia (in-game cards are already resolved server-side).
+  const classicNames = game.cardNameVersion === "classic";
+  const encName = (c: { name: string; oldName?: string | null }) =>
+    classicNames && c.oldName ? c.oldName : c.name;
   const encCategoryOf = (c: Card): "basic" | "trick" | "equip" =>
     c.cardType === "basic"
       ? "basic"
@@ -1705,12 +1738,19 @@ export default function Home() {
                 >
                   {encDetail.number} {suitTx(encDetail.suit)}
                 </span>
-                <h3>{encDetail.name}</h3>
+                <h3>{encName(encDetail)}</h3>
+                {encDetail.oldName &&
+                  encDetail.oldName !== encDetail.name && (
+                    <p className="ency-detail-altname">
+                      {classicNames ? "ชื่อใหม่" : "ชื่อเดิม"}:{" "}
+                      {classicNames ? encDetail.name : encDetail.oldName}
+                    </p>
+                  )}
                 {encDetail.image && (
                   <img
                     className="ency-detail-art"
                     src={encDetail.image}
-                    alt={encDetail.name}
+                    alt={encName(encDetail)}
                     loading="lazy"
                   />
                 )}
@@ -1824,6 +1864,7 @@ export default function Home() {
                         ({ card }) =>
                           encCategoryOf(card) === encCategory &&
                           (!q ||
+                            encName(card).toLowerCase().includes(q) ||
                             card.name.toLowerCase().includes(q) ||
                             (card.description || "")
                               .toLowerCase()
@@ -1838,20 +1879,20 @@ export default function Home() {
                               key={card.name}
                               className="ency-card"
                               onClick={() => setEncDetail(card)}
-                              title={card.name}
+                              title={encName(card)}
                             >
                               <span className="ency-card-count">×{count}</span>
                               {card.image ? (
                                 <img
                                   className="ency-card-img"
                                   src={card.image}
-                                  alt={card.name}
+                                  alt={encName(card)}
                                   loading="lazy"
                                 />
                               ) : (
                                 <span className="ency-card-noimg">🎴</span>
                               )}
-                              <b className="ency-card-name">{card.name}</b>
+                              <b className="ency-card-name">{encName(card)}</b>
                               <span className="ency-card-type">
                                 {cardTypeLabel(card)}
                               </span>
