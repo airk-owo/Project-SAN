@@ -1,6 +1,39 @@
 "use client";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { io } from "socket.io-client";
+import type {
+  Role,
+  Character,
+  Card,
+  EquipmentSlots,
+  Player,
+  RoleSet,
+  Room,
+  Game,
+  IceSelection,
+} from "./lib/gameTypes";
+import {
+  ROLE_LABEL,
+  PHASE_LABEL,
+  roleText,
+  hearts,
+  charName,
+  cardInfo,
+  suitColor,
+  suitTx,
+  cardTypeLabel,
+  KINGDOM_FACTION,
+  edgePosition,
+  lobbyPosition,
+  isViewerDecisionActive,
+  canAutoEndTurn,
+} from "./lib/gameConstants";
+import { CardFace } from "../components/CardFace";
+import { LogChatPanel } from "../components/LogChatPanel";
+import { SettingsPopover } from "../components/SettingsPopover";
+import { EncyclopediaDrawer } from "../components/EncyclopediaDrawer";
+import { CardDetailModal } from "../components/CardDetailModal";
+import { DropZoneModal } from "../components/DropZoneModal";
 const socket = io(
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
   { autoConnect: false },
@@ -17,353 +50,6 @@ const PLAY_CONFIRM_EVENTS = new Set([
   "weapon:snake-attack",
   "skill:seduce",
 ]);
-
-type Role = "emperor" | "loyalist" | "rebel" | "traitor";
-type RoleDefinition = {
-  role_key: Role;
-  role_th: string;
-  visibility: string;
-  win_condition_th: string;
-  team: string;
-};
-type Character = {
-  id: string;
-  name: string;
-  hp: number;
-  kingdom?: string;
-  kingdomTh?: string;
-  gender?: string;
-  image?: string | null;
-  skills: { name: string; description: string; condition?: string | null }[];
-};
-type Card = {
-  id: string;
-  name: string;
-  oldName?: string | null;
-  type: string;
-  cardType: string;
-  suit: string;
-  number: string;
-  description: string | null;
-  effect: string | null;
-  equipmentSlot: string | null;
-  image?: string | null;
-  effectParams?: { range?: number } | null;
-};
-type EquipmentSlots = {
-  weapon: Card | null;
-  armor: Card | null;
-  offensiveMount: Card | null;
-  defensiveMount: Card | null;
-};
-type Player = {
-  id: string;
-  username: string;
-  seatIndex: number;
-  connectionStatus: "online" | "disconnected";
-  joinedAt: string;
-  lastSeenAt: string;
-  role?: Role;
-  roleRevealed: boolean;
-  character?: Character;
-  characterOptions: Character[];
-  hand: Card[];
-  handCount: number;
-  equipment: EquipmentSlots;
-  decisionArea: Card[];
-  alive: boolean;
-  hp?: number;
-  maxHp?: number;
-  ready: boolean;
-  confirmedCharacter: boolean;
-};
-type Member = {
-  id: string;
-  username: string;
-  connectionStatus: "online" | "disconnected";
-  joinedAt: string;
-  lastSeenAt: string;
-};
-type ResponseWindow = {
-  type: string;
-  currentResponderId: string | null;
-  status: "open" | "resolved";
-  responses: {
-    playerId: string;
-    response: "card" | "decline" | "timeout";
-    card?: Card;
-  }[];
-  requiredPlayerIds?: string[];
-  dyingPlayerId?: string;
-};
-type Turn = {
-  activePlayerId: string | null;
-  phase: string;
-  attackUsedThisTurn: number;
-  drawnThisTurn?: number;
-  turnNumber?: number;
-};
-type RoleAliveCounts = {
-  emperor: number;
-  loyalist: number;
-  rebel: number;
-  traitor: number;
-};
-type RoleSet = {
-  emperor: number;
-  loyalist: number;
-  rebel: number;
-  traitor: number;
-};
-type Room = {
-  id: string;
-  playerCount: number;
-  spectatorCount: number;
-  host: string;
-  status: string;
-  hasPassword: boolean;
-};
-type Game = {
-  viewerId: string;
-  hostId: string;
-  isSpectator: boolean;
-  phase: string;
-  currentPlayerId?: string;
-  hasDrawnThisTurn: boolean;
-  lastPlayedCard?: Card;
-  pendingAction?: {
-    kind: "attack";
-    actorId: string;
-    targetId: string;
-    dodgesRequired?: number;
-    noDodge?: boolean;
-  } | null;
-  players: Player[];
-  spectators: Member[];
-  roleDefinitions?: RoleDefinition[];
-  deck: { length: number };
-  discard: Card[];
-  log: { id: string; message: string; at: string }[];
-  turn: Turn | null;
-  responseWindow: ResponseWindow | null;
-  winner?: string;
-  cardNameVersion?: "modern" | "classic";
-  pendingRepeatAttack?: { attackerId: string; weaponName: string } | null;
-  pendingDestroyMount?: { attackerId: string; targetId: string } | null;
-  pendingForceAttackDamage?: { attackerId: string } | null;
-  pendingReplaceDamage?: {
-    attackerId: string;
-    targetId: string;
-    damage: number;
-    weaponName: string;
-  } | null;
-  pendingTwinSwords?: {
-    attackerId: string;
-    targetId: string;
-    weaponName: string;
-  } | null;
-  pendingCoerce?: {
-    actorId: string;
-    weaponHolderId: string;
-    victimId: string;
-    trickName: string;
-  } | null;
-  pendingHarvest?: { revealed: Card[] } | null;
-  pendingJudgment?: {
-    playerId: string;
-    trickEffect: string;
-    trickName: string;
-    stage: "awaiting_draw" | "revealed";
-    revealed?: Card;
-  } | null;
-  pendingFankui?: { playerId: string; damagerId: string } | null;
-  pendingRetaliate?: { damagerId: string; victimId: string } | null;
-  pendingRetaliateJudgment?: { ownerId: string; damagerId: string } | null;
-  pendingLegacy?: { ownerId: string; cards: Card[] } | null;
-  pendingPeek?: { playerId: string; cards: Card[] } | null;
-  pendingDischord?: { jiuyiId: string; targetId: string } | null;
-  pendingAllyAssist?: {
-    emperorId: string;
-    allyId: string;
-    kind: "attack" | "dodge";
-    targetId?: string;
-  } | null;
-  pendingDraws?: Record<string, number>;
-  lastJudgment?: {
-    playerId: string;
-    trickName: string;
-    cardName: string;
-    cardNumber: string;
-    cardSuit: string;
-    result: string;
-    at: string;
-  };
-  tableFlash?: {
-    icon: string;
-    title: string;
-    detail?: string;
-    card?: { name: string; number: string; suit: string };
-    at: string;
-  } | null;
-  roleAliveCounts?: RoleAliveCounts;
-  distances?: Record<string, number | null>;
-  responseDeadline?: number | null;
-  startDeadline?: number | null;
-  characterSkillKeys?: Record<string, string[]>;
-  skillsUsedThisTurn?: string[];
-};
-type IceSelection =
-  | { zone: "hand"; handIndex: number }
-  | { zone: "equipment"; cardInstanceId: string };
-
-const ROLE_LABEL: Record<string, string> = {
-  emperor: "จักรพรรดิ",
-  rebel: "กบฏ",
-  loyalist: "ผู้ภักดี",
-  traitor: "ทรยศ",
-};
-const PHASE_LABEL: Record<string, string> = {
-  judgment: "ตัดสิน",
-  draw: "จั่ว",
-  play: "เล่น",
-  discard: "ทิ้งไพ่",
-  end: "จบเทิร์น",
-};
-const roleText = (role: RoleSet) =>
-  `จักรพรรดิ ${role.emperor} · ผู้ภักดี ${role.loyalist} · กบฏ ${role.rebel} · ทรยศ ${role.traitor}`;
-// '︎' (variation selector-15) forces text presentation so iOS/Safari doesn't turn ♥ into a color emoji (which ignores CSS color & breaks the HP bar layout).
-const HEART = "♥︎";
-const hearts = (hp?: number, maxHp?: number) =>
-  hp === undefined || maxHp === undefined ? null : (
-    <span className="mock-hearts">
-      {HEART.repeat(Math.max(0, hp))}
-      <i>{HEART.repeat(Math.max(0, maxHp - hp))}</i>
-    </span>
-  );
-const charName = (
-  p: { character?: { name: string }; username: string } | undefined,
-) => p?.character?.name ?? p?.username ?? "ผู้เล่น";
-const CARD_INFO: Record<string, { desc: string; use: string }> = {
-  attack: {
-    desc: 'ทำให้เป้าหมายต้องใช้ "หลบ" ไม่เช่นนั้นเสียพลังชีวิต 1',
-    use: "ใช้โจมตีศัตรูในระยะ (1 ครั้ง/เทิร์น)",
-  },
-  dodge: {
-    desc: 'ยกเลิกผลจากการ์ด "โจมตี"',
-    use: "การ์ดตอบโต้ — เล่นได้เมื่อถูกโจมตี",
-  },
-  heal: {
-    desc: "ฟื้นฟูพลังชีวิต 1 หน่วย",
-    use: "ใช้ตอนเลือดไม่เต็ม หรือช่วยคนใกล้ตาย",
-  },
-  all_others_attack_or_damage: {
-    desc: 'ขุนพลอื่นทุกคนต้องใช้ "โจมตี" ตามลำดับ ไม่เช่นนั้นเสียพลังชีวิต 1',
-    use: "กดดันทั้งโต๊ะ",
-  },
-  all_others_dodge_or_damage: {
-    desc: 'ขุนพลอื่นทุกคนต้องใช้ "หลบ" ตามลำดับ ไม่เช่นนั้นเสียพลังชีวิต 1',
-    use: "รัวใส่ทั้งโต๊ะ",
-  },
-  duel_attack_response: {
-    desc: 'เลือกขุนพล 1 คน ผลัดกันใช้ "โจมตี" ฝ่ายที่หยุดก่อนเสียพลังชีวิต 1',
-    use: "ท้าดวล",
-  },
-  draw_cards: { desc: "จั่วการ์ด 2 ใบจากกองจั่ว", use: "เติมการ์ดบนมือ" },
-  heal_all_living: {
-    desc: "ฟื้นฟูพลังชีวิตให้ขุนพลที่ยังมีชีวิตทุกคน คนละ 1 หน่วย",
-    use: "ฟื้นทั้งทีม",
-  },
-  discard_target_card: {
-    desc: "ทิ้งการ์ดบนมือ/อุปกรณ์ 1 ใบ ของขุนพลอื่น 1 คน",
-    use: "ทำลายอุปกรณ์หรือไพ่สำคัญของศัตรู",
-  },
-  steal_target_card_in_range: {
-    desc: "หยิบการ์ด 1 ใบ จากขุนพลอื่นที่อยู่ในระยะ 1 หน่วย",
-    use: "ขโมยไพ่ศัตรูที่อยู่ติดกัน",
-  },
-  negate_trick_effect: {
-    desc: "ยกเลิกผลของไพ่อุบายที่ประกาศใช้",
-    use: "ใช้ในช่วง Negate Window",
-  },
-  delayed_skip_play_phase: {
-    desc: "วางบนขุนพลอื่น เมื่อถึงเทิร์นเขา ตัดสิน: ถ้าไม่ใช่ ♥ จะถูกข้ามช่วงเล่นไพ่",
-    use: "กันไม่ให้ศัตรูออกการ์ดในเทิร์นถัดไป",
-  },
-  delayed_lightning_judgment: {
-    desc: "วางบนตัวเอง เมื่อถึงเทิร์น ตัดสิน: ♠ 2–9 เสีย 3 พลังชีวิต ไม่งั้นเลื่อนไปคนถัดไป",
-    use: "ระเบิดเวลาที่วนรอบโต๊ะ",
-  },
-  coerce_attack_or_take_weapon: {
-    desc: "บังคับขุนพลที่มีอาวุธให้โจมตีเป้าหมายที่เลือก ถ้าไม่โจมตี คุณยึดอาวุธของเขา",
-    use: "ยืมมือศัตรูฆ่ากันเอง หรือปล้นอาวุธ",
-  },
-  reveal_and_draft_cards: {
-    desc: "เปิดไพ่ 1 ใบต่อผู้เล่นมีชีวิต แล้วเริ่มจากคุณ ผลัดกันหยิบคนละใบ",
-    use: "เติมไพ่ให้ทั้งโต๊ะ แต่คุณเลือกก่อน",
-  },
-};
-const cardInfo = (c: Card) =>
-  CARD_INFO[c.effect || ""] ||
-  (c.description ? { desc: c.description, use: "" } : null);
-const suitColor = (suit: string) =>
-  suit === "♥" || suit === "♦" ? "red" : "black";
-// เติม VS-15 (U+FE0E) ท้ายดอกไพ่ตอนแสดงผล → บังคับให้ iOS ทุกเวอร์ชัน render เป็นตัวอักษร ไม่ใช่อิโมจิ (ห้ามใช้กับ logic เทียบดอก)
-const SUIT_TEXT: Record<string, string> = {
-  "♠": "♠︎",
-  "♥": "♥︎",
-  "♦": "♦︎",
-  "♣": "♣︎",
-};
-const suitTx = (s: string) => SUIT_TEXT[s] ?? s;
-/** Short type label: drops the "อุปกรณ์ /" prefix and appends the mount distance modifier. */
-const cardTypeLabel = (c: Card) => {
-  const base = (c.type || "").replace(/^อุปกรณ์\s*\/\s*/, "");
-  if (c.equipmentSlot === "offensive_mount") return `${base} −1`;
-  if (c.equipmentSlot === "defensive_mount") return `${base} +1`;
-  return base;
-};
-const KINGDOM_FACTION: Record<string, string> = {
-  WEI: "wei",
-  SHU: "shu",
-  WU: "wu",
-  QUN: "qun",
-};
-// Touch/no-hover device? Used to switch the drop-zone preview to two-step tap.
-const coarsePointer = () =>
-  typeof window !== "undefined" &&
-  !!window.matchMedia &&
-  window.matchMedia("(hover: none)").matches;
-/** A card rendered in the exact face style as the player's hand cards
- *  (rank / art / name / type). Reused for the drop-zone previews. */
-function CardFace({
-  card,
-  className = "",
-  compact = false,
-}: {
-  card: Card;
-  className?: string;
-  compact?: boolean;
-}) {
-  return (
-    <article
-      className={`mock-card mock-card-suit-${suitColor(card.suit)} ${className}`}
-    >
-      <header>
-        <span className="mock-card-rank">
-          {card.number}
-          {suitTx(card.suit)}
-        </span>
-      </header>
-      {card.image ? (
-        <img className="mock-card-art" src={card.image} alt={card.name} />
-      ) : (
-        <div className="mock-card-art">WTK</div>
-      )}
-      <b className="mock-card-name">{card.name}</b>
-      {!compact && <small>{cardTypeLabel(card)}</small>}
-    </article>
-  );
-}
 
 function EquipmentDisplay({
   eq,
@@ -438,26 +124,6 @@ function DecisionArea({
   );
 }
 
-// Arc across the top of the table. index 0 = viewer's immediate left neighbor,
-// last index = viewer's immediate right neighbor (viewer sits at the bottom).
-function edgePosition(index: number, total: number) {
-  if (total <= 0) return { left: "50%", top: "1%" };
-  if (total === 1) return { left: "50%", top: "4%" };
-  const t = index / (total - 1); // 0 → left, 1 → right
-  const angle = Math.PI * (1 - t); // π (left) → 0 (right)
-  const left = 50 + 46 * Math.cos(angle); // 4% … 96%
-  const top = 48 - 46 * Math.sin(angle); // ends low (48), middle high (2)
-  return { left: `${left.toFixed(1)}%`, top: `${top.toFixed(1)}%` };
-}
-
-// Circular position for all 10 lobby seats (seat 1 at top, clockwise)
-function lobbyPosition(seatIndex: number): { left: string; top: string } {
-  const angle = ((seatIndex - 1) / 10) * 2 * Math.PI - Math.PI / 2;
-  return {
-    left: `${(50 + 42 * Math.cos(angle)).toFixed(1)}%`,
-    top: `${(50 + 38 * Math.sin(angle)).toFixed(1)}%`,
-  };
-}
 
 function OpponentPanel({
   player,
@@ -526,85 +192,6 @@ function OpponentPanel({
   );
 }
 
-/** True when the server's decision countdown is waiting on the viewer specifically
- *  (dodge/heal/negate/duel/etc. or any pending decision the viewer must resolve). */
-function isViewerDecisionActive(game: Game | undefined): boolean {
-  if (!game || game.phase !== "playing" || !game.responseDeadline) return false;
-  const me = game.viewerId;
-  const rw = game.responseWindow;
-  return Boolean(
-    (rw?.status === "open" && rw.currentResponderId === me) ||
-      game.pendingJudgment?.playerId === me ||
-      game.pendingRepeatAttack?.attackerId === me ||
-      game.pendingDestroyMount?.attackerId === me ||
-      game.pendingForceAttackDamage?.attackerId === me ||
-      game.pendingReplaceDamage?.attackerId === me ||
-      game.pendingTwinSwords?.targetId === me ||
-      game.pendingFankui?.playerId === me ||
-      game.pendingLegacy?.ownerId === me ||
-      game.pendingRetaliateJudgment?.ownerId === me ||
-      game.pendingRetaliate?.damagerId === me ||
-      game.pendingPeek?.playerId === me ||
-      game.pendingDischord?.targetId === me ||
-      game.pendingAllyAssist?.allyId === me,
-  );
-}
-/** True when it is the viewer's play phase and there is genuinely nothing to do:
- *  no card is proactively playable AND no character/card ability can be activated
- *  AND no forced discard/draw/decision is pending. Used to auto-end the turn.
- *  Deliberately conservative — any doubt (e.g. holding a peach) keeps the turn open. */
-function canAutoEndTurn(game: Game | undefined): boolean {
-  if (!game || game.phase !== "playing") return false;
-  if (game.currentPlayerId !== game.viewerId) return false;
-  if (game.turn?.phase !== "play" || !game.hasDrawnThisTurn) return false;
-  if (game.responseWindow || game.pendingJudgment) return false;
-  if ((game.pendingDraws?.[game.viewerId] ?? 0) > 0) return false;
-  if (
-    game.pendingLegacy || game.pendingPeek || game.pendingDischord ||
-    game.pendingAllyAssist || game.pendingRetaliate || game.pendingRetaliateJudgment ||
-    game.pendingFankui || game.pendingCoerce || game.pendingTwinSwords ||
-    game.pendingForceAttackDamage || game.pendingReplaceDamage ||
-    game.pendingRepeatAttack || game.pendingDestroyMount || game.pendingHarvest
-  )
-    return false;
-  const me = game.players.find((p) => p.id === game.viewerId);
-  if (!me || me.hp === undefined) return false;
-  const keys = (me.character && game.characterSkillKeys?.[me.character.id]) || [];
-  const used = (k: string) => Boolean(game.skillsUsedThisTurn?.includes(k));
-  const attackedThisTurn = game.turn?.attackUsedThisTurn ?? 0;
-  const skipDiscard =
-    keys.includes("skip_discard_if_no_attack") && attackedThisTurn === 0;
-  if (!skipDiscard && me.hand.length - me.hp > 0) return false; // must discard = an action
-  const unlimited =
-    me.equipment.weapon?.effect === "unlimited_attack_per_turn" ||
-    keys.includes("unlimited_attack");
-  const canAttackMore = unlimited || attackedThisTurn < 1;
-  const isRed = (s: string) => s === "♥" || s === "♦";
-  const swap = keys.includes("attack_dodge_swap");
-  const redAsAttack = keys.includes("red_as_attack");
-  const playable = (c: Card): boolean => {
-    if (c.effect === "attack") return canAttackMore;
-    if (c.effect === "dodge")
-      return (swap || (redAsAttack && isRed(c.suit))) && canAttackMore;
-    return true; // tricks / equipment / heal etc. are always proactively playable
-  };
-  if (me.hand.some(playable)) return false;
-  const handN = me.hand.length;
-  const hasSuit = (suits: string[]) => me.hand.some((c) => suits.includes(c.suit));
-  const abilityUsable =
-    (me.equipment.weapon?.effect === "discard_two_as_attack" && canAttackMore) ||
-    (keys.includes("self_damage_draw") && me.hp > 0) ||
-    (keys.includes("discard_then_draw_equal") && !used("discard_then_draw_equal")) ||
-    (keys.includes("miracle_medicine") && !used("miracle_medicine") && handN > 0) ||
-    (keys.includes("marriage_heal") && !used("marriage_heal") && handN >= 2) ||
-    (keys.includes("benevolence_give") && handN > 0) ||
-    (keys.includes("black_as_dismantle") && hasSuit(["♠", "♣"])) ||
-    (keys.includes("diamond_as_indulgence") && hasSuit(["♦"])) ||
-    (keys.includes("dischord") && !used("dischord") && handN > 0) ||
-    (keys.includes("incite_duel") && !used("incite") && handN > 0) ||
-    (keys.includes("ask_shu_attack") && me.role === "emperor");
-  return !abilityUsable;
-}
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -1504,77 +1091,21 @@ export default function Home() {
     ? Math.max(0, Math.ceil((game.startDeadline - nowTs) / 1000))
     : null;
 
-  // Plain JSX element (not a component) so it is not remounted on every keystroke —
-  // a nested component definition would lose input focus after each character.
   // Log/chat panel content — opened from the navbar (top-right overlay so it never covers the hand).
   const logChatContent = (
-    <section className="mock-log local-navpanel">
-      <h2 className="local-tab-bar">
-        <button
-          className={`local-tab${logChatTab === "log" ? " local-tab-active" : ""}`}
-          onClick={() => setLogChatTab("log")}
-        >
-          บันทึก
-        </button>
-        <button
-          className={`local-tab${logChatTab === "chat" ? " local-tab-active" : ""}`}
-          onClick={() => setLogChatTab("chat")}
-        >
-          แชท
-        </button>
-        <button
-          className="local-chat-collapse"
-          onClick={() => setOpenPanel(null)}
-          title="ปิด"
-        >
-          ✕
-        </button>
-      </h2>
-      {logChatTab === "log" ? (
-        <div className="local-log-scroll">
-          {game.log.map((l) => (
-            <p key={l.id}>
-              <time>{l.at.slice(11, 16) || l.at}</time>
-              {renderLog(l.message)}
-            </p>
-          ))}
-          <div ref={logEndRef} />
-        </div>
-      ) : (
-        <div className="local-chat-scroll">
-          {chat.map((m) => (
-            <p key={m.id}>
-              <time>{m.at?.slice(11, 16) || ""}</time>
-              <b>{m.username}:</b> {m.text}
-            </p>
-          ))}
-          <div ref={chatEndRef} />
-        </div>
-      )}
-      {logChatTab === "chat" && (
-        <form
-          className="local-chat-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (chatText.trim()) {
-              emit("chat:send", { text: chatText });
-              setChatText("");
-            }
-          }}
-        >
-          <input
-            className="local-chat-input"
-            value={chatText}
-            onChange={(e) => setChatText(e.target.value)}
-            placeholder="พิมพ์ข้อความ…"
-            maxLength={200}
-          />
-          <button type="submit" disabled={!chatText.trim()}>
-            ส่ง
-          </button>
-        </form>
-      )}
-    </section>
+    <LogChatPanel
+      tab={logChatTab}
+      onTabChange={setLogChatTab}
+      onClose={() => setOpenPanel(null)}
+      log={game.log}
+      renderLog={renderLog}
+      logEndRef={logEndRef}
+      chat={chat}
+      chatEndRef={chatEndRef}
+      chatText={chatText}
+      onChatTextChange={setChatText}
+      onSendChat={(text) => emit("chat:send", { text })}
+    />
   );
   // Room panel content — opened from the navbar.
   const roomContent = (
@@ -1773,50 +1304,13 @@ export default function Home() {
             ⚙️
           </button>
           {showSettings && (
-            <>
-              <div
-                className="local-pop-backdrop"
-                onClick={() => setShowSettings(false)}
-              />
-              <div
-                className="local-settings-pop"
-                role="dialog"
-                aria-label="ตั้งค่าในเกม"
-              >
-                <div className="settings-row">
-                  <span className="settings-row-label">
-                    <b>ยืนยันก่อนเล่นการ์ด</b>
-                    <small>
-                      ถามยืนยันทุกครั้งก่อนเล่นการ์ด กันเผลอเล่นผิดใบ
-                    </small>
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={confirmBeforePlay}
-                    className={`settings-switch${confirmBeforePlay ? " on" : ""}`}
-                    onClick={toggleConfirmBeforePlay}
-                  >
-                    <span className="settings-switch-knob" />
-                  </button>
-                </div>
-                <div className="settings-row">
-                  <span className="settings-row-label">
-                    <b>เสียงแจ้งเตือน</b>
-                    <small>เล่นเสียงเมื่อถึงตาของคุณ</small>
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={soundOn}
-                    className={`settings-switch${soundOn ? " on" : ""}`}
-                    onClick={() => setSoundOn((v) => !v)}
-                  >
-                    <span className="settings-switch-knob" />
-                  </button>
-                </div>
-              </div>
-            </>
+            <SettingsPopover
+              onClose={() => setShowSettings(false)}
+              confirmBeforePlay={confirmBeforePlay}
+              onToggleConfirm={toggleConfirmBeforePlay}
+              soundOn={soundOn}
+              onToggleSound={() => setSoundOn((v) => !v)}
+            />
           )}
         </div>
       </div>
@@ -1844,274 +1338,24 @@ export default function Home() {
     myDecision && secondsLeft != null && secondsLeft <= 7 && secondsLeft >= 1;
 
   // Card name version for the encyclopedia (in-game cards are already resolved server-side).
-  const classicNames = game.cardNameVersion === "classic";
-  const encName = (c: { name: string; oldName?: string | null }) =>
-    classicNames && c.oldName ? c.oldName : c.name;
-  const encCategoryOf = (c: Card): "basic" | "trick" | "equip" =>
-    c.cardType === "basic"
-      ? "basic"
-      : c.cardType === "instant_trick" || c.cardType === "delayed_trick"
-        ? "trick"
-        : "equip";
   const encyclopediaDrawer = (
-    <>
-      {/* Edge triggers only on the game board (kept off the seating/lobby screens) */}
-      {isPlaying && (
-        <>
-          {/* Desktop: slim gold sliding tab on the left edge */}
-          <button
-            className={`ency-tab${showEncyclopedia ? " away" : ""}`}
-            onClick={() => setShowEncyclopedia(true)}
-            title="คลังการ์ด / สารานุกรม"
-            aria-label="เปิดคลังการ์ด"
-          >
-            <span className="ency-tab-icon">📜</span>
-            <span className="ency-tab-text">คลังการ์ด</span>
-          </button>
-          {/* Mobile: minimal handle (swipe from the left edge also works) */}
-          <button
-            className={`ency-handle${showEncyclopedia ? " away" : ""}`}
-            onClick={() => setShowEncyclopedia(true)}
-            aria-label="เปิดคลังการ์ด (ปัดจากขอบซ้าย)"
-          />
-        </>
-      )}
-      {/* Desktop backdrop — dims the board behind the 40–50% panel */}
-      <div
-        className={`ency-backdrop${showEncyclopedia ? " open" : ""}`}
-        onClick={() => setShowEncyclopedia(false)}
-      />
-      <aside
-        className={`ency-panel${showEncyclopedia ? " open" : ""}`}
-        aria-hidden={!showEncyclopedia}
-      >
-        <header className="ency-header">
-          <h2>📜 คลังการ์ด</h2>
-          <button
-            className="ency-close"
-            onClick={() => setShowEncyclopedia(false)}
-            aria-label="ปิด"
-          >
-            ×
-          </button>
-        </header>
-        {encCharDetail ? (
-          <div className="ency-detail">
-            <button className="ency-back" onClick={() => setEncCharDetail(null)}>
-              ← กลับไปที่รายการ
-            </button>
-            {encCharDetail.image && (
-              <img
-                className="ency-detail-art"
-                src={encCharDetail.image}
-                alt={encCharDetail.name}
-                loading="lazy"
-              />
-            )}
-            <h3>{encCharDetail.name}</h3>
-            <p className="ency-detail-type">
-              {encCharDetail.kingdomTh || "—"} · ♥ {encCharDetail.hp}
-              {encCharDetail.gender ? ` · ${encCharDetail.gender}` : ""}
-            </p>
-            {encCharDetail.skills.length ? (
-              <ul className="ency-skills">
-                {encCharDetail.skills.map((s) => (
-                  <li key={s.name}>
-                    <b>{s.name}</b>
-                    <p>{s.description}</p>
-                    {s.condition && <small>{s.condition}</small>}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>ไม่มีทักษะพิเศษ</p>
-            )}
-          </div>
-        ) : encDetail ? (
-          (() => {
-            const info = cardInfo(encDetail);
-            return (
-              <div className="ency-detail">
-                <button
-                  className="ency-back"
-                  onClick={() => setEncDetail(null)}
-                >
-                  ← กลับไปที่รายการ
-                </button>
-                <span
-                  className={`card-rank mock-card-suit-${suitColor(encDetail.suit)}`}
-                >
-                  {encDetail.number} {suitTx(encDetail.suit)}
-                </span>
-                <h3>{encName(encDetail)}</h3>
-                {encDetail.oldName &&
-                  encDetail.oldName !== encDetail.name && (
-                    <p className="ency-detail-altname">
-                      {classicNames ? "ชื่อใหม่" : "ชื่อเดิม"}:{" "}
-                      {classicNames ? encDetail.name : encDetail.oldName}
-                    </p>
-                  )}
-                {encDetail.image && (
-                  <img
-                    className="ency-detail-art"
-                    src={encDetail.image}
-                    alt={encName(encDetail)}
-                    loading="lazy"
-                  />
-                )}
-                <p className="ency-detail-type">
-                  <b>ประเภท:</b> {cardTypeLabel(encDetail)}
-                </p>
-                {(encDetail.cardType === "weapon" ||
-                  encDetail.equipmentSlot === "weapon") &&
-                encDetail.effectParams?.range ? (
-                  <p className="card-detail-range">
-                    🎯 ระยะโจมตี {encDetail.effectParams.range}
-                  </p>
-                ) : null}
-                <p>{info?.desc || encDetail.description || "ยังไม่มีคำอธิบาย"}</p>
-                {info?.use && (
-                  <p className="card-detail-use">
-                    <b>เมื่อไหร่:</b> {info.use}
-                  </p>
-                )}
-              </div>
-            );
-          })()
-        ) : (
-          <>
-            <input
-              className="ency-search"
-              value={encSearch}
-              onChange={(e) => setEncSearch(e.target.value)}
-              placeholder={
-                encCategory === "generals"
-                  ? "🔍 ค้นหาขุนพล…"
-                  : "🔍 ค้นหาชื่อการ์ด…"
-              }
-            />
-            <div className="ency-layout">
-              <nav className="ency-sidebar" aria-label="ตัวกรอง">
-                {(
-                  [
-                    ["generals", "👑", "ขุนพล"],
-                    ["basic", "🀄", "พื้นฐาน"],
-                    ["trick", "🎴", "อุบาย"],
-                    ["equip", "⚔️", "อุปกรณ์"],
-                  ] as const
-                ).map(([key, icon, label]) => (
-                  <button
-                    key={key}
-                    className={`ency-filter${encCategory === key ? " active" : ""}`}
-                    onClick={() => setEncCategory(key)}
-                  >
-                    <span className="ency-filter-icon">{icon}</span>
-                    <span className="ency-filter-label">{label}</span>
-                  </button>
-                ))}
-              </nav>
-              <div className="ency-body">
-                {encCategory === "generals"
-                  ? (() => {
-                      if (!charCatalog)
-                        return <p className="ency-empty">กำลังโหลดขุนพล…</p>;
-                      const q = encSearch.trim().toLowerCase();
-                      const items = charCatalog.filter(
-                        (c) =>
-                          !q ||
-                          c.name.toLowerCase().includes(q) ||
-                          (c.kingdomTh || "").toLowerCase().includes(q),
-                      );
-                      if (!items.length)
-                        return <p className="ency-empty">ไม่พบขุนพล</p>;
-                      return (
-                        <div className="ency-grid">
-                          {items.map((char) => (
-                            <button
-                              key={char.id}
-                              className="ency-card"
-                              onClick={() => setEncCharDetail(char)}
-                              title={char.name}
-                            >
-                              {char.image ? (
-                                <img
-                                  className="ency-card-img"
-                                  src={char.image}
-                                  alt={char.name}
-                                  loading="lazy"
-                                />
-                              ) : (
-                                <span className="ency-card-noimg">🎴</span>
-                              )}
-                              <b className="ency-card-name">{char.name}</b>
-                              <span className="ency-card-type">
-                                {char.kingdomTh || ""} · ♥{char.hp}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })()
-                  : (() => {
-                      if (!catalog)
-                        return <p className="ency-empty">กำลังโหลดการ์ด…</p>;
-                      const byName = new Map<
-                        string,
-                        { card: Card; count: number }
-                      >();
-                      for (const c of catalog) {
-                        const e = byName.get(c.name);
-                        if (e) e.count++;
-                        else byName.set(c.name, { card: c, count: 1 });
-                      }
-                      const q = encSearch.trim().toLowerCase();
-                      const items = [...byName.values()].filter(
-                        ({ card }) =>
-                          encCategoryOf(card) === encCategory &&
-                          (!q ||
-                            encName(card).toLowerCase().includes(q) ||
-                            card.name.toLowerCase().includes(q) ||
-                            (card.description || "")
-                              .toLowerCase()
-                              .includes(q)),
-                      );
-                      if (!items.length)
-                        return <p className="ency-empty">ไม่พบการ์ด</p>;
-                      return (
-                        <div className="ency-grid">
-                          {items.map(({ card, count }) => (
-                            <button
-                              key={card.name}
-                              className="ency-card"
-                              onClick={() => setEncDetail(card)}
-                              title={encName(card)}
-                            >
-                              <span className="ency-card-count">×{count}</span>
-                              {card.image ? (
-                                <img
-                                  className="ency-card-img"
-                                  src={card.image}
-                                  alt={encName(card)}
-                                  loading="lazy"
-                                />
-                              ) : (
-                                <span className="ency-card-noimg">🎴</span>
-                              )}
-                              <b className="ency-card-name">{encName(card)}</b>
-                              <span className="ency-card-type">
-                                {cardTypeLabel(card)}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })()}
-              </div>
-            </div>
-          </>
-        )}
-      </aside>
-    </>
+    <EncyclopediaDrawer
+      isPlaying={isPlaying}
+      open={showEncyclopedia}
+      onOpen={() => setShowEncyclopedia(true)}
+      onClose={() => setShowEncyclopedia(false)}
+      classicNames={game.cardNameVersion === "classic"}
+      encCharDetail={encCharDetail}
+      setEncCharDetail={setEncCharDetail}
+      encDetail={encDetail}
+      setEncDetail={setEncDetail}
+      encSearch={encSearch}
+      setEncSearch={setEncSearch}
+      encCategory={encCategory}
+      setEncCategory={setEncCategory}
+      catalog={catalog}
+      charCatalog={charCatalog}
+    />
   );
 
   return (
@@ -5235,150 +4479,18 @@ export default function Home() {
             </section>
           </div>
         )}
-        {detailCard &&
-          (() => {
-            const info = cardInfo(detailCard);
-            return (
-              <div
-                className="modal-backdrop modal-top"
-                onClick={() => setDetailCard(undefined)}
-              >
-                <section
-                  className="card-detail"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <button
-                    className="modal-close"
-                    onClick={() => setDetailCard(undefined)}
-                  >
-                    ×
-                  </button>
-                  <span
-                    className={`card-rank mock-card-suit-${suitColor(detailCard.suit)}`}
-                  >
-                    {detailCard.number} {suitTx(detailCard.suit)}
-                  </span>
-                  <h2>{detailCard.name}</h2>
-                  {detailCard.image && (
-                    <img
-                      className="card-detail-art"
-                      src={detailCard.image}
-                      alt={detailCard.name}
-                    />
-                  )}
-                  <p>
-                    <b>ประเภท:</b> {cardTypeLabel(detailCard)}
-                  </p>
-                  {(detailCard.cardType === "weapon" ||
-                    detailCard.equipmentSlot === "weapon") &&
-                  detailCard.effectParams?.range ? (
-                    <p className="card-detail-range">
-                      🎯 ระยะโจมตี {detailCard.effectParams.range}
-                    </p>
-                  ) : null}
-                  <p>
-                    {info?.desc || detailCard.description || "ยังไม่มีคำอธิบาย"}
-                  </p>
-                  {info?.use && (
-                    <p className="card-detail-use">
-                      <b>เมื่อไหร่:</b> {info.use}
-                    </p>
-                  )}
-                </section>
-              </div>
-            );
-          })()}
-        {showDropZone && (
-          <div
-            className="modal-backdrop"
-            onClick={() => {
-              setShowDropZone(false);
-              setNameTip(null);
-            }}
-          >
-            <section
-              className="card-detail dropzone-panel"
-              onClick={(e) => {
-                e.stopPropagation();
-                setNameTip(null); // tap outside a card closes the name tooltip
-              }}
-            >
-              <button
-                className="modal-close"
-                onClick={() => {
-                  setShowDropZone(false);
-                  setNameTip(null);
-                }}
-              >
-                ×
-              </button>
-              <h2>กองทิ้ง</h2>
-              <p className="dropzone-count">
-                ไพ่ทั้งหมด {game.discard.length} ใบ ·{" "}
-                {coarsePointer()
-                  ? "แตะ 1 ครั้งดูชื่อ แตะซ้ำเปิดรายละเอียด"
-                  : "ชี้เพื่อดูชื่อ · คลิกดูรายละเอียด"}
-              </p>
-              {game.discard.length === 0 ? (
-                <p className="dropzone-empty">ยังไม่มีไพ่ในกองทิ้ง</p>
-              ) : (
-                <div className="dropzone-grid">
-                  {game.discard
-                    .map((card, i) => ({ card, i }))
-                    .reverse()
-                    .map(({ card, i }) => {
-                      const key = `${card.id}-${i}`;
-                      const isTop = i === game.discard.length - 1;
-                      const openDetail = () => {
-                        setNameTip(null);
-                        setDetailCard(card);
-                      };
-                      return (
-                        <div
-                          key={key}
-                          role="button"
-                          tabIndex={0}
-                          className={`dropzone-card-wrap${isTop ? " dropzone-card-top" : ""}${nameTip?.key === key ? " tip-active" : ""}`}
-                          onMouseEnter={() => {
-                            if (!coarsePointer())
-                              setNameTip({ key, name: card.name });
-                          }}
-                          onMouseLeave={() =>
-                            setNameTip((t) => (t?.key === key ? null : t))
-                          }
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Mobile: 1st tap shows the name, 2nd tap opens detail.
-                            if (coarsePointer() && nameTip?.key !== key) {
-                              setNameTip({ key, name: card.name });
-                              return;
-                            }
-                            openDetail();
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              openDetail();
-                            }
-                          }}
-                        >
-                          {isTop && (
-                            <span className="dropzone-card-badge">ล่าสุด</span>
-                          )}
-                          <CardFace card={card} />
-                        </div>
-                      );
-                    })}
-                </div>
-              )}
-            </section>
-            {nameTip && (
-              <div className="dz-name-tooltip" role="tooltip">
-                {nameTip.name}
-              </div>
-            )}
-          </div>
-        )}
+        <CardDetailModal
+          card={detailCard}
+          onClose={() => setDetailCard(undefined)}
+        />
+        <DropZoneModal
+          open={showDropZone}
+          onClose={() => setShowDropZone(false)}
+          discard={game.discard}
+          nameTip={nameTip}
+          setNameTip={setNameTip}
+          onOpenDetail={setDetailCard}
+        />
         {pendingPlay &&
           (() => {
             const cid =
