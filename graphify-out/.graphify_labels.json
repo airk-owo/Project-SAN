@@ -40,7 +40,6 @@
   "38": "tailwind.config.ts",
   "39": "import-manual-docx.ps1",
   "40": "Folder Responsibilities",
-  "41": "createGame",
   "42": "Game State Model",
   "43": "WTK card effect logic",
   "44": "1. หน้าเว็บไม่มีสไตล์ / \"UI หาย\" (CSS โหลดไม่ได้ 404 ในโหมด dev)",
@@ -54,6 +53,5 @@
   "52": "next-tasks.md",
   "53": "CLAUDE.md",
   "54": "architecture-decisions.md",
-  "55": "draw",
   "56": "TODO.md"
 }
