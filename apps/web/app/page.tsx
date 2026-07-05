@@ -34,6 +34,7 @@ import { SettingsPopover } from "../components/SettingsPopover";
 import { EncyclopediaDrawer } from "../components/EncyclopediaDrawer";
 import { CardDetailModal } from "../components/CardDetailModal";
 import { DropZoneModal } from "../components/DropZoneModal";
+import { DebugSandboxPanel } from "../components/DebugSandboxPanel";
 const socket = io(
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
   { autoConnect: false },
@@ -1362,6 +1363,10 @@ export default function Home() {
     <>
       {navbar}
       {encyclopediaDrawer}
+      {/* QA God Mode — dev builds only; the guard is a compile-time constant so production bundles tree-shake the panel away. */}
+      {process.env.NODE_ENV !== "production" && (
+        <DebugSandboxPanel game={game} gameId={joinedRoom} socket={socket} />
+      )}
       <main
         className={
           isPlaying
