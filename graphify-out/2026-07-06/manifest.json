@@ -40,9 +40,9 @@
     "semantic_hash": "69ecf8ba488dd35ce1e822fee5c40849"
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783274978.3174489,
-    "ast_hash": "1eadf1e1d656599aa373be302409c91f",
-    "semantic_hash": ""
+    "mtime": 1783206202.9252155,
+    "ast_hash": "992b0bd5c83c3ad46555ae45f655b9cc",
+    "semantic_hash": "992b0bd5c83c3ad46555ae45f655b9cc"
   },
   "apps/web/components/LobbyTable.tsx": {
     "mtime": 1782915944.7687871,
@@ -717,11 +717,6 @@
   "packages/game/src/engine/handlers/dev-sandbox.ts": {
     "mtime": 1783247871.100255,
     "ast_hash": "c27221351ee1866b70a556625761bd53",
-    "semantic_hash": ""
-  },
-  "apps/web/components/DebugSandboxPanel.tsx": {
-    "mtime": 1783274964.7016785,
-    "ast_hash": "a4e1c238151ea1212cc0d57745f5e2b8",
     "semantic_hash": ""
   }
 }
