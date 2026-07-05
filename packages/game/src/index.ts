@@ -7,6 +7,7 @@ export * from './engine/setup.js';
 export * from './engine/turns.js';
 export * from './engine/view.js';
 export * from './engine/handlers/character-skills.js';
+export * from './engine/handlers/dev-sandbox.js';
 export * from './engine/handlers/combat.js';
 export * from './engine/handlers/equipment.js';
 export * from './engine/handlers/tricks.js';
