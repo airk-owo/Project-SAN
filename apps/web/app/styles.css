@@ -208,6 +208,12 @@ body:has(.lobby) {
   font-size: 1.03rem;
   letter-spacing: 0.01em;
 }
+.lobby-greet-name {
+  color: #a67722;
+}
+.lobby-greet-noname {
+  color: #a4906f;
+}
 .lobby input {
   display: block;
   width: 100%;
@@ -223,58 +229,150 @@ body:has(.lobby) {
     box-shadow 0.18s,
     background 0.18s;
 }
-/* ── Lobby identity chip — top-right corner, outside the card ──
-   Guest identity today; the same slot becomes the account/avatar chip when
-   email login lands, so players never have to relearn where "me" lives. */
+/* ── Lobby identity: Chinese scroll (คัมภีร์) — top-right corner, outside the card ──
+   Closed: two rods + red seal medallion. Hover/focus/edit: the paper unrolls leftward
+   revealing the player name. The seal circle is the future avatar slot — replace its
+   glyph with an <img> (round frame + overflow already handled) when accounts land. */
 .lobby-topbar {
   position: fixed;
   top: 16px;
   right: 20px;
   z-index: 50;
+  border-bottom: none; /* guard against the global header underline */
 }
-.identity-chip,
-.identity-chip-input {
-  font-family: inherit;
-  font-size: 0.98rem;
+.scroll-chip {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 10px #b88a3b4d);
+}
+/* Scroll rods: dark wood shafts with gold end-caps, slightly taller than the paper. */
+.scroll-rod {
+  width: 10px;
+  height: 52px;
+  border-radius: 5px;
+  background: linear-gradient(
+    180deg,
+    #c99a41 0%,
+    #6b4a2f 18%,
+    #8a6238 50%,
+    #6b4a2f 82%,
+    #c99a41 100%
+  );
+  box-shadow: inset 0 0 3px #3e2f2280;
+}
+/* The paper: collapsed to a sliver behind the seal; unrolls via max-width. */
+.scroll-paper {
+  max-width: 0;
+  min-width: 10px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0.6;
+  background:
+    linear-gradient(180deg, #d8c6a0 0, transparent 5px),
+    linear-gradient(0deg, #d8c6a0 0, transparent 5px),
+    linear-gradient(158deg, #fdf6e3, #f7ecd2);
+  box-shadow: inset 0 0 14px #c99a4126;
+  transition:
+    max-width 0.45s ease,
+    opacity 0.3s ease;
+}
+.scroll-chip:hover .scroll-paper,
+.scroll-chip:focus-within .scroll-paper,
+.scroll-chip.open .scroll-paper {
+  max-width: 240px;
+  opacity: 1;
+}
+/* Avatar plate (leads the chip) — the future profile-picture slot. */
+.scroll-seal {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 2px solid #c99a41;
+  background: radial-gradient(circle at 35% 30%, #a33327, #7c2222);
+  color: #fdf6e3;
+  font-size: 1.05rem;
+  text-shadow: 0 1px 2px #00000059;
+  transition: box-shadow 0.2s;
+}
+.scroll-chip:hover .scroll-seal,
+.scroll-chip.open .scroll-seal {
+  box-shadow: 0 0 0 4px #d4af5640;
+}
+/* Name button / edit input live on the paper — transparent, the paper is the frame. */
+.scroll-name,
+.scroll-name-input {
+  font: inherit;
+  border: none;
+  background: none;
+  padding: 8px 6px 8px 16px;
   color: #3e2f22;
-  background: #fffdf7f2;
-  border: 1px solid #d8c6a0;
-  border-radius: 999px;
-  padding: 9px 16px;
-  box-shadow: 0 4px 14px -8px #b88a3b80;
 }
-.identity-chip {
+.scroll-name {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   font-weight: 700;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
 }
-.identity-chip:hover {
-  border-color: #c99a41;
-  box-shadow: 0 0 0 4px #d4af5640;
-}
-.identity-chip-name {
+.scroll-name-text {
   color: #7c2222;
 }
-.identity-chip-edit {
+.scroll-name-edit {
   color: #a4906f;
   font-size: 0.85em;
 }
-.identity-chip-input {
-  width: min(220px, 56vw);
+.scroll-name-input {
+  width: min(200px, 52vw);
+  font-size: 0.98rem;
 }
-.identity-chip-input::placeholder {
+.scroll-name-input::placeholder {
   color: #a4906f;
 }
-.identity-chip-input:focus {
+.scroll-name-input:focus {
   outline: none;
-  border-color: #c99a41;
-  background: #fffef9;
-  box-shadow: 0 0 0 4px #d4af5640;
+}
+/* ── Mobile polish (≤700px): full-width card, chip clears the card, no x-overflow ── */
+@media (max-width: 700px) {
+  .lobby-topbar {
+    top: 10px;
+    right: 12px;
+  }
+  .scroll-rod {
+    height: 44px;
+  }
+  .scroll-paper {
+    height: 36px;
+  }
+  .scroll-seal {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+  .scroll-chip:hover .scroll-paper,
+  .scroll-chip:focus-within .scroll-paper,
+  .scroll-chip.open .scroll-paper {
+    max-width: min(180px, 52vw);
+  }
+  .lobby {
+    --card-padding: 34px 14px 22px;
+    margin: 78px 10px 0;
+    height: calc(100vh - 90px);
+    max-width: none;
+  }
+  .create-row input {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 }
 /* Short-window fallback: keep the room list usable when the window is minimized.
    The title only shrinks here — full size everywhere else. */
@@ -522,11 +620,24 @@ body:has(.lobby) {
 }
 @media (max-width: 700px) {
   .lobby {
-    margin-top: 4vh;
+    /* margin-top must clear the fixed identity chip (top:10px + ~54px tall) */
+    margin-top: 78px;
     border-radius: 16px;
   }
   .lobby .room-browser article button {
-    padding: 11px 18px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  /* Create row, phone-sized: the button stretches to match the input's height,
+     so shrinking the input's padding compacts the whole row. */
+  .lobby .create-room .create-row input {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+  .lobby .create-room button {
+    padding: 0 14px;
+    font-size: 0.78rem;
+    border-radius: 9px;
   }
 }
 input,

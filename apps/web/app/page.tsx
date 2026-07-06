@@ -802,31 +802,53 @@ export default function Home() {
   if (!game)
     return (
       <>
-        <header className="lobby-topbar">
-          {editingName || !name ? (
-            <input
-              className="identity-chip-input"
-              value={name}
-              autoFocus
-              placeholder="ตั้งชื่อผู้เล่น…"
-              onChange={(e) => setName(e.target.value)}
-              onBlur={commitName}
-              onKeyDown={(e) => e.key === "Enter" && commitName()}
-            />
-          ) : (
-            <button
-              className="identity-chip"
-              title="คลิกเพื่อแก้ชื่อ"
-              onClick={() => setEditingName(true)}
-            >
-              <span className="identity-chip-name">@{name}</span>
-              <span className="identity-chip-edit">✎</span>
-            </button>
-          )}
-        </header>
+        <div className="lobby-topbar">
+          {/* Scroll chip: closed = seal medallion + rods; hover/edit unrolls the paper.
+              The seal circle is the future avatar slot — swap its content for an <img>
+              when accounts land; the layout already reserves the round frame. */}
+          <div
+            className={`scroll-chip${editingName || !name ? " open" : ""}`}
+            onClick={() => {
+              if (!editingName && name) setEditingName(true);
+            }}
+          >
+            <span className="scroll-seal" aria-hidden>
+              <Icon name="sword" size="1.1em" />
+            </span>
+            <span className="scroll-rod" aria-hidden />
+            <div className="scroll-paper">
+              {editingName || !name ? (
+                <input
+                  className="scroll-name-input"
+                  value={name}
+                  autoFocus
+                  placeholder="โปรดตั้งชื่อผู้เล่น…"
+                  onChange={(e) => setName(e.target.value)}
+                  onBlur={commitName}
+                  onKeyDown={(e) => e.key === "Enter" && commitName()}
+                />
+              ) : (
+                <button className="scroll-name" title="คลิกเพื่อแก้ชื่อ">
+                  <span className="scroll-name-text">@{name}</span>
+                  <span className="scroll-name-edit">
+                    <Icon name="pencil" size="0.95em" />
+                  </span>
+                </button>
+              )}
+            </div>
+            <span className="scroll-rod" aria-hidden />
+          </div>
+        </div>
       <main className="lobby">
         <h1 className="game-title">ยุทธพิชัยสามก๊ก</h1>
-        <p>เข้าสู่สมรภูมิและรวมพลสหายของคุณ</p>
+        <p>
+          ยินดีต้อนรับท่านแม่ทัพ{" "}
+          {name ? (
+            <b className="lobby-greet-name">{name}</b>
+          ) : (
+            <i className="lobby-greet-noname">ไร้นาม</i>
+          )}
+        </p>
         <section className="room-browser">
           <div>
             <h2>ห้องที่เปิดอยู่</h2>

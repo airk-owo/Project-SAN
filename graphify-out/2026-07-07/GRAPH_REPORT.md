@@ -1,7 +1,7 @@
 # Graph Report - Project-SAN  (2026-07-07)
 
 ## Corpus Check
-- 91 files · ~890,769 words
+- 91 files · ~890,933 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `48dc3a05`
+- Built from commit: `e231334c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -132,12 +132,12 @@
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
 
 ## Import Cycles
-- 3-file cycle: `packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts`
 - 3-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/actions.ts`
 - 3-file cycle: `packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/handlers/character-skills.ts`
+- 3-file cycle: `packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts`
 - 3-file cycle: `packages/game/src/engine/state.ts -> packages/game/src/engine/types.ts -> packages/game/src/engine/view.ts -> packages/game/src/engine/state.ts`
-- 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
 - 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
+- 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
 
 ## Hyperedges (group relationships)
 - **Card System Assets** — source_ไพ่_doc, source_ไพ่หลบโจมตีเสบียง_doc, source_image_bg_img [INFERRED 0.70]
