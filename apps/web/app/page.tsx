@@ -36,6 +36,8 @@ import { EncyclopediaDrawer } from "../components/EncyclopediaDrawer";
 import { CardDetailModal } from "../components/CardDetailModal";
 import { DropZoneModal } from "../components/DropZoneModal";
 import { DebugSandboxPanel } from "../components/DebugSandboxPanel";
+import { AUTH_ENABLED } from "../lib/flags";
+import { useAuth, getAccessToken } from "../lib/useAuth";
 const socket = io(
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
   { autoConnect: false },
@@ -52,6 +54,24 @@ const PLAY_CONFIRM_EVENTS = new Set([
   "weapon:snake-attack",
   "skill:seduce",
 ]);
+// Join a room, attaching a fresh Supabase access token when the account feature is on
+// and a session exists — getAccessToken() refreshes an expired token first, so a
+// reconnect mid-game still verifies. The server treats a bad/missing token as guest.
+const emitRoomJoin = (
+  gameId: string,
+  username: string,
+  userId: string,
+  withToken: boolean,
+) => {
+  const payload = { gameId, username, userId };
+  if (withToken) {
+    void getAccessToken().then((token) =>
+      socket.emit("room:join", token ? { ...payload, accessToken: token } : payload),
+    );
+  } else {
+    socket.emit("room:join", payload);
+  }
+};
 
 function EquipmentDisplay({
   eq,
@@ -433,6 +453,9 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game, soundOn, joinedRoom]);
 
+  // Optional Google account (inert when NEXT_PUBLIC_FEATURE_AUTH is off). The guest
+  // wtk-member-id below stays the socket identity for everyone — logged in or not.
+  const { session, profile, signIn, signOut } = useAuth();
   useEffect(() => {
     let id = localStorage.getItem("wtk-member-id");
     if (!id) {
@@ -443,6 +466,16 @@ export default function Home() {
     const savedName = localStorage.getItem("wtk-name");
     if (savedName) setName(savedName);
   }, []);
+  // Logged-in players who never named themselves default to their profile name.
+  useEffect(() => {
+    if (!AUTH_ENABLED || !profile) return;
+    if (!localStorage.getItem("wtk-name")) {
+      setName(profile.username);
+      try {
+        localStorage.setItem("wtk-name", profile.username);
+      } catch {}
+    }
+  }, [profile]);
   // Per-player Card Play Confirmation preference — defaults ON; players opt out in settings.
   // Persists across reloads/matches on this device (only an explicit "0" turns it off).
   useEffect(() => {
@@ -527,17 +560,13 @@ export default function Home() {
   useEffect(() => {
     const reconnect = () => {
       if (joinedRoom && userId)
-        socket.emit("room:join", {
-          gameId: joinedRoom,
-          username: name,
-          userId,
-        });
+        emitRoomJoin(joinedRoom, name, userId, AUTH_ENABLED && !!session);
     };
     socket.on("connect", reconnect);
     return () => {
       socket.off("connect", reconnect);
     };
-  }, [joinedRoom, userId, name]);
+  }, [joinedRoom, userId, name, session]);
   // When it becomes the viewer's turn: flash a visual banner (always) and play a chime (if sound is on).
   useEffect(() => {
     const turn = game?.currentPlayerId;
@@ -768,7 +797,7 @@ export default function Home() {
     if (!userId) return;
     socket.connect();
     setJoinedRoom(roomId);
-    socket.emit("room:join", { gameId: roomId, username: name, userId });
+    emitRoomJoin(roomId, name, userId, AUTH_ENABLED && !!session);
   };
   const emitNow = (event: string, data?: Record<string, unknown>) =>
     socket.emit(event, { gameId: joinedRoom, ...data });
@@ -804,8 +833,8 @@ export default function Home() {
       <>
         <div className="lobby-topbar">
           {/* Scroll chip: closed = seal medallion + rods; hover/edit unrolls the paper.
-              The seal circle is the future avatar slot — swap its content for an <img>
-              when accounts land; the layout already reserves the round frame. */}
+              The seal doubles as the avatar slot — Google profile picture when the
+              account feature is on and the player is logged in, sword seal otherwise. */}
           <div
             className={`scroll-chip${editingName || !name ? " open" : ""}`}
             onClick={() => {
@@ -813,7 +842,16 @@ export default function Home() {
             }}
           >
             <span className="scroll-seal" aria-hidden>
-              <Icon name="sword" size="1.1em" />
+              {AUTH_ENABLED && profile?.avatar ? (
+                <img
+                  className="auth-avatar"
+                  src={profile.avatar}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <Icon name="sword" size="1.1em" />
+              )}
             </span>
             <span className="scroll-rod" aria-hidden />
             <div className="scroll-paper">
@@ -838,6 +876,18 @@ export default function Home() {
             </div>
             <span className="scroll-rod" aria-hidden />
           </div>
+          {AUTH_ENABLED && (
+            <div className="auth-chip-row">
+              {session ? (
+                <>
+                  <a href="/profile">โปรไฟล์</a>
+                  <button onClick={signOut}>ออกจากระบบ</button>
+                </>
+              ) : (
+                <button onClick={signIn}>เข้าสู่ระบบด้วย Google</button>
+              )}
+            </div>
+          )}
         </div>
       <main className="lobby">
         <h1 className="game-title">ยุทธพิชัยสามก๊ก</h1>

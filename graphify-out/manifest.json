@@ -5,13 +5,13 @@
     "semantic_hash": "598cb075410bcd95220ac90bbb60344a"
   },
   "apps/server/package.json": {
-    "mtime": 1783022706.4820082,
-    "ast_hash": "91f6d78ac0a1aa3057c9f322c8c5e23e",
-    "semantic_hash": "91f6d78ac0a1aa3057c9f322c8c5e23e"
+    "mtime": 1783374640.1700344,
+    "ast_hash": "c994e67c997260e2d9201f2b9b6fd6f5",
+    "semantic_hash": ""
   },
   "apps/server/src/index.ts": {
-    "mtime": 1783247945.2540317,
-    "ast_hash": "d6fbb05b2e7c40fda0a13af28ab4b63b",
+    "mtime": 1783374638.04504,
+    "ast_hash": "3a848c7dc13a21fe800edb6e0f9a5be0",
     "semantic_hash": ""
   },
   "apps/server/tsconfig.json": {
@@ -35,13 +35,13 @@
     "semantic_hash": ""
   },
   "apps/web/app/login/page.tsx": {
-    "mtime": 1783321494.181855,
-    "ast_hash": "52d3a7e47622311757c3cfede0a9bdff",
+    "mtime": 1783374880.0666916,
+    "ast_hash": "59f26a19e7713744ba7ee3edbeb4a250",
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783371464.7358785,
-    "ast_hash": "c0c26b8ad37c87c3318649f07bde7fd0",
+    "mtime": 1783374816.3655257,
+    "ast_hash": "b4425f20a237779815370a131a50d88d",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -792,6 +792,36 @@
   "source/Icon/pencil.svg": {
     "mtime": 1783371341.655718,
     "ast_hash": "76e7b6bd346ac71bdebec766457fdbe8",
+    "semantic_hash": ""
+  },
+  "apps/server/src/auth-stats.ts": {
+    "mtime": 1783374608.134656,
+    "ast_hash": "7bcfcf023fdff967aa900d6980b6b416",
+    "semantic_hash": ""
+  },
+  "apps/web/app/profile/page.tsx": {
+    "mtime": 1783374931.2498035,
+    "ast_hash": "664aba41163a5e917846689b941c80a9",
+    "semantic_hash": ""
+  },
+  "apps/web/lib/flags.ts": {
+    "mtime": 1783374739.758982,
+    "ast_hash": "431df8784a6c2e995f1ef9582e6355e2",
+    "semantic_hash": ""
+  },
+  "apps/web/lib/useAuth.ts": {
+    "mtime": 1783374749.069022,
+    "ast_hash": "49acc2744beb81df46f12b911aeb9866",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/0002_auth_stats.sql": {
+    "mtime": 1783374510.7943678,
+    "ast_hash": "d036b7d055ce284ad2462f8897151272",
+    "semantic_hash": ""
+  },
+  "docs/auth-setup.md": {
+    "mtime": 1783375007.9597664,
+    "ast_hash": "61bb1079390d8083df87abed154ca028",
     "semantic_hash": ""
   }
 }
