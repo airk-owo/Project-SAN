@@ -210,6 +210,8 @@ export default function Home() {
   const prevPhaseRef = useRef<string | undefined>(undefined);
   const [room, setRoom] = useState("demo");
   const [name, setName] = useState("");
+  // Lobby identity chip (top-right): true while the name input is open for editing.
+  const [editingName, setEditingName] = useState(false);
   const [userId, setUserId] = useState("");
   const [joinedRoom, setJoinedRoom] = useState("");
   const [chatText, setChatText] = useState("");
@@ -438,6 +440,8 @@ export default function Home() {
       localStorage.setItem("wtk-member-id", id);
     }
     setUserId(id);
+    const savedName = localStorage.getItem("wtk-name");
+    if (savedName) setName(savedName);
   }, []);
   // Per-player Card Play Confirmation preference — defaults ON; players opt out in settings.
   // Persists across reloads/matches on this device (only an explicit "0" turns it off).
@@ -786,16 +790,43 @@ export default function Home() {
       return next;
     });
 
+  const commitName = () => {
+    const trimmed = name.trim();
+    setName(trimmed);
+    setEditingName(false);
+    try {
+      localStorage.setItem("wtk-name", trimmed);
+    } catch {}
+  };
+
   if (!game)
     return (
+      <>
+        <header className="lobby-topbar">
+          {editingName || !name ? (
+            <input
+              className="identity-chip-input"
+              value={name}
+              autoFocus
+              placeholder="ตั้งชื่อผู้เล่น…"
+              onChange={(e) => setName(e.target.value)}
+              onBlur={commitName}
+              onKeyDown={(e) => e.key === "Enter" && commitName()}
+            />
+          ) : (
+            <button
+              className="identity-chip"
+              title="คลิกเพื่อแก้ชื่อ"
+              onClick={() => setEditingName(true)}
+            >
+              <span className="identity-chip-name">@{name}</span>
+              <span className="identity-chip-edit">✎</span>
+            </button>
+          )}
+        </header>
       <main className="lobby">
         <h1 className="game-title">ยุทธพิชัยสามก๊ก</h1>
         <p>เข้าสู่สมรภูมิและรวมพลสหายของคุณ</p>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Username"
-        />
         <section className="room-browser">
           <div>
             <h2>ห้องที่เปิดอยู่</h2>
@@ -817,6 +848,7 @@ export default function Home() {
                   </small>
                   <button
                     disabled={!name || !userId}
+                    title={!name ? "ตั้งชื่อผู้เล่นที่มุมบนขวาก่อน" : undefined}
                     onClick={() => join(r.id)}
                   >
                     {r.status === "waiting" ? "เข้าห้อง" : "เข้าชม"}
@@ -836,12 +868,17 @@ export default function Home() {
               onChange={(e) => setRoom(e.target.value)}
               placeholder="ชื่อห้อง"
             />
-            <button disabled={!name || !userId} onClick={() => join()}>
+            <button
+              disabled={!name || !userId}
+              title={!name ? "ตั้งชื่อผู้เล่นที่มุมบนขวาก่อน" : undefined}
+              onClick={() => join()}
+            >
               สร้าง/เข้าห้อง
             </button>
           </div>
         </section>
       </main>
+      </>
     );
 
   const myPlayer = game.players.find((p) => p.id === game.viewerId);
@@ -1646,48 +1683,52 @@ export default function Home() {
           </section>
         )}
         {game.phase === "character-select" && chooser && (
-          <section className="choice">
-            <h2>เลือกขุนพลของคุณ (คลิกที่การ์ด)</h2>
-            <div className="character-grid">
-              {chooser.characterOptions.map((c) => (
-                <article
-                  key={c.id}
-                  tabIndex={0}
-                  onClick={() => setConfirmCharacter(c)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setConfirmCharacter(c);
-                    }
-                  }}
-                  className={`local-general-card local-faction-${KINGDOM_FACTION[c.kingdom || ""] || "qun"}`}
-                >
-                  {c.image ? (
-                    <img className="local-general-bg" src={c.image} alt="" />
-                  ) : (
-                    <div className="local-general-bg local-general-bg-ph">
-                      WTK
-                    </div>
-                  )}
-                  <div className="local-general-info">
-                    <div className="local-general-head">
-                      <h3 className="general-name">{c.name}</h3>
-                      <span className="local-general-meta">
-                        {c.kingdomTh || "อิสระ"} · HP {c.hp}
-                      </span>
-                    </div>
-                    <div className="local-general-skills">
-                      {c.skills.map((s) => (
-                        <p key={s.name}>
-                          <b>{s.name}</b> — {s.description}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
+          <div className="modal-backdrop">
+            <section className="local-general-picker">
+              <h2>เลือกขุนพลของคุณ (คลิกที่การ์ด)</h2>
+              <div className="local-general-picker-body">
+                <div className="character-grid">
+                  {chooser.characterOptions.map((c) => (
+                    <article
+                      key={c.id}
+                      tabIndex={0}
+                      onClick={() => setConfirmCharacter(c)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setConfirmCharacter(c);
+                        }
+                      }}
+                      className={`local-general-card local-faction-${KINGDOM_FACTION[c.kingdom || ""] || "qun"}`}
+                    >
+                      {c.image ? (
+                        <img className="local-general-bg" src={c.image} alt="" />
+                      ) : (
+                        <div className="local-general-bg local-general-bg-ph">
+                          WTK
+                        </div>
+                      )}
+                      <div className="local-general-info">
+                        <div className="local-general-head">
+                          <h3 className="general-name">{c.name}</h3>
+                          <span className="local-general-meta">
+                            {c.kingdomTh || "อิสระ"} · HP {c.hp}
+                          </span>
+                        </div>
+                        <div className="local-general-skills">
+                          {c.skills.map((s) => (
+                            <p key={s.name}>
+                              <b>{s.name}</b> — {s.description}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
         )}
 
         {isPlaying && (

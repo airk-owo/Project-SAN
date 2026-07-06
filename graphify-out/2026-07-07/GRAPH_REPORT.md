@@ -1,16 +1,16 @@
-# Graph Report - Project-SAN  (2026-07-06)
+# Graph Report - Project-SAN  (2026-07-07)
 
 ## Corpus Check
-- 90 files · ~890,156 words
+- 91 files · ~890,769 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 897 nodes · 2810 edges · 99 communities (53 shown, 46 thin omitted)
+- 902 nodes · 2817 edges · 97 communities (51 shown, 46 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3df31681`
+- Built from commit: `48dc3a05`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -98,10 +98,8 @@
 - [[_COMMUNITY_Game Rules Data|Game Rules Data]]
 - [[_COMMUNITY_dev-sandbox.ts|dev-sandbox.ts]]
 - [[_COMMUNITY_TODO|TODO.md]]
-- [[_COMMUNITY_combat.ts|combat.ts]]
 - [[_COMMUNITY_page.tsx|page.tsx]]
 - [[_COMMUNITY_dev-sandbox.ts|dev-sandbox.ts]]
-- [[_COMMUNITY_createGame|createGame]]
 - [[_COMMUNITY_Server Entry Point|Server Entry Point]]
 - [[_COMMUNITY_Duel Card Art|Duel Card Art]]
 - [[_COMMUNITY_Kirin Bow Card Art|Kirin Bow Card Art]]
@@ -128,18 +126,18 @@
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
 - `runDummyStep()` --calls--> `owedDraws()`  [EXTRACTED]
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
-- `runDummyStep()` --calls--> `discardForHandLimit()`  [EXTRACTED]
-  apps/server/src/dev-sandbox.ts → packages/game/src/engine/turns.ts
-- `runDummyStep()` --calls--> `endTurn()`  [EXTRACTED]
-  apps/server/src/dev-sandbox.ts → packages/game/src/engine/turns.ts
+- `attachDevHandlers()` --calls--> `getPlayerById()`  [EXTRACTED]
+  apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
+- `attachDevHandlers()` --calls--> `logAction()`  [EXTRACTED]
+  apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
 
 ## Import Cycles
-- 3-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/actions.ts`
 - 3-file cycle: `packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts`
+- 3-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/actions.ts`
 - 3-file cycle: `packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/handlers/character-skills.ts`
 - 3-file cycle: `packages/game/src/engine/state.ts -> packages/game/src/engine/types.ts -> packages/game/src/engine/view.ts -> packages/game/src/engine/state.ts`
-- 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
 - 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/turns.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
+- 4-file cycle: `packages/game/src/engine/actions.ts -> packages/game/src/engine/handlers/combat.ts -> packages/game/src/engine/handlers/tricks.ts -> packages/game/src/engine/handlers/character-skills.ts -> packages/game/src/engine/actions.ts`
 
 ## Hyperedges (group relationships)
 - **Card System Assets** — source_ไพ่_doc, source_ไพ่หลบโจมตีเสบียง_doc, source_image_bg_img [INFERRED 0.70]
@@ -148,27 +146,27 @@
 - **Sanguosha Card Assets** — apps_web_public_cards_ลอบขโมย, apps_web_public_cards_ละโมบฉกฉวย, apps_web_public_cards_หน้าไม้กล, apps_web_public_cards_หลบ, apps_web_public_cards_เกาทัณฑ์พันดอก, apps_web_public_cards_เก็บเกี่ยวยุ้งฉาง, apps_web_public_cards_เจ่าหยิง, apps_web_public_cards_เจ่าหวงเฟยเตี้ยน, apps_web_public_cards_เซ็กเธาว์, apps_web_public_cards_เต๊กเลา, apps_web_public_cards_เสบียง, apps_web_public_cards_โจมตี, apps_web_public_cards_โล่จักรพรรดิ [INFERRED 0.90]
 - **Sanguosha Character Assets** — apps_web_public_characters_กวนอู, apps_web_public_characters_กำเหลง, apps_web_public_characters_กุยแก, apps_web_public_characters_จิวยี่, apps_web_public_characters_จูกัดเหลียง, apps_web_public_characters_จูล่ง, apps_web_public_characters_ซุนกวน [INFERRED 0.90]
 
-## Communities (99 total, 46 thin omitted)
+## Communities (97 total, 46 thin omitted)
 
 ### Community 0 - "index.ts"
 Cohesion: 0.09
-Nodes (116): ActiveTimeout, app, cards, characters, connections, DECISION_SECONDS, DecisionKind, games (+108 more)
+Nodes (135): pendingTimeoutFor(), LocalGamePage(), attackCard(), makeCard(), canPlayCardNow(), canPlayerAct(), createTargetedCardAction(), resolveTargetedCardAction() (+127 more)
 
 ### Community 1 - "index.ts"
-Cohesion: 0.07
-Nodes (55): card(), canAutoEndTurn(), CARD_INFO, cardInfo(), cardTypeLabel(), charName(), coarsePointer(), edgePosition() (+47 more)
+Cohesion: 0.06
+Nodes (59): card(), canAutoEndTurn(), CARD_INFO, cardInfo(), cardTypeLabel(), charName(), coarsePointer(), edgePosition() (+51 more)
 
 ### Community 2 - "basic-combat.scenarios.ts"
-Cohesion: 0.18
-Nodes (47): now(), card(), character(), combatState(), discardTargetCard(), distanceState(), drawState(), duelCard() (+39 more)
+Cohesion: 0.16
+Nodes (49): now(), card(), character(), combatState(), discardTargetCard(), distanceState(), drawState(), duelCard() (+41 more)
 
 ### Community 3 - "page.tsx"
-Cohesion: 0.06
-Nodes (31): CardType, CardZone, CharacterState, ChatMessage, ConnectionStatus, EffectResolverContext, EquipmentSlot, GameEvent (+23 more)
+Cohesion: 0.05
+Nodes (40): CardNameVersion, CardType, CardZone, CharacterState, ChatMessage, ConnectionStatus, CurrentAction, EffectParams (+32 more)
 
 ### Community 4 - "page.tsx"
-Cohesion: 0.16
-Nodes (19): dealEmperorOptions(), dealOtherCharacterOptions(), dealRoles(), RoleComposition, selectCharacter(), setCardNameVersion(), createEmptyEquipmentSlots(), shuffled() (+11 more)
+Cohesion: 0.20
+Nodes (15): dealEmperorOptions(), dealOtherCharacterOptions(), RoleComposition, selectCharacter(), draw(), shuffled(), Character, CAOCAO (+7 more)
 
 ### Community 5 - "import-cards.mjs"
 Cohesion: 0.10
@@ -191,8 +189,8 @@ Cohesion: 0.11
 Nodes (18): AI Working Rules, apps/server, apps/web, Coding Rules, Core Architecture, Current Development Strategy, data/generated, docs (+10 more)
 
 ### Community 10 - "compilerOptions"
-Cohesion: 0.18
-Nodes (16): clearNegateWindow(), passNegate(), passNegate(), declineNegate(), beginPlayAfterCharacters(), harvestCard(), makeCard(), makeCharacter() (+8 more)
+Cohesion: 0.43
+Nodes (7): Card, harvestCard(), makeCard(), makeCharacter(), makeGame(), poolCard(), spectator()
 
 ### Community 11 - "build-cards.js"
 Cohesion: 0.11
@@ -211,8 +209,8 @@ Cohesion: 0.13
 Nodes (14): Account identity and character identity, Basic turn phases, Canonical match fields, Card locations and current action, Current basic-combat migration, Distance, Dying rescue window, Equipment slots (+6 more)
 
 ### Community 15 - "dealRoles"
-Cohesion: 0.43
-Nodes (5): Spectator, allMembers(), handleDisconnect(), handleJoin(), handleLeave()
+Cohesion: 0.29
+Nodes (7): GameState, Spectator, effectResolvers, allMembers(), handleDisconnect(), handleJoin(), handleLeave()
 
 ### Community 16 - "scripts"
 Cohesion: 0.15
@@ -227,8 +225,8 @@ Cohesion: 0.18
 Nodes (10): 0. ⚠️ อย่ารัน `npm run build` ตอน dev server เปิดอยู่ (สาเหตุหลักของ .next พัง), 1. หน้าเว็บไม่มีสไตล์ / "UI หาย" (CSS โหลดไม่ได้ 404 ในโหมด dev), Troubleshooting (dev), กันไว้, ยืนยันว่าแก้สำเร็จ, วิธีเช็ก (diagnosis) — ทำเร็วๆ, วิธีแก้ (ยืนยันแล้วว่าหาย), สาเหตุ (+2 more)
 
 ### Community 19 - "trick-negate.test.ts"
-Cohesion: 0.13
-Nodes (15): canPlayCardNow(), gameStatusFor(), isEquipmentCard(), RuntimeEquipmentSlot, turnPhaseFor(), CardInstance, CurrentAction, EquipmentSlots (+7 more)
+Cohesion: 0.17
+Nodes (11): equipmentSlotForCard(), gameStatusFor(), getTopDiscardCard(), isEquipmentCard(), turnPhaseFor(), CardInstance, EquipmentSlots, GamePhase (+3 more)
 
 ### Community 20 - "package.json"
 Cohesion: 0.33
@@ -239,16 +237,16 @@ Cohesion: 0.20
 Nodes (9): devDependencies, typescript, exports, name, scripts, check, test, type (+1 more)
 
 ### Community 22 - "coerce.test.ts"
-Cohesion: 0.29
-Nodes (7): character(), makeGame(), spectator(), createSeatedPlayer(), allMembers(), selectRandomSeat(), selectSeat()
+Cohesion: 0.39
+Nodes (5): createSeatedPlayer(), createEmptyEquipmentSlots(), allMembers(), selectRandomSeat(), selectSeat()
 
 ### Community 23 - "delayed-tricks.test.ts"
-Cohesion: 0.22
-Nodes (8): ResponseRecord, ResponseWindow, applyClassicCardNames(), PublicCardView, PublicGameState, PublicPlayerState, PublicResponseRecord, PublicResponseWindow
+Cohesion: 0.20
+Nodes (9): Player, ResponseRecord, ResponseWindow, applyClassicCardNames(), PublicCardView, PublicGameState, PublicPlayerState, PublicResponseRecord (+1 more)
 
 ### Community 24 - "snake-spear.test.ts"
-Cohesion: 0.31
-Nodes (10): draw(), attackCard(), dodgeCard(), drawCard(), healAllCard(), makeCard(), makeCharacter(), makePlayingGame() (+2 more)
+Cohesion: 0.36
+Nodes (9): attackCard(), dodgeCard(), drawCard(), healAllCard(), makeCard(), makeCharacter(), makePlayingGame(), negateCard() (+1 more)
 
 ### Community 25 - "duel.test.ts"
 Cohesion: 0.22
@@ -267,12 +265,12 @@ Cohesion: 0.25
 Nodes (7): Applications, `apps/server`, `apps/web`, Domain and data flow, Extension boundaries, Root folders, WTK project architecture
 
 ### Community 29 - "GameState"
-Cohesion: 0.19
-Nodes (19): indulgence(), lightning(), makeCard(), makeCharacter(), makePlayingGame(), plain(), spectator(), discardPlayerZones() (+11 more)
+Cohesion: 0.21
+Nodes (13): clearNegateWindow(), passNegate(), indulgence(), lightning(), makeCard(), makeCharacter(), makePlayingGame(), passNegate() (+5 more)
 
 ### Community 30 - "compilerOptions"
-Cohesion: 0.39
-Nodes (7): attackCard(), character(), duelCard(), makeCard(), makeGame(), spectator(), Card
+Cohesion: 0.43
+Nodes (7): attackCard(), character(), duelCard(), makeCard(), makeGame(), spectator(), beginPlayAfterCharacters()
 
 ### Community 31 - "page.tsx"
 Cohesion: 0.50
@@ -319,44 +317,36 @@ Cohesion: 0.29
 Nodes (6): 1. Tech Stack, 2. Directory Tree, 3. Core Modules, 4. Data & Control Flow, 5. QA God Mode / Dev Sandbox, ARCHITECTURE
 
 ### Community 86 - "dev-sandbox.ts"
-Cohesion: 0.43
-Nodes (5): createGame(), assignCharacters(), makeCharacter(), makeCharacterSelectGame(), spectator()
-
-### Community 89 - "combat.ts"
-Cohesion: 0.18
-Nodes (30): createTargetedCardAction(), resolveTargetedCardAction(), assertForcedAttackTarget(), attackDamageBonus(), attackDodgesRequired(), isImmuneToAttack(), checkWinCondition(), finishGame() (+22 more)
+Cohesion: 0.21
+Nodes (12): character(), makeGame(), spectator(), createGame(), dealRoles(), makeCharacter(), makeGame(), spectator() (+4 more)
 
 ### Community 90 - "page.tsx"
-Cohesion: 0.14
-Nodes (27): CARD_INFO, cardInfo(), character(), characterName(), createMockGameState(), discardTargetCard(), duelCard(), edgePosition() (+19 more)
+Cohesion: 0.18
+Nodes (16): CARD_INFO, cardInfo(), character(), characterName(), createMockGameState(), discardTargetCard(), duelCard(), edgePosition() (+8 more)
 
 ### Community 91 - "dev-sandbox.ts"
-Cohesion: 0.10
-Nodes (32): attachDevHandlers(), devAutoTick(), DevSandboxDeps, dummyGames, dummyTimers, focusedIds(), frozenGames, isTimerFrozen() (+24 more)
-
-### Community 92 - "createGame"
-Cohesion: 0.33
-Nodes (5): dispatchGameEvent(), runSkillEventHandlers(), EffectResolver, EventSubscriber, effectResolvers
+Cohesion: 0.06
+Nodes (64): attachDevHandlers(), devAutoTick(), DevSandboxDeps, dummyGames, dummyTimers, focusedIds(), frozenGames, isTimerFrozen() (+56 more)
 
 ## Knowledge Gaps
-- **325 isolated node(s):** `name`, `private`, `type`, `dev`, `start` (+320 more)
+- **327 isolated node(s):** `name`, `private`, `type`, `dev`, `start` (+322 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **46 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `card()` connect `index.ts` to `page.tsx`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `card()` connect `index.ts` to `index.ts`, `page.tsx`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
 - **Why does `attachDevHandlers()` connect `dev-sandbox.ts` to `index.ts`, `basic-combat.scenarios.ts`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Why does `socket` connect `dev-sandbox.ts` to `index.ts`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `type` to the rest of the system?**
-  _325 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _327 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08864516129032259 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08809246309246309 - nodes in this community are weakly interconnected._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07111501316944688 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06430745814307458 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._

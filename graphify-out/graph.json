@@ -390,7 +390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_server_src_index",
-      "community": 0,
+      "community": 91,
       "norm_label": "index.ts"
     },
     {
@@ -400,7 +400,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_server_src_index_app",
-      "community": 0,
+      "community": 91,
       "norm_label": "app"
     },
     {
@@ -410,7 +410,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_server_src_index_http",
-      "community": 0,
+      "community": 91,
       "norm_label": "http"
     },
     {
@@ -420,7 +420,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_server_src_index_io",
-      "community": 0,
+      "community": 91,
       "norm_label": "io"
     },
     {
@@ -430,7 +430,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_server_src_index_cards",
-      "community": 0,
+      "community": 91,
       "norm_label": "cards"
     },
     {
@@ -440,7 +440,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "apps_server_src_index_characters",
-      "community": 0,
+      "community": 91,
       "norm_label": "characters"
     },
     {
@@ -450,7 +450,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "apps_server_src_index_rules",
-      "community": 0,
+      "community": 91,
       "norm_label": "rules"
     },
     {
@@ -460,7 +460,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_server_src_index_games",
-      "community": 0,
+      "community": 91,
       "norm_label": "games"
     },
     {
@@ -470,7 +470,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_server_src_index_connections",
-      "community": 0,
+      "community": 91,
       "norm_label": "connections"
     },
     {
@@ -520,7 +520,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "apps_server_src_index_starttimers",
-      "community": 0,
+      "community": 91,
       "norm_label": "starttimers"
     },
     {
@@ -530,7 +530,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "apps_server_src_index_startdeadlines",
-      "community": 0,
+      "community": 91,
       "norm_label": "startdeadlines"
     },
     {
@@ -550,7 +550,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "apps_server_src_index_decision_seconds",
-      "community": 0,
+      "community": 91,
       "norm_label": "decision_seconds"
     },
     {
@@ -560,7 +560,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "apps_server_src_index_decisionkind",
-      "community": 0,
+      "community": 91,
       "norm_label": "decisionkind"
     },
     {
@@ -580,7 +580,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "apps_server_src_index_activetimeout",
-      "community": 0,
+      "community": 91,
       "norm_label": "activetimeout"
     },
     {
@@ -590,7 +590,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "apps_server_src_index_gametimeouts",
-      "community": 0,
+      "community": 91,
       "norm_label": "gametimeouts"
     },
     {
@@ -620,7 +620,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "apps_server_src_index_sortseats",
-      "community": 0,
+      "community": 91,
       "norm_label": "sortseats()"
     },
     {
@@ -650,7 +650,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "apps_server_src_index_requireuser",
-      "community": 0,
+      "community": 91,
       "norm_label": "requireuser()"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_localgamepage",
-      "community": 90,
+      "community": 0,
       "norm_label": "localgamepage()"
     },
     {
@@ -1477,7 +1477,7 @@
       "label": "socket",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "apps_web_app_page_socket",
       "community": 91,
@@ -1487,7 +1487,7 @@
       "label": "PLAY_CONFIRM_EVENTS",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L45",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "apps_web_app_page_play_confirm_events",
       "community": 1,
@@ -1497,7 +1497,7 @@
       "label": "EquipmentDisplay()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L55",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "apps_web_app_page_equipmentdisplay",
       "community": 1,
@@ -1507,7 +1507,7 @@
       "label": "DecisionArea()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L92",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "apps_web_app_page_decisionarea",
       "community": 1,
@@ -1517,7 +1517,7 @@
       "label": "OpponentPanel()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L128",
+      "source_location": "L131",
       "_origin": "ast",
       "id": "apps_web_app_page_opponentpanel",
       "community": 1,
@@ -1527,7 +1527,7 @@
       "label": "Home()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L204",
+      "source_location": "L207",
       "_origin": "ast",
       "id": "apps_web_app_page_home",
       "community": 1,
@@ -1742,6 +1742,56 @@
       "id": "apps_web_components_encyclopediadrawer_encyclopediadrawer",
       "community": 1,
       "norm_label": "encyclopediadrawer()"
+    },
+    {
+      "label": "Icon.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_icon",
+      "community": 1,
+      "norm_label": "icon.tsx"
+    },
+    {
+      "label": "IconName",
+      "file_type": "code",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_icon_iconname",
+      "community": 1,
+      "norm_label": "iconname"
+    },
+    {
+      "label": "IconDef",
+      "file_type": "code",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "apps_web_components_icon_icondef",
+      "community": 1,
+      "norm_label": "icondef"
+    },
+    {
+      "label": "ICONS",
+      "file_type": "code",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "apps_web_components_icon_icons",
+      "community": 1,
+      "norm_label": "icons"
+    },
+    {
+      "label": "Icon()",
+      "file_type": "code",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "apps_web_components_icon_icon",
+      "community": 1,
+      "norm_label": "icon()"
     },
     {
       "label": "LobbyTable.tsx",
@@ -3120,7 +3170,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_spectator",
-      "community": 22,
+      "community": 86,
       "norm_label": "spectator()"
     },
     {
@@ -3150,7 +3200,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_character",
-      "community": 22,
+      "community": 86,
       "norm_label": "character()"
     },
     {
@@ -3160,7 +3210,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_makegame",
-      "community": 22,
+      "community": 86,
       "norm_label": "makegame()"
     },
     {
@@ -3170,7 +3220,7 @@
       "source_location": "L1691",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_clearnegatewindow",
-      "community": 10,
+      "community": 29,
       "norm_label": "clearnegatewindow()"
     },
     {
@@ -3190,7 +3240,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_coerce_test_passnegate",
-      "community": 10,
+      "community": 29,
       "norm_label": "passnegate()"
     },
     {
@@ -3290,7 +3340,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_passnegate",
-      "community": 10,
+      "community": 29,
       "norm_label": "passnegate()"
     },
     {
@@ -3300,7 +3350,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_runjudgment",
-      "community": 0,
+      "community": 91,
       "norm_label": "runjudgment()"
     },
     {
@@ -3450,7 +3500,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions",
-      "community": 19,
+      "community": 0,
       "norm_label": "actions.ts"
     },
     {
@@ -3460,7 +3510,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_createtargetedcardaction",
-      "community": 89,
+      "community": 0,
       "norm_label": "createtargetedcardaction()"
     },
     {
@@ -3470,7 +3520,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_resolvetargetedcardaction",
-      "community": 89,
+      "community": 0,
       "norm_label": "resolvetargetedcardaction()"
     },
     {
@@ -3490,7 +3540,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_canplaycardnow",
-      "community": 19,
+      "community": 0,
       "norm_label": "canplaycardnow()"
     },
     {
@@ -3510,7 +3560,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_dispatchgameevent",
-      "community": 92,
+      "community": 0,
       "norm_label": "dispatchgameevent()"
     },
     {
@@ -3530,7 +3580,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_character_skills",
-      "community": 0,
+      "community": 91,
       "norm_label": "character_skills"
     },
     {
@@ -3570,7 +3620,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_isimmunetoattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "isimmunetoattack()"
     },
     {
@@ -3580,7 +3630,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_attackdodgesrequired",
-      "community": 89,
+      "community": 0,
       "norm_label": "attackdodgesrequired()"
     },
     {
@@ -3590,7 +3640,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_attackdamagebonus",
-      "community": 89,
+      "community": 0,
       "norm_label": "attackdamagebonus()"
     },
     {
@@ -3610,7 +3660,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_assertforcedattacktarget",
-      "community": 89,
+      "community": 0,
       "norm_label": "assertforcedattacktarget()"
     },
     {
@@ -3650,7 +3700,7 @@
       "source_location": "L355",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_runskilleventhandlers",
-      "community": 92,
+      "community": 0,
       "norm_label": "runskilleventhandlers()"
     },
     {
@@ -3920,7 +3970,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat",
-      "community": 89,
+      "community": 0,
       "norm_label": "combat.ts"
     },
     {
@@ -3930,7 +3980,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_geteffectivedistancebetweenplayers",
-      "community": 90,
+      "community": 0,
       "norm_label": "geteffectivedistancebetweenplayers()"
     },
     {
@@ -3940,7 +3990,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playerhasanycard",
-      "community": 89,
+      "community": 0,
       "norm_label": "playerhasanycard()"
     },
     {
@@ -3950,7 +4000,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_cantargetwithattack",
-      "community": 90,
+      "community": 0,
       "norm_label": "cantargetwithattack()"
     },
     {
@@ -3980,7 +4030,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_discardplayerzones",
-      "community": 29,
+      "community": 0,
       "norm_label": "discardplayerzones()"
     },
     {
@@ -3990,7 +4040,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_finishgame",
-      "community": 89,
+      "community": 0,
       "norm_label": "finishgame()"
     },
     {
@@ -4000,7 +4050,7 @@
       "source_location": "L211",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_checkwincondition",
-      "community": 89,
+      "community": 0,
       "norm_label": "checkwincondition()"
     },
     {
@@ -4010,7 +4060,7 @@
       "source_location": "L234",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolveplayerdeath",
-      "community": 29,
+      "community": 0,
       "norm_label": "resolveplayerdeath()"
     },
     {
@@ -4050,7 +4100,7 @@
       "source_location": "L408",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "playattack()"
     },
     {
@@ -4060,7 +4110,7 @@
       "source_location": "L511",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_openattackdodgewindow",
-      "community": 89,
+      "community": 0,
       "norm_label": "openattackdodgewindow()"
     },
     {
@@ -4070,7 +4120,7 @@
       "source_location": "L546",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playduel",
-      "community": 89,
+      "community": 0,
       "norm_label": "playduel()"
     },
     {
@@ -4090,7 +4140,7 @@
       "source_location": "L638",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolveduel",
-      "community": 89,
+      "community": 0,
       "norm_label": "resolveduel()"
     },
     {
@@ -4100,7 +4150,7 @@
       "source_location": "L665",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolvecurrentaction",
-      "community": 89,
+      "community": 0,
       "norm_label": "resolvecurrentaction()"
     },
     {
@@ -4110,7 +4160,7 @@
       "source_location": "L734",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playdodge",
-      "community": 2,
+      "community": 0,
       "norm_label": "playdodge()"
     },
     {
@@ -4190,7 +4240,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devsethp",
-      "community": 0,
+      "community": 91,
       "norm_label": "devsethp()"
     },
     {
@@ -4250,7 +4300,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment",
-      "community": 89,
+      "community": 0,
       "norm_label": "equipment.ts"
     },
     {
@@ -4260,7 +4310,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_getattackrange",
-      "community": 89,
+      "community": 0,
       "norm_label": "getattackrange()"
     },
     {
@@ -4270,7 +4320,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasunlimitedattackperturn",
-      "community": 90,
+      "community": 2,
       "norm_label": "hasunlimitedattackperturn()"
     },
     {
@@ -4280,7 +4330,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasunlimitedattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasunlimitedattack()"
     },
     {
@@ -4290,7 +4340,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasrepeatattackafterdodge",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasrepeatattackafterdodge()"
     },
     {
@@ -4300,7 +4350,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_attackignorestargetarmor",
-      "community": 89,
+      "community": 0,
       "norm_label": "attackignorestargetarmor()"
     },
     {
@@ -4310,7 +4360,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasdamagedestroytargetmount",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasdamagedestroytargetmount()"
     },
     {
@@ -4320,7 +4370,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasdiscardtwoforceattackdamage",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasdiscardtwoforceattackdamage()"
     },
     {
@@ -4330,7 +4380,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasreplacedamagewithdiscardtwo",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasreplacedamagewithdiscardtwo()"
     },
     {
@@ -4340,7 +4390,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasdiscardtwoasattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasdiscardtwoasattack()"
     },
     {
@@ -4350,7 +4400,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_hasoppositegenderattackchoice",
-      "community": 89,
+      "community": 0,
       "norm_label": "hasoppositegenderattackchoice()"
     },
     {
@@ -4360,7 +4410,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_areoppositegenders",
-      "community": 89,
+      "community": 0,
       "norm_label": "areoppositegenders()"
     },
     {
@@ -4390,7 +4440,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_usediscardtwoasattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "usediscardtwoasattack()"
     },
     {
@@ -4400,7 +4450,7 @@
       "source_location": "L239",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_haslasthandmultitargetattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "haslasthandmultitargetattack()"
     },
     {
@@ -4410,7 +4460,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_playlasthandmultiattack",
-      "community": 89,
+      "community": 0,
       "norm_label": "playlasthandmultiattack()"
     },
     {
@@ -4480,7 +4530,7 @@
       "source_location": "L500",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_continuerepeatattackafterdodge",
-      "community": 90,
+      "community": 0,
       "norm_label": "continuerepeatattackafterdodge()"
     },
     {
@@ -4550,7 +4600,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassdodgeordamage",
-      "community": 90,
+      "community": 2,
       "norm_label": "playmassdodgeordamage()"
     },
     {
@@ -4560,7 +4610,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassattackordamage",
-      "community": 90,
+      "community": 2,
       "norm_label": "playmassattackordamage()"
     },
     {
@@ -4780,7 +4830,7 @@
       "source_location": "L988",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_declinenegate",
-      "community": 10,
+      "community": 29,
       "norm_label": "declinenegate()"
     },
     {
@@ -4840,7 +4890,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_setcardnameversion",
-      "community": 4,
+      "community": 91,
       "norm_label": "setcardnameversion()"
     },
     {
@@ -4860,7 +4910,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_dealroles",
-      "community": 4,
+      "community": 86,
       "norm_label": "dealroles()"
     },
     {
@@ -4910,7 +4960,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_beginplayaftercharacters",
-      "community": 10,
+      "community": 30,
       "norm_label": "beginplayaftercharacters()"
     },
     {
@@ -4940,7 +4990,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_createemptyequipmentslots",
-      "community": 4,
+      "community": 22,
       "norm_label": "createemptyequipmentslots()"
     },
     {
@@ -5010,7 +5060,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getplayersinseatorder",
-      "community": 29,
+      "community": 91,
       "norm_label": "getplayersinseatorder()"
     },
     {
@@ -5030,7 +5080,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getbasedistancebetweenplayers",
-      "community": 90,
+      "community": 91,
       "norm_label": "getbasedistancebetweenplayers()"
     },
     {
@@ -5040,7 +5090,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_gettopdiscardcard",
-      "community": 90,
+      "community": 19,
       "norm_label": "gettopdiscardcard()"
     },
     {
@@ -5060,7 +5110,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_draw",
-      "community": 24,
+      "community": 4,
       "norm_label": "draw()"
     },
     {
@@ -5100,7 +5150,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_numberparam",
-      "community": 89,
+      "community": 0,
       "norm_label": "numberparam()"
     },
     {
@@ -5170,7 +5220,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_runtimeequipmentslot",
-      "community": 19,
+      "community": 0,
       "norm_label": "runtimeequipmentslot"
     },
     {
@@ -5180,7 +5230,7 @@
       "source_location": "L264",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_equipmentslotforcard",
-      "community": 91,
+      "community": 19,
       "norm_label": "equipmentslotforcard()"
     },
     {
@@ -5200,7 +5250,7 @@
       "source_location": "L296",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_recordjudgment",
-      "community": 29,
+      "community": 91,
       "norm_label": "recordjudgment()"
     },
     {
@@ -5210,7 +5260,7 @@
       "source_location": "L314",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_flashtable",
-      "community": 0,
+      "community": 91,
       "norm_label": "flashtable()"
     },
     {
@@ -5230,7 +5280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns",
-      "community": 29,
+      "community": 91,
       "norm_label": "turns.ts"
     },
     {
@@ -5240,7 +5290,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_getdiscardrequirement",
-      "community": 90,
+      "community": 91,
       "norm_label": "getdiscardrequirement()"
     },
     {
@@ -5250,7 +5300,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_getnextaliveplayer",
-      "community": 29,
+      "community": 91,
       "norm_label": "getnextaliveplayer()"
     },
     {
@@ -5260,7 +5310,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_beginnextjudgment",
-      "community": 29,
+      "community": 91,
       "norm_label": "beginnextjudgment()"
     },
     {
@@ -5270,7 +5320,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_applyjudgmentoutcome",
-      "community": 29,
+      "community": 91,
       "norm_label": "applyjudgmentoutcome()"
     },
     {
@@ -5290,7 +5340,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_keepjudgmentcard",
-      "community": 29,
+      "community": 91,
       "norm_label": "keepjudgmentcard()"
     },
     {
@@ -5300,7 +5350,7 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_resolvejudgmentcard",
-      "community": 0,
+      "community": 91,
       "norm_label": "resolvejudgmentcard()"
     },
     {
@@ -5310,7 +5360,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_startturn",
-      "community": 29,
+      "community": 91,
       "norm_label": "startturn()"
     },
     {
@@ -5340,7 +5390,7 @@
       "source_location": "L381",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_advancephase",
-      "community": 0,
+      "community": 91,
       "norm_label": "advancephase()"
     },
     {
@@ -5350,7 +5400,7 @@
       "source_location": "L411",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_negatelightningjudgment",
-      "community": 29,
+      "community": 91,
       "norm_label": "negatelightningjudgment()"
     },
     {
@@ -5360,7 +5410,7 @@
       "source_location": "L463",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_endturn",
-      "community": 29,
+      "community": 91,
       "norm_label": "endturn()"
     },
     {
@@ -5380,7 +5430,7 @@
       "source_location": "L589",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_discardforhandlimit",
-      "community": 90,
+      "community": 91,
       "norm_label": "discardforhandlimit()"
     },
     {
@@ -5400,7 +5450,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_role",
-      "community": 4,
+      "community": 3,
       "norm_label": "role"
     },
     {
@@ -5510,7 +5560,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_currentaction",
-      "community": 19,
+      "community": 3,
       "norm_label": "currentaction"
     },
     {
@@ -5520,7 +5570,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetrules",
-      "community": 19,
+      "community": 3,
       "norm_label": "targetrules"
     },
     {
@@ -5530,7 +5580,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetedcardaction",
-      "community": 19,
+      "community": 3,
       "norm_label": "targetedcardaction"
     },
     {
@@ -5620,7 +5670,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_effectparams",
-      "community": 89,
+      "community": 3,
       "norm_label": "effectparams"
     },
     {
@@ -5630,7 +5680,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_cardnameversion",
-      "community": 4,
+      "community": 3,
       "norm_label": "cardnameversion"
     },
     {
@@ -5640,7 +5690,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_card",
-      "community": 30,
+      "community": 10,
       "norm_label": "card"
     },
     {
@@ -5670,7 +5720,7 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_player",
-      "community": 19,
+      "community": 23,
       "norm_label": "player"
     },
     {
@@ -5720,7 +5770,7 @@
       "source_location": "L262",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_eventsubscriber",
-      "community": 92,
+      "community": 3,
       "norm_label": "eventsubscriber"
     },
     {
@@ -5740,7 +5790,7 @@
       "source_location": "L276",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_effectresolver",
-      "community": 92,
+      "community": 3,
       "norm_label": "effectresolver"
     },
     {
@@ -5760,7 +5810,7 @@
       "source_location": "L288",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_winningside",
-      "community": 89,
+      "community": 3,
       "norm_label": "winningside"
     },
     {
@@ -5920,7 +5970,7 @@
       "source_location": "L337",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_gamestate",
-      "community": 29,
+      "community": 15,
       "norm_label": "gamestate"
     },
     {
@@ -6030,7 +6080,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test_passnegate",
-      "community": 10,
+      "community": 29,
       "norm_label": "passnegate()"
     },
     {
@@ -6180,7 +6230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_index",
-      "community": 92,
+      "community": 15,
       "norm_label": "index.ts"
     },
     {
@@ -6190,7 +6240,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "packages_game_src_index_effectresolvers",
-      "community": 92,
+      "community": 15,
       "norm_label": "effectresolvers"
     },
     {
@@ -6400,7 +6450,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test",
-      "community": 10,
+      "community": 86,
       "norm_label": "pending-draws.test.ts"
     },
     {
@@ -6410,7 +6460,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_spectator",
-      "community": 10,
+      "community": 86,
       "norm_label": "spectator()"
     },
     {
@@ -6420,7 +6470,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_makecard",
-      "community": 10,
+      "community": 86,
       "norm_label": "makecard()"
     },
     {
@@ -6430,7 +6480,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_makecharacter",
-      "community": 10,
+      "community": 86,
       "norm_label": "makecharacter()"
     },
     {
@@ -6440,7 +6490,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_makegame",
-      "community": 10,
+      "community": 86,
       "norm_label": "makegame()"
     },
     {
@@ -6450,7 +6500,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_passnegate",
-      "community": 10,
+      "community": 29,
       "norm_label": "passnegate()"
     },
     {
@@ -12154,7 +12204,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L936",
+      "source_location": "L976",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_game_local_page_card"
@@ -13244,7 +13294,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1636",
+      "source_location": "L1680",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_roletext"
@@ -13266,7 +13316,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1614",
+      "source_location": "L1658",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -13277,7 +13327,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L182",
+      "source_location": "L185",
       "weight": 1.0,
       "source": "apps_web_app_page_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -13299,7 +13349,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1585",
+      "source_location": "L1629",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -13310,7 +13360,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L151",
+      "source_location": "L154",
       "weight": 1.0,
       "source": "apps_web_app_page_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -13332,7 +13382,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2753",
+      "source_location": "L2807",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -13398,7 +13448,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1473",
+      "source_location": "L1517",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suitcolor"
@@ -13486,7 +13536,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1479",
+      "source_location": "L1523",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -13574,7 +13624,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1488",
+      "source_location": "L1532",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel"
@@ -13695,7 +13745,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1760",
+      "source_location": "L1813",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_edgeposition"
@@ -13717,7 +13767,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1553",
+      "source_location": "L1597",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_lobbyposition"
@@ -13739,7 +13789,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L387",
+      "source_location": "L392",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_isviewerdecisionactive"
@@ -13761,7 +13811,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L412",
+      "source_location": "L417",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_canautoendturn"
@@ -14206,7 +14256,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L92",
+      "source_location": "L95",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_decisionarea",
@@ -14216,7 +14266,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L55",
+      "source_location": "L56",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_equipmentdisplay",
@@ -14226,7 +14276,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L204",
+      "source_location": "L207",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_home",
@@ -14236,7 +14286,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L128",
+      "source_location": "L131",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_opponentpanel",
@@ -14246,7 +14296,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L45",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_play_confirm_events",
@@ -14256,7 +14306,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_socket",
@@ -14267,7 +14317,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_carddetailmodal",
@@ -14278,7 +14328,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_carddetailmodal_carddetailmodal",
@@ -14311,7 +14361,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_debugsandboxpanel",
@@ -14322,7 +14372,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_debugsandboxpanel_debugsandboxpanel",
@@ -14333,7 +14383,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_dropzonemodal",
@@ -14344,7 +14394,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_dropzonemodal_dropzonemodal",
@@ -14355,7 +14405,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_encyclopediadrawer",
@@ -14366,7 +14416,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_encyclopediadrawer_encyclopediadrawer",
@@ -14380,7 +14430,7 @@
       "source_location": "L32",
       "weight": 1.0,
       "source": "apps_web_app_page",
-      "target": "apps_web_components_logchatpanel",
+      "target": "apps_web_components_icon",
       "confidence_score": 1.0
     },
     {
@@ -14391,7 +14441,18 @@
       "source_location": "L32",
       "weight": 1.0,
       "source": "apps_web_app_page",
-      "target": "apps_web_components_logchatpanel_logchatpanel",
+      "target": "apps_web_components_icon_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_icon_iconname",
       "confidence_score": 1.0
     },
     {
@@ -14402,7 +14463,7 @@
       "source_location": "L33",
       "weight": 1.0,
       "source": "apps_web_app_page",
-      "target": "apps_web_components_settingspopover",
+      "target": "apps_web_components_logchatpanel",
       "confidence_score": 1.0
     },
     {
@@ -14411,6 +14472,28 @@
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
       "source_location": "L33",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_logchatpanel_logchatpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_settingspopover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L34",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_settingspopover_settingspopover",
@@ -14422,7 +14505,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L771",
+      "source_location": "L778",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_page_play_confirm_events"
@@ -14607,6 +14690,46 @@
       "weight": 1.0,
       "source": "apps_web_components_encyclopediadrawer",
       "target": "apps_web_components_encyclopediadrawer_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "apps_web_components_icon",
+      "target": "apps_web_components_icon_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "apps_web_components_icon",
+      "target": "apps_web_components_icon_icondef",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_icon",
+      "target": "apps_web_components_icon_iconname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/Icon.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "apps_web_components_icon",
+      "target": "apps_web_components_icon_icons",
       "confidence_score": 1.0
     },
     {
@@ -39200,5 +39323,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "b2d50b2076e73aa48fba9466ffd8707a39a9b0c1"
+  "built_at_commit": "48dc3a05ceae266d44aeb685510b1490b87b2f19"
 }

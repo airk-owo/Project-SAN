@@ -223,9 +223,76 @@ body:has(.lobby) {
     box-shadow 0.18s,
     background 0.18s;
 }
-/* Username field = the only direct-child input of .lobby; its bottom gap is the tunable knob. */
-.lobby > input {
-  margin-bottom: var(--username-margin-bottom);
+/* ── Lobby identity chip — top-right corner, outside the card ──
+   Guest identity today; the same slot becomes the account/avatar chip when
+   email login lands, so players never have to relearn where "me" lives. */
+.lobby-topbar {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 50;
+}
+.identity-chip,
+.identity-chip-input {
+  font-family: inherit;
+  font-size: 0.98rem;
+  color: #3e2f22;
+  background: #fffdf7f2;
+  border: 1px solid #d8c6a0;
+  border-radius: 999px;
+  padding: 9px 16px;
+  box-shadow: 0 4px 14px -8px #b88a3b80;
+}
+.identity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.identity-chip:hover {
+  border-color: #c99a41;
+  box-shadow: 0 0 0 4px #d4af5640;
+}
+.identity-chip-name {
+  color: #7c2222;
+}
+.identity-chip-edit {
+  color: #a4906f;
+  font-size: 0.85em;
+}
+.identity-chip-input {
+  width: min(220px, 56vw);
+}
+.identity-chip-input::placeholder {
+  color: #a4906f;
+}
+.identity-chip-input:focus {
+  outline: none;
+  border-color: #c99a41;
+  background: #fffef9;
+  box-shadow: 0 0 0 4px #d4af5640;
+}
+/* Short-window fallback: keep the room list usable when the window is minimized.
+   The title only shrinks here — full size everywhere else. */
+@media (max-height: 620px) {
+  .lobby {
+    margin-top: 2vh;
+    height: 94vh;
+  }
+  .lobby .game-title {
+    font-size: 1.9rem;
+    margin: 2px 0;
+  }
+  .lobby .game-title::after {
+    margin-top: 7px;
+  }
+  .lobby > p {
+    display: none;
+  }
 }
 .lobby input::placeholder {
   color: #a4906f;
@@ -3452,6 +3519,41 @@ img.mock-card-art {
 }
 
 /* Character-select faction cards (consistent layout, button pinned to bottom) */
+.local-general-picker {
+  position: relative;
+  width: 100%;
+  max-width: min(1000px, 96vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #3e2f22f5;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 18px 48px #0009;
+}
+.local-general-picker > h2 {
+  margin: 0 0 14px;
+  text-align: center;
+  color: #f5d994;
+}
+.local-general-picker-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #d4af56aa transparent;
+}
+.local-general-picker-body::-webkit-scrollbar {
+  width: 8px;
+}
+.local-general-picker-body::-webkit-scrollbar-thumb {
+  background: #d4af56aa;
+  border-radius: 8px;
+}
+.local-general-picker-body::-webkit-scrollbar-track {
+  background: transparent;
+}
 .local-general-card {
   position: relative;
   overflow: hidden;
