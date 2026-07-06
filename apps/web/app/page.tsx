@@ -29,6 +29,7 @@ import {
   canAutoEndTurn,
 } from "./lib/gameConstants";
 import { CardFace } from "../components/CardFace";
+import { Icon, type IconName } from "../components/Icon";
 import { LogChatPanel } from "../components/LogChatPanel";
 import { SettingsPopover } from "../components/SettingsPopover";
 import { EncyclopediaDrawer } from "../components/EncyclopediaDrawer";
@@ -59,7 +60,7 @@ function EquipmentDisplay({
   eq: EquipmentSlots;
   onInspect?: (card: Card) => void;
 }) {
-  const r = (key: keyof EquipmentSlots, icon: string, label: string) => {
+  const r = (key: keyof EquipmentSlots, icon: IconName, label: string) => {
     const s = eq[key];
     return (
       <span
@@ -74,7 +75,9 @@ function EquipmentDisplay({
             : undefined
         }
       >
-        <i>{icon}</i>
+        <i>
+          <Icon name={icon} />
+        </i>
         <em>{label}</em>
         <b>{s?.name ?? "—"}</b>
       </span>
@@ -82,10 +85,10 @@ function EquipmentDisplay({
   };
   return (
     <div className="mock-equipment">
-      {r("weapon", "🗡", "อาวุธ")}
-      {r("armor", "🛡", "เกราะ")}
-      {r("offensiveMount", "🐎", "ม้ารุก −1")}
-      {r("defensiveMount", "🐎", "ม้ารับ +1")}
+      {r("weapon", "sword", "อาวุธ")}
+      {r("armor", "shield", "เกราะ")}
+      {r("offensiveMount", "mount", "ม้ารุก −1")}
+      {r("defensiveMount", "mount", "ม้ารับ +1")}
     </div>
   );
 }
@@ -145,11 +148,20 @@ function OpponentPanel({
       onClick={onClick}
       className={`mock-player local-opponent ${targetable ? "local-targetable" : ""} ${!player.alive ? "local-dead" : ""}`}
     >
-      <div className="mock-portrait">
-        {player.character?.image ? (
-          <img src={player.character.image} alt={charName(player)} />
-        ) : (
-          charName(player).slice(0, 1)
+      <div className="mock-portrait-col">
+        <div className="mock-portrait">
+          {player.character?.image ? (
+            <img src={player.character.image} alt={charName(player)} />
+          ) : (
+            charName(player).slice(0, 1)
+          )}
+        </div>
+        {player.character?.kingdomTh && (
+          <span
+            className={`mock-kingdom kingdom-${player.character.kingdom ?? "QUN"}`}
+          >
+            {player.character.kingdomTh}
+          </span>
         )}
       </div>
       <div className="mock-player-content">
@@ -179,13 +191,6 @@ function OpponentPanel({
           ที่นั่ง {player.seatIndex}
           {distance != null ? ` · ระยะ ${distance}` : ""}
         </small>
-        {player.character?.kingdomTh && (
-          <span
-            className={`mock-kingdom kingdom-${player.character.kingdom ?? "QUN"}`}
-          >
-            {player.character.kingdomTh}
-          </span>
-        )}
         <small
           className={`mock-role${player.role ? " local-role-" + player.role : ""}`}
         >
@@ -1277,8 +1282,9 @@ export default function Home() {
           className={`local-nav-btn${openPanel === "room" ? " active" : ""}`}
           onClick={() => setOpenPanel((p) => (p === "room" ? null : "room"))}
           title="ห้อง"
+          aria-label="ห้อง"
         >
-          🏠
+          <Icon name="home" size={20} />
         </button>
         <button
           className={`local-nav-btn${openPanel === "logchat" ? " active" : ""}`}
@@ -1286,8 +1292,9 @@ export default function Home() {
             setOpenPanel((p) => (p === "logchat" ? null : "logchat"))
           }
           title="บันทึก/แชท"
+          aria-label="บันทึก/แชท"
         >
-          💬
+          <Icon name="comment" size={20} />
         </button>
         <button
           className={`local-nav-btn local-nav-ency${showEncyclopedia ? " active" : ""}`}
@@ -1295,15 +1302,16 @@ export default function Home() {
           title="คลังการ์ด / สารานุกรม"
           aria-label="เปิดคลังการ์ด"
         >
-          📜
+          <Icon name="book" size={20} />
         </button>
         {myPlayer?.role && (
           <button
             className="local-nav-btn"
             onClick={() => setShowRole(true)}
             title="บทบาทของฉัน"
+            aria-label="บทบาทของฉัน"
           >
-            🎭
+            <Icon name="masks" size={20} />
           </button>
         )}
         <div className="local-settings-anchor">
@@ -1313,8 +1321,9 @@ export default function Home() {
             title="ตั้งค่าในเกม"
             aria-haspopup="dialog"
             aria-expanded={showSettings}
+            aria-label="ตั้งค่าในเกม"
           >
-            ⚙️
+            <Icon name="settings" size={20} />
           </button>
           {showSettings && (
             <SettingsPopover
@@ -1740,7 +1749,12 @@ export default function Home() {
                     <b>กองทิ้ง</b>
                     <small>
                       {game.discard.length} ใบ
-                      {game.discard.length > 0 ? " 🔍" : ""}
+                      {game.discard.length > 0 ? (
+                        <>
+                          {" "}
+                          <Icon name="search" />
+                        </>
+                      ) : null}
                     </small>
                   </button>
                 </section>
@@ -2106,14 +2120,23 @@ export default function Home() {
         {isPlaying && (
           <section className="mock-current-player">
             <article className="mock-player mock-self">
-              <div className="mock-portrait">
-                {myPlayer?.character?.image ? (
-                  <img
-                    src={myPlayer.character.image}
-                    alt={charName(myPlayer)}
-                  />
-                ) : (
-                  charName(myPlayer).slice(0, 1)
+              <div className="mock-portrait-col">
+                <div className="mock-portrait">
+                  {myPlayer?.character?.image ? (
+                    <img
+                      src={myPlayer.character.image}
+                      alt={charName(myPlayer)}
+                    />
+                  ) : (
+                    charName(myPlayer).slice(0, 1)
+                  )}
+                </div>
+                {myPlayer?.character?.kingdomTh && (
+                  <span
+                    className={`mock-kingdom kingdom-${myPlayer.character.kingdom ?? "QUN"}`}
+                  >
+                    {myPlayer.character.kingdomTh}
+                  </span>
                 )}
               </div>
               <div className="mock-player-content">
@@ -2142,13 +2165,6 @@ export default function Home() {
                 <small className="mock-seat-info">
                   ที่นั่ง {myPlayer?.seatIndex}
                 </small>
-                {myPlayer?.character?.kingdomTh && (
-                  <span
-                    className={`mock-kingdom kingdom-${myPlayer.character.kingdom ?? "QUN"}`}
-                  >
-                    {myPlayer.character.kingdomTh}
-                  </span>
-                )}
                 {myPlayer?.role && (
                   <small
                     className={`mock-role${myPlayer.role === "emperor" || roleVisible ? " local-role-" + myPlayer.role : ""}`}
@@ -2158,8 +2174,9 @@ export default function Home() {
                         className="local-role-toggle"
                         onClick={() => setRoleVisible((v) => !v)}
                         title={roleVisible ? "ซ่อนบทบาท" : "แสดงบทบาท"}
+                        aria-label={roleVisible ? "ซ่อนบทบาท" : "แสดงบทบาท"}
                       >
-                        {roleVisible ? "👁" : "🙈"}
+                        <Icon name={roleVisible ? "eye" : "eyeCrossed"} />
                       </button>
                     )}
                     บทบาท:{" "}

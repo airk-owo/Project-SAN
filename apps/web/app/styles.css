@@ -1516,17 +1516,24 @@ h2 {
   display: block;
   margin-top: 1px;
 }
+/* Portrait + kingdom chip stacked under the picture, as a column beside the player content row. */
+.mock-portrait-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  gap: 3px;
+}
 /* Kingdom (ก๊ก) chip — public info from the player's character, colour-coded per kingdom. */
 .mock-kingdom {
   display: inline-block;
-  align-self: flex-start;
-  margin-top: 2px;
   padding: 0 7px;
   border-radius: 9px;
   font-size: 0.62rem;
   font-weight: 700;
   line-height: 1.5;
   border: 1px solid currentColor;
+  white-space: nowrap;
 }
 .kingdom-WEI {
   color: #2f6fb0;
