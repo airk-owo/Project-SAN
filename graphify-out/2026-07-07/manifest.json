@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783359425.010694,
-    "ast_hash": "574d2f7e18e4674d9230a8ac52abddbe",
+    "mtime": 1783354738.1545212,
+    "ast_hash": "484e4b7dd2e828890f27c62f0cd92934",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
