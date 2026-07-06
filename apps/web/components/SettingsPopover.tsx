@@ -19,7 +19,11 @@ export function SettingsPopover({
   return (
     <>
       <div className="local-pop-backdrop" onClick={onClose} />
-      <div className="local-settings-pop" role="dialog" aria-label="ตั้งค่าในเกม">
+      <div
+        className="local-settings-pop"
+        role="dialog"
+        aria-label="ตั้งค่าในเกม"
+      >
         <div className="settings-row">
           <span className="settings-row-label">
             <b>ยืนยันก่อนเล่นการ์ด</b>

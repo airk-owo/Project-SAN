@@ -1,5 +1,10 @@
 import type { Card } from "../app/lib/gameTypes";
-import { cardInfo, suitColor, suitTx, cardTypeLabel } from "../app/lib/gameConstants";
+import {
+  cardInfo,
+  suitColor,
+  suitTx,
+  cardTypeLabel,
+} from "../app/lib/gameConstants";
 
 type Props = {
   card: Card | undefined;

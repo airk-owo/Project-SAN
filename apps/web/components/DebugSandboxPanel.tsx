@@ -213,9 +213,7 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
           navigator.clipboard
             .writeText(json)
             .then(() => flash("📋 คัดลอก state ลง clipboard แล้ว"))
-            .catch(() =>
-              flash("state อยู่ใน textarea (clipboard ถูกปฏิเสธ)"),
-            );
+            .catch(() => flash("state อยู่ใน textarea (clipboard ถูกปฏิเสธ)"));
         else flash("state อยู่ใน textarea");
       },
     );
@@ -234,7 +232,10 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
     const panel = (e.currentTarget as HTMLElement).parentElement;
     if (!panel) return;
     const rect = panel.getBoundingClientRect();
-    dragOffset.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top };
+    dragOffset.current = {
+      dx: e.clientX - rect.left,
+      dy: e.clientY - rect.top,
+    };
     const onMove = (ev: PointerEvent) => {
       const grip = dragOffset.current;
       if (!grip) return;
@@ -265,7 +266,9 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
             type="button"
             className={`qa-seat${p.id === game.viewerId ? " active" : ""}${p.alive ? "" : " dead"}`}
             title={`สลับไปควบคุม ${p.username}`}
-            onClick={() => emitDev("dev:switch-control", { seatIndex: p.seatIndex })}
+            onClick={() =>
+              emitDev("dev:switch-control", { seatIndex: p.seatIndex })
+            }
           >
             <b>
               {p.seatIndex}·{p.username}
@@ -310,7 +313,9 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
             </button>
           </div>
           <div className="qa-body">
-            <div className="qa-section-label">HOT-SEAT — คลิกเพื่อสลับที่นั่ง</div>
+            <div className="qa-section-label">
+              HOT-SEAT — คลิกเพื่อสลับที่นั่ง
+            </div>
             {seatBar}
             <div className="qa-tabs">
               {(
@@ -346,7 +351,11 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
                       </option>
                     ))}
                   </select>
-                  <button type="button" className="qa-btn" onClick={() => bumpHp(1)}>
+                  <button
+                    type="button"
+                    className="qa-btn"
+                    onClick={() => bumpHp(1)}
+                  >
                     +1 HP
                   </button>
                   <button
@@ -368,7 +377,11 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
                   placeholder="ค้นหาการ์ด (ชื่อ / id)…"
                 />
                 <div className="qa-row">
-                  <button type="button" className="qa-btn" onClick={() => spawn("hand")}>
+                  <button
+                    type="button"
+                    className="qa-btn"
+                    onClick={() => spawn("hand")}
+                  >
                     ✋ Spawn to Hand
                   </button>
                   <button
@@ -505,10 +518,18 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
             {tab === "snap" && (
               <>
                 <div className="qa-row">
-                  <button type="button" className="qa-btn" onClick={exportSnapshot}>
+                  <button
+                    type="button"
+                    className="qa-btn"
+                    onClick={exportSnapshot}
+                  >
                     📋 Export State JSON
                   </button>
-                  <button type="button" className="qa-btn warn" onClick={loadSnapshot}>
+                  <button
+                    type="button"
+                    className="qa-btn warn"
+                    onClick={loadSnapshot}
+                  >
                     📥 Load State JSON
                   </button>
                 </div>

@@ -1,5 +1,10 @@
 import type { Card, Character } from "../app/lib/gameTypes";
-import { cardInfo, suitColor, suitTx, cardTypeLabel } from "../app/lib/gameConstants";
+import {
+  cardInfo,
+  suitColor,
+  suitTx,
+  cardTypeLabel,
+} from "../app/lib/gameConstants";
 
 type EncCategory = "generals" | "basic" | "trick" | "equip";
 
@@ -77,10 +82,7 @@ export function EncyclopediaDrawer({
         className={`ency-backdrop${open ? " open" : ""}`}
         onClick={onClose}
       />
-      <aside
-        className={`ency-panel${open ? " open" : ""}`}
-        aria-hidden={!open}
-      >
+      <aside className={`ency-panel${open ? " open" : ""}`} aria-hidden={!open}>
         <header className="ency-header">
           <h2>📜 คลังการ์ด</h2>
           <button className="ency-close" onClick={onClose} aria-label="ปิด">
@@ -89,7 +91,10 @@ export function EncyclopediaDrawer({
         </header>
         {encCharDetail ? (
           <div className="ency-detail">
-            <button className="ency-back" onClick={() => setEncCharDetail(null)}>
+            <button
+              className="ency-back"
+              onClick={() => setEncCharDetail(null)}
+            >
               ← กลับไปที่รายการ
             </button>
             {encCharDetail.image && (
@@ -124,7 +129,10 @@ export function EncyclopediaDrawer({
             const info = cardInfo(encDetail);
             return (
               <div className="ency-detail">
-                <button className="ency-back" onClick={() => setEncDetail(null)}>
+                <button
+                  className="ency-back"
+                  onClick={() => setEncDetail(null)}
+                >
                   ← กลับไปที่รายการ
                 </button>
                 <span
@@ -157,7 +165,9 @@ export function EncyclopediaDrawer({
                     🎯 ระยะโจมตี {encDetail.effectParams.range}
                   </p>
                 ) : null}
-                <p>{info?.desc || encDetail.description || "ยังไม่มีคำอธิบาย"}</p>
+                <p>
+                  {info?.desc || encDetail.description || "ยังไม่มีคำอธิบาย"}
+                </p>
                 {info?.use && (
                   <p className="card-detail-use">
                     <b>เมื่อไหร่:</b> {info.use}

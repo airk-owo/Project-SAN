@@ -125,7 +125,6 @@ function DecisionArea({
   );
 }
 
-
 function OpponentPanel({
   player,
   targetable,
@@ -192,7 +191,6 @@ function OpponentPanel({
     </article>
   );
 }
-
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -412,7 +410,10 @@ export default function Home() {
       if (soundOn) playAutoEndChime();
       setAutoEndBanner(true);
       if (autoEndBannerTimer.current) clearTimeout(autoEndBannerTimer.current);
-      autoEndBannerTimer.current = setTimeout(() => setAutoEndBanner(false), 2600);
+      autoEndBannerTimer.current = setTimeout(
+        () => setAutoEndBanner(false),
+        2600,
+      );
     }, 750);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -435,8 +436,7 @@ export default function Home() {
   // Encyclopedia: lazy-load the full card + general catalogues on first open.
   useEffect(() => {
     if (!showEncyclopedia) return;
-    const base =
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const base = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
     if (!catalog)
       fetch(`${base}/cards`)
         .then((r) => r.json())
@@ -695,7 +695,10 @@ export default function Home() {
       setLightningStrike(true);
       if (soundOn) playThunder();
       if (lightningTimer.current) clearTimeout(lightningTimer.current);
-      lightningTimer.current = setTimeout(() => setLightningStrike(false), 1600);
+      lightningTimer.current = setTimeout(
+        () => setLightningStrike(false),
+        1600,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game?.lastJudgment?.at, soundOn]);
@@ -1154,7 +1157,9 @@ export default function Home() {
         )}
         {waiting && (
           <div className="local-name-version">
-            <span className="local-name-version-label">🃏 เวอร์ชันชื่อการ์ด</span>
+            <span className="local-name-version-label">
+              🃏 เวอร์ชันชื่อการ์ด
+            </span>
             <div className="local-name-version-opts">
               {(
                 [
@@ -1711,9 +1716,7 @@ export default function Home() {
                   <button
                     type="button"
                     className="mock-pile mock-pile-btn"
-                    onClick={() =>
-                      game.discard.length && setShowDropZone(true)
-                    }
+                    onClick={() => game.discard.length && setShowDropZone(true)}
                     disabled={!game.discard.length}
                     title="ดูไพ่ทั้งหมดในกองทิ้ง"
                   >
@@ -4679,7 +4682,11 @@ export default function Home() {
           </div>
         )}
         {autoEndBanner && (
-          <div className="local-autoend-banner" role="status" aria-live="polite">
+          <div
+            className="local-autoend-banner"
+            role="status"
+            aria-live="polite"
+          >
             <span className="local-autoend-icon">⏭</span>
             <span>จบเทิร์นอัตโนมัติ (ไม่มีการ์ด/ทักษะให้ใช้)</span>
           </div>

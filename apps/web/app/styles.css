@@ -4911,7 +4911,11 @@ textarea,
   top: 0;
   left: 0;
   height: 100%;
-  width: clamp(380px, 45vw, 720px); /* ~40–50% on typical desktop/laptop widths */
+  width: clamp(
+    380px,
+    45vw,
+    720px
+  ); /* ~40–50% on typical desktop/laptop widths */
   max-width: 100vw;
   z-index: 220;
   display: flex;
