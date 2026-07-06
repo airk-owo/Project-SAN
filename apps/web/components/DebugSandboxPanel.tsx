@@ -13,6 +13,12 @@ type QaTab = "spawn" | "flow" | "rig" | "snap";
 const SOCKET_BASE =
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
 const SUITS = ["♠", "♥", "♦", "♣"] as const;
+// Cosmetic icons for the basic-card quick-spawn buttons; any unmapped name falls back to 🃏.
+const BASIC_ICONS: Record<string, string> = {
+  โจมตี: "⚔️",
+  หลบ: "🛡",
+  เสบียง: "🍑",
+};
 const RANKS = [
   "A",
   "2",
@@ -44,8 +50,8 @@ function PickList<T extends { id: string }>({
   placeholder: string;
 }) {
   const [query, setQuery] = useState("");
-  const shown = useMemo(() => {
-    if (!items) return [];
+  const { shown, total } = useMemo(() => {
+    if (!items) return { shown: [] as T[], total: 0 };
     const q = query.trim().toLowerCase();
     const matched = q
       ? items.filter(
@@ -54,7 +60,7 @@ function PickList<T extends { id: string }>({
             item.id.toLowerCase().includes(q),
         )
       : items;
-    return matched.slice(0, 40);
+    return { shown: matched.slice(0, 40), total: matched.length };
   }, [items, query, toLabel]);
   return (
     <div className="qa-pick">
@@ -80,6 +86,11 @@ function PickList<T extends { id: string }>({
           </button>
         ))}
       </div>
+      {total > shown.length && (
+        <span className="qa-empty">
+          แสดง {shown.length}/{total} — พิมพ์เพื่อค้นหาเพิ่ม
+        </span>
+      )}
     </div>
   );
 }
@@ -168,6 +179,15 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
     players.find((p) => p.id === targetId) ??
     players.find((p) => p.id === game.viewerId) ??
     players[0];
+  // Basic cards (โจมตี/หลบ/เสบียง) live past the picker's 40-item cap, so surface them
+  // as one-tap quick-spawn buttons. Derived from the catalogue so it tracks any name change.
+  const basicCards = useMemo(() => {
+    if (!cards) return [];
+    const seen = new Map<string, Card>();
+    for (const c of cards)
+      if (c.type === "พื้นฐาน" && !seen.has(c.name)) seen.set(c.name, c);
+    return [...seen.values()];
+  }, [cards]);
 
   const emitDev = useCallback(
     (event: string, data: Record<string, unknown> = {}) => {
@@ -184,6 +204,16 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
       targetPlayerId: target.id,
       card: spawnCardId,
       zone,
+    });
+  };
+  // Quick-spawn a basic card by name into the target's hand — the server pulls a real
+  // copy from the draw/discard pile first, then falls back to a fresh clone.
+  const spawnBasic = (name: string) => {
+    if (!target) return flash("✗ ไม่มีผู้เล่นเป้าหมาย", false);
+    emitDev("dev:spawn-card", {
+      targetPlayerId: target.id,
+      card: name,
+      zone: "hand",
     });
   };
   const morph = () => {
@@ -366,7 +396,27 @@ export function DebugSandboxPanel({ game, gameId, socket }: Props) {
                     −1 HP
                   </button>
                 </div>
-                <div className="qa-section-label">การ์ด</div>
+                <div className="qa-section-label">เสกด่วน — การ์ดพื้นฐาน</div>
+                <div className="qa-row">
+                  {basicCards.length ? (
+                    basicCards.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        className="qa-btn"
+                        onClick={() => spawnBasic(c.name)}
+                        title={`เสก ${c.name} เข้ามือ ${target?.username ?? ""}`}
+                      >
+                        {`${BASIC_ICONS[c.name] ?? "🃏"} ${c.name}`}
+                      </button>
+                    ))
+                  ) : (
+                    <span className="qa-empty">
+                      {cards ? "ไม่พบการ์ดพื้นฐาน" : "กำลังโหลด…"}
+                    </span>
+                  )}
+                </div>
+                <div className="qa-section-label">การ์ดทั้งหมด</div>
                 <PickList
                   items={cards}
                   selectedId={spawnCardId}

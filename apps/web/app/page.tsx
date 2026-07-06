@@ -179,6 +179,13 @@ function OpponentPanel({
           ที่นั่ง {player.seatIndex}
           {distance != null ? ` · ระยะ ${distance}` : ""}
         </small>
+        {player.character?.kingdomTh && (
+          <span
+            className={`mock-kingdom kingdom-${player.character.kingdom ?? "QUN"}`}
+          >
+            {player.character.kingdomTh}
+          </span>
+        )}
         <small
           className={`mock-role${player.role ? " local-role-" + player.role : ""}`}
         >
@@ -2135,6 +2142,13 @@ export default function Home() {
                 <small className="mock-seat-info">
                   ที่นั่ง {myPlayer?.seatIndex}
                 </small>
+                {myPlayer?.character?.kingdomTh && (
+                  <span
+                    className={`mock-kingdom kingdom-${myPlayer.character.kingdom ?? "QUN"}`}
+                  >
+                    {myPlayer.character.kingdomTh}
+                  </span>
+                )}
                 {myPlayer?.role && (
                   <small
                     className={`mock-role${myPlayer.role === "emperor" || roleVisible ? " local-role-" + myPlayer.role : ""}`}
