@@ -57,3 +57,25 @@ Server-authoritative online play, plus an offline **local** mode that runs the s
 **Offline (local):** `app/game/local/page.tsx` builds a `GameState` and calls the same engine functions directly in the browser — no socket, no server, no DB.
 
 **Persistence:** The client talks to Supabase directly for auth and stats; live game state remains in server memory only.
+
+## 5. QA God Mode / Dev Sandbox
+Dev-only tooling for driving a game into arbitrary states by hand instead of playing through them, so testers can reach and re-test any board/skill/judgment situation on demand. Two independent guards keep it out of production, so a misconfigured build can't leak it:
+- `registerDevSandbox` (backend) and `DebugSandboxPanel` (frontend) are each called/mounted from their host only behind `process.env.NODE_ENV !== "production"`.
+- Both also refuse a second time internally — `registerDevSandbox` returns immediately if `NODE_ENV === 'production'`, and `DebugSandboxPanel` renders `null` in production — so even a stray import can't activate them.
+
+**Backend:**
+- `packages/game/src/engine/handlers/dev-sandbox.ts` — pure `GameState` mutations (`devSpawnCard`, `devSetCharacter`, `devSetHp`, `devInsertTopDeck`, `devForceJudgment`, `devSnapshot`, `devLoadSnapshot`). No env access here; every mutation ends in `synchronizeGameState` so draw/discard mirrors and skill reconciliation stay coherent before broadcast.
+- `apps/server/src/dev-sandbox.ts` — the socket layer. `registerDevSandbox(deps)` is called once from `apps/server/src/index.ts` behind the `NODE_ENV` guard and wires `dev:*` handlers (below) onto every connecting socket. It also exports `isTimerFrozen(gameId)` and `devAutoTick(game)`, which `index.ts`'s `refreshTimeout` and `emitGame` call unconditionally on every game — until `registerDevSandbox` actually runs, the module's internal `deps` stays `null`, so both are no-ops and a production server is unaffected even though the imports are always present.
+
+**Frontend:**
+- `apps/web/components/DebugSandboxPanel.tsx` — a floating, draggable, collapsible panel (position/open-state persisted to `localStorage`). Talks to the server purely through `dev:*` emits on the socket it's handed.
+- Mounted in `apps/web/app/page.tsx` (the online client) next to the encyclopedia drawer, behind `process.env.NODE_ENV !== "production"`, passed the live `game`, `gameId`, and `socket`.
+
+**The 7 QA capabilities** (each maps to a `dev:*` socket event — see `dev-sandbox.ts` in both packages before building new debug tooling, this likely already covers it):
+1. **Hot-seat control** (`dev:switch-control`) — rebinds the current socket to another seat, so one tester plays every seat from one tab.
+2. **Card spawning** (`dev:spawn-card`) — gives any card (by id or name) to a target's hand or equipment slot; pulls a real physical copy from the deck/discard first, only clones a fresh id if none exists.
+3. **Character morphing** (`dev:set-character`) — swaps a player's character mid-game, resets HP/max HP and reseeds loss-tracking so the swap itself can't trigger loss-skill draws; skills resolve live from `CHARACTER_SKILLS[character.id]`.
+4. **Timer freeze** (`dev:toggle-freeze-timer`) — suspends a game's decision countdown; `refreshTimeout` checks `isTimerFrozen(game.id)` first and, when frozen, clears any running timer and broadcasts `responseDeadline: null`.
+5. **Deck/judgment rigging** (`dev:insert-top-deck`, `dev:force-judgment`) — places a chosen card, or an exact suit+rank, on top of the draw pile so the next draw or judgment reveal (Lightning, Indulgence, Guicai fortune, armor, retaliate…) is deterministic.
+6. **Dummy auto-pass** (`dev:set-dummy-mode`) — seats with no live socket attached auto-decline pending responses or auto-advance their own turn (draw → discard → end), one step per `emitGame` broadcast via `devAutoTick`, so a solo tester can watch a full table play out.
+7. **State snapshotting** (`dev:export-snapshot` / `dev:load-snapshot`) — exports the full authoritative `GameState` as JSON (via ack callback, copied to clipboard) and reloads one in place, preserving room identity (`id`/`hostId`) so server timers and closures holding the old object reference stay valid.
