@@ -28,6 +28,9 @@ Take the finished game loop to real players: enable persistence/auth in a deploy
 - **All 27 character skills (CHAR001–027) implemented and tested** — active, reactive (event handlers), suit-conversion, loss-triggered, and ally-assist skills. See `packages/game/src/engine/handlers/character-skills.ts`.
 - Engine modularized: `packages/game/src/engine/` (state, actions, setup, turns, view, handlers/) behind a thin `index.ts` router.
 - Automated engine test suite: 308 tests / 86 suites (`npm test -w @wtk/game`, Node test runner via tsx).
+- Gateway test suite (`npm test -w @wtk/server`): boots the real server in-process (`createServer()` in `apps/server/src/server.ts`) and drives it over socket.io-client — lobby flow, host-only guards, session-token identity, rate limit, malformed payloads.
+- GitHub Actions CI (`.github/workflows/ci.yml`): typecheck + both test suites on every push/PR.
+- Gateway security hardening (see `REVIEWS/security-gateway.md`): session tokens against userId spoofing, per-socket rate limiting, payload normalization (crash-proofing), CORS locked to `WEB_ORIGIN`.
 - QA God Mode dev sandbox (hot-seat control, card spawning, character morphing, timer freeze, deck/judgment rigging, state snapshot/load) — dev-only, double-guarded. See `ARCHITECTURE.md` §5.
 - Supabase Google Auth + player statistics **built but feature-flagged OFF by default** (web `NEXT_PUBLIC_FEATURE_AUTH`, server `FEATURE_AUTH_STATS`; enable procedure in `docs/auth-setup.md`).
 
@@ -40,5 +43,5 @@ Take the finished game loop to real players: enable persistence/auth in a deploy
 - Room browser realtime refresh, room passwords, host moderation tools.
 - Reconnect UX polish.
 - Replay system and match-history UI.
-- No automated tests for `apps/web` / `apps/server`; no end-to-end multiplayer test harness (manual testing via the QA sandbox).
+- No automated tests for `apps/web`; no full-match e2e harness (the gateway suite covers lobby/identity/hardening — deep in-game flows are engine-tested only; manual testing via the QA sandbox).
 - `basic-combat.scenarios.ts` standalone harness is not wired into `npm test`.

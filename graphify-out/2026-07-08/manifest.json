@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1783201630.4569297,
-    "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
+    "mtime": 1783466167.7019918,
+    "ast_hash": "b3df8aeb585c4f8b472fe21b432edaa3",
     "semantic_hash": ""
   },
   "REVIEWS/feat-card-tooltips.md": {
@@ -310,8 +310,8 @@
     "semantic_hash": ""
   },
   "docs/current-status.md": {
-    "mtime": 1781992996.739889,
-    "ast_hash": "9be7dc1a3542f31c992b10943aa978bd",
+    "mtime": 1783466142.9771094,
+    "ast_hash": "dc3d4a0b0075f2f22e23cf39de22c606",
     "semantic_hash": ""
   },
   "docs/game-state.md": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "docs/next-tasks.md": {
-    "mtime": 1781992629.4684274,
-    "ast_hash": "52ee79b4646cfcd50b9b21a30d226212",
+    "mtime": 1783466153.0503669,
+    "ast_hash": "f899206f253ac30678949df84cc11538",
     "semantic_hash": ""
   },
   "docs/troubleshooting.md": {
@@ -822,6 +822,11 @@
   "docs/auth-setup.md": {
     "mtime": 1783375007.9597664,
     "ast_hash": "61bb1079390d8083df87abed154ca028",
+    "semantic_hash": ""
+  },
+  "docs/workflow.md": {
+    "mtime": 1783466112.697165,
+    "ast_hash": "79cd16f8f63fe922c67e93938969a6ad",
     "semantic_hash": ""
   }
 }

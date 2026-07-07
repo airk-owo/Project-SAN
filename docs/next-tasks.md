@@ -6,7 +6,7 @@
 2. Deploy a real environment (Docker) and playtest online with real players.
 3. Room browser realtime refresh, room passwords, and host moderation.
 4. Reconnect UX polish (mid-game rejoin experience).
-5. Add automated coverage for `apps/server` socket handlers (seat/turn/skill flows) — the engine is tested, the gateway is not.
+5. Extend the gateway test suite (`apps/server/src/server.test.ts`) into in-game flows: start a 4-player match with the QA freeze-timer, cover turn/skill events end-to-end. (Lobby, identity, and hardening are already covered; CI runs the suite on every push.)
 6. Replay/statistics UI and match history — only after persistence (task 1) is live.
 
 # Not Yet

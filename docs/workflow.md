@@ -19,16 +19,21 @@
 ## 2. Dev loop
 
 ```
-npm run dev          # ที่ root — รัน web (:3000) + socket server (:3001) พร้อมกัน
-npm run check        # typecheck ทุก workspace (tsc --noEmit)
-npm test -w @wtk/game  # เทสต์ engine (Node test runner ผ่าน tsx --test)
+npm run dev              # ที่ root — รัน web (:3000) + socket server (:3001) พร้อมกัน
+npm run check            # typecheck ทุก workspace (tsc --noEmit)
+npm test -w @wtk/game    # เทสต์ engine (Node test runner ผ่าน tsx --test)
+npm test -w @wtk/server  # เทสต์ gateway — บูต server จริงบนพอร์ต 0 แล้วยิงผ่าน socket.io-client
 ```
+
+มี CI แล้ว (`.github/workflows/ci.yml`): ทุก push/PR จะรัน check + เทสต์ทั้งสองชุดบน GitHub Actions อัตโนมัติ
+
+โครง server: `apps/server/src/server.ts` คือตัวจริง (`createServer()` — express + socket.io + handlers ทั้งหมด คืน `close()` สำหรับเทสต์), `index.ts` เป็นแค่ entry ที่เรียก `listen` — เพิ่ม handler ใหม่ที่ server.ts และเพิ่มเทสต์ใน `server.test.ts`
 
 **ห้ามรัน `npm run build` ขณะ dev server ยังรันอยู่** — `next build` กับ `next dev` ใช้โฟลเดอร์ `.next` ร่วมกัน จะทำให้ dev พังทั้ง UI (unstyled/CSS 404) หรือ error `denormalizePagePath is not a function` อาการและวิธีแก้อยู่ใน [troubleshooting.md](troubleshooting.md) ข้อ 0–1 (สรุป: ปิด process พอร์ต 3000 → ลบ `apps\web\.next` → `npm run dev` ใหม่)
 
 อยากเช็คว่าโค้ดคอมไพล์ผ่าน ให้ใช้ `npm run check` หรือ `npx tsc --noEmit` เท่านั้น (ไม่แตะ `.next`)
 
-เทสต์มีเฉพาะ `packages/game` (engine) — web/server ยังไม่มีเทสต์อัตโนมัติ ต้องเทสต์มือผ่าน QA sandbox (ข้อ 8)
+เทสต์อัตโนมัติมี 2 ชุด: engine (`packages/game`) กับ gateway (`apps/server`) — ฝั่ง web ยังไม่มีเทสต์ ใช้ QA sandbox (ข้อ 8) + Chrome headless (ข้อ 4) เทสต์มือ
 
 ---
 
