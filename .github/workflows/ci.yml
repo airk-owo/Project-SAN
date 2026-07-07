@@ -1,0 +1,23 @@
+# CI: typecheck ทุก workspace + เทสต์ engine + เทสต์ gateway ทุกครั้งที่ push/PR
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck (web + server + game)
+        run: npm run check
+      - name: Engine tests
+        run: npm test -w @wtk/game
+      - name: Gateway tests
+        run: npm test -w @wtk/server
