@@ -1,3 +1,7 @@
+## workflow
+
+Before making any changes, read `docs/workflow.md` — the working guide for this repo (dev loop, known pitfalls like the inert Tailwind setup and the `.next` build/dev conflict, commit conventions, reusable engine patterns). Project status lives in `docs/current-status.md`; mandatory coding rules in `docs/ai-working-rules.md`.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
