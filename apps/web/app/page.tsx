@@ -42,6 +42,22 @@ const socket = io(
   process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
   { autoConnect: false },
 );
+// Session token: server แจก secret ผูกกับ wtk-member-id ตอน join แรก แล้วต้องแนบกลับทุกครั้งที่
+// join/reconnect — กันคนอื่นสวมรอย userId เรา (callback ยิงเฉพาะฝั่ง browser จึงแตะ localStorage ได้)
+const readSessionToken = () => {
+  try {
+    return localStorage.getItem("wtk-session-token") || undefined;
+  } catch {
+    return undefined;
+  }
+};
+socket.on("session:token", ({ token }: { token?: string }) => {
+  if (typeof token === "string" && token) {
+    try {
+      localStorage.setItem("wtk-session-token", token);
+    } catch {}
+  }
+});
 // Proactive "play a card" socket events gated by the optional Card Play Confirmation
 // setting. Response-window plays (dodge/negate/heal) are intentionally excluded — they
 // run under the server's response countdown, so a confirm step there could cause timeouts.
@@ -63,7 +79,7 @@ const emitRoomJoin = (
   userId: string,
   withToken: boolean,
 ) => {
-  const payload = { gameId, username, userId };
+  const payload = { gameId, username, userId, sessionToken: readSessionToken() };
   if (withToken) {
     void getAccessToken().then((token) =>
       socket.emit("room:join", token ? { ...payload, accessToken: token } : payload),
