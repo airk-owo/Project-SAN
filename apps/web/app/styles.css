@@ -3924,15 +3924,26 @@ img.mock-card-art {
   border-radius: 9px;
   background: var(--card, #f8f2df);
   border: 2px solid var(--border);
+  /* Dark bronze glyph — the global `button` rule sets color:#fff, which made the
+     currentColor SVG icon invisible on the cream button. */
+  color: #5a3d18;
   cursor: pointer;
   line-height: 1;
+  transition:
+    color 0.14s ease,
+    border-color 0.14s ease,
+    background 0.14s ease;
 }
 .local-nav-btn:hover {
   border-color: var(--primary);
+  color: #3e2a10;
 }
 .local-nav-btn.active {
   border-color: var(--primary);
-  background: #b88a3b22;
+  /* Menu open → the pill goes dark, so switch the glyph to gold (mode 2) so it
+     stays visible instead of blending into the dark background. */
+  background: #33220f;
+  color: #f5d994;
 }
 .local-pregame-header {
   display: flex;
@@ -5470,6 +5481,9 @@ textarea,
 .local-nav-ency.active {
   background: #d8b44a;
   border-color: #8b6b1f;
+  /* This button is gold in both states, so keep the glyph dark (overrides the
+     gold active glyph the standard buttons use). */
+  color: #3e2a10;
 }
 /* --- Mobile: full-screen overlay + minimal handle + swipe-from-edge --- */
 @media (max-width: 760px) {
