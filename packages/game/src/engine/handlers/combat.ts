@@ -28,7 +28,7 @@ import {
   createTargetedCardAction,
   resolveTargetedCardAction,
 } from "../actions.js";
-import { getNextAlivePlayer, startTurn } from "../turns.js";
+import { getNextAlivePlayer, startTurn } from "../turn-flow.js";
 import { publicCardView } from "../view.js";
 import {
   attackDamageBonus,
