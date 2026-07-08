@@ -59,6 +59,9 @@ import { RetaliatePrompt } from "../components/game/RetaliatePrompt";
 import { DischordPrompt } from "../components/game/DischordPrompt";
 import { AllyAssistPrompt } from "../components/game/AllyAssistPrompt";
 import { PeekPrompt } from "../components/game/PeekPrompt";
+import { CoercePrompt } from "../components/game/CoercePrompt";
+import { HarvestPrompt } from "../components/game/HarvestPrompt";
+import { JudgmentPanel } from "../components/game/JudgmentPanel";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -3112,265 +3115,34 @@ export default function Home() {
             </section>
           )}
 
-        {isPlaying &&
-          game.pendingCoerce &&
-          (() => {
-            const pc = game.pendingCoerce!;
-            const holder = game.players.find((p) => p.id === pc.weaponHolderId);
-            const victim = game.players.find((p) => p.id === pc.victimId);
-            const actor = game.players.find((p) => p.id === pc.actorId);
-            const isHolder = pc.weaponHolderId === game.viewerId;
-            const atk = myPlayer?.hand.find((c) => c.effect === "attack");
-            return (
-              <section className="mock-response" role="dialog">
-                <span className="mock-response-icon">🗡</span>
-                {countdownBadge}
-                {isHolder ? (
-                  <>
-                    <div>
-                      <small>
-                        {charName(actor)} ใช้ {pc.trickName}
-                      </small>
-                      <h2>ถูกบังคับให้โจมตี {charName(victim)}</h2>
-                    </div>
-                    <div className="mock-response-actions">
-                      <button
-                        disabled={!atk}
-                        onClick={() =>
-                          atk && emit("coerce:attack", { cardId: atk.id })
-                        }
-                      >
-                        {atk ? `⚔ โจมตี ${charName(victim)}` : "ไม่มีไพ่โจมตี"}
-                      </button>
-                      <button
-                        className="mock-muted-button"
-                        onClick={() => emit("coerce:decline")}
-                      >
-                        ไม่โจมตี (ให้ {charName(actor)} ยึดอาวุธ)
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <h2>กำลังรอ {holder?.username ?? "ผู้เล่น"} ตัดสินใจ</h2>
-                      <p>
-                        ยืมมือสังหาร: โจมตี {charName(victim)} หรือเสียอาวุธ
-                      </p>
-                    </div>
-                  </>
-                )}
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingHarvest &&
-          rw?.type === "harvest_pick" &&
-          (() => {
-            const picker = game.players.find(
-              (p) => p.id === rw.currentResponderId,
-            );
-            const isPicker = rw.currentResponderId === game.viewerId;
-            return (
-              <section className="mock-response local-harvest" role="dialog">
-                <span className="mock-response-icon">🌾</span>
-                {countdownBadge}
-                <div>
-                  <h2>
-                    {isPicker
-                      ? "เลือกไพ่ 1 ใบจากยุ้งฉาง"
-                      : `กำลังรอ ${picker?.username ?? "ผู้เล่น"} เลือกไพ่`}
-                  </h2>
-                </div>
-                <div className="local-harvest-pool">
-                  {game.pendingHarvest!.revealed.map((c, i) => {
-                    const hidden = c.effect === "hidden_harvest";
-                    const hinfo = hidden ? null : cardInfo(c);
-                    return (
-                      <button
-                        key={c.id || i}
-                        disabled={!isPicker || hidden}
-                        className={`mock-card ${hidden ? "local-harvest-hidden" : `mock-card-suit-${suitColor(c.suit)}`}`}
-                        onClick={() =>
-                          isPicker &&
-                          !hidden &&
-                          emit("harvest:pick", { cardId: c.id })
-                        }
-                      >
-                        {hidden ? null : (
-                          <>
-                            <header>
-                              <span className="mock-card-rank">
-                                {c.number}
-                                {suitTx(c.suit)}
-                              </span>
-                            </header>
-                            {c.image ? (
-                              <img
-                                className="mock-card-art"
-                                src={c.image}
-                                alt={c.name}
-                              />
-                            ) : (
-                              <div className="mock-card-art">WTK</div>
-                            )}
-                            <b className="mock-card-name">{c.name}</b>
-                            <small>{cardTypeLabel(c)}</small>
-                          </>
-                        )}
-                        {hinfo && (
-                          <div className="card-tip" role="tooltip">
-                            <b className="card-tip-name">{c.name}</b>
-                            <span className="card-tip-type">
-                              {cardTypeLabel(c)} · {c.number}
-                              {suitTx(c.suit)}
-                            </span>
-                            <p className="card-tip-desc">{hinfo.desc}</p>
-                            {hinfo.use && (
-                              <p className="card-tip-use">
-                                <i>เมื่อไหร่:</i> {hinfo.use}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          pj &&
-          (() => {
-            const jp = game.players.find((p) => p.id === pj.playerId);
-            const r = pj.revealed;
-            return (
-              <section
-                className="mock-response local-judgment-panel"
-                role="dialog"
-              >
-                <span className="mock-response-icon">⚖</span>
-                {countdownBadge}
-                {pj.stage === "awaiting_draw" ? (
-                  <div>
-                    <h2>การตัดสิน: {pj.trickName}</h2>
-                    {myJudgmentDraw ? (
-                      <p>⬆ กดกองจั่ว (หรือปุ่มด้านล่าง) เพื่อเปิดไพ่ตัดสิน</p>
-                    ) : (
-                      <p>กำลังรอ {jp?.username ?? "ผู้เล่น"} เปิดไพ่ตัดสิน…</p>
-                    )}
-                    {myJudgmentDraw && (
-                      <div className="mock-response-actions">
-                        <button onClick={() => emit("judgment:draw")}>
-                          ⚖ เปิดไพ่ตัดสิน
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <>
-                    <div className="local-judgment-reveal">
-                      <small>
-                        ไพ่ตัดสินของ {charName(jp)} — {pj.trickName}
-                      </small>
-                      {r ? (
-                        <div
-                          className={`local-judgment-card local-suit-${suitColor(r.suit)}`}
-                        >
-                          <span>
-                            {r.number} {suitTx(r.suit)}
-                          </span>
-                          <b>{r.name}</b>
-                        </div>
-                      ) : (
-                        <p>ไม่มีไพ่ตัดสิน</p>
-                      )}
-                    </div>
-                    {myJudgmentAct ? (
-                      <div className="mock-response-actions">
-                        {myKeys.includes("keep_judgment") && (
-                          <button onClick={() => emit("judgment:keep")}>
-                            🔮 เก็บไพ่ตัดสิน (คาดการณ์แม่นยำ)
-                          </button>
-                        )}
-                        <button
-                          className="mock-muted-button"
-                          onClick={() => emit("judgment:resolve")}
-                        >
-                          {myKeys.includes("keep_judgment")
-                            ? "ดำเนินการต่อ (เก็บไพ่เข้ามือ)"
-                            : "ดำเนินการต่อ (ทิ้ง)"}
-                        </button>
-                      </div>
-                    ) : (
-                      <p>กำลังรอ {jp?.username ?? "ผู้เล่น"} ตัดสินใจ…</p>
-                    )}
-                    {myGuicai &&
-                      (myPlayer?.hand.length ?? 0) > 0 &&
-                      (guicaiPicking ? (
-                        <div className="local-force-cards">
-                          {myPlayer?.hand.map((c) => (
-                            <button
-                              key={c.id}
-                              onClick={() => {
-                                emit("judgment:replace", { cardId: c.id });
-                                setGuicaiPicking(false);
-                              }}
-                            >
-                              {c.name} ({c.number}
-                              {suitTx(c.suit)})
-                            </button>
-                          ))}
-                          <button
-                            className="mock-muted-button"
-                            onClick={() => setGuicaiPicking(false)}
-                          >
-                            ยกเลิก
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          className="local-skill-btn"
-                          onClick={() => setGuicaiPicking(true)}
-                        >
-                          🃏 กำหนดชะตา (เปลี่ยนไพ่ตัดสิน)
-                        </button>
-                      ))}
-                  </>
-                )}
-                {pj.playerId === game.viewerId &&
-                  pj.stage === "awaiting_draw" &&
-                  hasMySkill("fortune_judgment") &&
-                  !skillUsed("fortune_done") && (
-                    <button
-                      className="local-skill-btn"
-                      onClick={() => emit("skill:fortune")}
-                    >
-                      ✦ พึ่งวาสนา (ใช้ก่อนตัดสิน — เปิดดวง เก็บดอกดำ)
-                    </button>
-                  )}
-                {pj.playerId === game.viewerId &&
-                  pj.stage === "awaiting_draw" &&
-                  pj.trickEffect === "delayed_lightning_judgment" &&
-                  myPlayer?.hand.some(
-                    (c) => c.effect === "negate_trick_effect",
-                  ) && (
-                    <button
-                      className="local-skill-btn"
-                      onClick={() => {
-                        const neg = myPlayer?.hand.find(
-                          (c) => c.effect === "negate_trick_effect",
-                        );
-                        if (neg) emit("lightning:negate", { cardId: neg.id });
-                      }}
-                    >
-                      🛡 คงกระพันชาตรี (ยกเลิกฟ้าลงโทษ)
-                    </button>
-                  )}
-              </section>
-            );
-          })()}
+        {isPlaying && (
+          <CoercePrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+          />
+        )}
+        {isPlaying && rw && (
+          <HarvestPrompt game={game} rw={rw} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && pj && (
+          <JudgmentPanel
+            game={game}
+            pj={pj}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+            myJudgmentDraw={myJudgmentDraw}
+            myJudgmentAct={myJudgmentAct}
+            myKeys={myKeys}
+            myGuicai={myGuicai}
+            guicaiPicking={guicaiPicking}
+            setGuicaiPicking={setGuicaiPicking}
+            hasMySkill={hasMySkill}
+            skillUsed={skillUsed}
+          />
+        )}
         {isPlaying && (
           <RepeatAttackPrompt
             game={game}
