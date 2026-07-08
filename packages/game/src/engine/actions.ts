@@ -17,7 +17,7 @@ import {
   toCardInstance,
 } from "./state.js";
 import { getAttackRange } from "./handlers/equipment-passives.js";
-import { getEffectiveDistanceBetweenPlayers } from "./handlers/combat.js";
+import { getEffectiveDistanceBetweenPlayers } from "./targeting.js";
 export function createTargetedCardAction(
   state: GameState,
   actorId: string,

@@ -27,40 +27,15 @@ import {
 } from "../sync.js";
 import { canPlayerAct } from "../actions.js";
 import { CHARACTER_SKILLS, hasCharacterSkill } from "../skills.js";
+import { canTargetWithAttack } from "../targeting.js";
 import {
   applyDamage,
-  canTargetWithAttack,
   healPlayer,
   openDyingRescueWindow,
   playAttack,
   playDodge,
 } from "./combat.js";
 import { hasUnlimitedAttack } from "./equipment-passives.js";
-/** อ้วนสุด ศัตรูหมายหัว: any reachable อ้วนสุด whose hand size exceeds their HP must be chosen as the attack target. */
-export const forcedAttackTargets = (
-  state: GameState,
-  attackerId: string,
-): string[] =>
-  state.players
-    .filter(
-      (p) =>
-        p.alive &&
-        p.id !== attackerId &&
-        hasCharacterSkill(state, p.id, "must_be_targeted_when_loaded") &&
-        p.hp !== undefined &&
-        p.hand.length > p.hp &&
-        canTargetWithAttack(state, attackerId, p.id),
-    )
-    .map((p) => p.id);
-export const assertForcedAttackTarget = (
-  state: GameState,
-  attackerId: string,
-  targetIds: string[],
-) => {
-  const forced = forcedAttackTargets(state, attackerId);
-  if (forced.length && !forced.some((id) => targetIds.includes(id)))
-    throw new Error("ต้องเลือกโจมตี อ้วนสุด ก่อน (ศัตรูหมายหัว)");
-};
 /** กุยแก คำสั่งเสีย (遗计): the owner hands one revealed card to any living player; the window closes once all are distributed. */
 export function assignLegacyCard(
   state: GameState,

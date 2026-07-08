@@ -35,7 +35,8 @@ import {
   cardActsAs,
   hasCharacterSkill,
 } from "../skills.js";
-import { applyDamage, canTargetWithAttack } from "./combat.js";
+import { canTargetWithAttack } from "../targeting.js";
+import { applyDamage } from "./combat.js";
 import { publicCardView } from "../view.js";
 function massQueue(state: GameState, actorId: string) {
   const alive = getAlivePlayersInSeatOrder(state),

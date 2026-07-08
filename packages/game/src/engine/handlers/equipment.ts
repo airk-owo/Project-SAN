@@ -31,10 +31,12 @@ import {
   hasDiscardTwoAsAttack,
   hasUnlimitedAttack,
 } from "./equipment-passives.js";
-import { assertForcedAttackTarget } from "./character-skills.js";
+import {
+  assertForcedAttackTarget,
+  canTargetWithAttack,
+} from "../targeting.js";
 import {
   applyDamage,
-  canTargetWithAttack,
   openAttackDodgeWindow,
   playAttack,
   resolveCurrentAction,

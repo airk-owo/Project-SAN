@@ -38,7 +38,11 @@ import {
   isImmuneToAttack,
 } from "../skills.js";
 import { dispatchGameEvent } from "../events.js";
-import { assertForcedAttackTarget } from "./character-skills.js";
+import {
+  assertForcedAttackTarget,
+  canTargetWithAttack,
+  getEffectiveDistanceBetweenPlayers,
+} from "../targeting.js";
 import {
   areOppositeGenders,
   attackIgnoresTargetArmor,
@@ -51,52 +55,8 @@ import {
   hasUnlimitedAttack,
 } from "./equipment-passives.js";
 import { advanceMassResponseQueue } from "./tricks.js";
-/**
- * Distance used by effects. It deliberately remains separate from the base
- * seat distance so the UI can show both values for debugging.
- */
-export function getEffectiveDistanceBetweenPlayers(
-  state: GameState,
-  fromPlayerId: string,
-  toPlayerId: string,
-) {
-  const baseDistance = getBaseDistanceBetweenPlayers(
-    state,
-    fromPlayerId,
-    toPlayerId,
-  );
-  if (baseDistance === null) return null;
-  if (fromPlayerId === toPlayerId) return 0;
-  const from = getPlayerById(state, fromPlayerId),
-    to = getPlayerById(state, toPlayerId);
-  if (!from || !to) return null;
-  const outgoingModifier =
-    (from.equipment.offensiveMount ? 1 : 0) +
-    (hasCharacterSkill(state, from.id, "outgoing_distance_minus_one") ? 1 : 0);
-  const incomingModifier = to.equipment.defensiveMount ? 1 : 0;
-  return Math.max(1, baseDistance - outgoingModifier + incomingModifier);
-}
 const playerHasAnyCard = (player: Player) =>
   player.hand.length > 0 || Object.values(player.equipment).some(Boolean);
-export function canTargetWithAttack(
-  state: GameState,
-  attackerId: string,
-  targetId: string,
-) {
-  const attacker = getPlayerById(state, attackerId),
-    target = getPlayerById(state, targetId),
-    distance = getEffectiveDistanceBetweenPlayers(state, attackerId, targetId);
-  return Boolean(
-    attacker &&
-    target &&
-    attacker.alive &&
-    target.alive &&
-    attackerId !== targetId &&
-    !isImmuneToAttack(state, targetId) &&
-    distance !== null &&
-    distance <= getAttackRange(state, attackerId),
-  );
-}
 export function openDyingRescueWindow(
   state: GameState,
   dyingPlayerId: string,
