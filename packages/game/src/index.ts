@@ -2,6 +2,8 @@
 // this module re-exports the public API and routes card plays / attack responses to handlers.
 export * from "./engine/types.js";
 export * from "./engine/state.js";
+export * from "./engine/skills.js";
+export * from "./engine/sync.js";
 export * from "./engine/actions.js";
 export * from "./engine/setup.js";
 export * from "./engine/turns.js";
@@ -23,11 +25,8 @@ import {
   logAction,
   numberParam,
 } from "./engine/state.js";
-import {
-  cardActsAs,
-  dispatchGameEvent,
-  hasCharacterSkill,
-} from "./engine/handlers/character-skills.js";
+import { cardActsAs, hasCharacterSkill } from "./engine/skills.js";
+import { dispatchGameEvent } from "./engine/handlers/character-skills.js";
 import {
   declineResponse,
   playAttack,

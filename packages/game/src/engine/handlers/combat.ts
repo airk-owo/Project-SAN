@@ -16,11 +16,13 @@ import {
   logAction,
   moveToDiscard,
   numberParam,
-  reshuffleDiscardIntoDrawPile,
-  synchronizeGameState,
   toCardInstance,
   type RuntimeEquipmentSlot,
 } from "../state.js";
+import {
+  reshuffleDiscardIntoDrawPile,
+  synchronizeGameState,
+} from "../sync.js";
 import {
   canPlayerAct,
   createTargetedCardAction,
@@ -29,13 +31,15 @@ import {
 import { getNextAlivePlayer, startTurn } from "../turns.js";
 import { publicCardView } from "../view.js";
 import {
-  assertForcedAttackTarget,
   attackDamageBonus,
   attackDodgesRequired,
   cardActsAs,
-  dispatchGameEvent,
   hasCharacterSkill,
   isImmuneToAttack,
+} from "../skills.js";
+import {
+  assertForcedAttackTarget,
+  dispatchGameEvent,
 } from "./character-skills.js";
 import {
   areOppositeGenders,

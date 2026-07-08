@@ -8,7 +8,7 @@ import type {
   ResponseRecord,
   ResponseWindow,
 } from "./types.js";
-import { synchronizeGameState } from "./state.js";
+import { synchronizeGameState } from "./sync.js";
 export type { PublicCardView } from "./types.js";
 export const publicCardView = (card: Card): PublicCardView => ({
   id: card.id,

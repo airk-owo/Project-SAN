@@ -9,8 +9,8 @@ import {
   getPlayerById,
   logAction,
   moveToDiscard,
-  synchronizeGameState,
 } from "../state.js";
+import { synchronizeGameState } from "../sync.js";
 
 let devCardCounter = 0;
 const normalize = (value: string) => value.trim().toLowerCase();

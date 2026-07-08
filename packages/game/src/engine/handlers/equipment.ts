@@ -9,23 +9,25 @@ import {
   logAction,
   moveToDiscard,
   numberParam,
-  reshuffleDiscardIntoDrawPile,
-  synchronizeGameState,
   toCardInstance,
   type RuntimeEquipmentSlot,
 } from "../state.js";
+import {
+  reshuffleDiscardIntoDrawPile,
+  synchronizeGameState,
+} from "../sync.js";
 import {
   canPlayerAct,
   createTargetedCardAction,
   resolveTargetedCardAction,
 } from "../actions.js";
 import {
-  assertForcedAttackTarget,
   attackDamageBonus,
   attackDodgesRequired,
   hasCharacterSkill,
   isImmuneToAttack,
-} from "./character-skills.js";
+} from "../skills.js";
+import { assertForcedAttackTarget } from "./character-skills.js";
 import {
   applyDamage,
   canTargetWithAttack,

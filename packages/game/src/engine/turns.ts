@@ -11,10 +11,12 @@ import {
   moveToDiscard,
   owedDraws,
   recordJudgment,
+} from "./state.js";
+import {
   reshuffleDiscardIntoDrawPile,
   synchronizeGameState,
-} from "./state.js";
-import { hasCharacterSkill } from "./handlers/character-skills.js";
+} from "./sync.js";
+import { hasCharacterSkill } from "./skills.js";
 import { applyDamage } from "./handlers/combat.js";
 export const getDiscardRequirement = (state: GameState, playerId: string) => {
   const player = getPlayerById(state, playerId);

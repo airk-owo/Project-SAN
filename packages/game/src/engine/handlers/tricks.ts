@@ -16,13 +16,15 @@ import {
   logAction,
   moveToDiscard,
   numberParam,
-  reshuffleDiscardIntoDrawPile,
   resolveHiddenHandCard,
-  synchronizeGameState,
   toCardInstance,
   validateHiddenHandIndex,
   type RuntimeEquipmentSlot,
 } from "../state.js";
+import {
+  reshuffleDiscardIntoDrawPile,
+  synchronizeGameState,
+} from "../sync.js";
 import {
   canPlayerAct,
   createTargetedCardAction,
@@ -32,7 +34,7 @@ import {
   attackDodgesRequired,
   cardActsAs,
   hasCharacterSkill,
-} from "./character-skills.js";
+} from "../skills.js";
 import { applyDamage, canTargetWithAttack } from "./combat.js";
 import { publicCardView } from "../view.js";
 function massQueue(state: GameState, actorId: string) {
