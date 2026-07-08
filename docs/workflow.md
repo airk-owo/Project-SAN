@@ -71,14 +71,16 @@ npm test -w @wtk/server  # เทสต์ gateway — บูต server จร�
 
 ## 6. Engine patterns ที่ใช้ซ้ำ (สกิล/การ์ดใหม่)
 
-สกิลตัวละครครบทั้ง 27 ตัวแล้ว (CHAR001–027) — โค้ดอยู่ที่ `packages/game/src/engine/handlers/character-skills.ts` ถ้าต้องเพิ่มสกิล/การ์ดใหม่ ให้ทำตาม pattern ที่มีอยู่ ไม่ต้องคิดกลไกใหม่:
+สกิลตัวละครครบทั้ง 27 ตัวแล้ว (CHAR001–027) — ตัว handler สกิลอยู่ที่ `packages/game/src/engine/handlers/character-skills.ts`; registry/conversions อยู่ที่ `engine/skills.ts`, event dispatch อยู่ที่ `engine/events.ts` (refactor 2026-07-08 แยกชั้นเพื่อตัด import cycles — `npx madge --circular` ต้องเป็น 0 เสมอ) ถ้าต้องเพิ่มสกิล/การ์ดใหม่ ให้ทำตาม pattern ที่มีอยู่ ไม่ต้องคิดกลไกใหม่:
 
 | Pattern | ใช้เมื่อ | ตัวอย่างที่ดูได้ |
 |---|---|---|
 | Pending-decision (field ใน state + `pendingTimeoutFor` auto-skip + endTurn guard + panel ฝั่ง client) | สกิลที่ต้องรอผู้เล่นตัดสินใจ | สุมาอี้ (Fankui), แฮหัวตุ้น (retaliate) |
-| `SKILL_EVENT_HANDLERS` + `dispatchGameEvent` | trigger อัตโนมัติหลังเหตุการณ์ (after_damage, after_judgment ฯลฯ) | แฮหัวตุ้น |
-| `CARD_CONVERSIONS` + `cardActsAs` | สกิลแปลงดอก/ใช้การ์ดแทนกัน (play-fn ต้องเช็ค `cardActsAs` ไม่ใช่ `effect` ตรงๆ) | กำเหลง, ไต้เกี้ยว |
-| `reconcileLossSkills` (ปลาย `synchronizeGameState`) | trigger ตอนผู้เล่นเสียการ์ด/อุปกรณ์ ครอบคลุมทุกทางที่การ์ดหาย | ลกซุน, ซุนซ่างเซียง |
+| `SKILL_EVENT_HANDLERS` + `dispatchGameEvent` (`engine/events.ts`) | trigger อัตโนมัติหลังเหตุการณ์ (after_damage, after_judgment ฯลฯ) | แฮหัวตุ้น |
+| `CARD_CONVERSIONS` + `cardActsAs` (`engine/skills.ts`) | สกิลแปลงดอก/ใช้การ์ดแทนกัน (play-fn ต้องเช็ค `cardActsAs` ไม่ใช่ `effect` ตรงๆ) | กำเหลง, ไต้เกี้ยว |
+| `reconcileLossSkills` (`engine/skills.ts`, ถูกเรียกปลาย `synchronizeGameState` ใน `engine/sync.ts`) | trigger ตอนผู้เล่นเสียการ์ด/อุปกรณ์ ครอบคลุมทุกทางที่การ์ดหาย | ลกซุน, ซุนซ่างเซียง |
+
+เขียนเทสต์ engine ใหม่: ใช้ fixture กลางจาก `packages/game/src/test-helpers.ts` (`makeCard`, `makeStandardGame`, `passNegate` ฯลฯ) — อย่า copy fixture ระหว่างไฟล์เทสต์อีก ไฟล์ที่ default ต่าง (เช่น ♠) มี wrapper 1-3 บรรทัดในไฟล์นั้นเป็นตัวอย่าง
 
 ฝั่ง client: active skill ใช้ pattern `xMode` boolean + ปุ่ม `local-skill-btn` + mode bar + branch ใน hand-card click + `xTargetable` ใน opponents map (ดู ฮัวโต๋/ซุนซ่างเซียง ใน `apps/web/app/game/local/page.tsx` และ `page.tsx`)
 

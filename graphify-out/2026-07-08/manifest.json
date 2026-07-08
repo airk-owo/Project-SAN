@@ -5,13 +5,13 @@
     "semantic_hash": "598cb075410bcd95220ac90bbb60344a"
   },
   "apps/server/package.json": {
-    "mtime": 1783468118.0166209,
-    "ast_hash": "ae8dbd559b83fee273f11f301d638259",
+    "mtime": 1783480277.2607634,
+    "ast_hash": "8acb88615e46c0e6396b300f37e588a3",
     "semantic_hash": ""
   },
   "apps/server/src/index.ts": {
-    "mtime": 1783468113.885225,
-    "ast_hash": "e2db507bd4d705dff3a29e843dd9f624",
+    "mtime": 1783480171.579529,
+    "ast_hash": "d5ffa2e2e9df97dcfa6a4f678a366747",
     "semantic_hash": ""
   },
   "apps/server/tsconfig.json": {
@@ -80,9 +80,9 @@
     "semantic_hash": "90426577ad8f38459f3e566411c85589"
   },
   "apps/web/next.config.mjs": {
-    "mtime": 1783023453.4908016,
-    "ast_hash": "592c9f8bafa387f1210bd3ebc8ff7456",
-    "semantic_hash": "592c9f8bafa387f1210bd3ebc8ff7456"
+    "mtime": 1783480290.1242974,
+    "ast_hash": "d81db04e99fe943f7aed0ac31ade50ba",
+    "semantic_hash": ""
   },
   "apps/web/package.json": {
     "mtime": 1783320433.6388395,
@@ -265,8 +265,8 @@
     "semantic_hash": "90ce7299f730d9a08e6616cd39854df4"
   },
   "ARCHITECTURE.md": {
-    "mtime": 1783322209.1669412,
-    "ast_hash": "f417633dfb2c20d0d1e4146ff5cbda51",
+    "mtime": 1783480627.8630226,
+    "ast_hash": "b02b3e55acbef3081d8140ec06ae0584",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -310,8 +310,8 @@
     "semantic_hash": ""
   },
   "docs/current-status.md": {
-    "mtime": 1783468471.1404488,
-    "ast_hash": "d083e7a739e2a853acf301a77c06d247",
+    "mtime": 1783480670.805251,
+    "ast_hash": "47d08bf800fe3128b3fb053a163b09a8",
     "semantic_hash": ""
   },
   "docs/game-state.md": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "docs/next-tasks.md": {
-    "mtime": 1783468473.855606,
-    "ast_hash": "466dc0889178f243f3106a49a2bfacb9",
+    "mtime": 1783480672.6072164,
+    "ast_hash": "2b3d03bc91cd193e189998ce15e3fe7c",
     "semantic_hash": ""
   },
   "docs/troubleshooting.md": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "apps/server/src/dev-sandbox.ts": {
-    "mtime": 1783247914.484228,
-    "ast_hash": "ec8d59af38b7cb37d41ea1f1eb25ce52",
+    "mtime": 1783480249.6147673,
+    "ast_hash": "10ea776acc8911ae67c2ffea9e7a149a",
     "semantic_hash": ""
   },
   "packages/game/src/engine/handlers/dev-sandbox.ts": {
@@ -825,28 +825,43 @@
     "semantic_hash": ""
   },
   "docs/workflow.md": {
-    "mtime": 1783468459.5329194,
-    "ast_hash": "f9e1cd5845a4d3d0da67593339181670",
+    "mtime": 1783480655.3040783,
+    "ast_hash": "0be7dc4ada13589d69db327ff9dae771",
     "semantic_hash": ""
   },
   "apps/server/src/server.test.ts": {
-    "mtime": 1783468352.8778286,
-    "ast_hash": "ba6f61c3ec2650bb62631230e639c04b",
+    "mtime": 1783480404.436962,
+    "ast_hash": "d0bef924385813b9ee688424281c03da",
     "semantic_hash": ""
   },
   "apps/server/src/server.ts": {
-    "mtime": 1783468102.918404,
-    "ast_hash": "69261f7be1c4a9d53655726a29b109b5",
+    "mtime": 1783480261.9850795,
+    "ast_hash": "cefcda4c0b1b3dbf5c10308e902b6e2e",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1783468371.7709255,
-    "ast_hash": "92c61e5b81073189022e53510237d11a",
+    "mtime": 1783480454.700653,
+    "ast_hash": "61e9dbcbe74a5582334ca14bd9b42bf1",
     "semantic_hash": ""
   },
   "REVIEWS/security-gateway.md": {
-    "mtime": 1783468440.3338792,
-    "ast_hash": "a67c0fc369b23b312725b7c90142fde4",
+    "mtime": 1783480585.010546,
+    "ast_hash": "343e8f66726d11b58fbbf2be5508b493",
+    "semantic_hash": ""
+  },
+  ".github/dependabot.yml": {
+    "mtime": 1783480458.936895,
+    "ast_hash": "e1f02d73033960f7705d645268e95ef9",
+    "semantic_hash": ""
+  },
+  "SECURITY.md": {
+    "mtime": 1783480496.1336627,
+    "ast_hash": "375ee97cdcab24b756628ac9c2b34eec",
+    "semantic_hash": ""
+  },
+  "docs/security-checklist.md": {
+    "mtime": 1783480549.3984852,
+    "ast_hash": "53614f0d99afe785ed4060d6b3cc26a5",
     "semantic_hash": ""
   }
 }

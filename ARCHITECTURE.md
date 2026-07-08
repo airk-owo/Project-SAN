@@ -28,17 +28,25 @@ Server-authoritative online play, plus an offline **local** mode that runs the s
 - `docs/` — Specs & notes (`architecture-decisions`, `card-effect-logic`, `game-state`, `lobby-seat-system`, `current-status`, `troubleshooting`, …).
 
 ## 3. Core Modules
-- `packages/game/src/index.ts` (~55 lines) — the Game Router and State Dispatcher. Re-exports the whole engine API (consumers keep importing from `@wtk/game`) and holds only `playCard` (effect-key dispatch to handlers), `respondToAttack`, and the legacy `effectResolvers` registry. All logic lives in `src/engine/`:
-  - `engine/types.ts` — the full type model: `GameState`, `Player`, `Card` plus the `Pending*` interaction-state family (repeat attack, destroy mount, ice-sword replace, twin swords, coerce, harvest, judgment, fankui, retaliate, legacy, peek, dischord, ally-assist).
-  - `engine/state.ts` — core state helpers: `synchronizeGameState`, `getPlayerById` (the two most-connected functions in the graph), zones/logging/draw-pile/pending-draw utilities.
+- `packages/game/src/index.ts` (~55 lines) — the Game Router and State Dispatcher. Re-exports the whole engine API (consumers keep importing from `@wtk/game`) and holds only `playCard` (effect-key dispatch to handlers), `respondToAttack`, and the legacy `effectResolvers` registry. All logic lives in `src/engine/`, layered so imports only point downward (**zero import cycles** — gate with `npx madge --circular --extensions ts packages/game/src/index.ts`):
+  - `engine/types.ts` — the full type model: `GameState`, `Player`, `Card`, `PublicCardView` plus the `Pending*` interaction-state family (repeat attack, destroy mount, ice-sword replace, twin swords, coerce, harvest, judgment, fankui, retaliate, legacy, peek, dischord, ally-assist).
+  - `engine/state.ts` — core state helpers: `getPlayerById` (the most-connected function in the graph), zones/logging/draw-pile utilities. No upward imports.
+  - `engine/skills.ts` — `CHARACTER_SKILLS` registry, `hasCharacterSkill`, suit conversions (`cardActsAs`), passive skill predicates, `reconcileLossSkills`.
+  - `engine/sync.ts` — `synchronizeGameState` (ends with `reconcileLossSkills`), `reshuffleDiscardIntoDrawPile`, `drawPendingCard`.
+  - `engine/events.ts` — `dispatchGameEvent` + `SKILL_EVENT_HANDLERS` (event-triggered skills: fankui, retaliate, legacy, gain-damage-card).
+  - `engine/targeting.ts` — `getEffectiveDistanceBetweenPlayers`, `canTargetWithAttack`, forced-target rules (อ้วนสุด).
+  - `engine/turn-flow.ts` — `getNextAlivePlayer`, `startTurn`, `beginNextJudgment` (turn hand-off primitives, used by combat on player death).
   - `engine/actions.ts` — targeted-card action framework (`createTargetedCardAction`, `canPlayerAct`, `canPlayCardNow`).
   - `engine/setup.ts` — `createGame`, `createSeatedPlayer`, `dealRoles`, `dealEmperorOptions`, `beginPlayAfterCharacters`, `setCardNameVersion`.
-  - `engine/turns.ts` — turn/phase flow, draw phase variants, delayed-trick judgments, `startTurn`/`endTurn`.
+  - `engine/turns.ts` — turn/phase flow, draw phase variants, delayed-trick judgments, `endTurn`.
   - `engine/view.ts` — `createPublicGameState(state, viewerId)` per-viewer redaction. (`publicState` is a `@deprecated` alias the server still calls.)
-  - `engine/handlers/character-skills.ts` — `CHARACTER_SKILLS` + `hasCharacterSkill` + `SKILL_EVENT_HANDLERS` + `dispatchGameEvent` and every player-triggered skill handler.
+  - `engine/handlers/equipment-passives.ts` — weapon/armor passive predicates (`getAttackRange`, `hasUnlimitedAttack`, …) checked by every handler.
+  - `engine/handlers/response-queue.ts` — `advanceMassResponseQueue` for mass/multi-attack windows.
+  - `engine/handlers/character-skills.ts` — every player-triggered skill handler (active skills, emperor flows, pending decisions).
   - `engine/handlers/combat.ts` — basic cards: attack/dodge/heal, damage, dying rescue, death resolution, duels.
-  - `engine/handlers/equipment.ts` — equipment cards: passives, weapon effect handlers (twin swords, snake spear, zhangba, kirin, ice sword…), armor judgment.
+  - `engine/handlers/equipment.ts` — equipment cards: weapon effect handlers (twin swords, snake spear, zhangba, kirin, ice sword…), armor judgment, equipping.
   - `engine/handlers/tricks.ts` — instant/targeted/delayed/mass tricks, harvest, coerce, and the negate (คงกระพันชาตรี) pipeline.
+  - `src/test-helpers.ts` — shared test fixtures (`makeCard`, `makeStandardGame`, `passNegate`, …) used by the 16 test suites; per-file wrappers override defaults (suit ฯลฯ).
 - `apps/server/src/index.ts` — Socket gateway (~75 `socket.on` handlers: `room:*` / `seat:*` / `player:ready` / `game:start`, `card:play`, `attack:*`, all `skill:*`, judgment & response flows, `chat:send`). Holds `games` and `connections` Maps. `emitGame` builds a **per-viewer** payload: redacted state + pairwise `distances` + `roleAliveCounts` + `characterSkillKeys` + response deadline. Auto-skip is driven by a `DECISION_SECONDS` map (default **15s**; peek/retaliate/legacy **60s**), one timer per game via `refreshTimeout`. HTTP routes: `/health`, `/rooms`, `/cards`, `/characters` (the last two feed the client-side card/character encyclopedia). Auth via `requireUser`.
 - `apps/web/app/page.tsx` — the online client screens; all state derives from incoming `game:state`.
 - `apps/web/app/game/local/page.tsx` — imports the engine directly and drives a full game in-browser (offline).
