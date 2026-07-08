@@ -1,92 +1,27 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
-  createGame,
-  createSeatedPlayer,
-  dealRoles,
-  beginPlayAfterCharacters,
   playHarvest,
   pickHarvestCard,
-  declineNegate,
   type Card,
-  type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import {
+  makeCard as baseCard,
+  makeStandardGame,
+  passNegate,
+} from "./test-helpers.js";
 
-/** Decline the negate window that every trick now opens, so its effect resolves. */
-function passNegate(game: GameState): void {
-  while (
-    game.responseWindow?.type === "negate" &&
-    game.responseWindow.currentResponderId
-  ) {
-    declineNegate(game, game.responseWindow.currentResponderId);
-  }
-}
-
-const NOW = "2026-01-01T00:00:00.000Z";
-
-const spectator = (id: string): Spectator => ({
-  id,
-  username: id,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-
-const makeCard = (
-  id: string,
-  effect: string,
-  cardType: string = "basic",
-): Card => ({
-  id,
-  name: id,
-  type: cardType,
-  cardType: cardType as Card["cardType"],
-  suit: "♥",
-  number: "K",
-  image: null,
-  description: null,
-  effect,
-  effectParams: {},
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
+// ไฟล์นี้ effectParams ว่างเสมอ (ต่างจาก helper กลางที่ default {damage:1})
+const makeCard = (id: string, effect: string, cardType: string = "basic"): Card =>
+  baseCard(id, effect, cardType, { effectParams: {} });
 const harvestCard = (id: string): Card =>
   makeCard(id, "reveal_and_draft_cards", "trick");
 const poolCard = (id: string): Card => makeCard(id, "attack", "basic");
-const makeCharacter = (id: string): Character => ({
-  id,
-  name: id,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
 
 function makeGame(deck: Card[]): GameState {
-  const host = spectator("p0");
-  const game = createGame("room1", host, []);
-  game.spectators = [];
-  game.players.push(createSeatedPlayer(host, 1));
-  for (let i = 1; i < 4; i++)
-    game.players.push(createSeatedPlayer(spectator(`p${i}`), i + 1));
-  dealRoles(game, { emperor: 1, rebel: 2, loyalist: 0, traitor: 1 });
-  game.players.forEach((p, i) => {
-    p.character = makeCharacter(`char${i}`);
-    p.confirmedCharacter = true;
-    p.maxHp = 4;
-    p.hp = 4;
-    p.characterOptions = [];
-  });
-  beginPlayAfterCharacters(game, 0);
-  game.turn.phase = "play";
-  game.turn.activePlayerId = "p0";
-  game.currentPlayerId = "p0";
-  game.hasDrawnThisTurn = true;
+  const game = makeStandardGame({ deck });
   game.players.find((p) => p.id === "p0")!.hand = [harvestCard("h1")];
-  game.deck = deck;
   return game;
 }
 

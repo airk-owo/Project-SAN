@@ -1,87 +1,26 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
-  createGame,
-  createSeatedPlayer,
-  dealRoles,
-  beginPlayAfterCharacters,
   playDrawCardsTrick,
-  declineNegate,
   drawPendingCard,
   owedDraws,
   endTurn,
   type Card,
-  type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import {
+  makeCard as baseCard,
+  makeStandardGame,
+  passNegate,
+} from "./test-helpers.js";
 
-const NOW = "2026-01-01T00:00:00.000Z";
-const spectator = (id: string): Spectator => ({
-  id,
-  username: id,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-const makeCard = (
-  id: string,
-  effect: string,
-  cardType: string = "basic",
-): Card => ({
-  id,
-  name: id,
-  type: cardType,
-  cardType: cardType as Card["cardType"],
-  suit: "♥",
-  number: "K",
-  image: null,
-  description: null,
-  effect,
-  effectParams: effect === "draw_cards" ? { amount: 2 } : {},
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
-const makeCharacter = (id: string): Character => ({
-  id,
-  name: id,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
-
-function makeGame(): GameState {
-  const host = spectator("p0");
-  const game = createGame("room1", host, []);
-  game.spectators = [];
-  game.players.push(createSeatedPlayer(host, 1));
-  for (let i = 1; i < 4; i++)
-    game.players.push(createSeatedPlayer(spectator(`p${i}`), i + 1));
-  dealRoles(game, { emperor: 1, rebel: 2, loyalist: 0, traitor: 1 });
-  game.players.forEach((p, i) => {
-    p.character = makeCharacter(`char${i}`);
-    p.confirmedCharacter = true;
-    p.maxHp = 4;
-    p.hp = 4;
-    p.characterOptions = [];
+// ไฟล์นี้ effectParams ตาม effect (ต่างจาก helper กลางที่ default {damage:1})
+const makeCard = (id: string, effect: string, cardType: string = "basic"): Card =>
+  baseCard(id, effect, cardType, {
+    effectParams: effect === "draw_cards" ? { amount: 2 } : {},
   });
-  beginPlayAfterCharacters(game, 0);
-  game.turn.phase = "play";
-  game.turn.activePlayerId = "p0";
-  game.currentPlayerId = "p0";
-  game.hasDrawnThisTurn = true;
-  return game;
-}
 
-function passNegate(game: GameState): void {
-  while (
-    game.responseWindow?.type === "negate" &&
-    game.responseWindow.currentResponderId
-  )
-    declineNegate(game, game.responseWindow.currentResponderId);
-}
+const makeGame = (): GameState => makeStandardGame();
 
 describe("Manual draws – pendingDraws", () => {
   it("draw_cards grants owed draws that the player takes one at a time", () => {
