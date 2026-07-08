@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { io } from "socket.io-client";
 import type {
   Role,
   Character,
@@ -29,7 +28,10 @@ import {
   canAutoEndTurn,
 } from "./lib/gameConstants";
 import { CardFace } from "../components/CardFace";
-import { Icon, type IconName } from "../components/Icon";
+import { Icon } from "../components/Icon";
+import { EquipmentDisplay } from "../components/EquipmentDisplay";
+import { DecisionArea } from "../components/DecisionArea";
+import { OpponentPanel } from "../components/OpponentPanel";
 import { LogChatPanel } from "../components/LogChatPanel";
 import { SettingsPopover } from "../components/SettingsPopover";
 import { EncyclopediaDrawer } from "../components/EncyclopediaDrawer";
@@ -37,208 +39,8 @@ import { CardDetailModal } from "../components/CardDetailModal";
 import { DropZoneModal } from "../components/DropZoneModal";
 import { DebugSandboxPanel } from "../components/DebugSandboxPanel";
 import { AUTH_ENABLED } from "../lib/flags";
-import { useAuth, getAccessToken } from "../lib/useAuth";
-const socket = io(
-  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001",
-  { autoConnect: false },
-);
-// Session token: server แจก secret ผูกกับ wtk-member-id ตอน join แรก แล้วต้องแนบกลับทุกครั้งที่
-// join/reconnect — กันคนอื่นสวมรอย userId เรา (callback ยิงเฉพาะฝั่ง browser จึงแตะ localStorage ได้)
-const readSessionToken = () => {
-  try {
-    return localStorage.getItem("wtk-session-token") || undefined;
-  } catch {
-    return undefined;
-  }
-};
-socket.on("session:token", ({ token }: { token?: string }) => {
-  if (typeof token === "string" && token) {
-    try {
-      localStorage.setItem("wtk-session-token", token);
-    } catch {}
-  }
-});
-// Proactive "play a card" socket events gated by the optional Card Play Confirmation
-// setting. Response-window plays (dodge/negate/heal) are intentionally excluded — they
-// run under the server's response countdown, so a confirm step there could cause timeouts.
-const PLAY_CONFIRM_EVENTS = new Set([
-  "card:play",
-  "card:discard-target",
-  "card:steal-target",
-  "coerce:play",
-  "attack:multi",
-  "weapon:snake-attack",
-  "skill:seduce",
-]);
-// Join a room, attaching a fresh Supabase access token when the account feature is on
-// and a session exists — getAccessToken() refreshes an expired token first, so a
-// reconnect mid-game still verifies. The server treats a bad/missing token as guest.
-const emitRoomJoin = (
-  gameId: string,
-  username: string,
-  userId: string,
-  withToken: boolean,
-) => {
-  const payload = { gameId, username, userId, sessionToken: readSessionToken() };
-  if (withToken) {
-    void getAccessToken().then((token) =>
-      socket.emit("room:join", token ? { ...payload, accessToken: token } : payload),
-    );
-  } else {
-    socket.emit("room:join", payload);
-  }
-};
-
-function EquipmentDisplay({
-  eq,
-  onInspect,
-}: {
-  eq: EquipmentSlots;
-  onInspect?: (card: Card) => void;
-}) {
-  const r = (key: keyof EquipmentSlots, icon: IconName, label: string) => {
-    const s = eq[key];
-    return (
-      <span
-        className={`mock-equipment-slot ${s ? "equipped" : ""}${s && onInspect ? " local-inspectable" : ""}`}
-        title={s?.name ?? `${label}: ว่าง`}
-        onClick={
-          s && onInspect
-            ? (e) => {
-                e.stopPropagation();
-                onInspect(s);
-              }
-            : undefined
-        }
-      >
-        <i>
-          <Icon name={icon} />
-        </i>
-        <em>{label}</em>
-        <b>{s?.name ?? "—"}</b>
-      </span>
-    );
-  };
-  return (
-    <div className="mock-equipment">
-      {r("weapon", "sword", "อาวุธ")}
-      {r("armor", "shield", "เกราะ")}
-      {r("offensiveMount", "mount", "ม้ารุก −1")}
-      {r("defensiveMount", "mount", "ม้ารับ +1")}
-    </div>
-  );
-}
-function DecisionArea({
-  cards,
-  onInspect,
-}: {
-  cards: Card[];
-  onInspect?: (card: Card) => void;
-}) {
-  if (!cards?.length) return null;
-  return (
-    <div className="local-decision-area">
-      {cards.map((c) => (
-        <span
-          key={c.id}
-          className={`local-decision-card${onInspect ? " local-inspectable" : ""}`}
-          title={c.description || c.name}
-          onClick={
-            onInspect
-              ? (e) => {
-                  e.stopPropagation();
-                  onInspect(c);
-                }
-              : undefined
-          }
-        >
-          {c.effect === "delayed_lightning_judgment"
-            ? "⚡"
-            : c.effect === "delayed_skip_play_phase"
-              ? "🕒"
-              : "🎴"}{" "}
-          {c.name}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function OpponentPanel({
-  player,
-  targetable,
-  distance,
-  onClick,
-  onSkills,
-  onInspect,
-}: {
-  player: Player;
-  targetable?: boolean;
-  distance?: number | null;
-  onClick?: () => void;
-  onSkills?: () => void;
-  onInspect?: (card: Card) => void;
-}) {
-  return (
-    <article
-      onClick={onClick}
-      className={`mock-player local-opponent ${targetable ? "local-targetable" : ""} ${!player.alive ? "local-dead" : ""}`}
-    >
-      <div className="mock-portrait-col">
-        <div className="mock-portrait">
-          {player.character?.image ? (
-            <img src={player.character.image} alt={charName(player)} />
-          ) : (
-            charName(player).slice(0, 1)
-          )}
-        </div>
-        {player.character?.kingdomTh && (
-          <span
-            className={`mock-kingdom kingdom-${player.character.kingdom ?? "QUN"}`}
-          >
-            {player.character.kingdomTh}
-          </span>
-        )}
-      </div>
-      <div className="mock-player-content">
-        <div className="local-name-row">
-          <b>{charName(player)}</b>
-          {player.character && (
-            <button
-              className="local-skills-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSkills?.();
-              }}
-              title="ดูทักษะ"
-            >
-              !
-            </button>
-          )}
-        </div>
-        <small className="mock-username">@{player.username}</small>
-        <div className="local-hp-hand">
-          {hearts(player.hp, player.maxHp)}
-          <span className="mock-hand-count">
-            🂠 × {player.handCount ?? player.hand.length}
-          </span>
-        </div>
-        <small className="mock-seat-info">
-          ที่นั่ง {player.seatIndex}
-          {distance != null ? ` · ระยะ ${distance}` : ""}
-        </small>
-        <small
-          className={`mock-role${player.role ? " local-role-" + player.role : ""}`}
-        >
-          บทบาท:{" "}
-          {player.role ? (ROLE_LABEL[player.role] ?? player.role) : "???"}
-        </small>
-        <EquipmentDisplay eq={player.equipment} onInspect={onInspect} />
-        <DecisionArea cards={player.decisionArea} onInspect={onInspect} />
-      </div>
-    </article>
-  );
-}
+import { useAuth } from "../lib/useAuth";
+import { socket, emitRoomJoin, PLAY_CONFIRM_EVENTS } from "./lib/socket";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
