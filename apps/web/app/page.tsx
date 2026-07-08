@@ -47,6 +47,9 @@ import {
   playDecisionAlert,
   playThunder,
 } from "./lib/audio";
+import { RepeatAttackPrompt } from "../components/game/RepeatAttackPrompt";
+import { DestroyMountPrompt } from "../components/game/DestroyMountPrompt";
+import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePrompt";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -3359,143 +3362,27 @@ export default function Home() {
               </section>
             );
           })()}
-        {isPlaying &&
-          game.pendingRepeatAttack &&
-          game.pendingRepeatAttack.attackerId === game.viewerId &&
-          (() => {
-            const attack = myPlayer?.hand.find((c) => c.effect === "attack");
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  เป้าหมายหลบสำเร็จ ต้องการโจมตีซ้ำด้วย{" "}
-                  {game.pendingRepeatAttack!.weaponName} หรือไม่?
-                </b>
-                {countdownBadge}
-                <div>
-                  <button
-                    disabled={!attack}
-                    onClick={() =>
-                      attack && emit("attack:repeat", { cardId: attack.id })
-                    }
-                  >
-                    {attack ? "โจมตีซ้ำ" : "ไม่มีไพ่โจมตี"}
-                  </button>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => emit("attack:repeat-decline")}
-                  >
-                    ไม่โจมตีซ้ำ
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingDestroyMount &&
-          game.pendingDestroyMount.attackerId === game.viewerId &&
-          (() => {
-            const target = game.players.find(
-              (p) => p.id === game.pendingDestroyMount!.targetId,
-            );
-            return (
-              target && (
-                <section className="local-repeat-attack" role="dialog">
-                  <b>โจมตีสำเร็จ ต้องการทำลายพาหนะของเป้าหมายหรือไม่?</b>
-                  {countdownBadge}
-                  <div>
-                    {target.equipment.offensiveMount && (
-                      <button
-                        onClick={() =>
-                          emit("mount:destroy", {
-                            targetId: target.id,
-                            slot: "offensiveMount",
-                          })
-                        }
-                      >
-                        ทำลาย {target.equipment.offensiveMount.name}
-                      </button>
-                    )}
-                    {target.equipment.defensiveMount && (
-                      <button
-                        onClick={() =>
-                          emit("mount:destroy", {
-                            targetId: target.id,
-                            slot: "defensiveMount",
-                          })
-                        }
-                      >
-                        ทำลาย {target.equipment.defensiveMount.name}
-                      </button>
-                    )}
-                  </div>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => emit("mount:destroy-decline")}
-                  >
-                    ไม่ทำลาย
-                  </button>
-                </section>
-              )
-            );
-          })()}
-        {isPlaying &&
-          game.pendingForceAttackDamage &&
-          game.pendingForceAttackDamage.attackerId === game.viewerId &&
-          (() => {
-            const choices = [
-              ...(myPlayer?.hand || []),
-              ...Object.values(myPlayer?.equipment || {}).filter(
-                (c): c is Card => Boolean(c),
-              ),
-            ];
-            const toggle = (id: string) =>
-              setForceDiscardRefs((cur) =>
-                cur.includes(id)
-                  ? cur.filter((r) => r !== id)
-                  : cur.length < 2
-                    ? [...cur, id]
-                    : cur,
-              );
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>ต้องการทิ้งไพ่ 2 ใบเพื่อบังคับให้โจมตีโดนหรือไม่?</b>
-                {countdownBadge}
-                <div className="local-force-cards">
-                  {choices.map((c) => (
-                    <button
-                      key={c.id}
-                      className={
-                        forceDiscardRefs.includes(c.id) ? "selected-card" : ""
-                      }
-                      onClick={() => toggle(c.id)}
-                    >
-                      {c.name}
-                    </button>
-                  ))}
-                </div>
-                <div>
-                  <button
-                    disabled={forceDiscardRefs.length !== 2}
-                    onClick={() => {
-                      emit("attack:force", { cardIds: forceDiscardRefs });
-                      setForceDiscardRefs([]);
-                    }}
-                  >
-                    ยืนยัน ({forceDiscardRefs.length}/2)
-                  </button>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => {
-                      emit("attack:force-decline");
-                      setForceDiscardRefs([]);
-                    }}
-                  >
-                    ยกเลิก
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
+        {isPlaying && (
+          <RepeatAttackPrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+          />
+        )}
+        {isPlaying && (
+          <DestroyMountPrompt game={game} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && (
+          <ForceAttackDamagePrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+            forceDiscardRefs={forceDiscardRefs}
+            setForceDiscardRefs={setForceDiscardRefs}
+          />
+        )}
         {isPlaying &&
           game.pendingReplaceDamage &&
           game.pendingReplaceDamage.attackerId === game.viewerId &&
