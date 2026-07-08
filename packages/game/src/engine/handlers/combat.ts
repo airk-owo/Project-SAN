@@ -49,7 +49,7 @@ import {
   hasRepeatAttackAfterDodge,
   hasReplaceDamageWithDiscardTwo,
   hasUnlimitedAttack,
-} from "./equipment.js";
+} from "./equipment-passives.js";
 import { advanceMassResponseQueue } from "./tricks.js";
 /**
  * Distance used by effects. It deliberately remains separate from the base

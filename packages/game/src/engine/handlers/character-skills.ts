@@ -35,7 +35,7 @@ import {
   playAttack,
   playDodge,
 } from "./combat.js";
-import { hasUnlimitedAttack } from "./equipment.js";
+import { hasUnlimitedAttack } from "./equipment-passives.js";
 /** อ้วนสุด ศัตรูหมายหัว: any reachable อ้วนสุด whose hand size exceeds their HP must be chosen as the attack target. */
 export const forcedAttackTargets = (
   state: GameState,

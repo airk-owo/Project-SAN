@@ -16,7 +16,7 @@ import {
   moveToDiscard,
   toCardInstance,
 } from "./state.js";
-import { getAttackRange } from "./handlers/equipment.js";
+import { getAttackRange } from "./handlers/equipment-passives.js";
 import { getEffectiveDistanceBetweenPlayers } from "./handlers/combat.js";
 export function createTargetedCardAction(
   state: GameState,
