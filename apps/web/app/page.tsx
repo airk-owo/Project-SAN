@@ -27,7 +27,6 @@ import {
   isViewerDecisionActive,
   canAutoEndTurn,
 } from "./lib/gameConstants";
-import { CardFace } from "../components/CardFace";
 import { Icon } from "../components/Icon";
 import { EquipmentDisplay } from "../components/EquipmentDisplay";
 import { DecisionArea } from "../components/DecisionArea";
@@ -66,6 +65,7 @@ import { ResponseWindowPanel } from "../components/game/ResponseWindowPanel";
 import { TargetCardPicker } from "../components/game/TargetCardPicker";
 import { WinnerScreen } from "../components/game/WinnerScreen";
 import { PreGameTable } from "../components/game/PreGameTable";
+import { TablePiles } from "../components/game/TablePiles";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -1446,78 +1446,17 @@ export default function Home() {
             <section className="mock-table-stage" data-density="large">
               <div className="mock-table-surface">
                 <div className="mock-table-pattern">三國</div>
-                <section className="mock-piles">
-                  <button
-                    className={`mock-pile${isDrawPhase || myOwedDraws > 0 || myJudgmentDraw ? " local-draw-pile-active" : ""}`}
-                    onClick={
-                      isDrawPhase
-                        ? () => emit("turn:draw-one")
-                        : myOwedDraws > 0
-                          ? () => emit("pending:draw")
-                          : myJudgmentDraw
-                            ? () => emit("judgment:draw")
-                            : undefined
-                    }
-                    title={
-                      isDrawPhase
-                        ? "คลิกเพื่อจั่วไพ่ทีละใบ"
-                        : myOwedDraws > 0
-                          ? "คลิกเพื่อจั่วไพ่ที่ได้รับ"
-                          : myJudgmentDraw
-                            ? "คลิกเพื่อเปิดไพ่ตัดสิน"
-                            : undefined
-                    }
-                  >
-                    <div className="mock-deck">
-                      {isDrawPhase
-                        ? `จั่ว ${game.turn?.drawnThisTurn ?? 0}/2`
-                        : myOwedDraws > 0
-                          ? `รับ +${myOwedDraws}`
-                          : myJudgmentDraw
-                            ? "⚖"
-                            : "🂠"}
-                    </div>
-                    <b>กองจั่ว</b>
-                    <small>{game.deck.length} ใบ</small>
-                  </button>
-                  <button
-                    type="button"
-                    className="mock-pile mock-pile-btn"
-                    onClick={() => game.discard.length && setShowDropZone(true)}
-                    disabled={!game.discard.length}
-                    title="ดูไพ่ทั้งหมดในกองทิ้ง"
-                  >
-                    {topDiscard ? (
-                      <CardFace
-                        key={topDiscard.id}
-                        card={topDiscard}
-                        className="mock-card-pile local-card-played"
-                        compact
-                      />
-                    ) : (
-                      <div className="mock-discard mock-card-pile-empty">—</div>
-                    )}
-                    <b>กองทิ้ง</b>
-                    <small>
-                      {game.discard.length} ใบ
-                      {game.discard.length > 0 ? (
-                        <>
-                          {" "}
-                          <Icon name="search" />
-                        </>
-                      ) : null}
-                    </small>
-                  </button>
-                </section>
-                <p className="local-action-empty">
-                  {isDrawPhase
-                    ? "⬆ กดกองจั่วเพื่อจั่วไพ่"
-                    : myOwedDraws > 0
-                      ? `⬆ กดกองจั่วเพื่อรับไพ่ที่ได้รับ (${myOwedDraws} ใบ)`
-                      : rw
-                        ? `กำลังรอ ${responder?.username ?? "ผู้เล่น"} ตอบสนอง`
-                        : "—"}
-                </p>
+                <TablePiles
+                  game={game}
+                  emit={emit}
+                  isDrawPhase={isDrawPhase}
+                  myOwedDraws={myOwedDraws}
+                  myJudgmentDraw={myJudgmentDraw}
+                  topDiscard={topDiscard}
+                  setShowDropZone={setShowDropZone}
+                  rw={rw}
+                  responder={responder}
+                />
               </div>
               {opponents.map((player, index) => {
                 const pos = edgePosition(index, opponents.length);
