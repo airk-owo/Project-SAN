@@ -20,50 +20,34 @@ import {
   owedDraws,
   drawPendingCard,
   type Card,
-  type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import {
+  makeCard as baseCard,
+  makeCharacter,
+  makeSpectator as spectator,
+} from "./test-helpers.js";
 
 // ────────────────────────────────────────────────────────
 // Fixtures
 // ────────────────────────────────────────────────────────
 
-const NOW = "2026-01-01T00:00:00.000Z";
-
-const spectator = (id: string): Spectator => ({
-  id,
-  username: id,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-
+// ไฟล์นี้ default เป็น trick ♠ + effectParams ตาม effect (ต่างจาก helper กลาง)
 const makeCard = (
   id: string,
   effect: string,
   cardType: string = "trick",
-): Card => ({
-  id,
-  name: id,
-  type: "trick",
-  cardType: cardType as Card["cardType"],
-  suit: "♠",
-  number: "K",
-  image: null,
-  description: null,
-  effect,
-  effectParams:
-    effect === "draw_cards"
-      ? { amount: 2 }
-      : effect === "heal"
-        ? { heal_amount: 1 }
-        : {},
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
+): Card =>
+  baseCard(id, effect, cardType, {
+    type: "trick",
+    suit: "♠",
+    effectParams:
+      effect === "draw_cards"
+        ? { amount: 2 }
+        : effect === "heal"
+          ? { heal_amount: 1 }
+          : {},
+  });
 
 const negateCard = (id: string): Card => makeCard(id, "negate_trick_effect");
 const drawCard = (id: string): Card => makeCard(id, "draw_cards");
@@ -71,17 +55,12 @@ const healAllCard = (id: string): Card => makeCard(id, "heal_all_living");
 const dodgeCard = (id: string): Card => makeCard(id, "dodge", "basic");
 const attackCard = (id: string): Card => makeCard(id, "attack", "basic");
 
-const makeCharacter = (id: string): Character => ({
-  id,
-  name: id,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
-
 /**
  * Build a 4-player game that is in the 'play' phase with p0 as the active player.
  * Each player has their character assigned and 0 cards initially.
+ *
+ * หมายเหตุ: จงใจไม่ใช้ makeStandardGame — ไฟล์นี้ไม่ force currentPlayerId /
+ * hasDrawnThisTurn (คงเป็นจักรพรรดิที่สุ่มได้ / false ตาม beginPlayAfterCharacters)
  */
 function makePlayingGame(): GameState {
   const host = spectator("p0");
