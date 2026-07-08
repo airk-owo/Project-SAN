@@ -1,10 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
-  createGame,
-  createSeatedPlayer,
-  dealRoles,
-  beginPlayAfterCharacters,
   playAttack,
   playDuel,
   respondToAttack,
@@ -61,123 +57,49 @@ import {
   surrenderPlayer,
   synchronizeGameState,
   type Card,
-  type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import {
+  makeCard as baseCard,
+  makeCharacter as character,
+  makeStandardGame,
+} from "./test-helpers.js";
+
 const suited = (
   id: string,
   effect: string,
   cardType: string,
   suit: string,
   number: string,
-): Card => ({
-  id,
-  name: id,
-  type: cardType,
-  cardType: cardType as Card["cardType"],
-  suit,
-  number,
-  image: null,
-  description: null,
-  effect,
-  effectParams: {},
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
+): Card => baseCard(id, effect, cardType, { suit, number, effectParams: {} });
 
-const duelCard = (id: string): Card => ({
-  id,
-  name: id,
-  type: "trick",
-  cardType: "instant_trick",
-  suit: "♣",
-  number: "3",
-  image: null,
-  description: null,
-  effect: "duel_attack_response",
-  effectParams: {},
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: true,
-  conditions: null,
-});
-
-const dodgeCard = (id: string): Card => ({
-  id,
-  name: id,
-  type: "basic",
-  cardType: "basic",
-  suit: "♦",
-  number: "2",
-  image: null,
-  description: null,
-  effect: "dodge",
-  effectParams: {},
-  triggerTiming: "on_response",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
-
-const NOW = "2026-01-01T00:00:00.000Z";
-const spectator = (id: string): Spectator => ({
-  id,
-  username: id,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-const makeCard = (id: string, effect: string, cardType = "basic"): Card => ({
-  id,
-  name: id,
-  type: cardType,
-  cardType: cardType as Card["cardType"],
-  suit: "♠",
-  number: "K",
-  image: null,
-  description: null,
-  effect,
-  effectParams: { damage: 1 },
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-});
-const attackCard = (id: string): Card => makeCard(id, "attack");
-/** Character with a specific id so the engine's skill registry (keyed by character id) applies. */
-const character = (id: string): Character => ({
-  id,
-  name: id,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
-
-function makeGame(charIds: Record<string, string> = {}): GameState {
-  const host = spectator("p0");
-  const game = createGame("room1", host, []);
-  game.spectators = [];
-  game.players.push(createSeatedPlayer(host, 1));
-  for (let i = 1; i < 4; i++)
-    game.players.push(createSeatedPlayer(spectator(`p${i}`), i + 1));
-  dealRoles(game, { emperor: 1, rebel: 2, loyalist: 0, traitor: 1 });
-  game.players.forEach((p, i) => {
-    p.character = character(charIds[p.id] ?? `CHAR_generic_${i}`);
-    p.confirmedCharacter = true;
-    p.maxHp = 8;
-    p.hp = 8;
-    p.characterOptions = [];
+const duelCard = (id: string): Card =>
+  baseCard(id, "duel_attack_response", "trick", {
+    cardType: "instant_trick",
+    suit: "♣",
+    number: "3",
+    effectParams: {},
+    createsResponseWindow: true,
   });
-  beginPlayAfterCharacters(game, 0);
-  game.turn.phase = "play";
-  game.turn.activePlayerId = "p0";
-  game.currentPlayerId = "p0";
-  game.hasDrawnThisTurn = true;
-  return game;
-}
+
+const dodgeCard = (id: string): Card =>
+  baseCard(id, "dodge", "basic", {
+    suit: "♦",
+    number: "2",
+    effectParams: {},
+    triggerTiming: "on_response",
+  });
+// ไฟล์นี้ default ♠ (ต่างจาก helper กลาง ♥)
+const makeCard = (id: string, effect: string, cardType = "basic"): Card =>
+  baseCard(id, effect, cardType, { suit: "♠" });
+const attackCard = (id: string): Card => makeCard(id, "attack");
+
+/** Characters get specific ids so the engine's skill registry (keyed by character id) applies. */
+const makeGame = (charIds: Record<string, string> = {}): GameState =>
+  makeStandardGame({
+    maxHp: 8,
+    characterFor: (id, i) => character(charIds[id] ?? `CHAR_generic_${i}`),
+  });
 
 describe("Character skill – เตียวหุย คำราม (unlimited_attack)", () => {
   it("lets เตียวหุย attack more than once per turn", () => {
