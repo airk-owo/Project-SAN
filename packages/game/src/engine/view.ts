@@ -4,23 +4,12 @@ import type {
   Character,
   GameState,
   Player,
+  PublicCardView,
   ResponseRecord,
   ResponseWindow,
 } from "./types.js";
 import { synchronizeGameState } from "./state.js";
-export type PublicCardView = Pick<
-  Card,
-  | "id"
-  | "name"
-  | "type"
-  | "cardType"
-  | "suit"
-  | "number"
-  | "image"
-  | "description"
-  | "effect"
-  | "equipmentSlot"
->;
+export type { PublicCardView } from "./types.js";
 export const publicCardView = (card: Card): PublicCardView => ({
   id: card.id,
   name: card.name,

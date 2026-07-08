@@ -1,5 +1,4 @@
 // Shared type definitions for the game engine. Extracted verbatim from index.ts.
-import type { PublicCardView } from "./view.js";
 export type Role = "emperor" | "rebel" | "loyalist" | "traitor";
 export type GameStatus =
   | "setup"
@@ -60,6 +59,19 @@ export type TurnState = {
   attackUsedThisTurn: number;
   drawnThisTurn?: number;
 };
+export type PublicCardView = Pick<
+  Card,
+  | "id"
+  | "name"
+  | "type"
+  | "cardType"
+  | "suit"
+  | "number"
+  | "image"
+  | "description"
+  | "effect"
+  | "equipmentSlot"
+>;
 export type ResponseRecord = {
   playerId: string;
   response: "card" | "decline" | "timeout";
