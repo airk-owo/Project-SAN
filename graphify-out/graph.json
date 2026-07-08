@@ -460,7 +460,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_istimerfrozen",
-      "community": 91,
+      "community": 0,
       "norm_label": "istimerfrozen()"
     },
     {
@@ -760,7 +760,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page",
-      "community": 2,
+      "community": 20,
       "norm_label": "page.tsx"
     },
     {
@@ -770,7 +770,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_character",
-      "community": 2,
+      "community": 20,
       "norm_label": "character()"
     },
     {
@@ -780,7 +780,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_member",
-      "community": 2,
+      "community": 20,
       "norm_label": "member()"
     },
     {
@@ -800,7 +800,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_equipmentcard",
-      "community": 2,
+      "community": 20,
       "norm_label": "equipmentcard()"
     },
     {
@@ -810,7 +810,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_discardtargetcard",
-      "community": 2,
+      "community": 20,
       "norm_label": "discardtargetcard()"
     },
     {
@@ -820,7 +820,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_stealtargetcard",
-      "community": 2,
+      "community": 20,
       "norm_label": "stealtargetcard()"
     },
     {
@@ -830,7 +830,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_duelcard",
-      "community": 2,
+      "community": 20,
       "norm_label": "duelcard()"
     },
     {
@@ -840,7 +840,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_masscard",
-      "community": 2,
+      "community": 20,
       "norm_label": "masscard()"
     },
     {
@@ -850,7 +850,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_immediatetrick",
-      "community": 2,
+      "community": 20,
       "norm_label": "immediatetrick()"
     },
     {
@@ -860,7 +860,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_card_info",
-      "community": 2,
+      "community": 20,
       "norm_label": "card_info"
     },
     {
@@ -870,7 +870,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_cardinfo",
-      "community": 2,
+      "community": 20,
       "norm_label": "cardinfo()"
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_createmockgamestate",
-      "community": 2,
+      "community": 20,
       "norm_label": "createmockgamestate()"
     },
     {
@@ -890,7 +890,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_charactername",
-      "community": 2,
+      "community": 20,
       "norm_label": "charactername()"
     },
     {
@@ -900,7 +900,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_hearts",
-      "community": 2,
+      "community": 20,
       "norm_label": "hearts()"
     },
     {
@@ -910,7 +910,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_edgeposition",
-      "community": 2,
+      "community": 20,
       "norm_label": "edgeposition()"
     },
     {
@@ -920,7 +920,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_equipment",
-      "community": 2,
+      "community": 20,
       "norm_label": "equipment()"
     },
     {
@@ -930,7 +930,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_role_label",
-      "community": 2,
+      "community": 20,
       "norm_label": "role_label"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_playerpanel",
-      "community": 2,
+      "community": 20,
       "norm_label": "playerpanel()"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_localgamepage",
-      "community": 2,
+      "community": 0,
       "norm_label": "localgamepage()"
     },
     {
@@ -1124,13 +1124,73 @@
       "norm_label": "layout()"
     },
     {
+      "label": "audio.ts",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio",
+      "community": 4,
+      "norm_label": "audio.ts"
+    },
+    {
+      "label": "tone()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio_tone",
+      "community": 4,
+      "norm_label": "tone()"
+    },
+    {
+      "label": "playDecisionAlert()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio_playdecisionalert",
+      "community": 4,
+      "norm_label": "playdecisionalert()"
+    },
+    {
+      "label": "playCountdownTick()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio_playcountdowntick",
+      "community": 4,
+      "norm_label": "playcountdowntick()"
+    },
+    {
+      "label": "playAutoEndChime()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio_playautoendchime",
+      "community": 4,
+      "norm_label": "playautoendchime()"
+    },
+    {
+      "label": "playThunder()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_audio_playthunder",
+      "community": 4,
+      "norm_label": "playthunder()"
+    },
+    {
       "label": "gameConstants.tsx",
       "file_type": "code",
       "source_file": "apps/web/app/lib/gameConstants.tsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants",
-      "community": 1,
+      "community": 15,
       "norm_label": "gameconstants.tsx"
     },
     {
@@ -1140,7 +1200,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_role_label",
-      "community": 1,
+      "community": 26,
       "norm_label": "role_label"
     },
     {
@@ -1150,7 +1210,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_phase_label",
-      "community": 1,
+      "community": 15,
       "norm_label": "phase_label"
     },
     {
@@ -1160,7 +1220,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_roletext",
-      "community": 1,
+      "community": 4,
       "norm_label": "roletext()"
     },
     {
@@ -1170,7 +1230,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_hearts",
-      "community": 1,
+      "community": 15,
       "norm_label": "hearts()"
     },
     {
@@ -1180,7 +1240,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_charname",
-      "community": 1,
+      "community": 15,
       "norm_label": "charname()"
     },
     {
@@ -1190,7 +1250,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_card_info",
-      "community": 1,
+      "community": 15,
       "norm_label": "card_info"
     },
     {
@@ -1220,7 +1280,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_suit_text",
-      "community": 1,
+      "community": 15,
       "norm_label": "suit_text"
     },
     {
@@ -1230,7 +1290,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_suittx",
-      "community": 1,
+      "community": 23,
       "norm_label": "suittx()"
     },
     {
@@ -1250,7 +1310,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_kingdom_faction",
-      "community": 1,
+      "community": 15,
       "norm_label": "kingdom_faction"
     },
     {
@@ -1270,7 +1330,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_edgeposition",
-      "community": 1,
+      "community": 4,
       "norm_label": "edgeposition()"
     },
     {
@@ -1280,7 +1340,7 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_lobbyposition",
-      "community": 1,
+      "community": 15,
       "norm_label": "lobbyposition()"
     },
     {
@@ -1290,7 +1350,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_isviewerdecisionactive",
-      "community": 1,
+      "community": 4,
       "norm_label": "isviewerdecisionactive()"
     },
     {
@@ -1300,7 +1360,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_canautoendturn",
-      "community": 1,
+      "community": 4,
       "norm_label": "canautoendturn()"
     },
     {
@@ -1310,7 +1370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes",
-      "community": 1,
+      "community": 27,
       "norm_label": "gametypes.ts"
     },
     {
@@ -1320,7 +1380,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_role",
-      "community": 1,
+      "community": 27,
       "norm_label": "role"
     },
     {
@@ -1330,7 +1390,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_roledefinition",
-      "community": 1,
+      "community": 27,
       "norm_label": "roledefinition"
     },
     {
@@ -1350,7 +1410,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_card",
-      "community": 1,
+      "community": 29,
       "norm_label": "card"
     },
     {
@@ -1360,7 +1420,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_equipmentslots",
-      "community": 1,
+      "community": 29,
       "norm_label": "equipmentslots"
     },
     {
@@ -1370,7 +1430,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_player",
-      "community": 1,
+      "community": 23,
       "norm_label": "player"
     },
     {
@@ -1380,7 +1440,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_member",
-      "community": 1,
+      "community": 27,
       "norm_label": "member"
     },
     {
@@ -1390,7 +1450,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_responsewindow",
-      "community": 1,
+      "community": 27,
       "norm_label": "responsewindow"
     },
     {
@@ -1400,7 +1460,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_turn",
-      "community": 1,
+      "community": 27,
       "norm_label": "turn"
     },
     {
@@ -1410,7 +1470,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_rolealivecounts",
-      "community": 1,
+      "community": 27,
       "norm_label": "rolealivecounts"
     },
     {
@@ -1420,7 +1480,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_roleset",
-      "community": 1,
+      "community": 15,
       "norm_label": "roleset"
     },
     {
@@ -1430,7 +1490,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_room",
-      "community": 1,
+      "community": 27,
       "norm_label": "room"
     },
     {
@@ -1440,7 +1500,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_game",
-      "community": 1,
+      "community": 23,
       "norm_label": "game"
     },
     {
@@ -1450,8 +1510,58 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_iceselection",
-      "community": 1,
+      "community": 27,
       "norm_label": "iceselection"
+    },
+    {
+      "label": "socket.ts",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_socket",
+      "community": 4,
+      "norm_label": "socket.ts"
+    },
+    {
+      "label": "socket",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_socket_socket",
+      "community": 4,
+      "norm_label": "socket"
+    },
+    {
+      "label": "readSessionToken()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_socket_readsessiontoken",
+      "community": 4,
+      "norm_label": "readsessiontoken()"
+    },
+    {
+      "label": "PLAY_CONFIRM_EVENTS",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_socket_play_confirm_events",
+      "community": 4,
+      "norm_label": "play_confirm_events"
+    },
+    {
+      "label": "emitRoomJoin()",
+      "file_type": "code",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "apps_web_app_lib_socket_emitroomjoin",
+      "community": 4,
+      "norm_label": "emitroomjoin()"
     },
     {
       "label": "page.tsx",
@@ -1460,7 +1570,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_login_page",
-      "community": 1,
+      "community": 26,
       "norm_label": "page.tsx"
     },
     {
@@ -1470,7 +1580,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_app_login_page_loginpage",
-      "community": 1,
+      "community": 26,
       "norm_label": "loginpage()"
     },
     {
@@ -1480,87 +1590,17 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_page",
-      "community": 1,
+      "community": 4,
       "norm_label": "page.tsx"
-    },
-    {
-      "label": "socket",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "apps_web_app_page_socket",
-      "community": 91,
-      "norm_label": "socket"
-    },
-    {
-      "label": "readSessionToken()",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "apps_web_app_page_readsessiontoken",
-      "community": 1,
-      "norm_label": "readsessiontoken()"
-    },
-    {
-      "label": "PLAY_CONFIRM_EVENTS",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "apps_web_app_page_play_confirm_events",
-      "community": 1,
-      "norm_label": "play_confirm_events"
-    },
-    {
-      "label": "emitRoomJoin()",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L76",
-      "_origin": "ast",
-      "id": "apps_web_app_page_emitroomjoin",
-      "community": 1,
-      "norm_label": "emitroomjoin()"
-    },
-    {
-      "label": "EquipmentDisplay()",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L92",
-      "_origin": "ast",
-      "id": "apps_web_app_page_equipmentdisplay",
-      "community": 1,
-      "norm_label": "equipmentdisplay()"
-    },
-    {
-      "label": "DecisionArea()",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L131",
-      "_origin": "ast",
-      "id": "apps_web_app_page_decisionarea",
-      "community": 1,
-      "norm_label": "decisionarea()"
-    },
-    {
-      "label": "OpponentPanel()",
-      "file_type": "code",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L167",
-      "_origin": "ast",
-      "id": "apps_web_app_page_opponentpanel",
-      "community": 1,
-      "norm_label": "opponentpanel()"
     },
     {
       "label": "Home()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L243",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "apps_web_app_page_home",
-      "community": 1,
+      "community": 4,
       "norm_label": "home()"
     },
     {
@@ -1570,7 +1610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_profile_page",
-      "community": 1,
+      "community": 26,
       "norm_label": "page.tsx"
     },
     {
@@ -1580,7 +1620,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_web_app_profile_page_charrow",
-      "community": 1,
+      "community": 26,
       "norm_label": "charrow"
     },
     {
@@ -1590,7 +1630,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "apps_web_app_profile_page_factionrow",
-      "community": 1,
+      "community": 26,
       "norm_label": "factionrow"
     },
     {
@@ -1600,7 +1640,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "apps_web_app_profile_page_recentrow",
-      "community": 1,
+      "community": 26,
       "norm_label": "recentrow"
     },
     {
@@ -1610,7 +1650,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "apps_web_app_profile_page_pct",
-      "community": 1,
+      "community": 26,
       "norm_label": "pct()"
     },
     {
@@ -1620,7 +1660,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "apps_web_app_profile_page_profilepage",
-      "community": 1,
+      "community": 26,
       "norm_label": "profilepage()"
     },
     {
@@ -1680,7 +1720,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel",
-      "community": 1,
+      "community": 31,
       "norm_label": "debugsandboxpanel.tsx"
     },
     {
@@ -1690,7 +1730,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_props",
-      "community": 1,
+      "community": 31,
       "norm_label": "props"
     },
     {
@@ -1700,7 +1740,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_qatab",
-      "community": 1,
+      "community": 31,
       "norm_label": "qatab"
     },
     {
@@ -1710,7 +1750,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_suits",
-      "community": 1,
+      "community": 31,
       "norm_label": "suits"
     },
     {
@@ -1720,7 +1760,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_basic_icons",
-      "community": 1,
+      "community": 31,
       "norm_label": "basic_icons"
     },
     {
@@ -1730,7 +1770,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_ranks",
-      "community": 1,
+      "community": 31,
       "norm_label": "ranks"
     },
     {
@@ -1740,7 +1780,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_picklist",
-      "community": 1,
+      "community": 31,
       "norm_label": "picklist()"
     },
     {
@@ -1750,8 +1790,28 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "apps_web_components_debugsandboxpanel_debugsandboxpanel",
-      "community": 1,
+      "community": 31,
       "norm_label": "debugsandboxpanel()"
+    },
+    {
+      "label": "DecisionArea.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/DecisionArea.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_decisionarea",
+      "community": 29,
+      "norm_label": "decisionarea.tsx"
+    },
+    {
+      "label": "DecisionArea()",
+      "file_type": "code",
+      "source_file": "apps/web/components/DecisionArea.tsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "apps_web_components_decisionarea_decisionarea",
+      "community": 29,
+      "norm_label": "decisionarea()"
     },
     {
       "label": "DropZoneModal.tsx",
@@ -1834,13 +1894,33 @@
       "norm_label": "encyclopediadrawer()"
     },
     {
+      "label": "EquipmentDisplay.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_equipmentdisplay",
+      "community": 29,
+      "norm_label": "equipmentdisplay.tsx"
+    },
+    {
+      "label": "EquipmentDisplay()",
+      "file_type": "code",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_equipmentdisplay_equipmentdisplay",
+      "community": 29,
+      "norm_label": "equipmentdisplay()"
+    },
+    {
       "label": "Icon.tsx",
       "file_type": "code",
       "source_file": "apps/web/components/Icon.tsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_icon",
-      "community": 1,
+      "community": 29,
       "norm_label": "icon.tsx"
     },
     {
@@ -1850,7 +1930,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_components_icon_iconname",
-      "community": 1,
+      "community": 29,
       "norm_label": "iconname"
     },
     {
@@ -1860,7 +1940,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "apps_web_components_icon_icondef",
-      "community": 1,
+      "community": 29,
       "norm_label": "icondef"
     },
     {
@@ -1870,7 +1950,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_web_components_icon_icons",
-      "community": 1,
+      "community": 29,
       "norm_label": "icons"
     },
     {
@@ -1880,7 +1960,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "apps_web_components_icon_icon",
-      "community": 1,
+      "community": 29,
       "norm_label": "icon()"
     },
     {
@@ -1930,7 +2010,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel",
-      "community": 1,
+      "community": 27,
       "norm_label": "logchatpanel.tsx"
     },
     {
@@ -1940,7 +2020,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_chatmessage",
-      "community": 1,
+      "community": 27,
       "norm_label": "chatmessage"
     },
     {
@@ -1950,7 +2030,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_props",
-      "community": 1,
+      "community": 27,
       "norm_label": "props"
     },
     {
@@ -1960,8 +2040,28 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_logchatpanel",
-      "community": 1,
+      "community": 27,
       "norm_label": "logchatpanel()"
+    },
+    {
+      "label": "OpponentPanel.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_opponentpanel",
+      "community": 29,
+      "norm_label": "opponentpanel.tsx"
+    },
+    {
+      "label": "OpponentPanel()",
+      "file_type": "code",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_components_opponentpanel_opponentpanel",
+      "community": 15,
+      "norm_label": "opponentpanel()"
     },
     {
       "label": "ReadyPanel.tsx",
@@ -2060,7 +2160,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_settingspopover",
-      "community": 1,
+      "community": 4,
       "norm_label": "settingspopover.tsx"
     },
     {
@@ -2070,7 +2170,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_settingspopover_props",
-      "community": 1,
+      "community": 4,
       "norm_label": "props"
     },
     {
@@ -2080,7 +2180,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_web_components_settingspopover_settingspopover",
-      "community": 1,
+      "community": 4,
       "norm_label": "settingspopover()"
     },
     {
@@ -2114,13 +2214,423 @@
       "norm_label": "spectatorlist()"
     },
     {
+      "label": "AllyAssistPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_allyassistprompt",
+      "community": 15,
+      "norm_label": "allyassistprompt.tsx"
+    },
+    {
+      "label": "AllyAssistPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_allyassistprompt_allyassistprompt",
+      "community": 15,
+      "norm_label": "allyassistprompt()"
+    },
+    {
+      "label": "CoercePrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_coerceprompt",
+      "community": 15,
+      "norm_label": "coerceprompt.tsx"
+    },
+    {
+      "label": "CoercePrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_coerceprompt_coerceprompt",
+      "community": 15,
+      "norm_label": "coerceprompt()"
+    },
+    {
+      "label": "DestroyMountPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/DestroyMountPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_destroymountprompt",
+      "community": 23,
+      "norm_label": "destroymountprompt.tsx"
+    },
+    {
+      "label": "DestroyMountPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/DestroyMountPrompt.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_game_destroymountprompt_destroymountprompt",
+      "community": 23,
+      "norm_label": "destroymountprompt()"
+    },
+    {
+      "label": "DischordPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_dischordprompt",
+      "community": 15,
+      "norm_label": "dischordprompt.tsx"
+    },
+    {
+      "label": "DischordPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_dischordprompt_dischordprompt",
+      "community": 15,
+      "norm_label": "dischordprompt()"
+    },
+    {
+      "label": "FankuiPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_fankuiprompt",
+      "community": 15,
+      "norm_label": "fankuiprompt.tsx"
+    },
+    {
+      "label": "FankuiPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_fankuiprompt_fankuiprompt",
+      "community": 15,
+      "norm_label": "fankuiprompt()"
+    },
+    {
+      "label": "ForceAttackDamagePrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_forceattackdamageprompt",
+      "community": 23,
+      "norm_label": "forceattackdamageprompt.tsx"
+    },
+    {
+      "label": "ForceAttackDamagePrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_forceattackdamageprompt_forceattackdamageprompt",
+      "community": 23,
+      "norm_label": "forceattackdamageprompt()"
+    },
+    {
+      "label": "HarvestPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_harvestprompt",
+      "community": 1,
+      "norm_label": "harvestprompt.tsx"
+    },
+    {
+      "label": "HarvestPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "apps_web_components_game_harvestprompt_harvestprompt",
+      "community": 1,
+      "norm_label": "harvestprompt()"
+    },
+    {
+      "label": "IceReplacePrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_icereplaceprompt",
+      "community": 27,
+      "norm_label": "icereplaceprompt.tsx"
+    },
+    {
+      "label": "IceReplacePrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_components_game_icereplaceprompt_icereplaceprompt",
+      "community": 27,
+      "norm_label": "icereplaceprompt()"
+    },
+    {
+      "label": "JudgmentPanel.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_judgmentpanel",
+      "community": 23,
+      "norm_label": "judgmentpanel.tsx"
+    },
+    {
+      "label": "JudgmentPanel()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "community": 23,
+      "norm_label": "judgmentpanel()"
+    },
+    {
+      "label": "LegacyPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_legacyprompt",
+      "community": 1,
+      "norm_label": "legacyprompt.tsx"
+    },
+    {
+      "label": "LegacyPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_legacyprompt_legacyprompt",
+      "community": 1,
+      "norm_label": "legacyprompt()"
+    },
+    {
+      "label": "PeekPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_peekprompt",
+      "community": 23,
+      "norm_label": "peekprompt.tsx"
+    },
+    {
+      "label": "PeekPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_components_game_peekprompt_peekprompt",
+      "community": 23,
+      "norm_label": "peekprompt()"
+    },
+    {
+      "label": "PreGameTable.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_pregametable",
+      "community": 15,
+      "norm_label": "pregametable.tsx"
+    },
+    {
+      "label": "PreGameTable()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_pregametable_pregametable",
+      "community": 15,
+      "norm_label": "pregametable()"
+    },
+    {
+      "label": "RepeatAttackPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_repeatattackprompt",
+      "community": 23,
+      "norm_label": "repeatattackprompt.tsx"
+    },
+    {
+      "label": "RepeatAttackPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_game_repeatattackprompt_repeatattackprompt",
+      "community": 23,
+      "norm_label": "repeatattackprompt()"
+    },
+    {
+      "label": "ResponseWindowPanel.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_responsewindowpanel",
+      "community": 23,
+      "norm_label": "responsewindowpanel.tsx"
+    },
+    {
+      "label": "ResponseWindowPanel()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
+      "community": 23,
+      "norm_label": "responsewindowpanel()"
+    },
+    {
+      "label": "RetaliateJudgmentPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RetaliateJudgmentPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_retaliatejudgmentprompt",
+      "community": 4,
+      "norm_label": "retaliatejudgmentprompt.tsx"
+    },
+    {
+      "label": "RetaliateJudgmentPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RetaliateJudgmentPrompt.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
+      "community": 4,
+      "norm_label": "retaliatejudgmentprompt()"
+    },
+    {
+      "label": "RetaliatePrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_retaliateprompt",
+      "community": 23,
+      "norm_label": "retaliateprompt.tsx"
+    },
+    {
+      "label": "RetaliatePrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "apps_web_components_game_retaliateprompt_retaliateprompt",
+      "community": 23,
+      "norm_label": "retaliateprompt()"
+    },
+    {
+      "label": "TablePiles.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_tablepiles",
+      "community": 29,
+      "norm_label": "tablepiles.tsx"
+    },
+    {
+      "label": "TablePiles()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "apps_web_components_game_tablepiles_tablepiles",
+      "community": 29,
+      "norm_label": "tablepiles()"
+    },
+    {
+      "label": "TargetCardPicker.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_targetcardpicker",
+      "community": 15,
+      "norm_label": "targetcardpicker.tsx"
+    },
+    {
+      "label": "TargetCardSelection",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_game_targetcardpicker_targetcardselection",
+      "community": 15,
+      "norm_label": "targetcardselection"
+    },
+    {
+      "label": "TargetCardPicker()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "apps_web_components_game_targetcardpicker_targetcardpicker",
+      "community": 15,
+      "norm_label": "targetcardpicker()"
+    },
+    {
+      "label": "TwinSwordsPrompt.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_twinswordsprompt",
+      "community": 23,
+      "norm_label": "twinswordsprompt.tsx"
+    },
+    {
+      "label": "TwinSwordsPrompt()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "apps_web_components_game_twinswordsprompt_twinswordsprompt",
+      "community": 23,
+      "norm_label": "twinswordsprompt()"
+    },
+    {
+      "label": "WinnerScreen.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_web_components_game_winnerscreen",
+      "community": 26,
+      "norm_label": "winnerscreen.tsx"
+    },
+    {
+      "label": "WinnerScreen()",
+      "file_type": "code",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "apps_web_components_game_winnerscreen_winnerscreen",
+      "community": 26,
+      "norm_label": "winnerscreen()"
+    },
+    {
       "label": "flags.ts",
       "file_type": "code",
       "source_file": "apps/web/lib/flags.ts",
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_lib_flags",
-      "community": 1,
+      "community": 26,
       "norm_label": "flags.ts"
     },
     {
@@ -2130,7 +2640,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_lib_supabase",
-      "community": 1,
+      "community": 26,
       "norm_label": "supabase.ts"
     },
     {
@@ -2170,7 +2680,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_lib_useauth",
-      "community": 1,
+      "community": 26,
       "norm_label": "useauth.ts"
     },
     {
@@ -2180,7 +2690,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_web_lib_useauth_profile",
-      "community": 1,
+      "community": 26,
       "norm_label": "profile"
     },
     {
@@ -2190,7 +2700,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "apps_web_lib_useauth_useauth",
-      "community": 1,
+      "community": 26,
       "norm_label": "useauth()"
     },
     {
@@ -2200,7 +2710,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "apps_web_lib_useauth_getaccesstoken",
-      "community": 1,
+      "community": 4,
       "norm_label": "getaccesstoken()"
     },
     {
@@ -3400,7 +3910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test",
-      "community": 29,
+      "community": 10,
       "norm_label": "delayed-tricks.test.ts"
     },
     {
@@ -3410,7 +3920,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_runjudgment",
-      "community": 29,
+      "community": 0,
       "norm_label": "runjudgment()"
     },
     {
@@ -3420,7 +3930,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_makecard",
-      "community": 29,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -3430,7 +3940,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_indulgence",
-      "community": 29,
+      "community": 10,
       "norm_label": "indulgence()"
     },
     {
@@ -3440,7 +3950,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_lightning",
-      "community": 29,
+      "community": 10,
       "norm_label": "lightning()"
     },
     {
@@ -3450,7 +3960,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_plain",
-      "community": 29,
+      "community": 10,
       "norm_label": "plain()"
     },
     {
@@ -3460,7 +3970,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_makeplayinggame",
-      "community": 29,
+      "community": 10,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -3470,7 +3980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_duel_test",
-      "community": 15,
+      "community": 10,
       "norm_label": "duel.test.ts"
     },
     {
@@ -3480,7 +3990,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_makecard",
-      "community": 15,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -3490,7 +4000,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_attackcard",
-      "community": 15,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -3500,7 +4010,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_duelcard",
-      "community": 15,
+      "community": 10,
       "norm_label": "duelcard()"
     },
     {
@@ -3520,7 +4030,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions",
-      "community": 3,
+      "community": 30,
       "norm_label": "actions.ts"
     },
     {
@@ -3530,7 +4040,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_createtargetedcardaction",
-      "community": 0,
+      "community": 22,
       "norm_label": "createtargetedcardaction()"
     },
     {
@@ -3540,7 +4050,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_resolvetargetedcardaction",
-      "community": 0,
+      "community": 22,
       "norm_label": "resolvetargetedcardaction()"
     },
     {
@@ -3560,7 +4070,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_canplaycardnow",
-      "community": 2,
+      "community": 20,
       "norm_label": "canplaycardnow()"
     },
     {
@@ -3940,7 +4450,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_discardplayerzones",
-      "community": 22,
+      "community": 0,
       "norm_label": "discardplayerzones()"
     },
     {
@@ -3970,7 +4480,7 @@
       "source_location": "L196",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolveplayerdeath",
-      "community": 26,
+      "community": 0,
       "norm_label": "resolveplayerdeath()"
     },
     {
@@ -4010,7 +4520,7 @@
       "source_location": "L370",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playattack",
-      "community": 2,
+      "community": 22,
       "norm_label": "playattack()"
     },
     {
@@ -4020,7 +4530,7 @@
       "source_location": "L473",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_openattackdodgewindow",
-      "community": 0,
+      "community": 22,
       "norm_label": "openattackdodgewindow()"
     },
     {
@@ -4030,7 +4540,7 @@
       "source_location": "L508",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playduel",
-      "community": 2,
+      "community": 22,
       "norm_label": "playduel()"
     },
     {
@@ -4050,7 +4560,7 @@
       "source_location": "L600",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolveduel",
-      "community": 0,
+      "community": 22,
       "norm_label": "resolveduel()"
     },
     {
@@ -4060,7 +4570,7 @@
       "source_location": "L627",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolvecurrentaction",
-      "community": 0,
+      "community": 22,
       "norm_label": "resolvecurrentaction()"
     },
     {
@@ -4220,7 +4730,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_getattackrange",
-      "community": 2,
+      "community": 30,
       "norm_label": "getattackrange()"
     },
     {
@@ -4230,7 +4740,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasunlimitedattackperturn",
-      "community": 2,
+      "community": 22,
       "norm_label": "hasunlimitedattackperturn()"
     },
     {
@@ -4240,7 +4750,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasunlimitedattack",
-      "community": 0,
+      "community": 22,
       "norm_label": "hasunlimitedattack()"
     },
     {
@@ -4300,7 +4810,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasdiscardtwoasattack",
-      "community": 0,
+      "community": 22,
       "norm_label": "hasdiscardtwoasattack()"
     },
     {
@@ -4330,7 +4840,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment",
-      "community": 0,
+      "community": 22,
       "norm_label": "equipment.ts"
     },
     {
@@ -4360,7 +4870,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_usediscardtwoasattack",
-      "community": 0,
+      "community": 22,
       "norm_label": "usediscardtwoasattack()"
     },
     {
@@ -4370,7 +4880,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_haslasthandmultitargetattack",
-      "community": 0,
+      "community": 22,
       "norm_label": "haslasthandmultitargetattack()"
     },
     {
@@ -4380,7 +4890,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_playlasthandmultiattack",
-      "community": 0,
+      "community": 22,
       "norm_label": "playlasthandmultiattack()"
     },
     {
@@ -4450,7 +4960,7 @@
       "source_location": "L454",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_continuerepeatattackafterdodge",
-      "community": 2,
+      "community": 22,
       "norm_label": "continuerepeatattackafterdodge()"
     },
     {
@@ -4490,7 +5000,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_response_queue",
-      "community": 0,
+      "community": 22,
       "norm_label": "response-queue.ts"
     },
     {
@@ -4550,7 +5060,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassdodgeordamage",
-      "community": 2,
+      "community": 0,
       "norm_label": "playmassdodgeordamage()"
     },
     {
@@ -4790,7 +5300,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup",
-      "community": 4,
+      "community": 10,
       "norm_label": "setup.ts"
     },
     {
@@ -4800,7 +5310,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_creategame",
-      "community": 4,
+      "community": 10,
       "norm_label": "creategame()"
     },
     {
@@ -4810,7 +5320,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_createseatedplayer",
-      "community": 4,
+      "community": 10,
       "norm_label": "createseatedplayer()"
     },
     {
@@ -4830,7 +5340,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_rolecomposition",
-      "community": 4,
+      "community": 10,
       "norm_label": "rolecomposition"
     },
     {
@@ -4840,7 +5350,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_dealroles",
-      "community": 4,
+      "community": 10,
       "norm_label": "dealroles()"
     },
     {
@@ -4850,7 +5360,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_uniquebyid",
-      "community": 4,
+      "community": 10,
       "norm_label": "uniquebyid()"
     },
     {
@@ -4860,7 +5370,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_dealemperoroptions",
-      "community": 4,
+      "community": 10,
       "norm_label": "dealemperoroptions()"
     },
     {
@@ -4870,7 +5380,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_dealothercharacteroptions",
-      "community": 4,
+      "community": 10,
       "norm_label": "dealothercharacteroptions()"
     },
     {
@@ -4880,7 +5390,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_selectcharacter",
-      "community": 4,
+      "community": 10,
       "norm_label": "selectcharacter()"
     },
     {
@@ -4890,7 +5400,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_beginplayaftercharacters",
-      "community": 4,
+      "community": 10,
       "norm_label": "beginplayaftercharacters()"
     },
     {
@@ -4950,7 +5460,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_isimmunetoattack",
-      "community": 2,
+      "community": 22,
       "norm_label": "isimmunetoattack()"
     },
     {
@@ -4960,7 +5470,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_attackdodgesrequired",
-      "community": 0,
+      "community": 22,
       "norm_label": "attackdodgesrequired()"
     },
     {
@@ -4970,7 +5480,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_attackdamagebonus",
-      "community": 0,
+      "community": 22,
       "norm_label": "attackdamagebonus()"
     },
     {
@@ -4980,7 +5490,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_reconcilelossskills",
-      "community": 24,
+      "community": 0,
       "norm_label": "reconcilelossskills()"
     },
     {
@@ -5000,7 +5510,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_shuffled",
-      "community": 4,
+      "community": 10,
       "norm_label": "shuffled()"
     },
     {
@@ -5010,7 +5520,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_createemptyequipmentslots",
-      "community": 4,
+      "community": 10,
       "norm_label": "createemptyequipmentslots()"
     },
     {
@@ -5050,7 +5560,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getplayersinseatorder",
-      "community": 26,
+      "community": 19,
       "norm_label": "getplayersinseatorder()"
     },
     {
@@ -5060,7 +5570,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getaliveplayersinseatorder",
-      "community": 0,
+      "community": 19,
       "norm_label": "getaliveplayersinseatorder()"
     },
     {
@@ -5070,7 +5580,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getbasedistancebetweenplayers",
-      "community": 2,
+      "community": 30,
       "norm_label": "getbasedistancebetweenplayers()"
     },
     {
@@ -5080,7 +5590,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_gettopdiscardcard",
-      "community": 19,
+      "community": 20,
       "norm_label": "gettopdiscardcard()"
     },
     {
@@ -5100,7 +5610,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_draw",
-      "community": 4,
+      "community": 10,
       "norm_label": "draw()"
     },
     {
@@ -5120,7 +5630,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_grantdraws",
-      "community": 26,
+      "community": 0,
       "norm_label": "grantdraws()"
     },
     {
@@ -5130,7 +5640,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_numberparam",
-      "community": 0,
+      "community": 22,
       "norm_label": "numberparam()"
     },
     {
@@ -5200,7 +5710,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_runtimeequipmentslot",
-      "community": 0,
+      "community": 19,
       "norm_label": "runtimeequipmentslot"
     },
     {
@@ -5220,7 +5730,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_isequipmentcard",
-      "community": 2,
+      "community": 20,
       "norm_label": "isequipmentcard()"
     },
     {
@@ -5230,7 +5740,7 @@
       "source_location": "L194",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_recordjudgment",
-      "community": 26,
+      "community": 0,
       "norm_label": "recordjudgment()"
     },
     {
@@ -5310,7 +5820,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting",
-      "community": 2,
+      "community": 30,
       "norm_label": "targeting.ts"
     },
     {
@@ -5320,7 +5830,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_geteffectivedistancebetweenplayers",
-      "community": 2,
+      "community": 30,
       "norm_label": "geteffectivedistancebetweenplayers()"
     },
     {
@@ -5330,7 +5840,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_cantargetwithattack",
-      "community": 2,
+      "community": 30,
       "norm_label": "cantargetwithattack()"
     },
     {
@@ -5340,7 +5850,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_forcedattacktargets",
-      "community": 2,
+      "community": 30,
       "norm_label": "forcedattacktargets()"
     },
     {
@@ -5350,7 +5860,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_assertforcedattacktarget",
-      "community": 2,
+      "community": 22,
       "norm_label": "assertforcedattacktarget()"
     },
     {
@@ -5360,7 +5870,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow",
-      "community": 26,
+      "community": 19,
       "norm_label": "turn-flow.ts"
     },
     {
@@ -5370,7 +5880,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_getnextaliveplayer",
-      "community": 26,
+      "community": 19,
       "norm_label": "getnextaliveplayer()"
     },
     {
@@ -5380,7 +5890,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_beginnextjudgment",
-      "community": 26,
+      "community": 0,
       "norm_label": "beginnextjudgment()"
     },
     {
@@ -5390,7 +5900,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_startturn",
-      "community": 26,
+      "community": 0,
       "norm_label": "startturn()"
     },
     {
@@ -5400,7 +5910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns",
-      "community": 26,
+      "community": 0,
       "norm_label": "turns.ts"
     },
     {
@@ -5410,7 +5920,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_getdiscardrequirement",
-      "community": 91,
+      "community": 0,
       "norm_label": "getdiscardrequirement()"
     },
     {
@@ -5420,7 +5930,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_applyjudgmentoutcome",
-      "community": 26,
+      "community": 0,
       "norm_label": "applyjudgmentoutcome()"
     },
     {
@@ -5460,7 +5970,7 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_drawcards",
-      "community": 2,
+      "community": 0,
       "norm_label": "drawcards()"
     },
     {
@@ -5500,7 +6010,7 @@
       "source_location": "L406",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_endturn",
-      "community": 26,
+      "community": 0,
       "norm_label": "endturn()"
     },
     {
@@ -5510,7 +6020,7 @@
       "source_location": "L512",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_drawforturn",
-      "community": 91,
+      "community": 0,
       "norm_label": "drawforturn()"
     },
     {
@@ -5520,7 +6030,7 @@
       "source_location": "L532",
       "_origin": "ast",
       "id": "packages_game_src_engine_turns_discardforhandlimit",
-      "community": 91,
+      "community": 0,
       "norm_label": "discardforhandlimit()"
     },
     {
@@ -5630,7 +6140,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_publiccardview",
-      "community": 23,
+      "community": 3,
       "norm_label": "publiccardview"
     },
     {
@@ -5640,7 +6150,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_responserecord",
-      "community": 23,
+      "community": 3,
       "norm_label": "responserecord"
     },
     {
@@ -5650,7 +6160,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_responsewindow",
-      "community": 23,
+      "community": 3,
       "norm_label": "responsewindow"
     },
     {
@@ -5660,7 +6170,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_currentaction",
-      "community": 3,
+      "community": 30,
       "norm_label": "currentaction"
     },
     {
@@ -5670,7 +6180,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetrules",
-      "community": 3,
+      "community": 30,
       "norm_label": "targetrules"
     },
     {
@@ -5680,7 +6190,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetedcardaction",
-      "community": 3,
+      "community": 30,
       "norm_label": "targetedcardaction"
     },
     {
@@ -5790,7 +6300,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_card",
-      "community": 86,
+      "community": 10,
       "norm_label": "card"
     },
     {
@@ -5800,7 +6310,7 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_character",
-      "community": 86,
+      "community": 10,
       "norm_label": "character"
     },
     {
@@ -5820,7 +6330,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_player",
-      "community": 22,
+      "community": 19,
       "norm_label": "player"
     },
     {
@@ -5900,7 +6410,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_spectator",
-      "community": 4,
+      "community": 10,
       "norm_label": "spectator"
     },
     {
@@ -5990,7 +6500,7 @@
       "source_location": "L329",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_pendingjudgment",
-      "community": 26,
+      "community": 19,
       "norm_label": "pendingjudgment"
     },
     {
@@ -6070,7 +6580,7 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_gamestate",
-      "community": 15,
+      "community": 10,
       "norm_label": "gamestate"
     },
     {
@@ -6090,7 +6600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_view",
-      "community": 23,
+      "community": 3,
       "norm_label": "view.ts"
     },
     {
@@ -6110,7 +6620,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_publicplayerstate",
-      "community": 23,
+      "community": 3,
       "norm_label": "publicplayerstate"
     },
     {
@@ -6120,7 +6630,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_publicresponserecord",
-      "community": 23,
+      "community": 3,
       "norm_label": "publicresponserecord"
     },
     {
@@ -6130,7 +6640,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_publicresponsewindow",
-      "community": 23,
+      "community": 3,
       "norm_label": "publicresponsewindow"
     },
     {
@@ -6140,7 +6650,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_publicgamestate",
-      "community": 23,
+      "community": 3,
       "norm_label": "publicgamestate"
     },
     {
@@ -6150,7 +6660,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_createpublicgamestate",
-      "community": 23,
+      "community": 2,
       "norm_label": "createpublicgamestate()"
     },
     {
@@ -6160,7 +6670,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_applyclassiccardnames",
-      "community": 23,
+      "community": 3,
       "norm_label": "applyclassiccardnames()"
     },
     {
@@ -6220,7 +6730,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test",
-      "community": 31,
+      "community": 10,
       "norm_label": "ice-sword.test.ts"
     },
     {
@@ -6230,7 +6740,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_makecard",
-      "community": 31,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -6240,7 +6750,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_attackcard",
-      "community": 31,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -6250,7 +6760,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_icesword",
-      "community": 31,
+      "community": 10,
       "norm_label": "icesword()"
     },
     {
@@ -6260,7 +6770,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_makeplayinggame",
-      "community": 31,
+      "community": 10,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -6270,7 +6780,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_attackdeclined",
-      "community": 31,
+      "community": 10,
       "norm_label": "attackdeclined()"
     },
     {
@@ -6280,7 +6790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_index",
-      "community": 15,
+      "community": 10,
       "norm_label": "index.ts"
     },
     {
@@ -6290,7 +6800,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "packages_game_src_index_effectresolvers",
-      "community": 15,
+      "community": 10,
       "norm_label": "effectresolvers"
     },
     {
@@ -6350,7 +6860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_negate_test",
-      "community": 102,
+      "community": 10,
       "norm_label": "negate.test.ts"
     },
     {
@@ -6360,7 +6870,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_makecard",
-      "community": 102,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -6370,7 +6880,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_negatecard",
-      "community": 102,
+      "community": 10,
       "norm_label": "negatecard()"
     },
     {
@@ -6380,7 +6890,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_drawcard",
-      "community": 102,
+      "community": 10,
       "norm_label": "drawcard()"
     },
     {
@@ -6390,7 +6900,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_healallcard",
-      "community": 102,
+      "community": 10,
       "norm_label": "healallcard()"
     },
     {
@@ -6400,7 +6910,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_dodgecard",
-      "community": 102,
+      "community": 10,
       "norm_label": "dodgecard()"
     },
     {
@@ -6410,7 +6920,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_attackcard",
-      "community": 102,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -6420,7 +6930,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_makeplayinggame",
-      "community": 4,
+      "community": 10,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -6460,7 +6970,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test",
-      "community": 15,
+      "community": 10,
       "norm_label": "reconnect.test.ts"
     },
     {
@@ -6470,7 +6980,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_allmembers",
-      "community": 15,
+      "community": 10,
       "norm_label": "allmembers()"
     },
     {
@@ -6480,7 +6990,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handlejoin",
-      "community": 15,
+      "community": 10,
       "norm_label": "handlejoin()"
     },
     {
@@ -6490,7 +7000,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handledisconnect",
-      "community": 15,
+      "community": 10,
       "norm_label": "handledisconnect()"
     },
     {
@@ -6500,7 +7010,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handleleave",
-      "community": 15,
+      "community": 10,
       "norm_label": "handleleave()"
     },
     {
@@ -6510,7 +7020,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test",
-      "community": 4,
+      "community": 10,
       "norm_label": "role-distribution.test.ts"
     },
     {
@@ -6520,7 +7030,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_character",
-      "community": 4,
+      "community": 10,
       "norm_label": "character()"
     },
     {
@@ -6530,7 +7040,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_caocao",
-      "community": 4,
+      "community": 10,
       "norm_label": "caocao"
     },
     {
@@ -6540,7 +7050,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_liubei",
-      "community": 4,
+      "community": 10,
       "norm_label": "liubei"
     },
     {
@@ -6550,7 +7060,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_sunquan",
-      "community": 4,
+      "community": 10,
       "norm_label": "sunquan"
     },
     {
@@ -6560,7 +7070,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_makecharacters",
-      "community": 4,
+      "community": 10,
       "norm_label": "makecharacters()"
     },
     {
@@ -6570,7 +7080,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_makewaitinggame",
-      "community": 4,
+      "community": 10,
       "norm_label": "makewaitinggame()"
     },
     {
@@ -6580,7 +7090,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "packages_game_src_role_distribution_test_setupafteremperorselects",
-      "community": 4,
+      "community": 10,
       "norm_label": "setupafteremperorselects()"
     },
     {
@@ -6590,7 +7100,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_seat_validation_test",
-      "community": 4,
+      "community": 10,
       "norm_label": "seat-validation.test.ts"
     },
     {
@@ -6600,7 +7110,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "packages_game_src_seat_validation_test_allmembers",
-      "community": 4,
+      "community": 10,
       "norm_label": "allmembers()"
     },
     {
@@ -6610,7 +7120,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "packages_game_src_seat_validation_test_selectseat",
-      "community": 4,
+      "community": 10,
       "norm_label": "selectseat()"
     },
     {
@@ -6620,7 +7130,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_seat_validation_test_selectrandomseat",
-      "community": 4,
+      "community": 10,
       "norm_label": "selectrandomseat()"
     },
     {
@@ -6630,7 +7140,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "packages_game_src_seat_validation_test_movetospectator",
-      "community": 4,
+      "community": 10,
       "norm_label": "movetospectator()"
     },
     {
@@ -6640,7 +7150,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test",
-      "community": 27,
+      "community": 10,
       "norm_label": "snake-spear.test.ts"
     },
     {
@@ -6650,7 +7160,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_makecard",
-      "community": 27,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -6660,7 +7170,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_handcard",
-      "community": 27,
+      "community": 10,
       "norm_label": "handcard()"
     },
     {
@@ -6670,7 +7180,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_dodgecard",
-      "community": 27,
+      "community": 10,
       "norm_label": "dodgecard()"
     },
     {
@@ -6680,7 +7190,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_snakespear",
-      "community": 27,
+      "community": 10,
       "norm_label": "snakespear()"
     },
     {
@@ -6690,7 +7200,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_renwangshield",
-      "community": 27,
+      "community": 10,
       "norm_label": "renwangshield()"
     },
     {
@@ -6700,7 +7210,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_makeplayinggame",
-      "community": 27,
+      "community": 10,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -6710,7 +7220,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers",
-      "community": 86,
+      "community": 10,
       "norm_label": "test-helpers.ts"
     },
     {
@@ -6720,7 +7230,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_makespectator",
-      "community": 4,
+      "community": 10,
       "norm_label": "makespectator()"
     },
     {
@@ -6770,7 +7280,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_standardgameoptions",
-      "community": 86,
+      "community": 10,
       "norm_label": "standardgameoptions"
     },
     {
@@ -6800,7 +7310,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test",
-      "community": 20,
+      "community": 10,
       "norm_label": "trick-negate.test.ts"
     },
     {
@@ -6810,7 +7320,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_makecard",
-      "community": 20,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -6820,7 +7330,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_negatecard",
-      "community": 20,
+      "community": 10,
       "norm_label": "negatecard()"
     },
     {
@@ -6830,7 +7340,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_indulgence",
-      "community": 20,
+      "community": 10,
       "norm_label": "indulgence()"
     },
     {
@@ -6840,7 +7350,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_lightning",
-      "community": 20,
+      "community": 10,
       "norm_label": "lightning()"
     },
     {
@@ -6850,7 +7360,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_attackcard",
-      "community": 20,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -6860,7 +7370,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_weapon",
-      "community": 20,
+      "community": 10,
       "norm_label": "weapon()"
     },
     {
@@ -6870,7 +7380,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_makegame",
-      "community": 20,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
@@ -6880,7 +7390,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_negatewith",
-      "community": 20,
+      "community": 10,
       "norm_label": "negatewith()"
     },
     {
@@ -6920,7 +7430,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test",
-      "community": 86,
+      "community": 10,
       "norm_label": "viewer-safe-state.test.ts"
     },
     {
@@ -6930,7 +7440,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_makecard",
-      "community": 86,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -6940,7 +7450,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_makecharacter",
-      "community": 86,
+      "community": 10,
       "norm_label": "makecharacter()"
     },
     {
@@ -6950,7 +7460,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_makecharacterselectgame",
-      "community": 4,
+      "community": 10,
       "norm_label": "makecharacterselectgame()"
     },
     {
@@ -6960,7 +7470,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_assigncharacters",
-      "community": 86,
+      "community": 10,
       "norm_label": "assigncharacters()"
     },
     {
@@ -8397,7 +8907,7 @@
       "label": "Incomplete / Not Started",
       "file_type": "document",
       "source_file": "docs/current-status.md",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "docs_current_status_incomplete_not_started",
       "community": 37,
@@ -10298,7 +10808,7 @@
       "source_location": "L68",
       "weight": 1.0,
       "source": "apps_server_src_dev_sandbox_attachdevhandlers",
-      "target": "apps_web_app_page_socket"
+      "target": "apps_web_app_lib_socket_socket"
     },
     {
       "relation": "calls",
@@ -10573,7 +11083,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L940",
+      "source_location": "L720",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_server_src_server_test_join"
@@ -13204,7 +13714,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1064",
+      "source_location": "L844",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_game_local_page_card"
@@ -13989,6 +14499,199 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio",
+      "target": "apps_web_app_lib_audio_playautoendchime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio",
+      "target": "apps_web_app_lib_audio_playcountdowntick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio",
+      "target": "apps_web_app_lib_audio_playdecisionalert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio",
+      "target": "apps_web_app_lib_audio_playthunder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio",
+      "target": "apps_web_app_lib_audio_tone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio_playautoendchime",
+      "target": "apps_web_app_lib_audio_tone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio_playcountdowntick",
+      "target": "apps_web_app_lib_audio_tone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio_playdecisionalert",
+      "target": "apps_web_app_lib_audio_tone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/audio.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_audio_playthunder",
+      "target": "apps_web_app_lib_audio_tone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_audio_playdecisionalert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_audio_playdecisionalert"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_audio_playcountdowntick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_audio_playcountdowntick"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_audio_playautoendchime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_audio_playautoendchime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_audio_playthunder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L537",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_audio_playthunder"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/lib/gameConstants.tsx",
       "source_location": "L190",
       "weight": 1.0,
@@ -14205,7 +14908,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants",
@@ -14267,11 +14970,187 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_winnerscreen",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gameconstants",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_role_label",
@@ -14292,8 +15171,30 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_winnerscreen",
+      "target": "apps_web_app_lib_gameconstants_role_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gameconstants_role_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_phase_label",
@@ -14304,7 +15205,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_roletext",
@@ -14316,7 +15217,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1768",
+      "source_location": "L1390",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_roletext"
@@ -14326,7 +15227,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_hearts",
@@ -14338,20 +15239,53 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1746",
+      "source_location": "L1850",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gameconstants_hearts",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L221",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L120",
       "weight": 1.0,
-      "source": "apps_web_app_page_opponentpanel",
+      "source": "apps_web_components_game_pregametable_pregametable",
+      "target": "apps_web_app_lib_gameconstants_hearts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gameconstants_hearts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_hearts"
     },
     {
@@ -14359,7 +15293,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_charname",
@@ -14371,20 +15305,251 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1717",
+      "source_location": "L1758",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L190",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L26",
       "weight": 1.0,
-      "source": "apps_web_app_page_opponentpanel",
+      "source": "apps_web_components_game_allyassistprompt_allyassistprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt_coerceprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt_dischordprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt_fankuiprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt_icereplaceprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable_pregametable",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker_targetcardpicker",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt_twinswordsprompt",
+      "target": "apps_web_app_lib_gameconstants_charname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gameconstants_charname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_charname"
     },
     {
@@ -14392,7 +15557,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_cardinfo",
@@ -14404,7 +15569,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2895",
+      "source_location": "L2456",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -14457,8 +15622,30 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_cardinfo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_cardinfo"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_suitcolor",
@@ -14470,7 +15657,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1605",
+      "source_location": "L1337",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suitcolor"
@@ -14545,8 +15732,74 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_suitcolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_suitcolor"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_suitcolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_suitcolor"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_app_lib_gameconstants_suitcolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt_legacyprompt",
+      "target": "apps_web_app_lib_gameconstants_suitcolor"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_suittx",
@@ -14558,7 +15811,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1611",
+      "source_location": "L1343",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -14633,8 +15886,162 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt_legacyprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt_peekprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt_retaliateprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt_twinswordsprompt",
+      "target": "apps_web_app_lib_gameconstants_suittx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel",
@@ -14646,7 +16053,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1620",
+      "source_location": "L1352",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel"
@@ -14721,8 +16128,30 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_cardtypelabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt_harvestprompt",
+      "target": "apps_web_app_lib_gameconstants_cardtypelabel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_kingdom_faction",
@@ -14755,7 +16184,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_edgeposition",
@@ -14767,7 +16196,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1901",
+      "source_location": "L1462",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_edgeposition"
@@ -14777,9 +16206,20 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_gameconstants_lobbyposition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
       "target": "apps_web_app_lib_gameconstants_lobbyposition",
       "confidence_score": 1.0
     },
@@ -14788,10 +16228,10 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1685",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L66",
       "weight": 1.0,
-      "source": "apps_web_app_page_home",
+      "source": "apps_web_components_game_pregametable_pregametable",
       "target": "apps_web_app_lib_gameconstants_lobbyposition"
     },
     {
@@ -14799,7 +16239,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_isviewerdecisionactive",
@@ -14811,7 +16251,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L428",
+      "source_location": "L208",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_isviewerdecisionactive"
@@ -14821,7 +16261,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gameconstants_canautoendturn",
@@ -14833,7 +16273,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L453",
+      "source_location": "L233",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_canautoendturn"
@@ -14983,7 +16423,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes",
@@ -15026,6 +16466,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/DecisionArea.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_decisionarea",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/DropZoneModal.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -15048,6 +16499,237 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DestroyMountPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_destroymountprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_forceattackdamageprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_repeatattackprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliateJudgmentPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliatejudgmentprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_game_winnerscreen",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/LogChatPanel.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -15056,11 +16738,22 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gametypes",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_role",
@@ -15071,7 +16764,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_character",
@@ -15104,7 +16797,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_card",
@@ -15147,6 +16840,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/DecisionArea.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_decisionarea",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/DropZoneModal.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -15169,8 +16873,74 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_forceattackdamageprompt",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gametypes_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_equipmentslots",
@@ -15180,8 +16950,19 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_app_lib_gametypes_equipmentslots",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_player",
@@ -15191,8 +16972,140 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_forceattackdamageprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_repeatattackprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_app_lib_gametypes_player",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_roleset",
@@ -15203,7 +17116,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_room",
@@ -15214,7 +17127,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_game",
@@ -15235,6 +17148,215 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DestroyMountPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_destroymountprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_forceattackdamageprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_repeatattackprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliateJudgmentPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliatejudgmentprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "apps_web_components_game_winnerscreen",
+      "target": "apps_web_app_lib_gametypes_game",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/LogChatPanel.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -15247,11 +17369,172 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_lib_gametypes_iceselection",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_app_lib_gametypes_iceselection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_app_lib_socket_emitroomjoin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_app_lib_socket_play_confirm_events",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_app_lib_socket_readsessiontoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_app_lib_socket_socket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_lib_useauth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket",
+      "target": "apps_web_lib_useauth_getaccesstoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_socket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_socket_socket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket_emitroomjoin",
+      "target": "apps_web_app_lib_socket_readsessiontoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_socket_play_confirm_events",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L603",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_socket_play_confirm_events"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/lib/socket.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "apps_web_app_lib_socket_emitroomjoin",
+      "target": "apps_web_lib_useauth_getaccesstoken"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_app_lib_socket_emitroomjoin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L359",
+      "weight": 1.0,
+      "source": "apps_web_app_page_home",
+      "target": "apps_web_app_lib_socket_emitroomjoin"
     },
     {
       "relation": "contains",
@@ -15311,80 +17594,10 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L131",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_decisionarea",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L76",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_emitroomjoin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L92",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_equipmentdisplay",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L243",
+      "source_location": "L70",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_home",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L167",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_opponentpanel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L64",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_play_confirm_events",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_readsessiontoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_app_page_socket",
       "confidence_score": 1.0
     },
     {
@@ -15392,7 +17605,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_carddetailmodal",
@@ -15403,7 +17616,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_carddetailmodal_carddetailmodal",
@@ -15414,29 +17627,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_components_cardface",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_components_cardface_cardface",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_debugsandboxpanel",
@@ -15447,7 +17638,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_debugsandboxpanel_debugsandboxpanel",
@@ -15458,7 +17649,29 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L37",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_decisionarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_decisionarea_decisionarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L38",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_dropzonemodal",
@@ -15469,7 +17682,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_dropzonemodal_dropzonemodal",
@@ -15480,7 +17693,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_encyclopediadrawer",
@@ -15491,7 +17704,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_encyclopediadrawer_encyclopediadrawer",
@@ -15502,7 +17715,469 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L32",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_equipmentdisplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_equipmentdisplay_equipmentdisplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_allyassistprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_allyassistprompt_allyassistprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_coerceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_coerceprompt_coerceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_destroymountprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_destroymountprompt_destroymountprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_dischordprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_dischordprompt_dischordprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_fankuiprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_fankuiprompt_fankuiprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_forceattackdamageprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_forceattackdamageprompt_forceattackdamageprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_harvestprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_harvestprompt_harvestprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_icereplaceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_icereplaceprompt_icereplaceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_judgmentpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_legacyprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_legacyprompt_legacyprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_peekprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_peekprompt_peekprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_pregametable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_pregametable_pregametable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_repeatattackprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_repeatattackprompt_repeatattackprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_responsewindowpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_retaliatejudgmentprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_retaliateprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_retaliateprompt_retaliateprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_tablepiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_tablepiles_tablepiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_targetcardpicker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_targetcardpicker_targetcardpicker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_twinswordsprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_twinswordsprompt_twinswordsprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_winnerscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_game_winnerscreen_winnerscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L30",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_icon",
@@ -15513,21 +18188,10 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L32",
+      "source_location": "L30",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_icon_icon",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_components_icon_iconname",
       "confidence_score": 1.0
     },
     {
@@ -15535,7 +18199,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_logchatpanel",
@@ -15546,7 +18210,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_logchatpanel_logchatpanel",
@@ -15557,7 +18221,29 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L34",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_opponentpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "apps_web_app_page",
+      "target": "apps_web_components_opponentpanel_opponentpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/app/page.tsx",
+      "source_location": "L35",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_settingspopover",
@@ -15568,7 +18254,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_settingspopover_settingspopover",
@@ -15579,7 +18265,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L39",
+      "source_location": "L40",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_lib_flags",
@@ -15590,7 +18276,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_lib_useauth",
@@ -15601,18 +18287,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_lib_useauth_getaccesstoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_lib_useauth_useauth",
@@ -15622,53 +18297,9 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L82",
-      "weight": 1.0,
-      "source": "apps_web_app_page_emitroomjoin",
-      "target": "apps_web_app_page_readsessiontoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L823",
-      "weight": 1.0,
-      "source": "apps_web_app_page_home",
-      "target": "apps_web_app_page_play_confirm_events"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L84",
-      "weight": 1.0,
-      "source": "apps_web_app_page_emitroomjoin",
-      "target": "apps_web_lib_useauth_getaccesstoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L579",
-      "weight": 1.0,
-      "source": "apps_web_app_page_home",
-      "target": "apps_web_app_page_emitroomjoin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L474",
+      "source_location": "L254",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_lib_useauth_useauth"
@@ -15831,6 +18462,17 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_components_cardface",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15838,6 +18480,17 @@
       "source_location": "L4",
       "weight": 1.0,
       "source": "apps_web_components_dropzonemodal",
+      "target": "apps_web_components_cardface_cardface",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
       "target": "apps_web_components_cardface_cardface",
       "confidence_score": 1.0
     },
@@ -15914,6 +18567,38 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/DecisionArea.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_components_decisionarea",
+      "target": "apps_web_components_decisionarea_decisionarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_components_decisionarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_components_decisionarea_decisionarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/DropZoneModal.tsx",
       "source_location": "L20",
       "weight": 1.0,
@@ -15974,6 +18659,82 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_components_equipmentdisplay_equipmentdisplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_components_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_components_icon_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/EquipmentDisplay.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "apps_web_components_equipmentdisplay",
+      "target": "apps_web_components_icon_iconname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_components_equipmentdisplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_components_equipmentdisplay_equipmentdisplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_components_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/Icon.tsx",
       "source_location": "L103",
       "weight": 1.0,
@@ -16009,6 +18770,17 @@
       "weight": 1.0,
       "source": "apps_web_components_icon",
       "target": "apps_web_components_icon_icons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_components_icon_icon",
       "confidence_score": 1.0
     },
     {
@@ -16146,6 +18918,16 @@
       "weight": 1.0,
       "source": "apps_web_components_logchatpanel",
       "target": "apps_web_components_logchatpanel_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/OpponentPanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_components_opponentpanel",
+      "target": "apps_web_components_opponentpanel_opponentpanel",
       "confidence_score": 1.0
     },
     {
@@ -16300,6 +19082,216 @@
       "weight": 1.0,
       "source": "apps_web_components_spectatorlist",
       "target": "apps_web_components_spectatorlist_spectatorlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/AllyAssistPrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_allyassistprompt",
+      "target": "apps_web_components_game_allyassistprompt_allyassistprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/CoercePrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_coerceprompt",
+      "target": "apps_web_components_game_coerceprompt_coerceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DestroyMountPrompt.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_game_destroymountprompt",
+      "target": "apps_web_components_game_destroymountprompt_destroymountprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/DischordPrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_dischordprompt",
+      "target": "apps_web_components_game_dischordprompt_dischordprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/FankuiPrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_fankuiprompt",
+      "target": "apps_web_components_game_fankuiprompt_fankuiprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ForceAttackDamagePrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_forceattackdamageprompt",
+      "target": "apps_web_components_game_forceattackdamageprompt_forceattackdamageprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/HarvestPrompt.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "apps_web_components_game_harvestprompt",
+      "target": "apps_web_components_game_harvestprompt_harvestprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/IceReplacePrompt.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_components_game_icereplaceprompt",
+      "target": "apps_web_components_game_icereplaceprompt_icereplaceprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/JudgmentPanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_judgmentpanel",
+      "target": "apps_web_components_game_judgmentpanel_judgmentpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/LegacyPrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_legacyprompt",
+      "target": "apps_web_components_game_legacyprompt_legacyprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PeekPrompt.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_components_game_peekprompt",
+      "target": "apps_web_components_game_peekprompt_peekprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/PreGameTable.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_pregametable",
+      "target": "apps_web_components_game_pregametable_pregametable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RepeatAttackPrompt.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_game_repeatattackprompt",
+      "target": "apps_web_components_game_repeatattackprompt_repeatattackprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/ResponseWindowPanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_components_game_responsewindowpanel",
+      "target": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliateJudgmentPrompt.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliatejudgmentprompt",
+      "target": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/RetaliatePrompt.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "apps_web_components_game_retaliateprompt",
+      "target": "apps_web_components_game_retaliateprompt_retaliateprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TablePiles.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "apps_web_components_game_tablepiles",
+      "target": "apps_web_components_game_tablepiles_tablepiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_components_game_targetcardpicker_targetcardpicker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TargetCardPicker.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_game_targetcardpicker",
+      "target": "apps_web_components_game_targetcardpicker_targetcardselection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/TwinSwordsPrompt.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "apps_web_components_game_twinswordsprompt",
+      "target": "apps_web_components_game_twinswordsprompt_twinswordsprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/components/game/WinnerScreen.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "apps_web_components_game_winnerscreen",
+      "target": "apps_web_components_game_winnerscreen_winnerscreen",
       "confidence_score": 1.0
     },
     {
@@ -40974,7 +43966,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/current-status.md",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "docs_current_status_current_system_status",
       "target": "docs_current_status_incomplete_not_started",
@@ -41620,5 +44612,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "96c7c0a05ca9752d076dd6526c64c5f22b2c0d44"
+  "built_at_commit": "8314562a5649e7669e08d56d05ec64347a61f538"
 }

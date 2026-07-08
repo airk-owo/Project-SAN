@@ -1,16 +1,16 @@
 # Graph Report - Project-SAN  (2026-07-08)
 
 ## Corpus Check
-- 111 files · ~898,279 words
+- 136 files · ~900,053 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 936 nodes · 2997 edges · 101 communities (55 shown, 46 thin omitted)
+- 987 nodes · 3225 edges · 100 communities (54 shown, 46 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `96c7c0a0`
+- Built from commit: `8314562a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -45,6 +45,7 @@
 - [[_COMMUNITY_multi-attack.test.ts|multi-attack.test.ts]]
 - [[_COMMUNITY_twin-swords.test.ts|twin-swords.test.ts]]
 - [[_COMMUNITY_GameState|GameState]]
+- [[_COMMUNITY_actions.ts|actions.ts]]
 - [[_COMMUNITY_page.tsx|page.tsx]]
 - [[_COMMUNITY_next.config.mjs|next.config.mjs]]
 - [[_COMMUNITY_dispatchGameEvent|dispatchGameEvent]]
@@ -94,7 +95,6 @@
 - [[_COMMUNITY_ARCHITECTURE|ARCHITECTURE]]
 - [[_COMMUNITY_CLAUDE|CLAUDE.md]]
 - [[_COMMUNITY_Game Rules Data|Game Rules Data]]
-- [[_COMMUNITY_dev-sandbox.ts|dev-sandbox.ts]]
 - [[_COMMUNITY_TODO|TODO.md]]
 - [[_COMMUNITY_ขั้นตอนเปิดใช้|ขั้นตอนเปิดใช้]]
 - [[_COMMUNITY_page.tsx|page.tsx]]
@@ -108,7 +108,6 @@
 - [[_COMMUNITY_Twin Swords Card Art|Twin Swords Card Art]]
 - [[_COMMUNITY_combat.ts|combat.ts]]
 - [[_COMMUNITY_index.ts|index.ts]]
-- [[_COMMUNITY_negate.test.ts|negate.test.ts]]
 - [[_COMMUNITY_รายละเอียด|รายละเอียด]]
 - [[_COMMUNITY_server.test.ts|server.test.ts]]
 
@@ -131,10 +130,10 @@
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
 - `runDummyStep()` --calls--> `drawPendingCard()`  [EXTRACTED]
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/sync.ts
-- `runDummyStep()` --calls--> `endTurn()`  [EXTRACTED]
+- `runDummyStep()` --calls--> `discardForHandLimit()`  [EXTRACTED]
   apps/server/src/dev-sandbox.ts → packages/game/src/engine/turns.ts
-- `attachDevHandlers()` --calls--> `getPlayerById()`  [EXTRACTED]
-  apps/server/src/dev-sandbox.ts → packages/game/src/engine/state.ts
+- `runDummyStep()` --calls--> `drawForTurn()`  [EXTRACTED]
+  apps/server/src/dev-sandbox.ts → packages/game/src/engine/turns.ts
 
 ## Import Cycles
 - None detected.
@@ -146,27 +145,27 @@
 - **Sanguosha Card Assets** — apps_web_public_cards_ลอบขโมย, apps_web_public_cards_ละโมบฉกฉวย, apps_web_public_cards_หน้าไม้กล, apps_web_public_cards_หลบ, apps_web_public_cards_เกาทัณฑ์พันดอก, apps_web_public_cards_เก็บเกี่ยวยุ้งฉาง, apps_web_public_cards_เจ่าหยิง, apps_web_public_cards_เจ่าหวงเฟยเตี้ยน, apps_web_public_cards_เซ็กเธาว์, apps_web_public_cards_เต๊กเลา, apps_web_public_cards_เสบียง, apps_web_public_cards_โจมตี, apps_web_public_cards_โล่จักรพรรดิ [INFERRED 0.90]
 - **Sanguosha Character Assets** — apps_web_public_characters_กวนอู, apps_web_public_characters_กำเหลง, apps_web_public_characters_กุยแก, apps_web_public_characters_จิวยี่, apps_web_public_characters_จูกัดเหลียง, apps_web_public_characters_จูล่ง, apps_web_public_characters_ซุนกวน [INFERRED 0.90]
 
-## Communities (101 total, 46 thin omitted)
+## Communities (100 total, 46 thin omitted)
 
 ### Community 0 - "index.ts"
 Cohesion: 0.11
-Nodes (113): createServer(), GameData, loadGameData(), RulesData, canPlayerAct(), createTargetedCardAction(), resolveTargetedCardAction(), allyAssist() (+105 more)
+Nodes (115): isTimerFrozen(), createServer(), GameData, loadGameData(), RulesData, LocalGamePage(), runJudgment(), canPlayerAct() (+107 more)
 
 ### Community 1 - "index.ts"
-Cohesion: 0.05
-Nodes (70): card(), canAutoEndTurn(), CARD_INFO, cardInfo(), cardTypeLabel(), charName(), coarsePointer(), edgePosition() (+62 more)
+Cohesion: 0.17
+Nodes (17): card(), cardInfo(), cardTypeLabel(), coarsePointer(), suitColor(), Character, CardDetailModal(), Props (+9 more)
 
 ### Community 2 - "basic-combat.scenarios.ts"
-Cohesion: 0.09
-Nodes (79): CARD_INFO, cardInfo(), character(), characterName(), createMockGameState(), discardTargetCard(), duelCard(), edgePosition() (+71 more)
+Cohesion: 0.17
+Nodes (48): card(), character(), combatState(), discardTargetCard(), distanceState(), drawState(), duelCard(), equipmentCard() (+40 more)
 
 ### Community 3 - "page.tsx"
-Cohesion: 0.06
-Nodes (33): CardNameVersion, CardType, CardZone, CharacterState, ChatMessage, ConnectionStatus, CurrentAction, EffectResolver (+25 more)
+Cohesion: 0.05
+Nodes (38): CardNameVersion, CardType, CardZone, CharacterState, ChatMessage, ConnectionStatus, EffectResolver, EffectResolverContext (+30 more)
 
 ### Community 4 - "page.tsx"
-Cohesion: 0.15
-Nodes (25): beginPlayAfterCharacters(), createGame(), createSeatedPlayer(), dealEmperorOptions(), dealOtherCharacterOptions(), dealRoles(), RoleComposition, selectCharacter() (+17 more)
+Cohesion: 0.19
+Nodes (18): playAutoEndChime(), playCountdownTick(), playDecisionAlert(), playThunder(), tone(), canAutoEndTurn(), edgePosition(), isViewerDecisionActive() (+10 more)
 
 ### Community 5 - "import-cards.mjs"
 Cohesion: 0.10
@@ -189,8 +188,8 @@ Cohesion: 0.25
 Nodes (8): apps/server, apps/web, data/generated, docs, Folder Responsibilities, packages/game, source, supabase
 
 ### Community 10 - "compilerOptions"
-Cohesion: 0.14
-Nodes (26): attackCard(), dodgeCard(), duelCard(), makeCard(), makeGame(), suited(), coerceCard(), makeGame() (+18 more)
+Cohesion: 0.05
+Nodes (96): attackCard(), dodgeCard(), duelCard(), makeCard(), makeGame(), suited(), coerceCard(), makeGame() (+88 more)
 
 ### Community 11 - "build-cards.js"
 Cohesion: 0.11
@@ -209,8 +208,8 @@ Cohesion: 0.13
 Nodes (14): Account identity and character identity, Basic turn phases, Canonical match fields, Card locations and current action, Current basic-combat migration, Distance, Dying rescue window, Equipment slots (+6 more)
 
 ### Community 15 - "dealRoles"
-Cohesion: 0.27
-Nodes (9): attackCard(), duelCard(), makeCard(), GameState, effectResolvers, allMembers(), handleDisconnect(), handleJoin() (+1 more)
+Cohesion: 0.15
+Nodes (16): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, RoleSet (+8 more)
 
 ### Community 16 - "scripts"
 Cohesion: 0.15
@@ -225,52 +224,56 @@ Cohesion: 0.29
 Nodes (7): 1. หน้าเว็บไม่มีสไตล์ / "UI หาย" (CSS โหลดไม่ได้ 404 ในโหมด dev), กันไว้, ยืนยันว่าแก้สำเร็จ, วิธีเช็ก (diagnosis) — ทำเร็วๆ, วิธีแก้ (ยืนยันแล้วว่าหาย), สาเหตุ, อาการ
 
 ### Community 19 - "trick-negate.test.ts"
-Cohesion: 0.21
-Nodes (9): getTopDiscardCard(), gameStatusFor(), turnPhaseFor(), CardInstance, EquipmentSlots, GamePhase, GameStatus, HiddenHandSelection (+1 more)
+Cohesion: 0.16
+Nodes (14): getAlivePlayersInSeatOrder(), getPlayersInSeatOrder(), RuntimeEquipmentSlot, gameStatusFor(), turnPhaseFor(), getNextAlivePlayer(), CardInstance, EquipmentSlots (+6 more)
 
 ### Community 20 - "package.json"
-Cohesion: 0.39
-Nodes (8): attackCard(), indulgence(), lightning(), makeCard(), makeGame(), negateCard(), negateWith(), weapon()
+Cohesion: 0.15
+Nodes (19): CARD_INFO, cardInfo(), character(), characterName(), createMockGameState(), discardTargetCard(), duelCard(), edgePosition() (+11 more)
 
 ### Community 21 - "compilerOptions"
 Cohesion: 0.20
 Nodes (9): devDependencies, typescript, exports, name, scripts, check, test, type (+1 more)
 
 ### Community 22 - "coerce.test.ts"
-Cohesion: 0.22
-Nodes (13): checkWinCondition(), discardPlayerZones(), finishGame(), playerHasAnyCard(), areOppositeGenders(), attackIgnoresTargetArmor(), hasDamageDestroyTargetMount(), hasDiscardTwoForceAttackDamage() (+5 more)
+Cohesion: 0.17
+Nodes (30): createTargetedCardAction(), resolveTargetedCardAction(), checkWinCondition(), finishGame(), openAttackDodgeWindow(), playAttack(), playDuel(), playerHasAnyCard() (+22 more)
 
 ### Community 23 - "delayed-tricks.test.ts"
-Cohesion: 0.22
-Nodes (9): PublicCardView, ResponseRecord, ResponseWindow, applyClassicCardNames(), createPublicGameState(), PublicGameState, PublicPlayerState, PublicResponseRecord (+1 more)
+Cohesion: 0.19
+Nodes (11): suitTx(), Game, Player, DestroyMountPrompt(), ForceAttackDamagePrompt(), JudgmentPanel(), PeekPrompt(), RepeatAttackPrompt() (+3 more)
 
 ### Community 24 - "snake-spear.test.ts"
-Cohesion: 0.20
-Nodes (10): dispatchGameEvent(), runSkillEventHandlers(), SKILL_EVENT_HANDLERS, SkillEventHandler, CARD_CONVERSIONS, CHARACTER_SKILLS, reconcileLossSkills(), EventSubscriber (+2 more)
+Cohesion: 0.22
+Nodes (9): dispatchGameEvent(), runSkillEventHandlers(), SKILL_EVENT_HANDLERS, SkillEventHandler, CARD_CONVERSIONS, CHARACTER_SKILLS, EventSubscriber, GameEvent (+1 more)
 
 ### Community 25 - "duel.test.ts"
 Cohesion: 0.22
 Nodes (8): compilerOptions, esModuleInterop, module, moduleResolution, noEmit, strict, target, include
 
 ### Community 26 - "resolvePlayerDeath"
-Cohesion: 0.39
-Nodes (10): resolvePlayerDeath(), getPlayersInSeatOrder(), grantDraws(), recordJudgment(), beginNextJudgment(), getNextAlivePlayer(), startTurn(), applyJudgmentOutcome() (+2 more)
+Cohesion: 0.19
+Nodes (10): ROLE_LABEL, LoginPage(), CharRow, FactionRow, pct(), ProfilePage(), RecentRow, WinnerScreen() (+2 more)
 
 ### Community 27 - "multi-attack.test.ts"
-Cohesion: 0.48
-Nodes (6): dodgeCard(), handCard(), makeCard(), makePlayingGame(), renwangShield(), snakeSpear()
+Cohesion: 0.14
+Nodes (12): IceSelection, Member, ResponseWindow, Role, RoleAliveCounts, RoleDefinition, Room, Turn (+4 more)
 
 ### Community 28 - "twin-swords.test.ts"
 Cohesion: 0.25
 Nodes (7): Applications, `apps/server`, `apps/web`, Domain and data flow, Extension boundaries, Root folders, WTK project architecture
 
 ### Community 29 - "GameState"
-Cohesion: 0.43
-Nodes (6): indulgence(), lightning(), makeCard(), makePlayingGame(), plain(), runJudgment()
+Cohesion: 0.23
+Nodes (9): Card, EquipmentSlots, DecisionArea(), EquipmentDisplay(), TablePiles(), Icon(), IconDef, IconName (+1 more)
+
+### Community 30 - "actions.ts"
+Cohesion: 0.33
+Nodes (8): getAttackRange(), getBaseDistanceBetweenPlayers(), canTargetWithAttack(), forcedAttackTargets(), getEffectiveDistanceBetweenPlayers(), CurrentAction, TargetedCardAction, TargetRules
 
 ### Community 31 - "page.tsx"
-Cohesion: 0.67
-Nodes (5): attackCard(), attackDeclined(), iceSword(), makeCard(), makePlayingGame()
+Cohesion: 0.25
+Nodes (6): BASIC_ICONS, DebugSandboxPanel(), Props, QaTab, RANKS, SUITS
 
 ### Community 34 - "next.config.mjs"
 Cohesion: 0.25
@@ -308,10 +311,6 @@ Nodes (3): Background Image, ไพ่ (Cards Document), ไพ่หลบโ�
 Cohesion: 0.29
 Nodes (6): 1. Tech Stack, 2. Directory Tree, 3. Core Modules, 4. Data & Control Flow, 5. QA God Mode / Dev Sandbox, ARCHITECTURE
 
-### Community 86 - "dev-sandbox.ts"
-Cohesion: 0.43
-Nodes (6): Card, Character, StandardGameOptions, assignCharacters(), makeCard(), makeCharacter()
-
 ### Community 89 - "ขั้นตอนเปิดใช้"
 Cohesion: 0.22
 Nodes (9): 1. สร้าง Supabase project (ฟรี), 2. Apply migrations, 3. ตั้ง Google OAuth, 4. ใส่ env + เปิด flag, 5. Checklist ทดสอบหลังเปิด, ขั้นตอนเปิดใช้, ขอบเขต/พฤติกรรมที่ตั้งใจ, ภาพรวมสถาปัตยกรรม (+1 more)
@@ -321,8 +320,8 @@ Cohesion: 0.18
 Nodes (10): AI Working Rules, Coding Rules, Core Architecture, Current Development Strategy, Explain Changes, No Silent Rule Changes, Preserve Existing Behavior, Project Overview (+2 more)
 
 ### Community 91 - "dev-sandbox.ts"
-Cohesion: 0.14
-Nodes (26): attachDevHandlers(), devAutoTick(), DevSandboxDeps, dummyGames, dummyTimers, focusedIds(), frozenGames, isTimerFrozen() (+18 more)
+Cohesion: 0.18
+Nodes (21): attachDevHandlers(), devAutoTick(), DevSandboxDeps, dummyGames, dummyTimers, focusedIds(), frozenGames, registerDevSandbox() (+13 more)
 
 ### Community 92 - "Coding Rules"
 Cohesion: 0.18
@@ -336,10 +335,6 @@ Nodes (3): 0. ⚠️ อย่ารัน `npm run build` ตอน dev server 
 Cohesion: 0.20
 Nodes (10): authByGuest, bindAuth(), MatchMeta, observeGame(), recordResult(), unbindAuth(), verifyAccessToken(), WIN_ROLES (+2 more)
 
-### Community 102 - "negate.test.ts"
-Cohesion: 0.52
-Nodes (6): attackCard(), dodgeCard(), drawCard(), healAllCard(), makeCard(), negateCard()
-
 ### Community 103 - "รายละเอียด"
 Cohesion: 0.18
 Nodes (10): 1. สวมรอยผู้เล่น (HIGH) — แก้แล้ว, 2. Payload แปลกๆ ทำ server ล้ม (HIGH) — แก้แล้ว, 3. Rate limiting (MED) — แก้แล้ว, 4. HTTP CORS (MED-LOW) — แก้แล้ว, 5–7. บันทึกไว้ ไม่แก้รอบนี้, 8. Chat / XSS (INFO), Security Review — Socket Gateway (apps/server), รายละเอียด (+2 more)
@@ -349,24 +344,24 @@ Cohesion: 0.25
 Nodes (6): clients, join(), JoinArgs, SessionToken, TestServer, waitFor()
 
 ## Knowledge Gaps
-- **362 isolated node(s):** `name`, `private`, `type`, `dev`, `start` (+357 more)
+- **363 isolated node(s):** `name`, `private`, `type`, `dev`, `start` (+358 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **46 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `card()` connect `index.ts` to `basic-combat.scenarios.ts`?**
-  _High betweenness centrality (0.052) - this node is a cross-community bridge._
-- **Why does `attachDevHandlers()` connect `dev-sandbox.ts` to `index.ts`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
-- **Why does `socket` connect `dev-sandbox.ts` to `index.ts`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `card()` connect `index.ts` to `index.ts`, `package.json`, `page.tsx`?**
+  _High betweenness centrality (0.069) - this node is a cross-community bridge._
+- **Why does `attachDevHandlers()` connect `dev-sandbox.ts` to `index.ts`, `page.tsx`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `socket` connect `page.tsx` to `dev-sandbox.ts`?**
+  _High betweenness centrality (0.057) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `type` to the rest of the system?**
-  _362 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _363 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.11442577030812325 - nodes in this community are weakly interconnected._
-- **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05158324821246169 - nodes in this community are weakly interconnected._
-- **Should `basic-combat.scenarios.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0916838084043491 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11336088154269973 - nodes in this community are weakly interconnected._
+- **Should `page.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.05384615384615385 - nodes in this community are weakly interconnected._
+- **Should `import-cards.mjs` be split into smaller, more focused modules?**
+  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
