@@ -63,6 +63,7 @@ import { CoercePrompt } from "../components/game/CoercePrompt";
 import { HarvestPrompt } from "../components/game/HarvestPrompt";
 import { JudgmentPanel } from "../components/game/JudgmentPanel";
 import { ResponseWindowPanel } from "../components/game/ResponseWindowPanel";
+import { TargetCardPicker } from "../components/game/TargetCardPicker";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -2940,186 +2941,36 @@ export default function Home() {
         )}
 
         {isPlaying && discardTarget && selectedDiscardId && (
-          <div className="modal-backdrop">
-            <section className="card-detail local-target-picker">
-              <h2>เลือกไพ่ของ {charName(discardTarget)}</h2>
-              {!selectedDiscardZone ? (
-                <>
-                  <p>เลือกโซน</p>
-                  <div className="local-equipment-picker">
-                    <button
-                      disabled={!discardTarget.handCount}
-                      onClick={() => setSelectedDiscardZone("hand")}
-                    >
-                      🂠 มือ ({discardTarget.handCount})
-                    </button>
-                    <button
-                      disabled={
-                        !Object.values(discardTarget.equipment).some(Boolean)
-                      }
-                      onClick={() => setSelectedDiscardZone("equipment")}
-                    >
-                      อุปกรณ์
-                    </button>
-                  </div>
-                </>
-              ) : selectedDiscardZone === "hand" ? (
-                <>
-                  <p>เลือกตำแหน่งไพ่บนมือ</p>
-                  <div className="local-equipment-picker">
-                    {Array.from({ length: discardTarget.handCount }, (_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          emit("card:discard-target", {
-                            cardId: selectedDiscardId,
-                            targetId: discardTarget.id,
-                            selection: { zone: "hand", handIndex: i },
-                          });
-                          cancelSelection();
-                        }}
-                      >
-                        🂠 {i + 1}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p>เลือกอุปกรณ์</p>
-                  <div className="local-equipment-picker">
-                    {(
-                      [
-                        { key: "weapon", label: "อาวุธ" },
-                        { key: "armor", label: "เกราะ" },
-                        { key: "offensiveMount", label: "ม้ารุก" },
-                        { key: "defensiveMount", label: "ม้ารับ" },
-                      ] as const
-                    ).map(({ key, label }) => {
-                      const eq = discardTarget.equipment[key];
-                      return eq ? (
-                        <button
-                          key={key}
-                          onClick={() => {
-                            emit("card:discard-target", {
-                              cardId: selectedDiscardId,
-                              targetId: discardTarget.id,
-                              selection: {
-                                zone: "equipment",
-                                cardInstanceId: eq.id,
-                              },
-                            });
-                            cancelSelection();
-                          }}
-                        >
-                          <small>{label}</small>
-                          {eq.name}
-                        </button>
-                      ) : (
-                        <span key={key} className="local-empty-slot">
-                          {label}: ว่าง
-                        </span>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-              <button className="mock-muted-button" onClick={cancelSelection}>
-                ยกเลิก
-              </button>
-            </section>
-          </div>
+          <TargetCardPicker
+            target={discardTarget}
+            zone={selectedDiscardZone}
+            setZone={setSelectedDiscardZone}
+            onPick={(selection) => {
+              emit("card:discard-target", {
+                cardId: selectedDiscardId,
+                targetId: discardTarget.id,
+                selection,
+              });
+              cancelSelection();
+            }}
+            onCancel={cancelSelection}
+          />
         )}
         {isPlaying && stealTarget && selectedStealId && (
-          <div className="modal-backdrop">
-            <section className="card-detail local-target-picker">
-              <h2>เลือกไพ่ของ {charName(stealTarget)}</h2>
-              {!selectedStealZone ? (
-                <>
-                  <p>เลือกโซน</p>
-                  <div className="local-equipment-picker">
-                    <button
-                      disabled={!stealTarget.handCount}
-                      onClick={() => setSelectedStealZone("hand")}
-                    >
-                      🂠 มือ ({stealTarget.handCount})
-                    </button>
-                    <button
-                      disabled={
-                        !Object.values(stealTarget.equipment).some(Boolean)
-                      }
-                      onClick={() => setSelectedStealZone("equipment")}
-                    >
-                      อุปกรณ์
-                    </button>
-                  </div>
-                </>
-              ) : selectedStealZone === "hand" ? (
-                <>
-                  <p>เลือกตำแหน่งไพ่บนมือ</p>
-                  <div className="local-equipment-picker">
-                    {Array.from({ length: stealTarget.handCount }, (_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          emit("card:steal-target", {
-                            cardId: selectedStealId,
-                            targetId: stealTarget.id,
-                            selection: { zone: "hand", handIndex: i },
-                          });
-                          cancelSelection();
-                        }}
-                      >
-                        🂠 {i + 1}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p>เลือกอุปกรณ์</p>
-                  <div className="local-equipment-picker">
-                    {(
-                      [
-                        { key: "weapon", label: "อาวุธ" },
-                        { key: "armor", label: "เกราะ" },
-                        { key: "offensiveMount", label: "ม้ารุก" },
-                        { key: "defensiveMount", label: "ม้ารับ" },
-                      ] as const
-                    ).map(({ key, label }) => {
-                      const eq = stealTarget.equipment[key];
-                      return eq ? (
-                        <button
-                          key={key}
-                          onClick={() => {
-                            emit("card:steal-target", {
-                              cardId: selectedStealId,
-                              targetId: stealTarget.id,
-                              selection: {
-                                zone: "equipment",
-                                cardInstanceId: eq.id,
-                              },
-                            });
-                            cancelSelection();
-                          }}
-                        >
-                          <small>{label}</small>
-                          {eq.name}
-                        </button>
-                      ) : (
-                        <span key={key} className="local-empty-slot">
-                          {label}: ว่าง
-                        </span>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-              <button className="mock-muted-button" onClick={cancelSelection}>
-                ยกเลิก
-              </button>
-            </section>
-          </div>
+          <TargetCardPicker
+            target={stealTarget}
+            zone={selectedStealZone}
+            setZone={setSelectedStealZone}
+            onPick={(selection) => {
+              emit("card:steal-target", {
+                cardId: selectedStealId,
+                targetId: stealTarget.id,
+                selection,
+              });
+              cancelSelection();
+            }}
+            onCancel={cancelSelection}
+          />
         )}
         {confirmSelfDamage && (
           <div
