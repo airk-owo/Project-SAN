@@ -28,10 +28,11 @@ Take the finished game loop to real players: enable persistence/auth in a deploy
 - **All 27 character skills (CHAR001–027) implemented and tested** — active, reactive (event handlers), suit-conversion, loss-triggered, and ally-assist skills. See `packages/game/src/engine/handlers/character-skills.ts`.
 - Engine modularized: `packages/game/src/engine/` (state, actions, setup, turns, view, handlers/) behind a thin `index.ts` router.
 - Automated engine test suite: 308 tests / 86 suites (`npm test -w @wtk/game`, Node test runner via tsx).
-- Gateway test suite (`npm test -w @wtk/server`): boots the real server in-process (`createServer()` in `apps/server/src/server.ts`) and drives it over socket.io-client — lobby flow, host-only guards, session-token identity, rate limit, malformed payloads.
-- GitHub Actions CI (`.github/workflows/ci.yml`): typecheck + both test suites on every push/PR.
+- Gateway test suite (`npm test -w @wtk/server`, 17 tests): boots the real server in-process (`createServer()` in `apps/server/src/server.ts`) and drives it over socket.io-client — lobby flow, host-only guards, session-token identity, rate limit, malformed/oversized payloads, username length cap, dev-sandbox opt-in gating.
+- GitHub Actions CI (`.github/workflows/ci.yml`): typecheck + both test suites + `security` job (gitleaks secret scan over full history, `npm audit --audit-level=high`) on every push/PR; Dependabot opens weekly dependency-update PRs.
 - Gateway security hardening (see `REVIEWS/security-gateway.md`): session tokens against userId spoofing, per-socket rate limiting, payload normalization (crash-proofing), CORS locked to `WEB_ORIGIN`.
-- QA God Mode dev sandbox (hot-seat control, card spawning, character morphing, timer freeze, deck/judgment rigging, state snapshot/load) — dev-only, double-guarded. See `ARCHITECTURE.md` §5.
+- Security foundation pass 2026-07-08: `SECURITY.md` (disclosure policy) + `docs/security-checklist.md` (pre-deploy checklist, handler rules, CSP draft); web security headers + `poweredByHeader:false` (`apps/web/next.config.mjs`); socket.io `maxHttpBufferSize` 100KB + username/roomId length caps; crash safety net (`unhandledRejection`/`uncaughtException` log-and-continue in `apps/server/src/index.ts`); Docker runs as non-root `node` and `.dockerignore` excludes `.env*`.
+- QA God Mode dev sandbox (hot-seat control, card spawning, character morphing, timer freeze, deck/judgment rigging, state snapshot/load) — dev-only, double-guarded **and opt-in via `DEV_SANDBOX=1`** (dev script sets it automatically). See `ARCHITECTURE.md` §5.
 - Supabase Google Auth + player statistics **built but feature-flagged OFF by default** (web `NEXT_PUBLIC_FEATURE_AUTH`, server `FEATURE_AUTH_STATS`; enable procedure in `docs/auth-setup.md`).
 
 ---

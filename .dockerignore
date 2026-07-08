@@ -5,3 +5,8 @@ node_modules
 .git
 *.log
 apps/web/.next
+# ห้าม secret หลุดเข้า image layer (COPY . . จะกวาดทุกอย่างที่ไม่ ignore)
+.env*
+**/.env*
+# ไม่ใช้ตอน runtime — ลดขนาด image (data/generated ต้องคงไว้ server โหลดตอนรัน)
+graphify-out

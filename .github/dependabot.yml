@@ -1,0 +1,15 @@
+# อัปเดต dependency อัตโนมัติรายสัปดาห์ — PR จะผ่าน CI (typecheck + เทสต์ + audit) ก่อน merge เสมอ
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      # รวม minor/patch เป็น PR เดียวต่อสัปดาห์ ลด noise; major แยก PR ให้รีวิวเอง
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

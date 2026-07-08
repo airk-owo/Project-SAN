@@ -1,5 +1,6 @@
 // เทสต์ gateway จริง: บูต createServer บนพอร์ต 0 แล้วยิงผ่าน socket.io-client
-// ครอบคลุม lobby flow, identity/session token, rate limit และ payload แปลกๆ
+// ครอบคลุม lobby flow, identity/session token, rate limit, payload แปลกๆ/ใหญ่เกิน,
+// ความยาว username และ DEV_SANDBOX opt-in ของ QA sandbox
 // (logic ในเกมลึกๆ มีเทสต์ engine ครอบอยู่แล้วใน packages/game)
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -179,5 +180,58 @@ describe('gateway hardening', () => {
   const throttled = errors.filter(message => message.includes('ส่งคำสั่งถี่เกินไป'));
   assert.equal(throttled.length, 1, 'ต้องมีคำเตือน rate limit ครั้งเดียว');
   assert.ok(errors.length < 40, `บาง packet ต้องถูก drop (ได้ ${errors.length}/40)`);
+ });
+ it('username ยาวเกินถูกตัดเหลือ 32 ตัวอักษรตอน join', async () => {
+  const room = newRoom();
+  const client = await connect();
+  const { state } = await join(client, { gameId: room, username: 'ย'.repeat(200), userId: 'user-longname' });
+  const players = state.players as { id: string; username: string }[];
+  const spectators = state.spectators as { id: string; username: string }[];
+  const me = [...players, ...spectators].find(member => member.id === 'user-longname');
+  assert.equal(me?.username.length, 32);
+ });
+ it('payload ใหญ่เกิน 100KB → socket โดนตัด แต่ server ไม่ล้ม', async () => {
+  const client = await connect();
+  const disconnected = waitFor<string>(client, 'disconnect');
+  client.emit('chat:send', { gameId: 'nowhere', text: 'x'.repeat(150_000) });
+  await disconnected; // เกิน maxHttpBufferSize → server ตัดการเชื่อมต่อทันที
+  const res = await fetch(`${baseUrl}/health`);
+  assert.equal(res.status, 200); // server ยังมีชีวิตอยู่
+ });
+ // QA sandbox ต้อง opt-in ด้วย DEV_SANDBOX=1 — probe ผ่าน ack ของ dev:export-snapshot
+ // (ไม่มี handler = ack ไม่ถูกเรียกเลย ต่างจากตอบ error)
+ it('dev:* ปิดโดย default เมื่อไม่ตั้ง DEV_SANDBOX', async () => {
+  const room = newRoom();
+  const client = await connect();
+  await join(client, { gameId: room, username: 'คิวเอ', userId: 'user-sandbox-off' });
+  const ackResult = await new Promise<unknown>(resolve => {
+   const timer = setTimeout(() => resolve('เงียบ'), 700);
+   timer.unref();
+   client.emit('dev:export-snapshot', { gameId: room }, (snapshot: unknown) => { clearTimeout(timer); resolve(snapshot); });
+  });
+  assert.equal(ackResult, 'เงียบ', 'sandbox ต้องไม่ตอบอะไรเลยเมื่อไม่ได้ opt-in');
+ });
+ it('ตั้ง DEV_SANDBOX=1 → dev handlers ทำงาน (opt-in)', async () => {
+  process.env.DEV_SANDBOX = '1';
+  const devServer = await createServer();
+  try {
+   await new Promise<void>(resolve => devServer.httpServer.listen(0, resolve));
+   const { port } = devServer.httpServer.address() as AddressInfo;
+   const client = ioc(`http://127.0.0.1:${port}`, { transports: ['websocket'], forceNew: true });
+   clients.push(client);
+   await new Promise<void>((resolve, reject) => { client.once('connect', () => resolve()); client.once('connect_error', reject); });
+   const room = newRoom();
+   await join(client, { gameId: room, username: 'คิวเอ', userId: 'user-sandbox-on' });
+   const snapshot = await new Promise<unknown>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('sandbox เปิดอยู่แต่ dev:export-snapshot ไม่ตอบ ack')), 2000);
+    timer.unref();
+    client.emit('dev:export-snapshot', { gameId: room }, (payload: unknown) => { clearTimeout(timer); resolve(payload); });
+   });
+   assert.ok(snapshot && typeof snapshot === 'object', 'ต้องได้ snapshot กลับมา');
+   client.disconnect();
+  } finally {
+   delete process.env.DEV_SANDBOX;
+   await devServer.close();
+  }
  });
 });

@@ -11,6 +11,7 @@
 1. [ai-working-rules.md](ai-working-rules.md) — กติกาบังคับ (server-authoritative, ห้ามเปลี่ยนกติกาเกมเอง, ขอบเขตของแต่ละโฟลเดอร์)
 2. [current-status.md](current-status.md) — สถานะปัจจุบันว่าอะไรเสร็จ/ไม่เสร็จ
 3. `ARCHITECTURE.md` (root) — เอกสาร onboarding ที่ละเอียดที่สุด (tech stack, โครงสร้าง, data flow, QA sandbox)
+4. [security-checklist.md](security-checklist.md) — **อ่านก่อนแตะ `apps/server` หรือก่อน deploy**: กติกาเขียน handler ให้ปลอดภัย + checklist env ก่อนปล่อยของจริง
 
 การค้นโค้ด: ใช้ `graphify query "<คำถาม>"` ก่อน grep/อ่านไฟล์ดิบ (กติกาอยู่ใน `CLAUDE.md` root และมี hook ใน `.claude/settings.json` คอยเตือน) — ได้ subgraph ที่แคบกว่าและเห็น cross-file relationships
 
@@ -25,7 +26,7 @@ npm test -w @wtk/game    # เทสต์ engine (Node test runner ผ่าน
 npm test -w @wtk/server  # เทสต์ gateway — บูต server จริงบนพอร์ต 0 แล้วยิงผ่าน socket.io-client
 ```
 
-มี CI แล้ว (`.github/workflows/ci.yml`): ทุก push/PR จะรัน check + เทสต์ทั้งสองชุดบน GitHub Actions อัตโนมัติ
+มี CI แล้ว (`.github/workflows/ci.yml`): ทุก push/PR จะรัน check + เทสต์ทั้งสองชุด + job `security` (gitleaks สแกน secret ทั้ง history และ `npm audit --audit-level=high`) บน GitHub Actions อัตโนมัติ; Dependabot เปิด PR อัปเดต dependency รายสัปดาห์
 
 โครง server: `apps/server/src/server.ts` คือตัวจริง (`createServer()` — express + socket.io + handlers ทั้งหมด คืน `close()` สำหรับเทสต์), `index.ts` เป็นแค่ entry ที่เรียก `listen` — เพิ่ม handler ใหม่ที่ server.ts และเพิ่มเทสต์ใน `server.test.ts`
 
@@ -96,7 +97,7 @@ npm test -w @wtk/server  # เทสต์ gateway — บูต server จร�
 
 ## 8. QA God Mode (dev sandbox)
 
-เครื่องมือเทสต์เกมด้วยมือ — hot-seat ควบคุมทุกที่นั่ง, เสกการ์ด, เปลี่ยนตัวละคร, freeze timer, rig สำรับ/judgment, snapshot/load state ถูก guard สองชั้นไม่ให้หลุดไป production รายละเอียดใน `ARCHITECTURE.md` §5
+เครื่องมือเทสต์เกมด้วยมือ — hot-seat ควบคุมทุกที่นั่ง, เสกการ์ด, เปลี่ยนตัวละคร, freeze timer, rig สำรับ/judgment, snapshot/load state ถูก guard สองชั้นไม่ให้หลุดไป production และเป็น **opt-in**: เปิดเฉพาะเมื่อ `DEV_SANDBOX=1` (dev script ของ `@wtk/server` ตั้งให้อัตโนมัติ — รันผ่าน `npm run dev` ใช้ได้เหมือนเดิม; รัน server เองต้องตั้ง env นี้ด้วยถ้าอยากใช้ sandbox) รายละเอียดใน `ARCHITECTURE.md` §5
 
 ---
 

@@ -13,7 +13,7 @@
 | 4 | MED-LOW | HTTP CORS เปิดทุก origin (ไม่ตรงกับ socket.io ที่จำกัด WEB_ORIGIN) | ✅ แก้แล้ว |
 | 5 | LOW | room code มาจาก client — เดา/ไล่ชื่อห้องได้, ไม่มีรหัสผ่านห้อง | 📋 บันทึกไว้ (backlog เดิม) |
 | 6 | LOW | `/rooms` เผย room id + ชื่อ host สาธารณะ | 📋 ยอมรับ (จำเป็นสำหรับ room browser) |
-| 7 | LOW | dev sandbox (QA God Mode) พึ่ง `NODE_ENV` อย่างเดียว | 📋 บันทึกไว้ — Docker ครอบแล้ว |
+| 7 | LOW | dev sandbox (QA God Mode) พึ่ง `NODE_ENV` อย่างเดียว | ✅ แก้แล้ว (2026-07-08 รอบ 2) — ต้อง opt-in `DEV_SANDBOX=1` |
 | 8 | INFO | chat XSS | ✅ ปลอดภัยอยู่แล้ว (React escape, ไม่มี dangerouslySetInnerHTML) |
 
 ## รายละเอียด
@@ -39,7 +39,7 @@ Token bucket ต่อ socket ใน middleware เดียวกัน: burst 
 ### 5–7. บันทึกไว้ ไม่แก้รอบนี้
 - **Room code จาก client**: ห้องถูกสร้างจากชื่อที่ client พิมพ์ → ห้องชื่อง่ายๆ ("test", "1234") โดนคนแปลกหน้า join ได้ ทางแก้จริงคือรหัสผ่านห้อง/room code ที่ server สุ่ม — อยู่ใน `docs/next-tasks.md` แล้ว
 - **`/rooms` เผยชื่อ host + สถานะห้อง**: จำเป็นสำหรับ room browser ในหน้า lobby ยอมรับได้ ระวังอย่าเพิ่มข้อมูลลับใน endpoint นี้ (`rooms()` ใน server.ts เลือก field ชัดเจนอยู่แล้ว — ไม่มี roles/hands)
-- **Dev sandbox**: guard 2 ชั้นแต่ทั้งคู่คือ `NODE_ENV !== 'production'` — Dockerfile ตั้ง `ENV NODE_ENV=production` แล้ว ✅ แต่ถ้า deploy นอก Docker ต้องไม่ลืมตั้งเอง มิฉะนั้น dev:* handlers (เสกการ์ด/แก้ HP/สลับตัว) เปิดสู่สาธารณะ
+- ~~**Dev sandbox**: guard 2 ชั้นแต่ทั้งคู่คือ `NODE_ENV !== 'production'`~~ → **แก้แล้วรอบ hardening 2026-07-08**: ทั้งสองชั้นต้องการ `DEV_SANDBOX=1` เพิ่มด้วย (fail-safe: ลืมตั้ง env = ปิด) dev script ตั้งให้อัตโนมัติผ่าน cross-env; มีเทสต์คุมทั้งฝั่งปิด default และฝั่ง opt-in
 
 ### 8. Chat / XSS (INFO)
 ข้อความ chat ถูกตัดที่ 500 ตัวอักษรฝั่ง server และ render เป็น React text node ล้วน — grep ทั้ง `apps/web` ไม่พบ `dangerouslySetInnerHTML` → escape อัตโนมัติ ปลอดภัย

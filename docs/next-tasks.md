@@ -4,7 +4,7 @@
 
 1. Enable and verify the auth/stats feature end-to-end against a real Supabase project (`docs/auth-setup.md`), then persist rooms, games, and logs.
 2. Deploy a real environment (Docker) and playtest online with real players.
-3. Room browser realtime refresh, room passwords, and host moderation.
+3. Room browser realtime refresh, room passwords (or server-generated room codes — see security backlog in `docs/security-checklist.md` §4), and host moderation.
 4. Reconnect UX polish (mid-game rejoin experience).
 5. Extend the gateway test suite (`apps/server/src/server.test.ts`) into in-game flows: start a 4-player match with the QA freeze-timer, cover turn/skill events end-to-end. (Lobby, identity, and hardening are already covered; CI runs the suite on every push.)
 6. Replay/statistics UI and match history — only after persistence (task 1) is live.

@@ -1,5 +1,6 @@
-// QA God Mode socket layer. registerDevSandbox is only called from index.ts behind a
-// process.env.NODE_ENV !== 'production' guard (and refuses again here as defence in depth).
+// QA God Mode socket layer. registerDevSandbox is only called from server.ts behind an
+// explicit opt-in guard (NODE_ENV !== 'production' AND DEV_SANDBOX === '1') and refuses
+// again here as defence in depth — fail-safe: forgetting the env means OFF, not on.
 // Until registered, `deps` stays null: isTimerFrozen always returns false and devAutoTick is a no-op,
 // so nothing in this module can affect a production game.
 import type { Server, Socket } from 'socket.io';
@@ -118,10 +119,10 @@ function attachDevHandlers(socket: Socket) {
  });
 }
 
-/** Wires the QA sandbox. Call only behind a NODE_ENV guard; refuses by itself in production as defence in depth. */
+/** Wires the QA sandbox. Requires explicit DEV_SANDBOX=1 opt-in (and never in production) — re-checked here as defence in depth. */
 export function registerDevSandbox(dependencies: DevSandboxDeps) {
- if (process.env.NODE_ENV === 'production') return;
+ if (process.env.NODE_ENV === 'production' || process.env.DEV_SANDBOX !== '1') return;
  deps = dependencies;
  dependencies.io.on('connection', socket => attachDevHandlers(socket));
- console.log('⚠️  QA dev sandbox enabled (dev:* socket handlers active) — set NODE_ENV=production to disable');
+ console.log('⚠️  QA dev sandbox enabled (dev:* socket handlers active) — เปิดเพราะ DEV_SANDBOX=1; ห้ามตั้งบน production');
 }

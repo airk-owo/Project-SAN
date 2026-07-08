@@ -60,12 +60,12 @@ Server-authoritative online play, plus an offline **local** mode that runs the s
 
 ## 5. QA God Mode / Dev Sandbox
 Dev-only tooling for driving a game into arbitrary states by hand instead of playing through them, so testers can reach and re-test any board/skill/judgment situation on demand. Two independent guards keep it out of production, so a misconfigured build can't leak it:
-- `registerDevSandbox` (backend) and `DebugSandboxPanel` (frontend) are each called/mounted from their host only behind `process.env.NODE_ENV !== "production"`.
-- Both also refuse a second time internally — `registerDevSandbox` returns immediately if `NODE_ENV === 'production'`, and `DebugSandboxPanel` renders `null` in production — so even a stray import can't activate them.
+- Backend: the sandbox is **opt-in** — `registerDevSandbox` is called from `server.ts` only when `NODE_ENV !== 'production'` **and** `DEV_SANDBOX === '1'` (the `@wtk/server` dev script sets it via cross-env). Forgetting the env means OFF, not on. Frontend: `DebugSandboxPanel` is mounted only behind `process.env.NODE_ENV !== "production"`.
+- Both also refuse a second time internally — `registerDevSandbox` re-checks both conditions and returns, and `DebugSandboxPanel` renders `null` in production — so even a stray import can't activate them. Both sides of the guard are covered by gateway tests (`server.test.ts`).
 
 **Backend:**
 - `packages/game/src/engine/handlers/dev-sandbox.ts` — pure `GameState` mutations (`devSpawnCard`, `devSetCharacter`, `devSetHp`, `devInsertTopDeck`, `devForceJudgment`, `devSnapshot`, `devLoadSnapshot`). No env access here; every mutation ends in `synchronizeGameState` so draw/discard mirrors and skill reconciliation stay coherent before broadcast.
-- `apps/server/src/dev-sandbox.ts` — the socket layer. `registerDevSandbox(deps)` is called once from `apps/server/src/index.ts` behind the `NODE_ENV` guard and wires `dev:*` handlers (below) onto every connecting socket. It also exports `isTimerFrozen(gameId)` and `devAutoTick(game)`, which `index.ts`'s `refreshTimeout` and `emitGame` call unconditionally on every game — until `registerDevSandbox` actually runs, the module's internal `deps` stays `null`, so both are no-ops and a production server is unaffected even though the imports are always present.
+- `apps/server/src/dev-sandbox.ts` — the socket layer. `registerDevSandbox(deps)` is called once from `apps/server/src/server.ts` behind the `NODE_ENV` + `DEV_SANDBOX=1` guard and wires `dev:*` handlers (below) onto every connecting socket. It also exports `isTimerFrozen(gameId)` and `devAutoTick(game)`, which `server.ts`'s `refreshTimeout` and `emitGame` call unconditionally on every game — until `registerDevSandbox` actually runs, the module's internal `deps` stays `null`, so both are no-ops and a production server is unaffected even though the imports are always present.
 
 **Frontend:**
 - `apps/web/components/DebugSandboxPanel.tsx` — a floating, draggable, collapsible panel (position/open-state persisted to `localStorage`). Talks to the server purely through `dev:*` emits on the socket it's handed.
