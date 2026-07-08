@@ -1,51 +1,21 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
-  createGame,
-  createSeatedPlayer,
-  dealRoles,
-  beginPlayAfterCharacters,
   useDiscardTwoAsAttack,
   respondToAttack,
   playDodge,
   type Card,
-  type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import { makeCard as baseCard, makeStandardGame } from "./test-helpers.js";
 
-const NOW = "2026-01-01T00:00:00.000Z";
-
-const spectator = (id: string): Spectator => ({
-  id,
-  username: id,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-
+// ไฟล์นี้ default ♠ (ต่างจาก helper กลาง ♥)
 const makeCard = (
   id: string,
   effect: string,
   cardType: string = "basic",
   extra: Partial<Card> = {},
-): Card => ({
-  id,
-  name: id,
-  type: cardType,
-  cardType: cardType as Card["cardType"],
-  suit: "♠",
-  number: "K",
-  image: null,
-  description: null,
-  effect,
-  effectParams: { damage: 1 },
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: false,
-  conditions: null,
-  ...extra,
-});
+): Card => baseCard(id, effect, cardType, { suit: "♠", ...extra });
 const handCard = (id: string, suit: string = "♠"): Card =>
   makeCard(id, "attack", "basic", { suit });
 const dodgeCard = (id: string): Card => makeCard(id, "dodge", "basic");
@@ -59,35 +29,8 @@ const renwangShield = (id: string): Card =>
     type: "armor",
     equipmentSlot: "armor",
   });
-const makeCharacter = (id: string): Character => ({
-  id,
-  name: id,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
 
-function makePlayingGame(): GameState {
-  const host = spectator("p0");
-  const game = createGame("room1", host, []);
-  game.spectators = [];
-  game.players.push(createSeatedPlayer(host, 1));
-  for (let i = 1; i < 4; i++)
-    game.players.push(createSeatedPlayer(spectator(`p${i}`), i + 1));
-  dealRoles(game, { emperor: 1, rebel: 2, loyalist: 0, traitor: 1 });
-  game.players.forEach((p, i) => {
-    p.character = makeCharacter(`char${i}`);
-    p.confirmedCharacter = true;
-    p.maxHp = 4;
-    p.hp = 4;
-    p.characterOptions = [];
-  });
-  beginPlayAfterCharacters(game, 0);
-  game.turn.phase = "play";
-  game.turn.activePlayerId = "p0";
-  game.hasDrawnThisTurn = true;
-  return game;
-}
+const makePlayingGame = (): GameState => makeStandardGame();
 
 describe("Snake Spear – discard_two_as_attack", () => {
   it("discards both chosen cards and opens an attack-dodge window on the target", () => {
