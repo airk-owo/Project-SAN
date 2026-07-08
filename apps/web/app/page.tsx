@@ -50,6 +50,8 @@ import {
 import { RepeatAttackPrompt } from "../components/game/RepeatAttackPrompt";
 import { DestroyMountPrompt } from "../components/game/DestroyMountPrompt";
 import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePrompt";
+import { IceReplacePrompt } from "../components/game/IceReplacePrompt";
+import { TwinSwordsPrompt } from "../components/game/TwinSwordsPrompt";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -3383,144 +3385,23 @@ export default function Home() {
             setForceDiscardRefs={setForceDiscardRefs}
           />
         )}
-        {isPlaying &&
-          game.pendingReplaceDamage &&
-          game.pendingReplaceDamage.attackerId === game.viewerId &&
-          (() => {
-            const target = game.players.find(
-              (p) => p.id === game.pendingReplaceDamage!.targetId,
-            );
-            if (!target) return null;
-            const has = (s: IceSelection) =>
-              iceSelections.some(
-                (x) =>
-                  x.zone === s.zone &&
-                  (x.zone === "hand"
-                    ? x.handIndex === (s as { handIndex: number }).handIndex
-                    : x.cardInstanceId ===
-                      (s as { cardInstanceId: string }).cardInstanceId),
-              );
-            const toggle = (s: IceSelection) =>
-              setIceSelections((cur) =>
-                has(s)
-                  ? cur.filter(
-                      (x) =>
-                        !(
-                          x.zone === s.zone &&
-                          (x.zone === "hand"
-                            ? x.handIndex ===
-                              (s as { handIndex: number }).handIndex
-                            : x.cardInstanceId ===
-                              (s as { cardInstanceId: string }).cardInstanceId)
-                        ),
-                    )
-                  : cur.length < 2
-                    ? [...cur, s]
-                    : cur,
-              );
-            const equipEntries = (
-              [
-                { key: "weapon", label: "อาวุธ" },
-                { key: "armor", label: "เกราะ" },
-                { key: "offensiveMount", label: "ม้ารุก" },
-                { key: "defensiveMount", label: "ม้ารับ" },
-              ] as const
-            )
-              .map(({ key, label }) => ({ card: target.equipment[key], label }))
-              .filter((e) => e.card);
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  {game.pendingReplaceDamage!.weaponName}: ทิ้งไพ่ของ{" "}
-                  {charName(target)} 1–2 ใบ แทนที่จะสร้างความเสียหายหรือไม่?
-                </b>
-                {countdownBadge}
-                <div className="local-force-cards">
-                  {Array.from({ length: target.handCount }, (_, i) => {
-                    const s: IceSelection = { zone: "hand", handIndex: i };
-                    return (
-                      <button
-                        key={`h${i}`}
-                        className={has(s) ? "selected-card" : ""}
-                        onClick={() => toggle(s)}
-                      >
-                        🂠 {i + 1}
-                      </button>
-                    );
-                  })}
-                  {equipEntries.map(({ card, label }) => {
-                    const s: IceSelection = {
-                      zone: "equipment",
-                      cardInstanceId: card!.id,
-                    };
-                    return (
-                      <button
-                        key={card!.id}
-                        className={has(s) ? "selected-card" : ""}
-                        onClick={() => toggle(s)}
-                      >
-                        {label}: {card!.name}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div>
-                  <button
-                    disabled={iceSelections.length < 1}
-                    onClick={() => {
-                      emit("ice:replace", { selections: iceSelections });
-                      setIceSelections([]);
-                    }}
-                  >
-                    ทิ้งไพ่ ({iceSelections.length}/2)
-                  </button>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => {
-                      emit("ice:decline");
-                      setIceSelections([]);
-                    }}
-                  >
-                    ให้เสียเลือดตามปกติ
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingTwinSwords &&
-          game.pendingTwinSwords.targetId === game.viewerId &&
-          (() => {
-            const attacker = game.players.find(
-              (p) => p.id === game.pendingTwinSwords!.attackerId,
-            );
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  {charName(attacker)} ใช้ {game.pendingTwinSwords!.weaponName}{" "}
-                  — เลือกทิ้งไพ่บนมือ 1 ใบ หรือให้ผู้โจมตีจั่ว 1 ใบ
-                </b>
-                {countdownBadge}
-                <div className="local-force-cards">
-                  {myPlayer?.hand.map((c) => (
-                    <button
-                      key={c.id}
-                      onClick={() => emit("twin:discard", { cardId: c.id })}
-                    >
-                      ทิ้ง {c.name} ({c.number}
-                      {suitTx(c.suit)})
-                    </button>
-                  ))}
-                </div>
-                <button
-                  className="mock-muted-button"
-                  onClick={() => emit("twin:draw")}
-                >
-                  ให้ผู้โจมตีจั่ว 1 ใบ
-                </button>
-              </section>
-            );
-          })()}
+        {isPlaying && (
+          <IceReplacePrompt
+            game={game}
+            emit={emit}
+            countdown={countdownBadge}
+            iceSelections={iceSelections}
+            setIceSelections={setIceSelections}
+          />
+        )}
+        {isPlaying && (
+          <TwinSwordsPrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+          />
+        )}
         {isPlaying &&
           game.pendingFankui &&
           game.pendingFankui.playerId === game.viewerId &&
