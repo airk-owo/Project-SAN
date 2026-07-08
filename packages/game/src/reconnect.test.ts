@@ -4,22 +4,11 @@ import {
   createGame,
   createSeatedPlayer,
   type GameState,
-  type Spectator,
 } from "./index.js";
-
-// ────────────────────────────────────────────────────────
-// Test fixtures
-// ────────────────────────────────────────────────────────
-
-const NOW = "2026-01-01T00:00:00.000Z";
-
-const spectator = (id: string, username: string): Spectator => ({
-  id,
-  username,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
+import {
+  makeSpectator as spectator,
+  TEST_NOW as NOW,
+} from "./test-helpers.js";
 
 function allMembers(game: GameState) {
   return [...game.players, ...game.spectators];

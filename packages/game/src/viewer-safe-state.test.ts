@@ -8,47 +8,23 @@ import {
   type Card,
   type Character,
   type GameState,
-  type Spectator,
 } from "./index.js";
+import {
+  makeCard as baseCard,
+  makeCharacter as baseCharacter,
+  makeSpectator as spectator,
+  TEST_NOW as NOW,
+} from "./test-helpers.js";
 
 // ────────────────────────────────────────────────────────
 // Test fixtures
 // ────────────────────────────────────────────────────────
 
-const NOW = "2026-01-01T00:00:00.000Z";
+const makeCard = (id: string): Card =>
+  baseCard(id, "attack", "basic", { number: "7", createsResponseWindow: true });
 
-const spectator = (id: string, username: string): Spectator => ({
-  id,
-  username,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
-
-const makeCard = (id: string): Card => ({
-  id,
-  name: id,
-  type: "basic",
-  cardType: "basic",
-  suit: "♥",
-  number: "7",
-  image: null,
-  description: null,
-  effect: "attack",
-  effectParams: { damage: 1 },
-  triggerTiming: "on_play",
-  equipmentSlot: null,
-  createsResponseWindow: true,
-  conditions: null,
-});
-
-const makeCharacter = (id: string, name: string): Character => ({
-  id,
-  name,
-  hp: 4,
-  faction: "test",
-  skills: [],
-});
+const makeCharacter = (id: string, name: string): Character =>
+  baseCharacter(id, { name });
 
 /**
  * Build a game with `count` seated players and deal roles.

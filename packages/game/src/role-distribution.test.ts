@@ -10,22 +10,12 @@ import {
   type Character,
   type GameState,
   type RoleComposition,
-  type Spectator,
 } from "./index.js";
+import { makeSpectator as spectator } from "./test-helpers.js";
 
 // ────────────────────────────────────────────────────────
 // Test fixtures
 // ────────────────────────────────────────────────────────
-
-const NOW = "2026-01-01T00:00:00.000Z";
-
-const spectator = (id: string, username: string): Spectator => ({
-  id,
-  username,
-  connectionStatus: "online",
-  joinedAt: NOW,
-  lastSeenAt: NOW,
-});
 
 const character = (id: string, name: string, hp = 4): Character => ({
   id,
