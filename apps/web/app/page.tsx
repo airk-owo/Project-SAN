@@ -64,6 +64,7 @@ import { HarvestPrompt } from "../components/game/HarvestPrompt";
 import { JudgmentPanel } from "../components/game/JudgmentPanel";
 import { ResponseWindowPanel } from "../components/game/ResponseWindowPanel";
 import { TargetCardPicker } from "../components/game/TargetCardPicker";
+import { WinnerScreen } from "../components/game/WinnerScreen";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -1299,63 +1300,15 @@ export default function Home() {
         }
       >
         {navPanels}
-        {game.winner &&
-          (() => {
-            const label =
-              game.winner === "traitor"
-                ? "คนทรยศชนะ"
-                : game.winner === "rebels"
-                  ? "กบฏชนะ"
-                  : "จักรพรรดิและผู้ภักดีชนะ";
-            const me = game.players.find((p) => p.id === game.viewerId);
-            const iWin =
-              !!me &&
-              ((game.winner === "traitor" && me.role === "traitor") ||
-                (game.winner === "rebels" && me.role === "rebel") ||
-                (game.winner === "emperor_loyalists" &&
-                  (me.role === "emperor" || me.role === "loyalist")));
-            return (
-              <div className="modal-backdrop local-endgame">
-                <section className="local-endgame-card">
-                  <h1 className="local-endgame-title">🏆 {label}</h1>
-                  {me && (
-                    <p className={`local-endgame-you ${iWin ? "win" : "lose"}`}>
-                      {iWin ? "🎉 คุณชนะ!" : "😔 คุณพ่ายแพ้"}
-                    </p>
-                  )}
-                  <div className="local-endgame-roles">
-                    {[...game.players]
-                      .sort((a, b) => a.seatIndex - b.seatIndex)
-                      .map((p) => (
-                        <div
-                          key={p.id}
-                          className={`local-endgame-row local-role-${p.role || "unknown"}`}
-                        >
-                          <b>{p.username}</b>
-                          <span>
-                            {p.character?.name ? `${p.character.name} · ` : ""}
-                            {ROLE_LABEL[p.role || ""] || p.role || "—"}
-                          </span>
-                          <small>{p.alive ? "✅ รอด" : "💀 ตาย"}</small>
-                        </div>
-                      ))}
-                  </div>
-                  <div className="mock-response-actions">
-                    <button
-                      onClick={() => {
-                        emit("room:leave");
-                        setGame(undefined);
-                        setJoinedRoom("");
-                        loadRooms();
-                      }}
-                    >
-                      ออกจากห้อง
-                    </button>
-                  </div>
-                </section>
-              </div>
-            );
-          })()}
+        <WinnerScreen
+          game={game}
+          onLeave={() => {
+            emit("room:leave");
+            setGame(undefined);
+            setJoinedRoom("");
+            loadRooms();
+          }}
+        />
         {error && (
           <div
             className="local-warn-overlay"
