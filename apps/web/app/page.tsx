@@ -52,6 +52,13 @@ import { DestroyMountPrompt } from "../components/game/DestroyMountPrompt";
 import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePrompt";
 import { IceReplacePrompt } from "../components/game/IceReplacePrompt";
 import { TwinSwordsPrompt } from "../components/game/TwinSwordsPrompt";
+import { FankuiPrompt } from "../components/game/FankuiPrompt";
+import { LegacyPrompt } from "../components/game/LegacyPrompt";
+import { RetaliateJudgmentPrompt } from "../components/game/RetaliateJudgmentPrompt";
+import { RetaliatePrompt } from "../components/game/RetaliatePrompt";
+import { DischordPrompt } from "../components/game/DischordPrompt";
+import { AllyAssistPrompt } from "../components/game/AllyAssistPrompt";
+import { PeekPrompt } from "../components/game/PeekPrompt";
 
 export default function Home() {
   const [game, setGame] = useState<Game | undefined>();
@@ -3402,379 +3409,49 @@ export default function Home() {
             countdown={countdownBadge}
           />
         )}
-        {isPlaying &&
-          game.pendingFankui &&
-          game.pendingFankui.playerId === game.viewerId &&
-          (() => {
-            const damager = game.players.find(
-              (p) => p.id === game.pendingFankui!.damagerId,
-            );
-            if (!damager) return null;
-            const equipEntries = (
-              [
-                { key: "weapon", label: "อาวุธ" },
-                { key: "armor", label: "เกราะ" },
-                { key: "offensiveMount", label: "ม้ารุก" },
-                { key: "defensiveMount", label: "ม้ารับ" },
-              ] as const
-            )
-              .map(({ key, label }) => ({
-                card: damager.equipment[key],
-                label,
-              }))
-              .filter((e) => e.card);
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>🎯 กลยุทธ์โต้กลับ: หยิบไพ่ 1 ใบจาก {charName(damager)}</b>
-                {countdownBadge}
-                <div className="local-force-cards">
-                  {Array.from({ length: damager.handCount }, (_, i) => (
-                    <button
-                      key={`h${i}`}
-                      onClick={() =>
-                        emit("fankui:take", {
-                          selection: { zone: "hand", handIndex: i },
-                        })
-                      }
-                    >
-                      🂠 {i + 1}
-                    </button>
-                  ))}
-                  {equipEntries.map(({ card, label }) => (
-                    <button
-                      key={card!.id}
-                      onClick={() =>
-                        emit("fankui:take", {
-                          selection: {
-                            zone: "equipment",
-                            cardInstanceId: card!.id,
-                          },
-                        })
-                      }
-                    >
-                      {label}: {card!.name}
-                    </button>
-                  ))}
-                </div>
-                <button
-                  className="mock-muted-button"
-                  onClick={() => emit("fankui:decline")}
-                >
-                  ไม่ใช้
-                </button>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingLegacy &&
-          (() => {
-            const isOwner = game.pendingLegacy!.ownerId === game.viewerId;
-            const owner = game.players.find(
-              (p) => p.id === game.pendingLegacy!.ownerId,
-            );
-            if (!isOwner)
-              return (
-                <section className="mock-response" role="dialog">
-                  <span className="mock-response-icon">📜</span>
-                  {countdownBadge}
-                  <div>
-                    <h2>คำสั่งเสีย</h2>
-                    <p>
-                      กำลังรอ {owner?.username ?? "ผู้เล่น"} มอบไพ่ให้ผู้เล่น…
-                    </p>
-                  </div>
-                </section>
-              );
-            const cards = game.pendingLegacy!.cards;
-            return (
-              <section className="mock-response local-legacy" role="dialog">
-                <span className="mock-response-icon">📜</span>
-                {countdownBadge}
-                <div className="local-legacy-body">
-                  <h2>คำสั่งเสีย — มอบไพ่ให้ผู้เล่น</h2>
-                  <p>เลือกผู้รับของแต่ละใบ (ใบบนสุดจั่วก่อน)</p>
-                  <div className="local-legacy-list">
-                    {cards.map((c) => (
-                      <div key={c.id} className="local-legacy-row">
-                        <b
-                          className={`local-legacy-card local-suit-${suitColor(c.suit)}`}
-                        >
-                          {c.name} · {c.number}
-                          {suitTx(c.suit)}
-                        </b>
-                        <div className="local-legacy-targets">
-                          {game.players
-                            .filter((p) => p.alive)
-                            .map((p) => (
-                              <button
-                                key={p.id}
-                                onClick={() =>
-                                  emit("legacy:assign", {
-                                    cardId: c.id,
-                                    targetId: p.id,
-                                  })
-                                }
-                              >
-                                {p.username}
-                                {p.id === game.viewerId ? " (ตัวเอง)" : ""}
-                              </button>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingRetaliateJudgment &&
-          (() => {
-            const owner = game.players.find(
-              (p) => p.id === game.pendingRetaliateJudgment!.ownerId,
-            );
-            const damager = game.players.find(
-              (p) => p.id === game.pendingRetaliateJudgment!.damagerId,
-            );
-            const isOwner =
-              game.pendingRetaliateJudgment!.ownerId === game.viewerId;
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  🩸 ย้อนรอยศัตรู
-                  {isOwner ? "" : ` — ${owner?.username ?? "ผู้เล่น"}`}
-                </b>
-                {countdownBadge}
-                {isOwner ? (
-                  <>
-                    <p>
-                      เปิดไพ่ตัดสินเอง — ถ้าไม่ใช่ ♥ ผู้ทำดาเมจ (
-                      {damager?.username ?? "ผู้เล่น"}) ต้องทิ้งไพ่ 2 ใบ
-                      หรือรับความเสียหาย 1 หน่วย
-                    </p>
-                    <div className="mock-response-actions">
-                      <button onClick={() => emit("retaliate:reveal")}>
-                        🎴 เปิดไพ่ตัดสิน
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <p>
-                    กำลังรอ {owner?.username ?? "ผู้เล่น"} เปิดไพ่ตัดสิน
-                    ย้อนรอยศัตรู…
-                  </p>
-                )}
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingRetaliate &&
-          game.pendingRetaliate.damagerId === game.viewerId &&
-          (() => {
-            const victim = game.players.find(
-              (p) => p.id === game.pendingRetaliate!.victimId,
-            );
-            const toggle = (id: string) =>
-              setRetaliateCards((prev) =>
-                prev.includes(id)
-                  ? prev.filter((x) => x !== id)
-                  : prev.length < 2
-                    ? [...prev, id]
-                    : prev,
-              );
-            const canDiscard = (myPlayer?.hand.length ?? 0) >= 2;
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  🩸 คุณถูกสกิล ย้อนรอยศัตรู ของ {victim?.username ?? "ผู้เล่น"}{" "}
-                  — ทิ้งไพ่บนมือ 2 ใบ หรือรับความเสียหาย 1 หน่วย
-                </b>
-                {countdownBadge}
-                {canDiscard && (
-                  <div className="local-force-cards">
-                    {myPlayer?.hand.map((c) => (
-                      <button
-                        key={c.id}
-                        className={
-                          retaliateCards.includes(c.id) ? "selected-card" : ""
-                        }
-                        onClick={() => toggle(c.id)}
-                      >
-                        {c.name} ({c.number}
-                        {suitTx(c.suit)})
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <div className="mock-response-actions">
-                  {canDiscard && (
-                    <button
-                      disabled={retaliateCards.length !== 2}
-                      onClick={() => {
-                        emit("retaliate:discard", { cardIds: retaliateCards });
-                        setRetaliateCards([]);
-                      }}
-                    >
-                      ทิ้งไพ่ 2 ใบ ({retaliateCards.length}/2)
-                    </button>
-                  )}
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => {
-                      emit("retaliate:damage");
-                      setRetaliateCards([]);
-                    }}
-                  >
-                    รับความเสียหาย 1 หน่วย
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingDischord &&
-          game.pendingDischord.targetId === game.viewerId &&
-          (() => {
-            const jiuyi = game.players.find(
-              (p) => p.id === game.pendingDischord!.jiuyiId,
-            );
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  🎴 บาดหมาง จาก {charName(jiuyi)}: เลือก 1 ดอกไพ่
-                  (ทายผิดดอกที่หยิบได้ = เสีย 1 HP แต่ได้ไพ่ใบนั้น)
-                </b>
-                {countdownBadge}
-                <div className="mock-response-actions">
-                  {["♠", "♥", "♦", "♣"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => emit("dischord:suit", { suit: s })}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingAllyAssist &&
-          game.pendingAllyAssist.allyId === game.viewerId &&
-          (() => {
-            const pa = game.pendingAllyAssist!;
-            const emperor = game.players.find((p) => p.id === pa.emperorId);
-            const need = pa.kind;
-            const card = myPlayer?.hand.find((c) => c.effect === need);
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  👑 {charName(emperor)} ขอให้คุณใช้{" "}
-                  {need === "attack" ? "โจมตี" : "หลบ"} แทน
-                  {pa.targetId
-                    ? ` (เป้าหมาย ${charName(game.players.find((p) => p.id === pa.targetId))})`
-                    : ""}
-                </b>
-                {countdownBadge}
-                <div className="mock-response-actions">
-                  <button
-                    disabled={!card}
-                    onClick={() =>
-                      card && emit("ally:assist", { cardId: card.id })
-                    }
-                  >
-                    {card
-                      ? `${need === "attack" ? "⚔ ใช้ โจมตี" : "🛡 ใช้ หลบ"} แทน`
-                      : `ไม่มีไพ่${need === "attack" ? "โจมตี" : "หลบ"}`}
-                  </button>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => emit("ally:decline")}
-                  >
-                    ปฏิเสธ
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
-        {isPlaying &&
-          game.pendingPeek &&
-          game.pendingPeek.playerId === game.viewerId &&
-          (() => {
-            const cards = game.pendingPeek.cards;
-            const toggle = (id: string) =>
-              setPeekOrder((prev) =>
-                prev.includes(id)
-                  ? prev.filter((x) => x !== id)
-                  : [...prev, id],
-              );
-            const unselected = cards.filter((c) => !peekOrder.includes(c.id));
-            const bottomIds = unselected.map((c) => c.id);
-            const ordered = [
-              ...peekOrder
-                .map((id) => cards.find((c) => c.id === id))
-                .filter((c): c is Card => !!c),
-              ...unselected,
-            ];
-            return (
-              <section className="local-repeat-attack" role="dialog">
-                <b>
-                  🔮 หยั่งรู้ฟ้าดิน — จัดลำดับกองจั่ว (บนลงล่าง ·
-                  ใบบนสุดจั่วก่อน)
-                </b>
-                <small className="local-peek-hint">
-                  กดไพ่เพื่อเลื่อนขึ้นกลุ่ม “บน” ตามลำดับที่กด ·
-                  ใบที่ไม่ได้กดจะไหลลงล่าง
-                </small>
-                {countdownBadge}
-                <div className="local-force-cards local-peek-list">
-                  {ordered.map((c, i) => {
-                    const sel = peekOrder.includes(c.id);
-                    return (
-                      <button
-                        key={c.id}
-                        className={sel ? "selected-card" : ""}
-                        onClick={() => toggle(c.id)}
-                      >
-                        <b>{i + 1}.</b> {c.name} ({c.number}
-                        {suitTx(c.suit)}){" "}
-                        <em>
-                          {sel ? "บน" : "ล่าง"}
-                          {i === 0 ? " · จั่วก่อน" : ""}
-                        </em>
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="mock-response-actions">
-                  <button
-                    onClick={() => {
-                      emit("skill:peek-resolve", {
-                        topIds: peekOrder,
-                        bottomIds,
-                      });
-                      setPeekOrder([]);
-                    }}
-                  >
-                    ยืนยันการจัดเรียง (บน {peekOrder.length}/ล่าง{" "}
-                    {bottomIds.length})
-                  </button>
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => {
-                      emit("skill:peek-resolve", {
-                        topIds: cards.map((c) => c.id),
-                        bottomIds: [],
-                      });
-                      setPeekOrder([]);
-                    }}
-                  >
-                    วางทั้งหมดไว้บน (ตามเดิม)
-                  </button>
-                </div>
-              </section>
-            );
-          })()}
+        {isPlaying && (
+          <FankuiPrompt game={game} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && (
+          <LegacyPrompt game={game} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && (
+          <RetaliateJudgmentPrompt
+            game={game}
+            emit={emit}
+            countdown={countdownBadge}
+          />
+        )}
+        {isPlaying && (
+          <RetaliatePrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+            retaliateCards={retaliateCards}
+            setRetaliateCards={setRetaliateCards}
+          />
+        )}
+        {isPlaying && (
+          <DischordPrompt game={game} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && (
+          <AllyAssistPrompt
+            game={game}
+            myPlayer={myPlayer}
+            emit={emit}
+            countdown={countdownBadge}
+          />
+        )}
+        {isPlaying && (
+          <PeekPrompt
+            game={game}
+            emit={emit}
+            countdown={countdownBadge}
+            peekOrder={peekOrder}
+            setPeekOrder={setPeekOrder}
+          />
+        )}
 
         {isPlaying && discardTarget && selectedDiscardId && (
           <div className="modal-backdrop">
