@@ -37,10 +37,8 @@ import {
   hasCharacterSkill,
   isImmuneToAttack,
 } from "../skills.js";
-import {
-  assertForcedAttackTarget,
-  dispatchGameEvent,
-} from "./character-skills.js";
+import { dispatchGameEvent } from "../events.js";
+import { assertForcedAttackTarget } from "./character-skills.js";
 import {
   areOppositeGenders,
   attackIgnoresTargetArmor,
