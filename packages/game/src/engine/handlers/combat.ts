@@ -54,7 +54,7 @@ import {
   hasReplaceDamageWithDiscardTwo,
   hasUnlimitedAttack,
 } from "./equipment-passives.js";
-import { advanceMassResponseQueue } from "./tricks.js";
+import { advanceMassResponseQueue } from "./response-queue.js";
 const playerHasAnyCard = (player: Player) =>
   player.hand.length > 0 || Object.values(player.equipment).some(Boolean);
 export function openDyingRescueWindow(

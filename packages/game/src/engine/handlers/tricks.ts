@@ -36,6 +36,10 @@ import {
   hasCharacterSkill,
 } from "../skills.js";
 import { canTargetWithAttack } from "../targeting.js";
+import {
+  advanceMassResponseQueue,
+  isQueuedResponseWindow,
+} from "./response-queue.js";
 import { applyDamage } from "./combat.js";
 import { publicCardView } from "../view.js";
 function massQueue(state: GameState, actorId: string) {
@@ -438,36 +442,6 @@ export function pickHarvestCard(
     chosen!.id,
   );
   advanceHarvest(state);
-}
-const isQueuedResponseWindow = (type: string) =>
-  type === "mass_dodge" || type === "mass_attack" || type === "multi_attack";
-export function advanceMassResponseQueue(state: GameState) {
-  const window = state.responseWindow,
-    action = state.currentAction;
-  if (!window || !action || !isQueuedResponseWindow(window.type)) return;
-  if (state.status === "finished") return;
-  const queue = window.responderQueue || [],
-    next = queue.find((id) => {
-      const player = getPlayerById(state, id);
-      return (
-        player?.alive &&
-        !window.responses.some((response) => response.playerId === id)
-      );
-    });
-  if (next) {
-    window.currentResponderId = next;
-    synchronizeGameState(state);
-    return;
-  }
-  window.status = "resolved";
-  state.responseWindow = null;
-  resolveTargetedCardAction(state, action.actionId);
-  logAction(
-    state,
-    "mass-trick-finished",
-    `การ์ด ${action.card?.name || ""} จบการทำงาน`,
-  );
-  synchronizeGameState(state);
 }
 export function playMassResponseCard(
   state: GameState,
