@@ -80,8 +80,8 @@
     "semantic_hash": "90426577ad8f38459f3e566411c85589"
   },
   "apps/web/next.config.mjs": {
-    "mtime": 1783480290.1242974,
-    "ast_hash": "d81db04e99fe943f7aed0ac31ade50ba",
+    "mtime": 1783560787.1346629,
+    "ast_hash": "5d5f997daffedae6e380431f29f91a10",
     "semantic_hash": ""
   },
   "apps/web/package.json": {
@@ -1027,6 +1027,31 @@
   "apps/web/components/game/WinnerScreen.tsx": {
     "mtime": 1783516446.953951,
     "ast_hash": "7e77e64d592246708885b9d08d437e60",
+    "semantic_hash": ""
+  },
+  "source/Icon/cursor_challenge.png": {
+    "mtime": 1783559415.6532729,
+    "ast_hash": "4d56a78f148711a8c9685e14ebc421ca",
+    "semantic_hash": ""
+  },
+  "source/Icon/cursor_hammer.png": {
+    "mtime": 1783554984.8005767,
+    "ast_hash": "8cb229c37f264f1bf0ddfc78ff7df3a1",
+    "semantic_hash": ""
+  },
+  "source/Icon/cursor_heal.png": {
+    "mtime": 1783554350.7258165,
+    "ast_hash": "aced827a9de4971fabc54128bd4a7416",
+    "semantic_hash": ""
+  },
+  "source/Icon/cursor_sword.png": {
+    "mtime": 1783555412.4142942,
+    "ast_hash": "788e18430c3c15d46d1a3682b1f36a8b",
+    "semantic_hash": ""
+  },
+  "source/Icon/hammer.png": {
+    "mtime": 1783555924.4537246,
+    "ast_hash": "bdf07b226ef80f85885a8026920947a8",
     "semantic_hash": ""
   }
 }

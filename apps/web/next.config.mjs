@@ -14,6 +14,15 @@ const securityHeaders = [
 const nextConfig = {
   transpilePackages: ['@wtk/game'],
   poweredByHeader: false,
+  // @wtk/game เขียน import แบบ ESM ลงท้าย .js แต่ไฟล์จริงเป็น .ts —
+  // dev (turbopack) resolve ให้เอง แต่ production webpack build ต้องบอก extensionAlias เอง
+  webpack: (config) => {
+    config.resolve.extensionAlias = {
+      '.js': ['.ts', '.tsx', '.js'],
+      '.mjs': ['.mts', '.mjs'],
+    };
+    return config;
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
