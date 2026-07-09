@@ -204,6 +204,7 @@ export default function Home() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
   const handRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   const myDecision = isViewerDecisionActive(game);
   const prevDecisionRef = useRef(false);
@@ -464,6 +465,21 @@ export default function Home() {
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
   }, [game?.phase]);
+  // Publish the sticky navbar's live height as --wtk-nav-h so the in-game page can
+  // size itself to a single screen (100dvh minus navbar) and popups can clear it.
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const apply = () =>
+      document.documentElement.style.setProperty(
+        "--wtk-nav-h",
+        `${el.offsetHeight}px`,
+      );
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [game?.phase]);
   // Tick once per second while a response/decision countdown is active (display only; server enforces the skip)
   useEffect(() => {
     if (!game?.responseDeadline && !game?.startDeadline) return;
@@ -657,6 +673,11 @@ export default function Home() {
                   value={name}
                   autoFocus
                   placeholder="โปรดตั้งชื่อผู้เล่น…"
+                  // Keep editing sticky: without this, typing the first character makes
+                  // `!name` flip to false and (with editingName still false) the input
+                  // would unmount mid-keystroke, dropping focus. autoFocus fires onFocus
+                  // on mount so editingName is already true before the first keystroke.
+                  onFocus={() => setEditingName(true)}
                   onChange={(e) => setName(e.target.value)}
                   onBlur={commitName}
                   onKeyDown={(e) => e.key === "Enter" && commitName()}
@@ -964,6 +985,38 @@ export default function Home() {
     setPendingPlay(null);
     cancelSelection(); // return the card safely to hand / clear any target selection
   };
+  // Custom action cursor: which card/mode is staged for a target pick. Attack and
+  // duel both use selectedAttackId, so disambiguate by the staged card's effect.
+  const stagedAttackCard = selectedAttackId
+    ? myPlayer?.hand.find((c) => c.id === selectedAttackId)
+    : undefined;
+  const cursorMode: "sword" | "challenge" | "hammer" | "heal" | null =
+    stagedAttackCard?.effect === "duel_attack_response"
+      ? "challenge" // ท้าสู้
+      : selectedAttackId || multiAttackId
+        ? "sword" // โจมตี
+        : selectedDiscardId || bandinMode
+          ? "hammer" // ถอนสะพาน (รวม บ้าบิ่น ที่แปลงดอกดำเป็นถอนสะพาน)
+          : canRespond && rw?.type === "dying_heal"
+            ? "heal" // เสบียง/ฮีล ช่วยคนใกล้ตาย
+            : null;
+  // Target-selection modes a right-click can abort — mirrors the on-screen
+  // "ยกเลิกเลือกเป้าหมาย" button plus the black-as-dismantle (บ้าบิ่น) staging.
+  const cancelableTargeting = Boolean(
+    selectedAttackId ||
+      selectedDiscardId ||
+      selectedStealId ||
+      multiAttackId ||
+      coerceCardId ||
+      bandinMode,
+  );
+  const cancelTargeting = () => {
+    cancelSelection();
+    setBandinMode(false);
+  };
+  // Turn feedback: dim + tuck the viewer's own seat/hand when it is neither their
+  // turn nor their moment to respond, so it's obvious whose turn it is.
+  const selfIdle = !isMyTurn && !canRespond;
   // Opponents in circular seat order starting just after the viewer, wrapping around,
   // so the table mirrors real seat geometry (immediate neighbors sit beside the viewer).
   const seatOrdered = [...game.players].sort(
@@ -1147,7 +1200,7 @@ export default function Home() {
     (p) => p.id === game.turn?.activePlayerId,
   );
   const navbar = (
-    <nav className="local-navbar">
+    <nav className="local-navbar" ref={navRef}>
       <div className="local-navbar-left">
         <span className="local-nav-title">ยุทธพิชัยสามก๊ก</span>
         {isPlaying && (
@@ -1296,9 +1349,19 @@ export default function Home() {
       <main
         className={
           isPlaying
-            ? `mock-game-page local-game-page mock-count-${game.players.length}`
+            ? `mock-game-page local-game-page mock-count-${game.players.length}${
+                cursorMode ? ` local-cursor-${cursorMode}` : ""
+              }${isMyTurn ? " local-my-turn" : " local-not-my-turn"}`
             : "game-page"
         }
+        // Right-click while picking a target = cancel (same as the on-screen button).
+        // Left-click still selects the target. Only swallow the menu while targeting.
+        onContextMenu={(e) => {
+          if (isPlaying && cancelableTargeting) {
+            e.preventDefault();
+            cancelTargeting();
+          }
+        }}
       >
         {navPanels}
         <WinnerScreen
@@ -1393,7 +1456,7 @@ export default function Home() {
           </section>
         )}
         {game.phase === "character-select" && chooser && (
-          <div className="modal-backdrop">
+          <div className="modal-backdrop modal-general">
             <section className="local-general-picker">
               <h2>เลือกขุนพลของคุณ (คลิกที่การ์ด)</h2>
               <div className="local-general-picker-body">
@@ -1780,6 +1843,7 @@ export default function Home() {
                     <OpponentPanel
                       player={player}
                       targetable={targetable}
+                      isActiveTurn={player.id === game.turn?.activePlayerId}
                       distance={dist}
                       onClick={onTarget}
                       onSkills={
@@ -1808,8 +1872,16 @@ export default function Home() {
         )}
 
         {isPlaying && (
-          <section className="mock-current-player">
-            <article className="mock-player mock-self">
+          <section
+            className={`mock-current-player${
+              selfIdle ? " local-seat-idle" : " local-seat-active"
+            }`}
+          >
+            <article
+              className={`mock-player mock-self${
+                isMyTurn ? " mock-active-turn" : ""
+              }`}
+            >
               <div className="mock-portrait-col">
                 <div className="mock-portrait">
                   {myPlayer?.character?.image ? (
@@ -1892,6 +1964,9 @@ export default function Home() {
                 />
               </div>
             </article>
+            {/* Middle column of the [profile] → [actions] → [hand] row (desktop);
+                stacks above the hand on narrow screens. */}
+            <div className="local-action-col">
             <div className="mock-your-turn">
               {myOwedDraws > 0 ? (
                 <strong>
@@ -2451,6 +2526,7 @@ export default function Home() {
                 </button>
               </div>
             )}
+            </div>
             <div className="mock-hand" ref={handRef}>
               {myPlayer?.hand.map((card) => {
                 const info = cardInfo(card);

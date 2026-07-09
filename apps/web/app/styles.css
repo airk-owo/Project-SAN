@@ -3663,7 +3663,8 @@ img.mock-card-art {
   position: relative;
   width: 100%;
   max-width: min(1000px, 96vw);
-  max-height: 90vh;
+  /* Fit below the sticky navbar so the popup never overlaps it (mobile bug). */
+  max-height: calc(100dvh - var(--wtk-nav-h, 56px) - 28px);
   display: flex;
   flex-direction: column;
   background: #3e2f22f5;
@@ -4220,23 +4221,29 @@ img {
   pointer-events: none;
 }
 
-/* ── Group 2: desktop layout — character info on the left, hand on the right ── */
+/* ── Group 2: desktop layout — one horizontal row: [profile] → [actions] → [hand].
+   Scoped to the real game page so the /game/mock design sandbox is left untouched. ── */
 @media (min-width: 1000px) {
-  .mock-current-player {
+  .local-game-page .mock-current-player {
     display: grid;
-    grid-template-columns: 268px minmax(0, 1fr);
-    column-gap: 18px;
-    align-items: start;
+    grid-template-columns: 244px minmax(170px, 300px) minmax(0, 1fr);
+    column-gap: 16px;
+    align-items: end;
     justify-items: stretch;
   }
-  .mock-current-player > .mock-self {
+  .local-game-page .mock-current-player > .mock-self {
     grid-column: 1;
-    grid-row: 1 / span 99;
-    align-self: start;
+    align-self: end;
     justify-self: start;
   }
-  .mock-current-player > :not(.mock-self) {
+  .local-game-page .mock-current-player > .local-action-col {
     grid-column: 2;
+    align-self: end;
+  }
+  .local-game-page .mock-current-player > .mock-hand {
+    grid-column: 3;
+    align-self: end;
+    justify-content: flex-start;
   }
 }
 
@@ -5638,4 +5645,116 @@ textarea,
 .mock-card-pile-empty {
   width: 92px;
   height: 132px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UI/UX pass: single-screen desktop, turn feedback, hand animation, cursors
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Middle column of the current-player row: turn hint + action buttons + mode bars. */
+.local-action-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.local-action-col .mock-your-turn,
+.local-action-col .local-turn-controls {
+  margin: 0;
+}
+
+/* ── Part 2 · turn feedback: dim + mute the viewer's own seat when idle ── */
+.mock-current-player {
+  transition:
+    filter 0.3s ease,
+    opacity 0.3s ease;
+}
+.local-seat-idle {
+  filter: brightness(0.72) saturate(0.85);
+  opacity: 0.88;
+}
+.local-seat-active {
+  filter: none;
+  opacity: 1;
+}
+
+/* ── Part 1.3 (desktop) single-screen: fit the match in one viewport, no page scroll.
+   The hand keeps its own horizontal scroll; the table flexes to fill the rest.
+   Scoped to wide screens — small screens keep their scrollable stacked layout. ── */
+@media (min-width: 1000px) {
+  .local-game-page {
+    height: calc(100dvh - var(--wtk-nav-h, 56px));
+    max-height: calc(100dvh - var(--wtk-nav-h, 56px));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 24px 6px;
+    margin-inline: auto;
+  }
+  .local-game-page > .mock-match-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .local-game-page .mock-table-stage {
+    flex: 1 1 auto;
+    min-height: 0; /* was a fixed 650px min — let it shrink to the viewport */
+    margin-top: 0; /* drop the sticky-navbar spacer; the flex column handles it */
+  }
+  .local-game-page > .mock-current-player {
+    flex: 0 0 auto;
+    max-height: 46vh;
+    margin: -34px auto 0; /* keep the slight tuck under the table piles */
+  }
+
+  /* ── Part 3 · hand sink/rise by turn (needs the single-screen bottom edge) ── */
+  .mock-current-player > .mock-hand {
+    transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.5, 1);
+    will-change: transform;
+  }
+  .local-seat-idle > .mock-hand {
+    transform: translateY(34%); /* tuck below the screen edge when it's not our turn */
+  }
+  .local-seat-active > .mock-hand {
+    transform: translateY(0); /* rise fully into view on our turn */
+  }
+}
+
+/* ── Part 4 · custom action cursors (48px, hotspot centred; crosshair fallback).
+   The descendant selector keeps the cursor consistent over cards/panels/buttons. ── */
+.local-cursor-sword,
+.local-cursor-sword * {
+  cursor: url("/cursors/cursor_sword.png") 24 24, crosshair;
+}
+.local-cursor-challenge,
+.local-cursor-challenge * {
+  cursor: url("/cursors/cursor_challenge.png") 24 24, crosshair;
+}
+.local-cursor-heal,
+.local-cursor-heal * {
+  cursor: url("/cursors/cursor_heal.png") 24 24, crosshair;
+}
+.local-cursor-hammer,
+.local-cursor-hammer * {
+  cursor: url("/cursors/cursor_hammer.png") 24 24, crosshair;
+}
+
+/* ── Part 1.2 · general (ขุนพล) picker: sit below the navbar, never overlap it ── */
+.modal-general {
+  align-items: start;
+  padding-top: calc(var(--wtk-nav-h, 56px) + 14px);
+}
+@media (max-width: 760px) {
+  .modal-general {
+    padding-top: calc(var(--wtk-nav-h, 56px) + 10px);
+    padding-bottom: 10px;
+  }
+  .modal-general .local-general-card {
+    height: 320px;
+  }
 }

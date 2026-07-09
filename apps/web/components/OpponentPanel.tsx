@@ -7,6 +7,7 @@ import { DecisionArea } from "./DecisionArea";
 export function OpponentPanel({
   player,
   targetable,
+  isActiveTurn,
   distance,
   onClick,
   onSkills,
@@ -14,6 +15,7 @@ export function OpponentPanel({
 }: {
   player: Player;
   targetable?: boolean;
+  isActiveTurn?: boolean;
   distance?: number | null;
   onClick?: () => void;
   onSkills?: () => void;
@@ -22,7 +24,7 @@ export function OpponentPanel({
   return (
     <article
       onClick={onClick}
-      className={`mock-player local-opponent ${targetable ? "local-targetable" : ""} ${!player.alive ? "local-dead" : ""}`}
+      className={`mock-player local-opponent ${targetable ? "local-targetable" : ""} ${!player.alive ? "local-dead" : ""} ${isActiveTurn ? "mock-active-turn" : ""}`}
     >
       <div className="mock-portrait-col">
         <div className="mock-portrait">
