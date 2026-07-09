@@ -1,7 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Card, Game, Player } from "../../app/lib/gameTypes";
 import { CardFace } from "../CardFace";
-import { Icon } from "../Icon";
 
 /** กองจั่ว/กองทิ้งกลางโต๊ะ + บรรทัดบอกสถานะ — ย้าย verbatim จาก app/page.tsx
  *  ปุ่มกองจั่วควบหน้าที่ จั่วเทิร์น/รับไพ่ค้าง/เปิดไพ่ตัดสิน ตาม state */
@@ -80,15 +79,7 @@ export function TablePiles({
             <div className="mock-discard mock-card-pile-empty">—</div>
           )}
           <b>กองทิ้ง</b>
-          <small>
-            {game.discard.length} ใบ
-            {game.discard.length > 0 ? (
-              <>
-                {" "}
-                <Icon name="search" />
-              </>
-            ) : null}
-          </small>
+          <small>{game.discard.length} ใบ</small>
         </button>
       </section>
       <p className="local-action-empty">

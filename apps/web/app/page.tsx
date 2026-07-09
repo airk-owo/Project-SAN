@@ -1,4 +1,12 @@
 "use client";
+/**
+ * ★ THE REAL online game page (route "/"). Edit THIS file for real-game UI/UX:
+ *   it uses the .mock-card hand, custom cursors, <TablePiles> discard pile, and the
+ *   lobby "การตั้งค่าห้อง" room settings. The sibling screens are NOT this one:
+ *     • app/game/local/page.tsx — hot-seat DEMO (its own, mostly-unstyled cards)
+ *     • app/game/mock/page.tsx  — design sandbox
+ *   Almost all styling lives in app/styles.css (Tailwind is inert here).
+ */
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type {
   Role,
@@ -776,6 +784,21 @@ export default function Home() {
   );
   const isMyTurn = game.currentPlayerId === game.viewerId;
   const isPlaying = game.phase === "playing";
+  // ── Hand fan overlap knob ────────────────────────────────────────────────
+  // JS only derives a 0→1 "fill" from how many cards are in hand; the actual
+  // min/max overlap distance lives in styles.css (.mock-hand → --hand-overlap-min
+  // / --hand-overlap-max). Tune the two card counts below to change WHEN the fan
+  // starts tightening and when it hits max overlap.
+  const HAND_OVERLAP_FROM = 5; // ≤ this many cards → spread out (fill 0)
+  const HAND_OVERLAP_TO = 16; // ≥ this many cards → tightest stack (fill 1)
+  const handFill = Math.max(
+    0,
+    Math.min(
+      1,
+      ((myPlayer?.hand.length ?? 0) - HAND_OVERLAP_FROM) /
+        (HAND_OVERLAP_TO - HAND_OVERLAP_FROM),
+    ),
+  );
   const rw = game.responseWindow;
   const canRespond =
     rw?.currentResponderId === game.viewerId && rw.status === "open";
@@ -1137,26 +1160,41 @@ export default function Home() {
           </div>
         )}
         {waiting && (
-          <div className="local-name-version">
-            <span className="local-name-version-label">
-              🃏 เวอร์ชันชื่อการ์ด
-            </span>
-            <div className="local-name-version-opts">
-              {(
-                [
-                  ["modern", "ชื่อใหม่"],
-                  ["classic", "ชื่อเดิม"],
-                ] as const
-              ).map(([v, label]) => (
-                <button
-                  key={v}
-                  className={`local-name-version-btn${(game.cardNameVersion || "modern") === v ? " active" : ""}`}
-                  disabled={!isHost}
-                  onClick={() => emit("room:card-name-version", { version: v })}
-                >
-                  {label}
-                </button>
-              ))}
+          <div className="local-room-settings">
+            <span className="local-room-settings-title">⚙️ การตั้งค่าห้อง</span>
+            {/* Setting row 1 · card name version — add more <div className="settings-row"> below for future room settings */}
+            <div className="settings-row">
+              <span className="settings-row-label">
+                <b>เวอร์ชันชื่อการ์ด</b>
+                <small>
+                  ปัจจุบัน:{" "}
+                  <b className="local-setting-value">
+                    {game.cardNameVersion === "classic"
+                      ? "ชื่อเดิม"
+                      : "ชื่อใหม่"}
+                  </b>
+                </small>
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={game.cardNameVersion !== "classic"}
+                className={`settings-switch${game.cardNameVersion !== "classic" ? " on" : ""}`}
+                disabled={!isHost}
+                title={
+                  isHost
+                    ? "สลับ ชื่อเดิม / ชื่อใหม่"
+                    : "หัวหน้าห้องเป็นผู้เลือก"
+                }
+                onClick={() =>
+                  emit("room:card-name-version", {
+                    version:
+                      game.cardNameVersion === "classic" ? "modern" : "classic",
+                  })
+                }
+              >
+                <span className="settings-switch-knob" />
+              </button>
             </div>
             {!isHost && (
               <small className="local-name-version-note">
@@ -2538,7 +2576,11 @@ export default function Home() {
               </div>
             )}
             </div>
-            <div className="mock-hand" ref={handRef}>
+            <div
+              className="mock-hand"
+              ref={handRef}
+              style={{ "--hand-fill": handFill } as CSSProperties}
+            >
               {myPlayer?.hand.map((card) => {
                 const info = cardInfo(card);
                 const isDiscardSelected = discardLimitSelected.includes(

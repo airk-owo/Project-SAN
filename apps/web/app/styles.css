@@ -1512,6 +1512,30 @@ h2 {
   justify-content: center;
   overflow-x: auto;
   padding: 10px 8px 18px;
+  /* Hand fan overlap knobs — JS sets --hand-fill (0→1) from card count; these two
+     ends set the overlap distance. Less negative = more spread; more = tighter stack. */
+  --hand-overlap-min: -4px; /* few cards → barely overlap */
+  --hand-overlap-max: -46px; /* many cards → tight stack */
+  /* Soft edge fade width (left/right), instead of a hard cut-off. Tune to taste. */
+  --hand-fade: 28px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--hand-fade),
+    #000 calc(100% - var(--hand-fade)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--hand-fade),
+    #000 calc(100% - var(--hand-fade)),
+    transparent
+  );
+  scrollbar-width: none; /* hide the scrollbar (wheel-scroll still works via JS) */
+}
+.mock-hand::-webkit-scrollbar {
+  display: none;
 }
 .mock-card {
   display: flex;
@@ -2032,7 +2056,7 @@ h2 {
 }
 .mock-hand {
   gap: 0;
-  padding-top: 14px;
+  padding-top: 34px; /* headroom so a hover-lifted card pops out the top, not clipped */
 }
 .mock-card {
   margin-left: -11px;
@@ -2044,6 +2068,17 @@ h2 {
 .mock-card:first-child {
   margin-left: 0;
   transform: rotate(-4deg);
+}
+/* Hand cards only: overlap ramps with --hand-fill between the min/max knobs on
+   .mock-hand. Scoped to .mock-hand so standalone preview cards keep the flat -11px. */
+.mock-hand .mock-card {
+  margin-left: calc(
+    var(--hand-overlap-min) + (var(--hand-overlap-max) - var(--hand-overlap-min)) *
+      var(--hand-fill, 0.4)
+  );
+}
+.mock-hand .mock-card:first-child {
+  margin-left: 0;
 }
 .mock-card:nth-child(2) {
   transform: rotate(-2deg);
@@ -2675,6 +2710,7 @@ h2 {
 .local-turn-controls button {
   margin: 0;
   font-size: 0.78rem;
+  width: 150px; /* fixed button size — tune this ONE value (buttons no longer stretch) */
 }
 .local-out-of-range {
   opacity: 0.5;
@@ -4226,8 +4262,11 @@ img {
 @media (min-width: 1000px) {
   .local-game-page .mock-current-player {
     display: grid;
-    grid-template-columns: 244px minmax(170px, 300px) minmax(0, 1fr);
-    column-gap: 16px;
+    /* --actions-gap: horizontal gap between [seat] · [buttons] · [hand]. Tune to taste.
+       Middle column is now narrow (buttons are fixed-width, item 5) → seat & hand sit closer. */
+    --actions-gap: 10px;
+    grid-template-columns: 244px minmax(160px, 190px) minmax(0, 1fr);
+    column-gap: var(--actions-gap);
     align-items: end;
     justify-items: stretch;
   }
@@ -4244,6 +4283,16 @@ img {
     grid-column: 3;
     align-self: end;
     justify-content: flex-start;
+  }
+  /* Fluid hand-card size on the single screen — fills the wide hand column and
+     scales with the viewport. Tune the clamp (min, ideal, max) here; height keeps
+     the 126:180 ratio automatically. */
+  .local-game-page .mock-hand {
+    --hand-card-w: clamp(126px, 9.2vw, 168px);
+  }
+  .local-game-page .mock-hand .mock-card {
+    width: var(--hand-card-w);
+    height: calc(var(--hand-card-w) * 1.4286);
   }
 }
 
@@ -4640,6 +4689,9 @@ textarea,
 }
 .mock-pile-btn:not(:disabled):hover {
   transform: translateY(-3px);
+  /* Peek the discard pile → magnifier cursor. `zoom-in` is the keyword fallback that
+     works with no asset; drop a cursor_search.png (~24–32px) in public/cursors/ for art. */
+  cursor: url("/cursors/cursor_search.png") 12 12, zoom-in;
 }
 .mock-pile-btn:not(:disabled):hover .mock-discard {
   box-shadow: 9px 9px 0 #160f0a;
@@ -5546,46 +5598,39 @@ textarea,
   }
 }
 
-/* --- Room Setup: card name version (Classic / Modern) toggle --- */
-.local-name-version {
+/* --- Room Setup: การตั้งค่าห้อง (settings list) — reuses .settings-row / .settings-switch,
+       with dark-panel color overrides since the lobby panel is dark. Add more
+       .settings-row entries in the JSX for future room settings. --- */
+.local-room-settings {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 8px 0;
+  gap: 2px;
+  padding: 8px 0 4px;
 }
-.local-name-version-label {
+.local-room-settings-title {
   font-size: 0.85rem;
   font-weight: 700;
   color: #f5d994;
+  margin-bottom: 2px;
 }
-.local-name-version-opts {
-  display: flex;
-  gap: 6px;
+.local-room-settings .settings-row {
+  padding: 10px 2px;
+  border-top-color: #ffffff1f;
 }
-.local-name-version-btn {
-  flex: 1;
-  margin: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #ffffff14;
+.local-room-settings .settings-row-label b {
   color: #f6efdd;
-  font-size: 0.85rem;
-  cursor: pointer;
+  font-size: 0.95rem;
 }
-.local-name-version-btn.active {
-  background: #e0ba67;
-  border-color: #e0ba67;
-  color: #241812;
-  font-weight: 700;
+.local-room-settings .settings-row-label small {
+  color: #c8b58a;
+  font-size: 0.78rem;
 }
-.local-name-version-btn:disabled {
+.local-room-settings .local-setting-value {
+  color: #f5d994;
+}
+.settings-switch:disabled {
   cursor: default;
-  filter: none;
-  opacity: 1;
-}
-.local-name-version-btn:disabled:not(.active) {
-  opacity: 0.5;
+  opacity: 0.55;
 }
 .local-name-version-note {
   color: #c8b58a;
@@ -5664,19 +5709,33 @@ textarea,
   margin: 0;
 }
 
-/* ── Part 2 · turn feedback: dim + mute the viewer's own seat when idle ── */
+/* ── Part 2 · turn feedback: dim + mute NON-active seats (own seat + opponents) ──
+   Tune --seat-idle-filter once to change how "not your turn" seats read (gray). */
+.local-game-page {
+  --seat-idle-filter: brightness(0.72) saturate(0.85);
+}
 .mock-current-player {
   transition:
     filter 0.3s ease,
     opacity 0.3s ease;
 }
 .local-seat-idle {
-  filter: brightness(0.72) saturate(0.85);
+  filter: var(--seat-idle-filter);
   opacity: 0.88;
 }
 .local-seat-active {
   filter: none;
   opacity: 1;
+}
+/* Opponents had no idle treatment — gray out any opponent whose turn it isn't,
+   matching the own-seat idle look. Skips .local-dead / .local-out-of-range so their
+   stronger grayscale keeps winning for those states. */
+.local-opponent:not(.mock-active-turn):not(.local-dead):not(.local-out-of-range) {
+  filter: var(--seat-idle-filter);
+  opacity: 0.9;
+  transition:
+    filter 0.3s ease,
+    opacity 0.3s ease;
 }
 
 /* ── Part 1.3 (desktop) single-screen: fit the match in one viewport, no page scroll.
@@ -5740,7 +5799,7 @@ textarea,
   /* Part B — stack the turn/action buttons top-to-bottom in the middle column. */
   .local-game-page .local-turn-controls {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center; /* was stretch — buttons keep their fixed width now */
   }
 
   /* ── Part 3 · hand sink/rise by turn (needs the single-screen bottom edge) ── */
@@ -5756,7 +5815,13 @@ textarea,
   }
 }
 
-/* ── Part 4 · custom action cursors (48px, hotspot centred; crosshair fallback).
+/* ── Part 4 · custom action cursors ───────────────────────────────────────────
+   ► HOW TO RESIZE A CURSOR (there is NO CSS size property for `cursor: url()`):
+     the browser draws each PNG at its native pixel size, so cursor size == the PNG's
+     own resolution. To make them smaller, re-export the PNGs smaller (e.g. 32×32 or
+     24×24) into public/cursors/, then set the hotspot numbers below to HALF the new
+     size — 48px→"24 24", 32px→"16 16", 24px→"12 12". The two numbers are ONLY the
+     click point, not a size. (Browsers often cap cursors ≈32px, so smaller is safe.)
    The descendant selector keeps the cursor consistent over cards/panels/buttons. ── */
 .local-cursor-sword,
 .local-cursor-sword * {

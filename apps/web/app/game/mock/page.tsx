@@ -1,3 +1,8 @@
+/**
+ * ⚠ DESIGN SANDBOX (route "/game/mock"), NOT the real game. Static mock data for tuning
+ *   table/seat visuals in isolation (uses .mock-active-turn etc.). For real-game UI/UX edit
+ *   app/page.tsx. (Hot-seat demo = app/game/local/page.tsx.)
+ */
 import type { CSSProperties } from "react";
 
 interface PlayerIdentity {

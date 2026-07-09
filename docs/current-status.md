@@ -14,6 +14,18 @@ Take the finished game loop to real players: enable persistence/auth in a deploy
 
 ---
 
+## UI screens — which file to edit
+
+There are three `.local-game-page` screens; don't confuse them when doing UI/UX work:
+
+- **`apps/web/app/page.tsx` (route `/`) — THE REAL online game.** Edit this for real-game UI/UX. It uses the `.mock-card` hand, custom cursors, `<TablePiles>` discard pile, and the lobby **การตั้งค่าห้อง** room settings. Styling is in `apps/web/app/styles.css` (Tailwind is inert).
+- `apps/web/app/game/local/page.tsx` (`/game/local`) — hot-seat **demo** (pass-and-play, in-memory `createGame`). Its cards use bespoke `-red/-blue/-gold` classes and are mostly unstyled; it does **not** share the real page's cursors/turn-feedback.
+- `apps/web/app/game/mock/page.tsx` (`/game/mock`) — **design sandbox** for tuning table/seat visuals in isolation.
+
+Each file also carries a header comment saying the same thing.
+
+---
+
 ## Completed
 
 - Source-data import for cards, roles, turn rules, characters, and authoritative DOCX setup rules.

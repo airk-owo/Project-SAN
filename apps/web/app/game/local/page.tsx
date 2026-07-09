@@ -1,5 +1,11 @@
 'use client';
 
+/**
+ * ⚠ HOT-SEAT DEMO (route "/game/local"), NOT the real game. Pass-and-play on in-memory
+ *   createGame(); its hand cards use bespoke -red/-blue/-gold classes (mostly unstyled)
+ *   and it does NOT share the real page's cursors/turn-feedback. For real-game UI/UX edit
+ *   app/page.tsx instead. (Design sandbox = app/game/mock/page.tsx.)
+ */
 import { useState, useRef, useEffect, type CSSProperties } from 'react';
 import { attackIgnoresTargetArmor, canPlayCardNow, canTargetWithAttack, continueRepeatAttackAfterDodge, createGame, createSeatedPlayer, declineDestroyTargetMount, declineForceAttackDamage, declineMassResponse, declineNegate, declineRepeatAttackAfterDodge, declineResponse, destroyTargetMountAfterDamage, discardForHandLimit, drawOneTurnCard, endTurn, forceAttackDamageByDiscardingTwo, getBaseDistanceBetweenPlayers, getEffectiveDistanceBetweenPlayers, getDiscardRequirement, getPlayerById, getTopDiscardCard, hasUnlimitedAttackPerTurn, isEquipmentCard, playAttack, playAttackResponse, playDiscardTargetCard, playDodge, playDrawCardsTrick, playEquipment, playHeal, playHealAllLiving, playMassAttackOrDamage, playMassDodgeOrDamage, playMassResponseCard, playNegateInMassWindow, playStealTargetCard, respondToAttack, respondWithNegate, startTurn, type Card, type Character, type GameState, type Player, type Spectator, useArmorJudgment } from '@wtk/game';
 
