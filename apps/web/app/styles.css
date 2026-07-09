@@ -5704,12 +5704,31 @@ textarea,
   .local-game-page .mock-table-stage {
     flex: 1 1 auto;
     min-height: 0; /* was a fixed 650px min — let it shrink to the viewport */
-    margin-top: 0; /* drop the sticky-navbar spacer; the flex column handles it */
+    /* Re-add the sticky-navbar spacer (single-screen had zeroed it → top-arc seats
+       were clipped under the navbar) and centre the width-capped table. */
+    margin: 44px auto 0;
+    /* Cap the table width so the extreme seats (edgePosition spans left 4%–96%) always
+       fit inside the clipped single-screen box. The seat arc is 0.92·stage wide and each
+       250px panel adds a 125px half-width past the arc, so the panel edges fit the content
+       box when stage ≤ (contentBox − 2·125)/0.92. `100%` = the match-layout (content) width,
+       which is contentBox; add back main's 48px inline padding the seats may bleed into.
+       Adapts to the viewport; +22px over the exact fit leaves a small edge gap. */
+    max-width: calc((100% - 224px) / 0.92);
+  }
+  /* Pull the high top-arc seats (top≈2%) down clear of the navbar; side seats at
+     top≈48% sit above the 44px min so they are untouched. Pairs with the 44px spacer. */
+  .local-game-page .mock-opponent {
+    top: clamp(44px, var(--seat-y), calc(100% - 60px));
   }
   .local-game-page > .mock-current-player {
     flex: 0 0 auto;
     max-height: 46vh;
     margin: -34px auto 0; /* keep the slight tuck under the table piles */
+  }
+  /* Part B — stack the turn/action buttons top-to-bottom in the middle column. */
+  .local-game-page .local-turn-controls {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   /* ── Part 3 · hand sink/rise by turn (needs the single-screen bottom edge) ── */
