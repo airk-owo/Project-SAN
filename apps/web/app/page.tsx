@@ -1030,6 +1030,17 @@ export default function Home() {
           ...seatOrdered.slice(viewerSeatIdx + 1),
           ...seatOrdered.slice(0, viewerSeatIdx),
         ];
+  // Seat-panel density by player count (mirrors the /game/mock reference): fewer players
+  // → wider panels, more players → narrower so the ring doesn't overlap. Previously the
+  // stage was hardcoded "large", so 6–10-player desktop tables overlapped.
+  const seatDensity =
+    game.players.length <= 4
+      ? "large"
+      : game.players.length <= 6
+        ? "medium"
+        : game.players.length <= 8
+          ? "small"
+          : "compact";
   const discardTarget = selectedDiscardTargetId
     ? game.players.find((p) => p.id === selectedDiscardTargetId)
     : undefined;
@@ -1506,7 +1517,7 @@ export default function Home() {
 
         {isPlaying && (
           <section className="mock-match-layout">
-            <section className="mock-table-stage" data-density="large">
+            <section className="mock-table-stage" data-density={seatDensity}>
               <div className="mock-table-surface">
                 <div className="mock-table-pattern">三國</div>
                 <TablePiles

@@ -5712,8 +5712,20 @@ textarea,
        250px panel adds a 125px half-width past the arc, so the panel edges fit the content
        box when stage ≤ (contentBox − 2·125)/0.92. `100%` = the match-layout (content) width,
        which is contentBox; add back main's 48px inline padding the seats may bleed into.
-       Adapts to the viewport; +22px over the exact fit leaves a small edge gap. */
+       Adapts to the viewport; +22px over the exact fit leaves a small edge gap.
+       Default value assumes the widest (large-density, 250px) panels. */
     max-width: calc((100% - 224px) / 0.92);
+  }
+  /* Denser tables use narrower panels (medium 216 / small 184 / compact 156px), so the
+     table can be wider before the extreme seats clip — constant = 2·halfWidth − 26. */
+  .local-game-page .mock-table-stage[data-density="medium"] {
+    max-width: calc((100% - 190px) / 0.92);
+  }
+  .local-game-page .mock-table-stage[data-density="small"] {
+    max-width: calc((100% - 158px) / 0.92);
+  }
+  .local-game-page .mock-table-stage[data-density="compact"] {
+    max-width: calc((100% - 130px) / 0.92);
   }
   /* Pull the high top-arc seats (top≈2%) down clear of the navbar; side seats at
      top≈48% sit above the 44px min so they are untouched. Pairs with the 44px spacer. */

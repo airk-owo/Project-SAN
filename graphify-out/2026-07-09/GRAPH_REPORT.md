@@ -1,7 +1,7 @@
-# Graph Report - Project-SAN  (2026-07-08)
+# Graph Report - Project-SAN  (2026-07-09)
 
 ## Corpus Check
-- 136 files · ~900,053 words
+- 136 files · ~904,965 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8314562a`
+- Built from commit: `cb852d55`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -152,8 +152,8 @@ Cohesion: 0.11
 Nodes (115): isTimerFrozen(), createServer(), GameData, loadGameData(), RulesData, LocalGamePage(), runJudgment(), canPlayerAct() (+107 more)
 
 ### Community 1 - "index.ts"
-Cohesion: 0.17
-Nodes (17): card(), cardInfo(), cardTypeLabel(), coarsePointer(), suitColor(), Character, CardDetailModal(), Props (+9 more)
+Cohesion: 0.21
+Nodes (16): card(), cardInfo(), cardTypeLabel(), suitColor(), suitTx(), Character, CardDetailModal(), Props (+8 more)
 
 ### Community 2 - "basic-combat.scenarios.ts"
 Cohesion: 0.17
@@ -164,8 +164,8 @@ Cohesion: 0.05
 Nodes (38): CardNameVersion, CardType, CardZone, CharacterState, ChatMessage, ConnectionStatus, EffectResolver, EffectResolverContext (+30 more)
 
 ### Community 4 - "page.tsx"
-Cohesion: 0.19
-Nodes (18): playAutoEndChime(), playCountdownTick(), playDecisionAlert(), playThunder(), tone(), canAutoEndTurn(), edgePosition(), isViewerDecisionActive() (+10 more)
+Cohesion: 0.21
+Nodes (17): playAutoEndChime(), playCountdownTick(), playDecisionAlert(), playThunder(), tone(), canAutoEndTurn(), edgePosition(), isViewerDecisionActive() (+9 more)
 
 ### Community 5 - "import-cards.mjs"
 Cohesion: 0.10
@@ -208,8 +208,8 @@ Cohesion: 0.13
 Nodes (14): Account identity and character identity, Basic turn phases, Canonical match fields, Card locations and current action, Current basic-combat migration, Distance, Dying rescue window, Equipment slots (+6 more)
 
 ### Community 15 - "dealRoles"
-Cohesion: 0.15
-Nodes (16): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, RoleSet (+8 more)
+Cohesion: 0.14
+Nodes (18): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, IceSelection (+10 more)
 
 ### Community 16 - "scripts"
 Cohesion: 0.15
@@ -240,8 +240,8 @@ Cohesion: 0.17
 Nodes (30): createTargetedCardAction(), resolveTargetedCardAction(), checkWinCondition(), finishGame(), openAttackDodgeWindow(), playAttack(), playDuel(), playerHasAnyCard() (+22 more)
 
 ### Community 23 - "delayed-tricks.test.ts"
-Cohesion: 0.19
-Nodes (11): suitTx(), Game, Player, DestroyMountPrompt(), ForceAttackDamagePrompt(), JudgmentPanel(), PeekPrompt(), RepeatAttackPrompt() (+3 more)
+Cohesion: 0.11
+Nodes (19): Game, Member, Player, ResponseWindow, Role, RoleAliveCounts, RoleDefinition, Room (+11 more)
 
 ### Community 24 - "snake-spear.test.ts"
 Cohesion: 0.22
@@ -256,8 +256,8 @@ Cohesion: 0.19
 Nodes (10): ROLE_LABEL, LoginPage(), CharRow, FactionRow, pct(), ProfilePage(), RecentRow, WinnerScreen() (+2 more)
 
 ### Community 27 - "multi-attack.test.ts"
-Cohesion: 0.14
-Nodes (12): IceSelection, Member, ResponseWindow, Role, RoleAliveCounts, RoleDefinition, Room, Turn (+4 more)
+Cohesion: 0.50
+Nodes (4): coarsePointer(), DropZoneModal(), NameTip, Props
 
 ### Community 28 - "twin-swords.test.ts"
 Cohesion: 0.25
@@ -351,7 +351,7 @@ Nodes (6): clients, join(), JoinArgs, SessionToken, TestServer, waitFor()
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `card()` connect `index.ts` to `index.ts`, `package.json`, `page.tsx`?**
+- **Why does `card()` connect `index.ts` to `index.ts`, `multi-attack.test.ts`, `package.json`, `page.tsx`?**
   _High betweenness centrality (0.069) - this node is a cross-community bridge._
 - **Why does `attachDevHandlers()` connect `dev-sandbox.ts` to `index.ts`, `page.tsx`?**
   _High betweenness centrality (0.058) - this node is a cross-community bridge._

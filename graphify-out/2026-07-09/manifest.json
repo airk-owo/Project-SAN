@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783516738.1646664,
-    "ast_hash": "50d7b8b7b9e99b9ad9f0d951d58d0afc",
+    "mtime": 1783562911.4673872,
+    "ast_hash": "9e69ee1b4ebdff99f170866f92396780",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/OpponentPanel.tsx": {
-    "mtime": 1783510813.5333986,
-    "ast_hash": "a28be791787a4e78d7790d7be48b21bb",
+    "mtime": 1783562883.1220016,
+    "ast_hash": "173327f6a0013c656209d5d6f4c24132",
     "semantic_hash": ""
   },
   "apps/web/components/game/AllyAssistPrompt.tsx": {
@@ -1052,6 +1052,26 @@
   "source/Icon/hammer.png": {
     "mtime": 1783555924.4537246,
     "ast_hash": "bdf07b226ef80f85885a8026920947a8",
+    "semantic_hash": ""
+  },
+  "apps/web/public/cursors/cursor_challenge.png": {
+    "mtime": 1783562564.946598,
+    "ast_hash": "f16ad39a2d523b990d30496efb01006e",
+    "semantic_hash": ""
+  },
+  "apps/web/public/cursors/cursor_hammer.png": {
+    "mtime": 1783562564.9555998,
+    "ast_hash": "e5390a84a0b78565c445ba24c345ce9f",
+    "semantic_hash": ""
+  },
+  "apps/web/public/cursors/cursor_heal.png": {
+    "mtime": 1783562564.9515984,
+    "ast_hash": "7a550940ea7531fe983a8973c5579110",
+    "semantic_hash": ""
+  },
+  "apps/web/public/cursors/cursor_sword.png": {
+    "mtime": 1783562564.938597,
+    "ast_hash": "c0b9e54d9314e33567c4f9efc809ea4b",
     "semantic_hash": ""
   }
 }

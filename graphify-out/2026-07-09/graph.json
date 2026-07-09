@@ -1290,7 +1290,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_suittx",
-      "community": 23,
+      "community": 1,
       "norm_label": "suittx()"
     },
     {
@@ -1320,7 +1320,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "apps_web_app_lib_gameconstants_coarsepointer",
-      "community": 1,
+      "community": 27,
       "norm_label": "coarsepointer()"
     },
     {
@@ -1370,7 +1370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes",
-      "community": 27,
+      "community": 23,
       "norm_label": "gametypes.ts"
     },
     {
@@ -1380,7 +1380,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_role",
-      "community": 27,
+      "community": 23,
       "norm_label": "role"
     },
     {
@@ -1390,7 +1390,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_roledefinition",
-      "community": 27,
+      "community": 23,
       "norm_label": "roledefinition"
     },
     {
@@ -1440,7 +1440,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_member",
-      "community": 27,
+      "community": 23,
       "norm_label": "member"
     },
     {
@@ -1450,7 +1450,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_responsewindow",
-      "community": 27,
+      "community": 23,
       "norm_label": "responsewindow"
     },
     {
@@ -1460,7 +1460,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_turn",
-      "community": 27,
+      "community": 23,
       "norm_label": "turn"
     },
     {
@@ -1470,7 +1470,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_rolealivecounts",
-      "community": 27,
+      "community": 23,
       "norm_label": "rolealivecounts"
     },
     {
@@ -1490,7 +1490,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_room",
-      "community": 27,
+      "community": 23,
       "norm_label": "room"
     },
     {
@@ -1510,7 +1510,7 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_iceselection",
-      "community": 27,
+      "community": 15,
       "norm_label": "iceselection"
     },
     {
@@ -1820,7 +1820,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_dropzonemodal",
-      "community": 1,
+      "community": 27,
       "norm_label": "dropzonemodal.tsx"
     },
     {
@@ -1830,7 +1830,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_components_dropzonemodal_nametip",
-      "community": 1,
+      "community": 27,
       "norm_label": "nametip"
     },
     {
@@ -1840,7 +1840,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_web_components_dropzonemodal_props",
-      "community": 1,
+      "community": 27,
       "norm_label": "props"
     },
     {
@@ -1850,7 +1850,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "apps_web_components_dropzonemodal_dropzonemodal",
-      "community": 1,
+      "community": 27,
       "norm_label": "dropzonemodal()"
     },
     {
@@ -2010,7 +2010,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel",
-      "community": 27,
+      "community": 23,
       "norm_label": "logchatpanel.tsx"
     },
     {
@@ -2020,7 +2020,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_chatmessage",
-      "community": 27,
+      "community": 23,
       "norm_label": "chatmessage"
     },
     {
@@ -2030,7 +2030,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_props",
-      "community": 27,
+      "community": 23,
       "norm_label": "props"
     },
     {
@@ -2040,7 +2040,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "apps_web_components_logchatpanel_logchatpanel",
-      "community": 27,
+      "community": 23,
       "norm_label": "logchatpanel()"
     },
     {
@@ -2360,7 +2360,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_icereplaceprompt",
-      "community": 27,
+      "community": 15,
       "norm_label": "icereplaceprompt.tsx"
     },
     {
@@ -2370,7 +2370,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_web_components_game_icereplaceprompt_icereplaceprompt",
-      "community": 27,
+      "community": 15,
       "norm_label": "icereplaceprompt()"
     },
     {
@@ -2380,7 +2380,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_judgmentpanel",
-      "community": 23,
+      "community": 1,
       "norm_label": "judgmentpanel.tsx"
     },
     {
@@ -2390,7 +2390,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_web_components_game_judgmentpanel_judgmentpanel",
-      "community": 23,
+      "community": 1,
       "norm_label": "judgmentpanel()"
     },
     {
@@ -2420,7 +2420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_peekprompt",
-      "community": 23,
+      "community": 1,
       "norm_label": "peekprompt.tsx"
     },
     {
@@ -2430,7 +2430,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_web_components_game_peekprompt_peekprompt",
-      "community": 23,
+      "community": 1,
       "norm_label": "peekprompt()"
     },
     {
@@ -2500,7 +2500,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_retaliatejudgmentprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "retaliatejudgmentprompt.tsx"
     },
     {
@@ -2510,7 +2510,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "retaliatejudgmentprompt()"
     },
     {
@@ -11083,7 +11083,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L720",
+      "source_location": "L741",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_server_src_server_test_join"
@@ -13714,7 +13714,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L844",
+      "source_location": "L865",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_game_local_page_card"
@@ -14618,7 +14618,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L213",
+      "source_location": "L214",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playdecisionalert"
@@ -14640,7 +14640,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L226",
+      "source_location": "L227",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playcountdowntick"
@@ -14662,7 +14662,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L240",
+      "source_location": "L241",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playautoendchime"
@@ -14684,7 +14684,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L537",
+      "source_location": "L553",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playthunder"
@@ -15217,7 +15217,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1390",
+      "source_location": "L1453",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_roletext"
@@ -15239,7 +15239,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1850",
+      "source_location": "L1922",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -15283,7 +15283,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/OpponentPanel.tsx",
-      "source_location": "L61",
+      "source_location": "L63",
       "weight": 1.0,
       "source": "apps_web_components_opponentpanel_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -15305,7 +15305,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1758",
+      "source_location": "L1821",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -15547,7 +15547,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/OpponentPanel.tsx",
-      "source_location": "L30",
+      "source_location": "L32",
       "weight": 1.0,
       "source": "apps_web_components_opponentpanel_opponentpanel",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -15569,7 +15569,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2456",
+      "source_location": "L2532",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -15657,7 +15657,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1337",
+      "source_location": "L1400",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suitcolor"
@@ -15811,7 +15811,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1343",
+      "source_location": "L1406",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -16053,7 +16053,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1352",
+      "source_location": "L1415",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel"
@@ -16196,7 +16196,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1462",
+      "source_location": "L1525",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_edgeposition"
@@ -16251,7 +16251,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L208",
+      "source_location": "L209",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_isviewerdecisionactive"
@@ -16273,7 +16273,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L233",
+      "source_location": "L234",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_canautoendturn"
@@ -17498,7 +17498,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L603",
+      "source_location": "L619",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_socket_play_confirm_events"
@@ -17531,7 +17531,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L359",
+      "source_location": "L360",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_socket_emitroomjoin"
@@ -18299,7 +18299,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L254",
+      "source_location": "L255",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_lib_useauth_useauth"
@@ -44612,5 +44612,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "8314562a5649e7669e08d56d05ec64347a61f538"
+  "built_at_commit": "cb852d55f6c4b8fda8c920299b3e6b0d5742c60e"
 }
