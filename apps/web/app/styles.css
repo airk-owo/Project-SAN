@@ -5714,31 +5714,27 @@ textarea,
   --seat-idle-filter: brightness(0.72) saturate(0.85);
 }
 .mock-current-player {
-  transition: filter 0.3s ease;
+  transition:
+    filter 0.3s ease,
+    opacity 0.3s ease;
 }
 .local-seat-idle {
   filter: var(--seat-idle-filter);
-}
-/* Solid gray card background instead of opacity — opacity blends the card with
-   whatever's behind it (busy table), which washed out the text sitting on top. */
-.local-seat-idle .mock-self {
-  background: #bebbb5;
-}
-.mock-self {
-  transition: background 0.3s ease;
+  opacity: 0.88;
 }
 .local-seat-active {
   filter: none;
+  opacity: 1;
 }
 /* Opponents had no idle treatment — gray out any opponent whose turn it isn't,
    matching the own-seat idle look. Skips .local-dead / .local-out-of-range so their
    stronger grayscale keeps winning for those states. */
 .local-opponent:not(.mock-active-turn):not(.local-dead):not(.local-out-of-range) {
   filter: var(--seat-idle-filter);
-  background: #bebbb5;
+  opacity: 0.9;
   transition:
     filter 0.3s ease,
-    background 0.3s ease;
+    opacity 0.3s ease;
 }
 
 /* ── Part 1.3 (desktop) single-screen: fit the match in one viewport, no page scroll.
