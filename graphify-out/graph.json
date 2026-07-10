@@ -15589,7 +15589,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2743",
+      "source_location": "L2744",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -44630,5 +44630,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "07244e0b491ded999fc9823109fc7de8d8ac9a1b"
+  "built_at_commit": "5eb612d4a008a95c548ae45b147d59b5151c0e54"
 }

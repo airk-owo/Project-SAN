@@ -3583,7 +3583,7 @@ h2 {
   border-radius: 10px;
   /* rgba so the opacity is a plain 0-1 number to tune, not hex alpha math.
      Was #00000014 (~8% opaque) — too see-through against the busy table art. */
-  background: rgba(0, 0, 0, 0.85);
+  background: #f2ece4ea;
 }
 .local-skill-slot {
   display: flex;

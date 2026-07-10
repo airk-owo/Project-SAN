@@ -2426,17 +2426,18 @@ export default function Home() {
                 </div>
               ))}
               <div className="local-turn-controls">
-                {requiredDiscard > 0 && isMyTurn && !discardLimitMode && (
-                  <button
-                    className="mock-muted-button"
-                    onClick={() => {
-                      setDiscardLimitMode(true);
-                      setDiscardLimitSelected([]);
-                    }}
-                  >
-                    ทิ้งไพ่เกินมือ ({requiredDiscard})
-                  </button>
-                )}
+                <button
+                  className="mock-muted-button"
+                  disabled={
+                    !(requiredDiscard > 0 && isMyTurn && !discardLimitMode)
+                  }
+                  onClick={() => {
+                    setDiscardLimitMode(true);
+                    setDiscardLimitSelected([]);
+                  }}
+                >
+                  ทิ้งไพ่เกินมือ{requiredDiscard > 0 ? ` (${requiredDiscard})` : ""}
+                </button>
                 <button
                   disabled={
                     !isMyTurn ||
