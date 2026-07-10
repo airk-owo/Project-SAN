@@ -4343,7 +4343,8 @@ img {
     /* --actions-gap: horizontal gap between [seat] · [buttons] · [hand]. Tune to taste.
        Middle column is now narrow (buttons are fixed-width, item 5) → seat & hand sit closer. */
     --actions-gap: 6px;
-    grid-template-columns: 244px minmax(160px, 190px) minmax(0, 1fr);
+    grid-template-columns: 244px 244px minmax(0, 1fr); /* middle (buttons) matches
+      the seat card's width — was minmax(160px,190px), narrower than the seat card */
     column-gap: var(--actions-gap);
     align-items: end;
     justify-items: stretch;
@@ -4360,6 +4361,12 @@ img {
        constant regardless of character, so it can safely share the same bottom edge
        as the seat card and hand instead). */
     align-self: end;
+  }
+  /* .local-action-col is align-items:center (flex), so its children size to their own
+     content by default — without this, the button frame would stay its natural ~166px
+     width even though the column itself grew to 244px above. */
+  .local-game-page .local-turn-frame {
+    width: 100%;
   }
   .local-game-page .mock-current-player > .mock-hand {
     grid-column: 3;
