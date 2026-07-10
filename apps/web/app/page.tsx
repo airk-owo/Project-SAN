@@ -527,16 +527,29 @@ export default function Home() {
     ro.observe(el);
     return () => ro.disconnect();
   }, [game?.phase]);
-  // Auto-hide the navbar on scroll-down, reveal on scroll-up (a no-op on screens that
-  // don't scroll — window.scrollY never changes there, e.g. the desktop single-screen
-  // game view or the lobby, both of which lock body scroll elsewhere in this file).
+  // Auto-hide the navbar on scroll-down, reveal on scroll-up. Most of this app's
+  // "scrollable screens" scroll INSIDE a panel (.local-navpanel, log/chat, etc.), not
+  // the window — plain DOM `scroll` events don't bubble, so a bubble-phase listener on
+  // `window` would only ever see real page-level scroll. Listening in the CAPTURE phase
+  // on `window` catches scroll events from any descendant scrollable element too, since
+  // capturing fires on the way down regardless of whether the event itself bubbles.
   useEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
-    let lastY = Math.max(0, window.scrollY);
+    const lastYByTarget = new WeakMap<EventTarget, number>();
     let ticking = false;
+    let pendingTarget: EventTarget | null = null;
     const apply = () => {
-      const y = Math.max(0, window.scrollY);
+      ticking = false;
+      const target = pendingTarget;
+      if (!target) return;
+      const y = Math.max(
+        0,
+        target === document
+          ? window.scrollY
+          : (target as HTMLElement).scrollTop,
+      );
+      const lastY = lastYByTarget.get(target) ?? y;
       if (y <= nav.offsetHeight) {
         nav.classList.remove("local-navbar-collapsed"); // always show near the top
       } else if (y > lastY) {
@@ -544,16 +557,20 @@ export default function Home() {
       } else if (y < lastY) {
         nav.classList.remove("local-navbar-collapsed"); // scrolling up
       }
-      lastY = y;
-      ticking = false;
+      lastYByTarget.set(target, y);
     };
-    const onScroll = () => {
+    const onScroll = (e: Event) => {
+      pendingTarget = e.target;
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(apply);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+    return () =>
+      window.removeEventListener("scroll", onScroll, { capture: true });
   }, []);
   // Tick once per second while a response/decision countdown is active (display only; server enforces the skip)
   useEffect(() => {

@@ -57,7 +57,7 @@ export function LogChatPanel({
           {log.map((l) => (
             <p key={l.id}>
               <time>{l.at.slice(11, 16) || l.at}</time>
-              {renderLog(l.message)}
+              <span className="local-log-text">{renderLog(l.message)}</span>
             </p>
           ))}
           <div ref={logEndRef} />
@@ -67,7 +67,9 @@ export function LogChatPanel({
           {chat.map((m) => (
             <p key={m.id}>
               <time>{m.at?.slice(11, 16) || ""}</time>
-              <b>{m.username}:</b> {m.text}
+              <span className="local-log-text">
+                <b>{m.username}:</b> {m.text}
+              </span>
             </p>
           ))}
           <div ref={chatEndRef} />

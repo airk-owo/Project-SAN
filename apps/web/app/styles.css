@@ -1396,9 +1396,14 @@ h2 {
   margin: 5px 0;
   font-size: 0.79rem;
   color: #faf8ef;
+  /* Flex row: wrapped lines align under the message text, not back under the
+     timestamp — <time> is a fixed-width flex item, .local-log-text takes the rest. */
+  display: flex;
+  align-items: baseline;
 }
 .mock-log time {
   display: inline-block;
+  flex: none;
   width: 43px;
   color: #e0ba67;
   font-variant-numeric: tabular-nums;
@@ -2939,6 +2944,8 @@ h2 {
 .local-log-scroll p,
 .local-chat-scroll p {
   margin: 2px 0;
+  display: flex;
+  align-items: baseline;
 }
 /* Chat input row */
 .local-chat-form {
@@ -2970,11 +2977,16 @@ h2 {
 .local-log-scroll time,
 .local-chat-scroll time {
   display: inline-block;
+  flex: none;
   width: 40px;
   font-size: 0.68rem;
   color: #e0ba67;
   font-variant-numeric: tabular-nums;
   margin-right: 3px;
+}
+.local-log-text {
+  flex: 1;
+  min-width: 0;
 }
 /* Draw pile clickable state */
 .local-draw-pile-active {
