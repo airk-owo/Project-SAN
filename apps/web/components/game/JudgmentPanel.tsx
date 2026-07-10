@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Game, Player } from "../../app/lib/gameTypes";
-import { charName, suitColor, suitTx } from "../../app/lib/gameConstants";
+import { suitColor, suitTx } from "../../app/lib/gameConstants";
 
 /** แผงเปิดไพ่ตัดสิน (มีสุขลืมเมือง/ฟ้าลงโทษ + สกิลกุยแก/เอียนสี/สุมาอี้) — ย้าย verbatim จาก app/page.tsx */
 export function JudgmentPanel({
@@ -58,7 +58,7 @@ export function JudgmentPanel({
         <>
           <div className="local-judgment-reveal">
             <small>
-              ไพ่ตัดสินของ {charName(jp)} — {pj.trickName}
+              ไพ่ตัดสินของ {jp?.username ?? "ผู้เล่น"} — {pj.trickName}
             </small>
             {r ? (
               <div

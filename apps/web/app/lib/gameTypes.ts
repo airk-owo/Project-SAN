@@ -67,6 +67,7 @@ export type Player = {
   alive: boolean;
   hp?: number;
   maxHp?: number;
+  skippedPlayThisTurn?: boolean; // "โดนใบ้" — skipped by มีสุขลืมเมือง this turn
   ready: boolean;
   confirmedCharacter: boolean;
 };

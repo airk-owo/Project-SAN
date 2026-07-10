@@ -27,7 +27,9 @@ export function OpponentPanel({
       className={`mock-player local-opponent ${targetable ? "local-targetable" : ""} ${!player.alive ? "local-dead" : ""} ${isActiveTurn ? "mock-active-turn" : ""}`}
     >
       <div className="mock-portrait-col">
-        <div className="mock-portrait">
+        <div
+          className={`mock-portrait${player.skippedPlayThisTurn ? " local-silenced" : ""}`}
+        >
           {player.character?.image ? (
             <img src={player.character.image} alt={charName(player)} />
           ) : (

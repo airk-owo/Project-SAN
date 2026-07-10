@@ -1443,6 +1443,7 @@ h2 {
   box-shadow: none;
 }
 .mock-portrait {
+  position: relative; /* anchor for .local-silenced's strike mark */
   display: grid;
   place-items: center;
   flex: none;
@@ -1454,6 +1455,21 @@ h2 {
   color: #fff;
   font-family: Baozi, sans-serif;
   font-size: 1.7rem;
+}
+/* "โดนใบ้" (skipped by มีสุขลืมเมือง this turn) — diagonal strike across the portrait. */
+.local-silenced::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 2px),
+    #c0392b calc(50% - 2px),
+    #c0392b calc(50% + 2px),
+    transparent calc(50% + 2px)
+  );
+  pointer-events: none;
 }
 .mock-player-content {
   min-width: 0;
@@ -1521,6 +1537,7 @@ h2 {
 }
 .mock-your-turn strong {
   color: var(--danger);
+  display: block; /* stack on its own line if the silenced banner and a phase hint both show */
 }
 .mock-hand {
   display: flex;

@@ -52,6 +52,7 @@ export function startTurn(state: GameState, playerId: string) {
   state.hasDrawnThisTurn = false;
   state.attacksThisTurn = 0;
   state.skipPlayPhase = false;
+  player.skippedPlayThisTurn = false; // clear last turn's "โดนใบ้" indicator
   state.skillsUsedThisTurn = [];
   state.unarmedPowerActive = false;
   state.benevolenceGivenThisTurn = 0;

@@ -234,6 +234,10 @@ export type Player = {
   alive: boolean;
   hp?: number;
   maxHp?: number;
+  /** True for the rest of this player's turn after มีสุขลืมเมือง (delayed_skip_play_phase)
+   * skips their play phase — cleared at the start of their next turn. UI-only status flag
+   * (ไม่กระทบ game logic โดยตรง — ใช้แสดงผลว่า "โดนใบ้" อยู่). */
+  skippedPlayThisTurn?: boolean;
 };
 export type GamePhase =
   | "waiting"

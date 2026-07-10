@@ -52,6 +52,7 @@ function applyJudgmentOutcome(
     const skipped = judged?.suit !== "♥";
     if (skipped) {
       state.skipPlayPhase = true;
+      player.skippedPlayThisTurn = true; // cleared in startTurn — UI status flag only
       logAction(
         state,
         "indulgence-skip",

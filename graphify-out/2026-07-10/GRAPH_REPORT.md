@@ -1,16 +1,16 @@
 # Graph Report - Project-SAN  (2026-07-10)
 
 ## Corpus Check
-- 136 files · ~906,205 words
+- 136 files · ~906,332 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 989 nodes · 3225 edges · 98 communities (53 shown, 45 thin omitted)
+- 989 nodes · 3221 edges · 98 communities (53 shown, 45 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5eb612d4`
+- Built from commit: `860b69c8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -207,7 +207,7 @@ Nodes (14): Account identity and character identity, Basic turn phases, Canonica
 
 ### Community 15 - "dealRoles"
 Cohesion: 0.14
-Nodes (18): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, IceSelection (+10 more)
+Nodes (17): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, IceSelection (+9 more)
 
 ### Community 16 - "scripts"
 Cohesion: 0.15
@@ -258,8 +258,8 @@ Cohesion: 0.25
 Nodes (7): Applications, `apps/server`, `apps/web`, Domain and data flow, Extension boundaries, Root folders, WTK project architecture
 
 ### Community 29 - "GameState"
-Cohesion: 0.26
-Nodes (8): Card, EquipmentSlots, DecisionArea(), EquipmentDisplay(), Icon(), IconDef, IconName, ICONS
+Cohesion: 0.21
+Nodes (9): Card, EquipmentSlots, DecisionArea(), EquipmentDisplay(), PeekPrompt(), Icon(), IconDef, IconName (+1 more)
 
 ### Community 31 - "page.tsx"
 Cohesion: 0.25

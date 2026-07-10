@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Card, Game, Player } from "../../app/lib/gameTypes";
-import { charName, suitTx } from "../../app/lib/gameConstants";
+import { charName } from "../../app/lib/gameConstants";
 
 /** แผง response window กลาง (negate / dying-heal / attack-dodge / mass / duel)
  *  รวมสกิลแทรกระหว่างหลบ (ระเหเร่ร่อน, ปกป้องราชันย์) — ย้าย verbatim จาก app/page.tsx */
@@ -200,25 +200,12 @@ export function ResponseWindowPanel({
                       </span>
                     )}
                     {redirectMode && (
-                      <div className="local-force-cards">
-                        {!redirectCard ? (
-                          <>
-                            {myPlayer?.hand.map((c) => (
-                              <button
-                                key={c.id}
-                                onClick={() => setRedirectCard(c.id)}
-                              >
-                                ทิ้ง {c.name} ({c.number}
-                                {suitTx(c.suit)})
-                              </button>
-                            ))}
-                          </>
-                        ) : (
-                          <span>
-                            เลือกเป้าหมายใหม่บนโต๊ะ (ในระยะของคุณ
-                            ไม่ใช่ผู้โจมตี)
-                          </span>
-                        )}
+                      <div className="local-discard-limit-bar">
+                        <span>
+                          {!redirectCard
+                            ? "เลือกไพ่บนมือ 1 ใบเพื่อทิ้ง (ค่าใช้จ่ายของระเหเร่ร่อน)"
+                            : "เลือกเป้าหมายใหม่บนโต๊ะ (ในระยะของคุณ ไม่ใช่ผู้โจมตี)"}
+                        </span>
                         <button
                           className="mock-muted-button"
                           onClick={() => {

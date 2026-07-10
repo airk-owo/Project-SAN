@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783681091.30713,
-    "ast_hash": "85c5cdbf4593cdd12b064e6b8969681d",
+    "mtime": 1783686699.8855138,
+    "ast_hash": "90e67e074729e876b9754c236925171a",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/SettingsPopover.tsx": {
-    "mtime": 1783321494.1788547,
-    "ast_hash": "1d40b4190fabfa045c0ef9d2140d3557",
+    "mtime": 1783681556.4730487,
+    "ast_hash": "e0811acb0afec6eb3d52a72fe66fc54c",
     "semantic_hash": ""
   },
   "packages/game/src/engine/actions.ts": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "packages/game/src/engine/turns.ts": {
-    "mtime": 1783510413.3177845,
-    "ast_hash": "9478850837668cb8db6554f14d748fa9",
+    "mtime": 1783686150.6211574,
+    "ast_hash": "a8705ed70794ddb9a192e36efe2121ae",
     "semantic_hash": ""
   },
   "packages/game/src/engine/types.ts": {
@@ -970,8 +970,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/game/JudgmentPanel.tsx": {
-    "mtime": 1783516105.0787141,
-    "ast_hash": "7c5e407b11b7f27d238d584dbdd93be7",
+    "mtime": 1783686758.2375867,
+    "ast_hash": "8d93a9f50734ad48d00dd25974124de5",
     "semantic_hash": ""
   },
   "apps/web/components/game/LegacyPrompt.tsx": {
@@ -995,8 +995,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/game/ResponseWindowPanel.tsx": {
-    "mtime": 1783516227.3490734,
-    "ast_hash": "040fce4d1f414175c7558ecb179ed6d4",
+    "mtime": 1783686733.8905115,
+    "ast_hash": "e47388ffcde1dfa9ce589f63b18c792b",
     "semantic_hash": ""
   },
   "apps/web/components/game/RetaliateJudgmentPrompt.tsx": {

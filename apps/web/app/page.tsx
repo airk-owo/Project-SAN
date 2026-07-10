@@ -2334,7 +2334,9 @@ export default function Home() {
               }`}
             >
               <div className="mock-portrait-col">
-                <div className="mock-portrait">
+                <div
+                  className={`mock-portrait${myPlayer?.skippedPlayThisTurn ? " local-silenced" : ""}`}
+                >
                   {myPlayer?.character?.image ? (
                     <img
                       src={myPlayer.character.image}
@@ -2419,6 +2421,11 @@ export default function Home() {
                 stacks above the hand on narrow screens. */}
             <div className="local-action-col">
             <div className="mock-your-turn">
+              {isMyTurn && myPlayer?.skippedPlayThisTurn && (
+                <strong className="local-silenced-banner">
+                  😶 คุณโดนใบ้ (มีสุขลืมเมือง) — ข้ามช่วงเล่นไพ่รอบนี้
+                </strong>
+              )}
               {myOwedDraws > 0 ? (
                 <strong>
                   ⬆ คุณได้รับไพ่ {myOwedDraws} ใบ — กดกองจั่วเพื่อรับ
@@ -2773,6 +2780,7 @@ export default function Home() {
                 );
                 const isSeduceSelected = seduceCard === card.id;
                 const isInciteSelected = inciteCard === card.id;
+                const isRedirectSelected = redirectCard === card.id;
                 const pickMode =
                   discardLimitMode ||
                   snakeMode ||
@@ -2782,7 +2790,8 @@ export default function Home() {
                   benevolenceMode ||
                   bandinMode ||
                   seduceMode ||
-                  inciteMode;
+                  inciteMode ||
+                  redirectMode;
                 const handleClick = discardLimitMode
                   ? () => toggleDiscardLimit(card.id)
                   : snakeMode
@@ -2821,7 +2830,9 @@ export default function Home() {
                                   }
                                 : inciteMode
                                   ? () => setInciteCard(card.id)
-                                  : () => selectCard(card);
+                                  : redirectMode
+                                    ? () => setRedirectCard(card.id)
+                                    : () => selectCard(card);
                 const playable = canPlayCard(card);
                 return (
                   <article
@@ -2840,7 +2851,7 @@ export default function Home() {
                     onMouseLeave={hideCardTip}
                     onFocus={(e) => !pickMode && info && showCardTip(e, card)}
                     onBlur={hideCardTip}
-                    className={`mock-card mock-card-suit-${suitColor(card.suit)} ${pickMode ? "local-hand-card" : playable ? "local-hand-card" : "local-card-disabled"} ${!pickMode && (selectedAttackId === card.id || selectedDiscardId === card.id || selectedStealId === card.id) ? "selected-card" : ""} ${(discardLimitMode && !isDiscardSelected) || (snakeMode && !isSnakeSelected) || (balanceMode && !isBalanceSelected) || (miracleMode && !isMiracleSelected) || (marriageMode && !isMarriageSelected) || (benevolenceMode && !isBenevolenceSelected) || (seduceMode && !isSeduceSelected) || (inciteMode && !isInciteSelected) ? "local-discard-unselected" : ""} ${isDiscardSelected || isSnakeSelected || isBalanceSelected || isMiracleSelected || isMarriageSelected || isBenevolenceSelected || isSeduceSelected || isInciteSelected ? "local-discard-selected" : ""}`}
+                    className={`mock-card mock-card-suit-${suitColor(card.suit)} ${pickMode ? "local-hand-card" : playable ? "local-hand-card" : "local-card-disabled"} ${!pickMode && (selectedAttackId === card.id || selectedDiscardId === card.id || selectedStealId === card.id) ? "selected-card" : ""} ${(discardLimitMode && !isDiscardSelected) || (snakeMode && !isSnakeSelected) || (balanceMode && !isBalanceSelected) || (miracleMode && !isMiracleSelected) || (marriageMode && !isMarriageSelected) || (benevolenceMode && !isBenevolenceSelected) || (seduceMode && !isSeduceSelected && card.suit !== "♦") || (inciteMode && !isInciteSelected) || (redirectMode && !isRedirectSelected) ? "local-discard-unselected" : ""} ${isDiscardSelected || isSnakeSelected || isBalanceSelected || isMiracleSelected || isMarriageSelected || isBenevolenceSelected || isSeduceSelected || isInciteSelected || isRedirectSelected ? "local-discard-selected" : ""}`}
                   >
                     <header>
                       <span className="mock-card-rank">
@@ -2873,7 +2884,8 @@ export default function Home() {
                       isSnakeSelected ||
                       isBalanceSelected ||
                       isMiracleSelected ||
-                      isMarriageSelected) && (
+                      isMarriageSelected ||
+                      isRedirectSelected) && (
                       <span className="local-discard-badge">ทิ้ง</span>
                     )}
                     {isBenevolenceSelected && (
