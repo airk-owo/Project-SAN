@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783659911.5664651,
-    "ast_hash": "977f13dbe1b7a38b18f335c24a10022e",
+    "mtime": 1783675938.310652,
+    "ast_hash": "3520882dcf65b0c1502bf9592b4910bf",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -645,9 +645,9 @@
     "semantic_hash": ""
   },
   "apps/web/components/LogChatPanel.tsx": {
-    "mtime": 1783205683.4544566,
-    "ast_hash": "e720a6668eca010a56ace916b3d8621b",
-    "semantic_hash": "e720a6668eca010a56ace916b3d8621b"
+    "mtime": 1783660639.1415534,
+    "ast_hash": "2771b5c34aefb2d24faa56263a92b84d",
+    "semantic_hash": ""
   },
   "apps/web/components/SettingsPopover.tsx": {
     "mtime": 1783321494.1788547,

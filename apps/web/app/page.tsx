@@ -14,6 +14,7 @@ import {
   type CSSProperties,
   type FocusEvent,
   type MouseEvent,
+  type ReactNode,
 } from "react";
 import type {
   Role,
@@ -1471,6 +1472,305 @@ export default function Home() {
     />
   );
 
+  // Collected once here (rather than each button independently deciding whether to
+  // render) so the turn-controls frame can reserve a fixed 2 skill slots below — see
+  // .local-turn-frame in the JSX. Every entry below is the exact same condition/onClick/
+  // label the button already had; only ~0-2 are ever true for a given character/state.
+  const skillButtons: ReactNode[] = [];
+  if (canSnakeAttack && !snakeMode && !discardLimitMode) {
+    skillButtons.push(
+      <button
+        key="snake"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setSnakeMode(true);
+          setSnakeCards([]);
+        }}
+      >
+        ⚔ {myPlayer?.equipment.weapon?.name || "ทวนอสรพิษ"} (ทิ้ง 2 ใบ)
+      </button>,
+    );
+  }
+  if (canAct && hasMySkill("self_damage_draw") && (myPlayer?.hp ?? 0) > 0) {
+    skillButtons.push(
+      <button
+        key="self_damage_draw"
+        className="local-skill-btn"
+        onClick={() => setConfirmSelfDamage(true)}
+      >
+        ✦ พลีชีพ (จ่าย 1 HP จั่ว 2)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("discard_then_draw_equal") &&
+    !skillUsed("discard_then_draw_equal") &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode &&
+    !miracleMode
+  ) {
+    skillButtons.push(
+      <button
+        key="balance"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setBalanceMode(true);
+          setBalanceCards([]);
+        }}
+      >
+        ✦ ถ่วงดุล (ทิ้ง→จั่ว)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("miracle_medicine") &&
+    !skillUsed("miracle_medicine") &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode &&
+    !miracleMode &&
+    !marriageMode
+  ) {
+    skillButtons.push(
+      <button
+        key="miracle"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setMiracleMode(true);
+          setMiracleCard(undefined);
+        }}
+      >
+        ✦ ยาสวรรค์ (ทิ้ง 1 → ฟื้น 1 HP)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("marriage_heal") &&
+    !skillUsed("marriage_heal") &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode &&
+    !miracleMode &&
+    !marriageMode
+  ) {
+    skillButtons.push(
+      <button
+        key="marriage"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setMarriageMode(true);
+          setMarriageCards([]);
+        }}
+      >
+        ✦ แผนแต่งงาน (ทิ้ง 2 → ฟื้น 2)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("benevolence_give") &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode &&
+    !miracleMode &&
+    !marriageMode &&
+    !benevolenceMode
+  ) {
+    skillButtons.push(
+      <button
+        key="benevolence"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setBenevolenceMode(true);
+          setBenevolenceCards([]);
+        }}
+      >
+        ✦ เมตตาธรรม (มอบไพ่ให้พันธมิตร)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("black_as_dismantle") &&
+    !bandinMode &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode
+  ) {
+    skillButtons.push(
+      <button
+        key="bandin"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setBandinMode(true);
+        }}
+      >
+        ✦ บ้าบิ่น (♠/♣ เป็น ถอนสะพาน)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("diamond_as_indulgence") &&
+    !seduceMode &&
+    !balanceMode &&
+    !discardLimitMode &&
+    !snakeMode
+  ) {
+    skillButtons.push(
+      <button
+        key="seduce"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setSeduceMode(true);
+          setSeduceCard(undefined);
+        }}
+      >
+        ✦ โปรยเสน่ห์ (♦ เป็น มีสุขลืมเมือง)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("dischord") &&
+    !skillUsed("dischord") &&
+    (myPlayer?.hand.length ?? 0) > 0 &&
+    !dischordMode
+  ) {
+    skillButtons.push(
+      <button
+        key="dischord"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setDischordMode(true);
+        }}
+      >
+        ✦ บาดหมาง (เลือกเป้าให้ทายดอก)
+      </button>,
+    );
+  }
+  if (
+    canAct &&
+    hasMySkill("incite_duel") &&
+    !skillUsed("incite") &&
+    (myPlayer?.hand.length ?? 0) > 0 &&
+    !inciteMode
+  ) {
+    skillButtons.push(
+      <button
+        key="incite"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setInciteMode(true);
+          setInciteCard(undefined);
+          setInciteFirst(undefined);
+        }}
+      >
+        ✦ สาวงามยุยง (ให้ 2 ชายท้าสู้กัน)
+      </button>,
+    );
+  }
+  if (canAct && hasMySkill("ask_shu_attack") && myPlayer?.role === "emperor" && !unityMode) {
+    skillButtons.push(
+      <button
+        key="unity"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setUnityMode(true);
+          setUnityTarget(undefined);
+        }}
+      >
+        ✦ คุณธรรมสามัคคี (ให้จ๊กก๊กโจมตีแทน)
+      </button>,
+    );
+  }
+  if (
+    isDrawPhase &&
+    hasMySkill("raid_draw_phase") &&
+    (game.turn?.drawnThisTurn ?? 0) === 0 &&
+    !raidMode
+  ) {
+    skillButtons.push(
+      <button
+        key="raid"
+        className="local-skill-btn"
+        onClick={() => {
+          cancelSelection();
+          setRaidMode(true);
+          setRaidTargets([]);
+        }}
+      >
+        ✦ จู่โจมฉับพลัน (แทนการจั่ว)
+      </button>,
+    );
+  }
+  if (isDrawPhase && hasMySkill("unarmed_tiger") && (game.turn?.drawnThisTurn ?? 0) === 0) {
+    skillButtons.push(
+      <button key="hunt" className="local-skill-btn" onClick={() => emit("skill:hunt")}>
+        ✦ ฆ่าเสือมือเปล่า (จั่ว 1 → +1 ดาเมจ)
+      </button>,
+    );
+  }
+  if (
+    isDrawPhase &&
+    hasMySkill("fortune_judgment") &&
+    (game.turn?.drawnThisTurn ?? 0) === 0 &&
+    !skillUsed("fortune_done")
+  ) {
+    skillButtons.push(
+      <button key="fortune" className="local-skill-btn" onClick={() => emit("skill:fortune")}>
+        ✦ พึ่งวาสนา (เปิดดวง เก็บดอกดำ)
+      </button>,
+    );
+  }
+  if (
+    isDrawPhase &&
+    hasMySkill("emperor_arrogance") &&
+    myPlayer?.role === "emperor" &&
+    (game.turn?.drawnThisTurn ?? 0) === 0 &&
+    !skillUsed("arrogance")
+  ) {
+    skillButtons.push(
+      <button key="arrogance" className="local-skill-btn" onClick={() => emit("skill:arrogance")}>
+        ✦ จองหอง (จั่ว +1, มือ -1)
+      </button>,
+    );
+  }
+  if (
+    isDrawPhase &&
+    hasMySkill("peek_reorder_deck") &&
+    (game.turn?.drawnThisTurn ?? 0) === 0 &&
+    !skillUsed("peek") &&
+    !game.pendingPeek
+  ) {
+    skillButtons.push(
+      <button
+        key="peek"
+        className="local-skill-btn"
+        onClick={() => {
+          setPeekOrder([]);
+          emit("skill:peek");
+        }}
+      >
+        ✦ หยั่งรู้ฟ้าดิน (ดู/จัดกองจั่ว)
+      </button>,
+    );
+  }
+
   return (
     <>
       {navbar}
@@ -2111,272 +2411,46 @@ export default function Home() {
                 <strong>⬆ กดกองจั่วบนโต๊ะเพื่อจั่วไพ่</strong>
               ) : null}
             </div>
-            <div className="local-turn-controls">
-              <button
-                disabled={
-                  !isMyTurn ||
-                  Boolean(rw) ||
-                  Boolean(pj) ||
-                  game.turn?.phase === "draw" ||
-                  requiredDiscard > 0 ||
-                  myOwedDraws > 0
-                }
-                onClick={() => emit("turn:end")}
-              >
-                จบเทิร์น
-              </button>
-              {requiredDiscard > 0 && isMyTurn && !discardLimitMode && (
-                <button
-                  className="mock-muted-button"
-                  onClick={() => {
-                    setDiscardLimitMode(true);
-                    setDiscardLimitSelected([]);
-                  }}
+            <div className="local-turn-frame">
+              {[0, 1].map((i) => (
+                <div
+                  key={i}
+                  className={`local-skill-slot${skillButtons[i] ? "" : " local-skill-slot-empty"}`}
                 >
-                  ทิ้งไพ่เกินมือ ({requiredDiscard})
-                </button>
-              )}
-              {canSnakeAttack && !snakeMode && !discardLimitMode && (
+                  {skillButtons[i] ?? null}
+                </div>
+              ))}
+              {skillButtons.slice(2).map((btn, i) => (
+                <div key={`extra-${i}`} className="local-skill-slot">
+                  {btn}
+                </div>
+              ))}
+              <div className="local-turn-controls">
+                {requiredDiscard > 0 && isMyTurn && !discardLimitMode && (
+                  <button
+                    className="mock-muted-button"
+                    onClick={() => {
+                      setDiscardLimitMode(true);
+                      setDiscardLimitSelected([]);
+                    }}
+                  >
+                    ทิ้งไพ่เกินมือ ({requiredDiscard})
+                  </button>
+                )}
                 <button
-                  className="mock-muted-button"
-                  onClick={() => {
-                    cancelSelection();
-                    setSnakeMode(true);
-                    setSnakeCards([]);
-                  }}
+                  disabled={
+                    !isMyTurn ||
+                    Boolean(rw) ||
+                    Boolean(pj) ||
+                    game.turn?.phase === "draw" ||
+                    requiredDiscard > 0 ||
+                    myOwedDraws > 0
+                  }
+                  onClick={() => emit("turn:end")}
                 >
-                  ⚔ {myPlayer?.equipment.weapon?.name || "ทวนอสรพิษ"} (ทิ้ง 2
-                  ใบ)
+                  จบเทิร์น
                 </button>
-              )}
-              {canAct &&
-                hasMySkill("self_damage_draw") &&
-                (myPlayer?.hp ?? 0) > 0 && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => setConfirmSelfDamage(true)}
-                  >
-                    ✦ พลีชีพ (จ่าย 1 HP จั่ว 2)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("discard_then_draw_equal") &&
-                !skillUsed("discard_then_draw_equal") &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode &&
-                !miracleMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setBalanceMode(true);
-                      setBalanceCards([]);
-                    }}
-                  >
-                    ✦ ถ่วงดุล (ทิ้ง→จั่ว)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("miracle_medicine") &&
-                !skillUsed("miracle_medicine") &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode &&
-                !miracleMode &&
-                !marriageMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setMiracleMode(true);
-                      setMiracleCard(undefined);
-                    }}
-                  >
-                    ✦ ยาสวรรค์ (ทิ้ง 1 → ฟื้น 1 HP)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("marriage_heal") &&
-                !skillUsed("marriage_heal") &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode &&
-                !miracleMode &&
-                !marriageMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setMarriageMode(true);
-                      setMarriageCards([]);
-                    }}
-                  >
-                    ✦ แผนแต่งงาน (ทิ้ง 2 → ฟื้น 2)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("benevolence_give") &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode &&
-                !miracleMode &&
-                !marriageMode &&
-                !benevolenceMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setBenevolenceMode(true);
-                      setBenevolenceCards([]);
-                    }}
-                  >
-                    ✦ เมตตาธรรม (มอบไพ่ให้พันธมิตร)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("black_as_dismantle") &&
-                !bandinMode &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setBandinMode(true);
-                    }}
-                  >
-                    ✦ บ้าบิ่น (♠/♣ เป็น ถอนสะพาน)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("diamond_as_indulgence") &&
-                !seduceMode &&
-                !balanceMode &&
-                !discardLimitMode &&
-                !snakeMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setSeduceMode(true);
-                      setSeduceCard(undefined);
-                    }}
-                  >
-                    ✦ โปรยเสน่ห์ (♦ เป็น มีสุขลืมเมือง)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("dischord") &&
-                !skillUsed("dischord") &&
-                (myPlayer?.hand.length ?? 0) > 0 &&
-                !dischordMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setDischordMode(true);
-                    }}
-                  >
-                    ✦ บาดหมาง (เลือกเป้าให้ทายดอก)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("incite_duel") &&
-                !skillUsed("incite") &&
-                (myPlayer?.hand.length ?? 0) > 0 &&
-                !inciteMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setInciteMode(true);
-                      setInciteCard(undefined);
-                      setInciteFirst(undefined);
-                    }}
-                  >
-                    ✦ สาวงามยุยง (ให้ 2 ชายท้าสู้กัน)
-                  </button>
-                )}
-              {canAct &&
-                hasMySkill("ask_shu_attack") &&
-                myPlayer?.role === "emperor" &&
-                !unityMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setUnityMode(true);
-                      setUnityTarget(undefined);
-                    }}
-                  >
-                    ✦ คุณธรรมสามัคคี (ให้จ๊กก๊กโจมตีแทน)
-                  </button>
-                )}
-              {isDrawPhase &&
-                hasMySkill("raid_draw_phase") &&
-                (game.turn?.drawnThisTurn ?? 0) === 0 &&
-                !raidMode && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      cancelSelection();
-                      setRaidMode(true);
-                      setRaidTargets([]);
-                    }}
-                  >
-                    ✦ จู่โจมฉับพลัน (แทนการจั่ว)
-                  </button>
-                )}
-              {isDrawPhase &&
-                hasMySkill("unarmed_tiger") &&
-                (game.turn?.drawnThisTurn ?? 0) === 0 && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => emit("skill:hunt")}
-                  >
-                    ✦ ฆ่าเสือมือเปล่า (จั่ว 1 → +1 ดาเมจ)
-                  </button>
-                )}
-              {isDrawPhase &&
-                hasMySkill("fortune_judgment") &&
-                (game.turn?.drawnThisTurn ?? 0) === 0 &&
-                !skillUsed("fortune_done") && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => emit("skill:fortune")}
-                  >
-                    ✦ พึ่งวาสนา (เปิดดวง เก็บดอกดำ)
-                  </button>
-                )}
-              {isDrawPhase &&
-                hasMySkill("emperor_arrogance") &&
-                myPlayer?.role === "emperor" &&
-                (game.turn?.drawnThisTurn ?? 0) === 0 &&
-                !skillUsed("arrogance") && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => emit("skill:arrogance")}
-                  >
-                    ✦ จองหอง (จั่ว +1, มือ -1)
-                  </button>
-                )}
-              {isDrawPhase &&
-                hasMySkill("peek_reorder_deck") &&
-                (game.turn?.drawnThisTurn ?? 0) === 0 &&
-                !skillUsed("peek") &&
-                !game.pendingPeek && (
-                  <button
-                    className="local-skill-btn"
-                    onClick={() => {
-                      setPeekOrder([]);
-                      emit("skill:peek");
-                    }}
-                  >
-                    ✦ หยั่งรู้ฟ้าดิน (ดู/จัดกองจั่ว)
-                  </button>
-                )}
+              </div>
             </div>
             {(selectedAttackId || selectedDiscardId || selectedStealId) && (
               <button className="local-cancel" onClick={cancelSelection}>
