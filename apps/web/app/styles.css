@@ -5655,7 +5655,8 @@ textarea,
 }
 .local-room-settings .settings-row-label b {
   color: #f6efdd;
-  font-size: 0.95rem;
+  font-size: 0.85rem; /* match .local-room-settings-title, was too big/bold */
+  font-weight: 600;
 }
 .local-room-settings .settings-row-label small {
   color: #c8b58a;
@@ -5663,6 +5664,7 @@ textarea,
 }
 .local-room-settings .local-setting-value {
   color: #f5d994;
+  font-weight: 600; /* <b> defaults to bold(700), read as too heavy at this size */
 }
 .settings-switch:disabled {
   cursor: default;
