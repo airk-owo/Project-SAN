@@ -4072,6 +4072,15 @@ img.mock-card-art {
   width: 100%;
   margin: 0;
 }
+/* The room-settings toggle switch is a <button> nested inside .local-lobby-controls,
+   so the full-width rule above (meant for the room's action buttons) was stretching
+   it to fill the panel, stranding the knob. Restore its fixed pill size — 3 classes
+   here outweighs the 2-classes-plus-element specificity of the rule above. */
+.local-navpanel .local-lobby-controls .settings-switch {
+  width: 52px;
+  height: 30px;
+  margin: 0;
+}
 
 /* Center-of-table "waiting for pick" message */
 .local-select-center {
