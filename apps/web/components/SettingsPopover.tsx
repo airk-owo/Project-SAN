@@ -4,6 +4,8 @@ type Props = {
   onToggleConfirm: () => void;
   soundOn: boolean;
   onToggleSound: () => void;
+  cardTipEnabled: boolean;
+  onToggleCardTip: () => void;
 };
 
 // In-game settings popover — anchored under the ⚙️ navbar button.
@@ -15,6 +17,8 @@ export function SettingsPopover({
   onToggleConfirm,
   soundOn,
   onToggleSound,
+  cardTipEnabled,
+  onToggleCardTip,
 }: Props) {
   return (
     <>
@@ -50,6 +54,21 @@ export function SettingsPopover({
             aria-checked={soundOn}
             className={`settings-switch${soundOn ? " on" : ""}`}
             onClick={onToggleSound}
+          >
+            <span className="settings-switch-knob" />
+          </button>
+        </div>
+        <div className="settings-row">
+          <span className="settings-row-label">
+            <b>ทูลทิปไพ่</b>
+            <small>แสดงชื่อ/คำอธิบายการ์ดตอนชี้เมาส์ที่ไพ่บนมือ</small>
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={cardTipEnabled}
+            className={`settings-switch${cardTipEnabled ? " on" : ""}`}
+            onClick={onToggleCardTip}
           >
             <span className="settings-switch-knob" />
           </button>

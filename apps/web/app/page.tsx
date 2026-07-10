@@ -121,6 +121,7 @@ export default function Home() {
     e: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>,
     card: Card,
   ) => {
+    if (!cardTipEnabled) return;
     const rect = e.currentTarget.getBoundingClientRect();
     // Clamp so the tip (max 230px wide, see .card-tip) never pokes past the viewport
     // edge on narrow screens — that would grow the whole page into a side-scroller.
@@ -148,6 +149,7 @@ export default function Home() {
   const [encDetail, setEncDetail] = useState<Card | null>(null);
   const [encCharDetail, setEncCharDetail] = useState<Character | null>(null);
   const [confirmBeforePlay, setConfirmBeforePlay] = useState(true); // default ON — opt out via settings
+  const [cardTipEnabled, setCardTipEnabled] = useState(true); // hover tooltip on hand cards — default ON
   const [pendingPlay, setPendingPlay] = useState<{
     event: string;
     data?: Record<string, unknown>;
@@ -324,6 +326,11 @@ export default function Home() {
   useEffect(() => {
     const stored = localStorage.getItem("wtk-confirm-play");
     setConfirmBeforePlay(stored === null ? true : stored === "1");
+  }, []);
+  // Hover tooltip on hand cards — same persisted-preference pattern as above.
+  useEffect(() => {
+    const stored = localStorage.getItem("wtk-card-tip");
+    setCardTipEnabled(stored === null ? true : stored === "1");
   }, []);
   // Encyclopedia: lazy-load the full card + general catalogues on first open.
   useEffect(() => {
@@ -721,6 +728,15 @@ export default function Home() {
       try {
         localStorage.setItem("wtk-confirm-play", next ? "1" : "0");
       } catch {}
+      return next;
+    });
+  const toggleCardTipEnabled = () =>
+    setCardTipEnabled((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("wtk-card-tip", next ? "1" : "0");
+      } catch {}
+      if (!next) setHoverTip(null); // hide any tip currently showing when turned off
       return next;
     });
 
@@ -1424,6 +1440,8 @@ export default function Home() {
               onToggleConfirm={toggleConfirmBeforePlay}
               soundOn={soundOn}
               onToggleSound={() => setSoundOn((v) => !v)}
+              cardTipEnabled={cardTipEnabled}
+              onToggleCardTip={toggleCardTipEnabled}
             />
           )}
         </div>

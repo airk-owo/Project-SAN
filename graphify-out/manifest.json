@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783681091.30713,
-    "ast_hash": "85c5cdbf4593cdd12b064e6b8969681d",
+    "mtime": 1783681613.3092,
+    "ast_hash": "94a967d8016b1c703a82946394ca1714",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/SettingsPopover.tsx": {
-    "mtime": 1783321494.1788547,
-    "ast_hash": "1d40b4190fabfa045c0ef9d2140d3557",
+    "mtime": 1783681556.4730487,
+    "ast_hash": "e0811acb0afec6eb3d52a72fe66fc54c",
     "semantic_hash": ""
   },
   "packages/game/src/engine/actions.ts": {
