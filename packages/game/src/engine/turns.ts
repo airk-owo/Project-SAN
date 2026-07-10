@@ -546,8 +546,8 @@ export function discardForHandLimit(
   const required = getDiscardRequirement(state, playerId),
     unique = [...new Set(cardIds)];
   if (required === 0) throw new Error("You do not need to discard cards");
-  if (unique.length < required)
-    throw new Error(`ต้องทิ้งอย่างน้อย ${required} ใบ`); // ทิ้งได้ตั้งแต่ขั้นต่ำจนถึงทั้งมือ (ตามที่ผู้เล่นต้องการ)
+  if (unique.length !== required)
+    throw new Error(`ต้องทิ้ง ${required} ใบพอดี`); // ต้องทิ้งให้เหลือพอดีจำนวนพลังชีวิต ในครั้งเดียว ทิ้งน้อยหรือมากกว่านี้ไม่ได้
   const selected = player.hand.filter((card) => unique.includes(card.id));
   if (selected.length !== unique.length)
     throw new Error("A selected card is not in your hand");

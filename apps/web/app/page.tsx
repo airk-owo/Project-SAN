@@ -2479,11 +2479,11 @@ export default function Home() {
             {discardLimitMode && (
               <div className="local-discard-limit-bar">
                 <span>
-                  เลือก <b>{discardLimitSelected.length}</b> ใบ (อย่างน้อย{" "}
-                  {requiredDiscard} ใบ — จะทิ้งมากกว่านี้ก็ได้)
+                  เลือก <b>{discardLimitSelected.length}</b> ใบ (ต้องทิ้ง{" "}
+                  {requiredDiscard} ใบพอดี)
                 </span>
                 <button
-                  disabled={discardLimitSelected.length < requiredDiscard}
+                  disabled={discardLimitSelected.length !== requiredDiscard}
                   onClick={() => setDiscardLimitConfirming(true)}
                 >
                   ทิ้งที่เลือก
