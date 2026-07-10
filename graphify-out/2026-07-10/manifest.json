@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783658193.6005876,
-    "ast_hash": "fce7e918ec25547bf1ad95439879634d",
+    "mtime": 1783614842.0943675,
+    "ast_hash": "a125ac133535412b0df10a6241b11e37",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1783615941.4446826,
-    "ast_hash": "a783deca9bd2ca952948167c71656405",
+    "mtime": 1783466167.7019918,
+    "ast_hash": "b3df8aeb585c4f8b472fe21b432edaa3",
     "semantic_hash": ""
   },
   "REVIEWS/feat-card-tooltips.md": {

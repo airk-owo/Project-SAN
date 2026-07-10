@@ -7,7 +7,14 @@
  *     • app/game/mock/page.tsx  — design sandbox
  *   Almost all styling lives in app/styles.css (Tailwind is inert here).
  */
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FocusEvent,
+  type MouseEvent,
+} from "react";
 import type {
   Role,
   Character,
@@ -99,6 +106,28 @@ export default function Home() {
   const [nameTip, setNameTip] = useState<{ key: string; name: string } | null>(
     null,
   );
+  // Hand card-info tooltip: rendered as a single fixed-position sibling of <main> (see
+  // near <CardDetailModal>) instead of nested inside .mock-hand, because .mock-hand's
+  // overflow-x:auto (which forces overflow-y:auto) clips anything positioned inside it,
+  // and .mock-hand/.mock-current-player's will-change/filter would hijack a nested
+  // position:fixed element's containing block anyway.
+  const [hoverTip, setHoverTip] = useState<{
+    card: Card;
+    x: number;
+    bottomOffset: number;
+  } | null>(null);
+  const showCardTip = (
+    e: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>,
+    card: Card,
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setHoverTip({
+      card,
+      x: rect.left + rect.width / 2,
+      bottomOffset: window.innerHeight - rect.top + 12,
+    });
+  };
+  const hideCardTip = () => setHoverTip(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showEncyclopedia, setShowEncyclopedia] = useState(false);
   const [catalog, setCatalog] = useState<Card[] | null>(null);
@@ -469,6 +498,7 @@ export default function Home() {
     const handler = (e: WheelEvent) => {
       e.preventDefault();
       el.scrollLeft += e.deltaY;
+      setHoverTip(null); // avoid a stale-positioned tip after scrolling the hand
     };
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
@@ -2657,6 +2687,12 @@ export default function Home() {
                         handleClick();
                       }
                     }}
+                    onMouseEnter={(e) =>
+                      !pickMode && info && showCardTip(e, card)
+                    }
+                    onMouseLeave={hideCardTip}
+                    onFocus={(e) => !pickMode && info && showCardTip(e, card)}
+                    onBlur={hideCardTip}
                     className={`mock-card mock-card-suit-${suitColor(card.suit)} ${pickMode ? "local-hand-card" : playable ? "local-hand-card" : "local-card-disabled"} ${!pickMode && (selectedAttackId === card.id || selectedDiscardId === card.id || selectedStealId === card.id) ? "selected-card" : ""} ${(discardLimitMode && !isDiscardSelected) || (snakeMode && !isSnakeSelected) || (balanceMode && !isBalanceSelected) || (miracleMode && !isMiracleSelected) || (marriageMode && !isMarriageSelected) || (benevolenceMode && !isBenevolenceSelected) || (seduceMode && !isSeduceSelected) || (inciteMode && !isInciteSelected) ? "local-discard-unselected" : ""} ${isDiscardSelected || isSnakeSelected || isBalanceSelected || isMiracleSelected || isMarriageSelected || isBenevolenceSelected || isSeduceSelected || isInciteSelected ? "local-discard-selected" : ""}`}
                   >
                     <header>
@@ -2698,21 +2734,6 @@ export default function Home() {
                     )}
                     {isSeduceSelected && (
                       <span className="local-discard-badge">เสน่ห์</span>
-                    )}
-                    {!pickMode && info && (
-                      <div className="card-tip" role="tooltip">
-                        <b className="card-tip-name">{card.name}</b>
-                        <span className="card-tip-type">
-                          {cardTypeLabel(card)} · {card.number}
-                          {suitTx(card.suit)}
-                        </span>
-                        <p className="card-tip-desc">{info.desc}</p>
-                        {info.use && (
-                          <p className="card-tip-use">
-                            <i>เมื่อไหร่:</i> {info.use}
-                          </p>
-                        )}
-                      </div>
                     )}
                   </article>
                 );
@@ -3106,6 +3127,29 @@ export default function Home() {
           card={detailCard}
           onClose={() => setDetailCard(undefined)}
         />
+        {hoverTip &&
+          (() => {
+            const tipInfo = cardInfo(hoverTip.card);
+            return (
+              <div
+                className="card-tip"
+                role="tooltip"
+                style={{ left: hoverTip.x, bottom: hoverTip.bottomOffset }}
+              >
+                <b className="card-tip-name">{hoverTip.card.name}</b>
+                <span className="card-tip-type">
+                  {cardTypeLabel(hoverTip.card)} · {hoverTip.card.number}
+                  {suitTx(hoverTip.card.suit)}
+                </span>
+                <p className="card-tip-desc">{tipInfo.desc}</p>
+                {tipInfo.use && (
+                  <p className="card-tip-use">
+                    <i>เมื่อไหร่:</i> {tipInfo.use}
+                  </p>
+                )}
+              </div>
+            );
+          })()}
         <DropZoneModal
           open={showDropZone}
           onClose={() => setShowDropZone(false)}

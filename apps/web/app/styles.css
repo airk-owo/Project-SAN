@@ -3277,11 +3277,16 @@ h2 {
 .mock-card {
   position: relative;
 }
+/* Positioned via inline style (left/bottom, viewport-relative px) set from the hovered
+   card's getBoundingClientRect() in page.tsx — the tip is rendered as a sibling of
+   <main> (near <CardDetailModal>), NOT nested inside .mock-hand, because .mock-hand's
+   overflow-x:auto (which forces overflow-y:auto) clips anything positioned inside it,
+   and .mock-hand/.mock-current-player's will-change/filter would hijack a nested
+   position:fixed element's containing block anyway. Visibility is a plain React
+   mount/unmount, not a CSS :hover trigger. */
 .card-tip {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 12px);
-  transform: translateX(-50%) translateY(6px);
+  position: fixed;
+  transform: translateX(-50%);
   width: 230px;
   z-index: 30;
   display: grid;
@@ -3294,11 +3299,6 @@ h2 {
   color: var(--text);
   text-align: left;
   pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.14s cubic-bezier(0.2, 0.8, 0.2, 1),
-    transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .card-tip::after {
   content: "";
@@ -3309,12 +3309,22 @@ h2 {
   border: 8px solid transparent;
   border-top-color: var(--primary);
 }
-.mock-card:hover .card-tip,
-.mock-card:focus-visible .card-tip,
-.mock-card:focus .card-tip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
+/* Transitions don't play on initial mount; an animation does, so the pop-in plays
+   every time the tip is inserted for a newly-hovered card. */
+@media (prefers-reduced-motion: no-preference) {
+  .card-tip {
+    animation: card-tip-pop 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+@keyframes card-tip-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 .card-tip-name {
   font-family: Baozi, BaiJamjuree, sans-serif;
@@ -3350,17 +3360,6 @@ h2 {
 .mock-card:focus-visible {
   outline: 3px solid var(--info);
   outline-offset: 2px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .card-tip {
-    transition: none;
-    transform: translateX(-50%);
-  }
-  .mock-card:hover .card-tip,
-  .mock-card:focus .card-tip,
-  .mock-card:focus-visible .card-tip {
-    transform: translateX(-50%);
-  }
 }
 @media (max-width: 760px) {
   .card-tip {
