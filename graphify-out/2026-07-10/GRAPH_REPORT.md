@@ -1,7 +1,7 @@
 # Graph Report - Project-SAN  (2026-07-10)
 
 ## Corpus Check
-- 136 files · ~905,765 words
+- 136 files · ~905,801 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fccd08a1`
+- Built from commit: `e2bdc37a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -150,7 +150,7 @@ Cohesion: 0.08
 Nodes (160): bindAuth(), unbindAuth(), verifyAccessToken(), isTimerFrozen(), registerDevSandbox(), createServer(), GameData, loadGameData() (+152 more)
 
 ### Community 1 - "index.ts"
-Cohesion: 0.17
+Cohesion: 0.18
 Nodes (17): card(), cardInfo(), cardTypeLabel(), suitColor(), suitTx(), Character, CardDetailModal(), Props (+9 more)
 
 ### Community 2 - "basic-combat.scenarios.ts"
@@ -207,7 +207,7 @@ Nodes (14): Account identity and character identity, Basic turn phases, Canonica
 
 ### Community 15 - "dealRoles"
 Cohesion: 0.14
-Nodes (17): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, IceSelection (+9 more)
+Nodes (18): CARD_INFO, charName(), hearts(), KINGDOM_FACTION, lobbyPosition(), PHASE_LABEL, SUIT_TEXT, IceSelection (+10 more)
 
 ### Community 16 - "scripts"
 Cohesion: 0.15
@@ -235,7 +235,7 @@ Nodes (9): devDependencies, typescript, exports, name, scripts, check, test, typ
 
 ### Community 23 - "delayed-tricks.test.ts"
 Cohesion: 0.11
-Nodes (18): Game, Member, Player, ResponseWindow, Role, RoleAliveCounts, RoleDefinition, Room (+10 more)
+Nodes (19): Game, Member, Player, ResponseWindow, Role, RoleAliveCounts, RoleDefinition, Room (+11 more)
 
 ### Community 24 - "snake-spear.test.ts"
 Cohesion: 0.29
@@ -266,8 +266,8 @@ Cohesion: 0.25
 Nodes (6): BASIC_ICONS, DebugSandboxPanel(), Props, QaTab, RANKS, SUITS
 
 ### Community 32 - "DropZoneModal.tsx"
-Cohesion: 0.31
-Nodes (6): coarsePointer(), CardFace(), DropZoneModal(), NameTip, Props, TablePiles()
+Cohesion: 0.50
+Nodes (4): coarsePointer(), DropZoneModal(), NameTip, Props
 
 ### Community 34 - "next.config.mjs"
 Cohesion: 0.25

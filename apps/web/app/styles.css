@@ -38,6 +38,11 @@ body {
     elements near the edge (e.g. the fixed-position card-tip, wide fixed-width
     buttons) must never grow the whole page into a side-scrolling viewport —
     vertical scroll and each component's own inner overflow-x are unaffected */
+  /* .local-navbar is position:fixed (see there) and no longer reserves its own
+     space in normal flow — this padding reserves that same space at the top of
+     every page instead, using the same live-measured height (page.tsx ResizeObserver
+     effect keeps --wtk-nav-h in sync with the navbar's actual rendered height). */
+  padding-top: var(--wtk-nav-h, 56px);
   background-image:
     linear-gradient(
       to bottom right,
@@ -3897,8 +3902,16 @@ img.mock-card-art {
   margin: 0 auto;
 }
 .local-navbar {
-  position: sticky;
+  /* fixed (not sticky): sticky only "sticks" once the page scrolls past it while it's
+     still in normal flow — on some ancestor/scroll-container setups across this app's
+     several screens (lobby, waiting room, mobile game) that reference frame wasn't
+     reliably the viewport, so it visually scrolled away. Fixed is unconditionally
+     viewport-relative. `body`'s padding-top (below) reserves the space it used to
+     occupy in-flow, so removing it from flow doesn't shift any page's layout. */
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 140;
   display: flex;
   align-items: center;
@@ -3908,6 +3921,12 @@ img.mock-card-art {
   border-bottom: 1px solid #c8b58a55;
   box-shadow: 0 3px 14px #0006;
   backdrop-filter: blur(3px);
+  transition: transform 0.25s ease;
+}
+/* Auto-hide on scroll-down, reveal on scroll-up (toggled in page.tsx via a window
+   scroll listener). No-op on screens that don't scroll — scrollY never changes there. */
+.local-navbar-collapsed {
+  transform: translateY(-100%);
 }
 .local-navbar-left {
   flex: 1;

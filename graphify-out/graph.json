@@ -11103,7 +11103,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L787",
+      "source_location": "L816",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_server_src_server_test_join"
@@ -14704,7 +14704,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L599",
+      "source_location": "L628",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playthunder"
@@ -15237,7 +15237,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1540",
+      "source_location": "L1569",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_roletext"
@@ -15259,7 +15259,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2009",
+      "source_location": "L2038",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -15325,7 +15325,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1908",
+      "source_location": "L1937",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -15589,7 +15589,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2623",
+      "source_location": "L2652",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -15677,7 +15677,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1487",
+      "source_location": "L1516",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suitcolor"
@@ -15831,7 +15831,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1493",
+      "source_location": "L1522",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -16073,7 +16073,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1502",
+      "source_location": "L1531",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel"
@@ -16216,7 +16216,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1612",
+      "source_location": "L1641",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_edgeposition"
@@ -17518,7 +17518,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L665",
+      "source_location": "L694",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_socket_play_confirm_events"
@@ -44630,5 +44630,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "e2bdc37a21bc93f5c895db8be34b131c446a4e83"
+  "built_at_commit": "668f3e12cedaee33ed8a8249cd72bc927fe746f4"
 }

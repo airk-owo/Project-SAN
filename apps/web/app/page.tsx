@@ -511,8 +511,9 @@ export default function Home() {
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
   }, [game?.phase]);
-  // Publish the sticky navbar's live height as --wtk-nav-h so the in-game page can
-  // size itself to a single screen (100dvh minus navbar) and popups can clear it.
+  // Publish the fixed navbar's live height as --wtk-nav-h so every page can reserve
+  // that space (body padding-top) and the in-game page can size itself to a single
+  // screen (100dvh minus navbar); popups also use it to clear the bar.
   useEffect(() => {
     const el = navRef.current;
     if (!el) return;
@@ -526,6 +527,34 @@ export default function Home() {
     ro.observe(el);
     return () => ro.disconnect();
   }, [game?.phase]);
+  // Auto-hide the navbar on scroll-down, reveal on scroll-up (a no-op on screens that
+  // don't scroll — window.scrollY never changes there, e.g. the desktop single-screen
+  // game view or the lobby, both of which lock body scroll elsewhere in this file).
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    let lastY = Math.max(0, window.scrollY);
+    let ticking = false;
+    const apply = () => {
+      const y = Math.max(0, window.scrollY);
+      if (y <= nav.offsetHeight) {
+        nav.classList.remove("local-navbar-collapsed"); // always show near the top
+      } else if (y > lastY) {
+        nav.classList.add("local-navbar-collapsed"); // scrolling down
+      } else if (y < lastY) {
+        nav.classList.remove("local-navbar-collapsed"); // scrolling up
+      }
+      lastY = y;
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(apply);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   // Tick once per second while a response/decision countdown is active (display only; server enforces the skip)
   useEffect(() => {
     if (!game?.responseDeadline && !game?.startDeadline) return;
