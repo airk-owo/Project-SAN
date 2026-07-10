@@ -873,7 +873,7 @@ export default function Home() {
   // min/max overlap distance lives in styles.css (.mock-hand → --hand-overlap-min
   // / --hand-overlap-max). Tune the two card counts below to change WHEN the fan
   // starts tightening and when it hits max overlap.
-  const HAND_OVERLAP_FROM = 5; // ≤ this many cards → spread out (fill 0)
+  const HAND_OVERLAP_FROM = 2; // ≤ this many cards → spread out (fill 0)
   const HAND_OVERLAP_TO = 16; // ≥ this many cards → tightest stack (fill 1)
   const handFill = Math.max(
     0,

@@ -1531,7 +1531,7 @@ h2 {
   padding: 10px 8px 18px;
   /* Hand fan overlap knobs — JS sets --hand-fill (0→1) from card count; these two
      ends set the overlap distance. Less negative = more spread; more = tighter stack. */
-  --hand-overlap-min: -4px; /* few cards → barely overlap */
+  --hand-overlap-min: -22px; /* few cards → still a clearly visible overlap */
   --hand-overlap-max: -46px; /* many cards → tight stack */
   /* Soft edge fade width (left/right), instead of a hard cut-off. Tune to taste. */
   --hand-fade: 28px;
@@ -4311,7 +4311,7 @@ img {
     display: grid;
     /* --actions-gap: horizontal gap between [seat] · [buttons] · [hand]. Tune to taste.
        Middle column is now narrow (buttons are fixed-width, item 5) → seat & hand sit closer. */
-    --actions-gap: 10px;
+    --actions-gap: 6px;
     grid-template-columns: 244px minmax(160px, 190px) minmax(0, 1fr);
     column-gap: var(--actions-gap);
     align-items: end;
@@ -4319,27 +4319,21 @@ img {
   }
   .local-game-page .mock-current-player > .mock-self {
     grid-column: 1;
-    align-self: end;
+    align-self: start; /* was end — trying top-anchored per request, easy to revert */
     justify-self: start;
   }
   .local-game-page .mock-current-player > .local-action-col {
     grid-column: 2;
-    align-self: end;
+    /* Top-anchored (was end): characters with extra skill-mode buttons append them
+       below จบเทิร์น/ทิ้งไพ่ inside this column — bottom-anchoring made that growth
+       push the whole block upward, visibly shifting the main buttons' position.
+       Anchoring the top instead means extra buttons just extend downward in place. */
+    align-self: start;
   }
   .local-game-page .mock-current-player > .mock-hand {
     grid-column: 3;
     align-self: end;
     justify-content: flex-start;
-  }
-  /* Fluid hand-card size on the single screen — fills the wide hand column and
-     scales with the viewport. Tune the clamp (min, ideal, max) here; height keeps
-     the 126:180 ratio automatically. */
-  .local-game-page .mock-hand {
-    --hand-card-w: clamp(126px, 9.2vw, 168px);
-  }
-  .local-game-page .mock-hand .mock-card {
-    width: var(--hand-card-w);
-    height: calc(var(--hand-card-w) * 1.4286);
   }
 }
 
@@ -5807,7 +5801,7 @@ textarea,
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 8px 24px 6px;
+    padding: 8px 24px 16px; /* bottom was 6px — seat card/buttons sat flush on the edge */
     margin-inline: auto;
   }
   .local-game-page > .mock-match-layout {
@@ -5853,6 +5847,10 @@ textarea,
     flex: 0 0 auto;
     max-height: 46vh;
     margin: -34px auto 0; /* keep the slight tuck under the table piles */
+    /* Override the bare .mock-current-player{max-width:1060px} rule elsewhere in this
+       file — that stale cap centered the whole row at a fixed width, wasting equal
+       margins on both sides of a wide screen. Let it use the full row width instead. */
+    max-width: none;
   }
   /* Part B — stack the turn/action buttons top-to-bottom in the middle column. */
   .local-game-page .local-turn-controls {
