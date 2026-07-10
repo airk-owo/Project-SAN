@@ -2674,8 +2674,10 @@ h2 {
 }
 .local-card-disabled {
   cursor: not-allowed;
-  opacity: 0.52;
-  filter: grayscale(0.55);
+  /* filter only, no opacity: opacity makes the whole card translucent (including its
+     own background), so heavily-overlapping cards bled through each other. Grayscale
+     + brightness dims it while the card stays fully opaque, blocking the one behind. */
+  filter: grayscale(0.65) brightness(0.8);
 }
 .local-action-empty {
   position: absolute;
@@ -3594,10 +3596,11 @@ h2 {
   border-radius: 8px;
   opacity: 0.4;
 }
-/* Discard-for-hand-limit selection mode */
+/* Discard-for-hand-limit selection mode. filter only (not opacity) — same reason as
+   .local-card-disabled: opacity bleeds overlapping cards into each other. */
 .local-discard-unselected {
-  opacity: 0.45;
-  transition: opacity 0.1s;
+  filter: grayscale(0.5) brightness(0.85);
+  transition: filter 0.1s;
 }
 .local-discard-selected {
   outline: 3px solid var(--danger) !important;
