@@ -28,9 +28,16 @@
 * {
   box-sizing: border-box;
 }
+html {
+  overflow-x: hidden;
+}
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden; /* page-level safeguard: on narrow windows/phones, stray
+    elements near the edge (e.g. the fixed-position card-tip, wide fixed-width
+    buttons) must never grow the whole page into a side-scrolling viewport —
+    vertical scroll and each component's own inner overflow-x are unaffected */
   background-image:
     linear-gradient(
       to bottom right,
@@ -4717,6 +4724,8 @@ textarea,
   justify-content: center;
   max-height: min(62vh, 500px);
   overflow-y: auto;
+  overflow-x: hidden; /* without this, overflow-y:auto alone computes overflow-x to
+    auto too (CSS overflow spec), showing a spurious side-scrollbar on rounding */
   padding: 10px 2px;
 }
 /* Each preview is a real hand-card face (CardFace = .mock-card). The wrapper is the
@@ -5682,6 +5691,9 @@ textarea,
 .mock-card-pile .mock-card-name {
   font-size: 0.72rem;
   line-height: 1.05;
+}
+.mock-card-pile small {
+  font-size: 0.58rem;
 }
 .mock-card-pile.local-card-played {
   animation: local-card-drop 0.42s cubic-bezier(0.2, 0.8, 0.3, 1.25);

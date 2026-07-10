@@ -103,7 +103,7 @@ export function DropZoneModal({
                     {isTop && (
                       <span className="dropzone-card-badge">ล่าสุด</span>
                     )}
-                    <CardFace card={card} />
+                    <CardFace card={card} className="mock-card-pile" />
                   </div>
                 );
               })}

@@ -121,9 +121,17 @@ export default function Home() {
     card: Card,
   ) => {
     const rect = e.currentTarget.getBoundingClientRect();
+    // Clamp so the tip (max 230px wide, see .card-tip) never pokes past the viewport
+    // edge on narrow screens — that would grow the whole page into a side-scroller.
+    const halfTip = 115;
+    const margin = 8;
+    const x = Math.min(
+      Math.max(rect.left + rect.width / 2, halfTip + margin),
+      window.innerWidth - halfTip - margin,
+    );
     setHoverTip({
       card,
-      x: rect.left + rect.width / 2,
+      x,
       bottomOffset: window.innerHeight - rect.top + 12,
     });
   };

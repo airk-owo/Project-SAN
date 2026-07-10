@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783614842.0943675,
-    "ast_hash": "a125ac133535412b0df10a6241b11e37",
+    "mtime": 1783658844.6020613,
+    "ast_hash": "01769ecd3cadb7bf2acffe7be815117d",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1783466167.7019918,
-    "ast_hash": "b3df8aeb585c4f8b472fe21b432edaa3",
+    "mtime": 1783615941.4446826,
+    "ast_hash": "a783deca9bd2ca952948167c71656405",
     "semantic_hash": ""
   },
   "REVIEWS/feat-card-tooltips.md": {
@@ -635,9 +635,9 @@
     "semantic_hash": "5e7e431039b5a233fe7dbf7f3cb3efab"
   },
   "apps/web/components/DropZoneModal.tsx": {
-    "mtime": 1783205737.5584965,
-    "ast_hash": "dd289cbe4815542789f149240756a892",
-    "semantic_hash": "dd289cbe4815542789f149240756a892"
+    "mtime": 1783659382.6110961,
+    "ast_hash": "4c93f772b43f34bb9e267d7c846b0573",
+    "semantic_hash": ""
   },
   "apps/web/components/EncyclopediaDrawer.tsx": {
     "mtime": 1783321494.177855,
