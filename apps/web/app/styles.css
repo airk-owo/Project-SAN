@@ -3581,7 +3581,9 @@ h2 {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #00000014;
+  /* rgba so the opacity is a plain 0-1 number to tune, not hex alpha math.
+     Was #00000014 (~8% opaque) — too see-through against the busy table art. */
+  background: rgba(0, 0, 0, 0.85);
 }
 .local-skill-slot {
   display: flex;
@@ -4340,33 +4342,47 @@ img {
     display: grid;
     /* --actions-gap: horizontal gap between [seat] · [hand] · [buttons]. Tune to taste. */
     --actions-gap: 20px;
-    grid-template-columns: 244px minmax(0, 1fr) 244px; /* seat, hand, buttons —
-      buttons moved to the far right; both fixed columns match the seat card's width */
+    grid-template-columns: 250px minmax(0, 1fr) 250px; /* seat, hand, buttons —
+      buttons moved to the far right; both fixed columns match the seat card's actual
+      rendered width (.mock-self measures 250×179.48 live — 244 was a wrong guess) */
     column-gap: var(--actions-gap);
     align-items: end;
     justify-items: stretch;
   }
   .local-game-page .mock-current-player > .mock-self {
     grid-column: 1;
+    grid-row: 1; /* without this, browsers can auto-place columns 2/3 onto a 2nd
+      implicit row (seen live in DevTools) since only grid-column was specified */
     align-self: end;
     justify-self: start;
+    margin-bottom: 15px;
   }
   .local-game-page .mock-current-player > .local-action-col {
     grid-column: 3;
+    grid-row: 1;
     /* Bottom-anchored again (the earlier top-anchor experiment is no longer needed —
        .local-turn-frame's 2 reserved skill slots now keep this column's height
        constant regardless of character, so it can safely share the same bottom edge
        as the seat card and hand instead). */
     align-self: end;
+    margin-bottom: 15px;
   }
   /* .local-action-col is align-items:center (flex), so its children size to their own
-     content by default — without this, the button frame would stay its natural ~166px
-     width even though the column itself grew to 244px above. */
+     content by default — without this, the button frame wouldn't stretch to fill the
+     column's width/height. width matches the seat card's width (250px, see above);
+     min-height matches its measured height (179.48px live) — the frame's own content
+     (2 skill slots + controls) was much shorter (141px), which visually read as
+     "sitting lower" than the seat card even though both share the same bottom edge —
+     a short box vs. a tall one on the same baseline just looks sunk in. space-between
+     spreads the extra height while still keeping จบเทิร์น flush at the very bottom. */
   .local-game-page .local-turn-frame {
     width: 100%;
+    min-height: 180px;
+    justify-content: space-between;
   }
   .local-game-page .mock-current-player > .mock-hand {
     grid-column: 2;
+    grid-row: 1;
     align-self: end;
     justify-content: flex-start;
   }
