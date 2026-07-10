@@ -2085,7 +2085,8 @@ h2 {
    .mock-hand. Scoped to .mock-hand so standalone preview cards keep the flat -11px. */
 .mock-hand .mock-card {
   margin-left: calc(
-    var(--hand-overlap-min) + (var(--hand-overlap-max) - var(--hand-overlap-min)) *
+    var(--hand-overlap-min) +
+      (var(--hand-overlap-max) - var(--hand-overlap-min)) *
       var(--hand-fill, 0.4)
   );
 }
@@ -4725,7 +4726,9 @@ textarea,
   transform: translateY(-3px);
   /* Peek the discard pile → magnifier cursor. `zoom-in` is the keyword fallback that
      works with no asset; drop a cursor_search.png (~24–32px) in public/cursors/ for art. */
-  cursor: url("/cursors/cursor_search.png") 12 12, zoom-in;
+  cursor:
+    url("/cursors/cursor_search.png") 12 12,
+    zoom-in;
 }
 .mock-pile-btn:not(:disabled):hover .mock-discard {
   box-shadow: 9px 9px 0 #160f0a;
@@ -5656,7 +5659,7 @@ textarea,
 .local-room-settings .settings-row-label b {
   color: #f6efdd;
   font-size: 0.85rem; /* match .local-room-settings-title, was too big/bold */
-  font-weight: 600;
+  font-weight: 500;
 }
 .local-room-settings .settings-row-label small {
   color: #c8b58a;
@@ -5771,7 +5774,9 @@ textarea,
 /* Opponents had no idle treatment — gray out any opponent whose turn it isn't,
    matching the own-seat idle look. Skips .local-dead / .local-out-of-range so their
    stronger grayscale keeps winning for those states. */
-.local-opponent:not(.mock-active-turn):not(.local-dead):not(.local-out-of-range) {
+.local-opponent:not(.mock-active-turn):not(.local-dead):not(
+    .local-out-of-range
+  ) {
   filter: var(--seat-idle-filter);
   opacity: 0.9;
   transition:
@@ -5849,7 +5854,9 @@ textarea,
     will-change: transform;
   }
   .local-seat-idle > .mock-hand {
-    transform: translateY(34%); /* tuck below the screen edge when it's not our turn */
+    transform: translateY(
+      34%
+    ); /* tuck below the screen edge when it's not our turn */
   }
   .local-seat-active > .mock-hand {
     transform: translateY(0); /* rise fully into view on our turn */
@@ -5866,19 +5873,27 @@ textarea,
    The descendant selector keeps the cursor consistent over cards/panels/buttons. ── */
 .local-cursor-sword,
 .local-cursor-sword * {
-  cursor: url("/cursors/cursor_sword.png") 24 24, crosshair;
+  cursor:
+    url("/cursors/cursor_sword.png") 24 24,
+    crosshair;
 }
 .local-cursor-challenge,
 .local-cursor-challenge * {
-  cursor: url("/cursors/cursor_challenge.png") 24 24, crosshair;
+  cursor:
+    url("/cursors/cursor_challenge.png") 24 24,
+    crosshair;
 }
 .local-cursor-heal,
 .local-cursor-heal * {
-  cursor: url("/cursors/cursor_heal.png") 24 24, crosshair;
+  cursor:
+    url("/cursors/cursor_heal.png") 24 24,
+    crosshair;
 }
 .local-cursor-hammer,
 .local-cursor-hammer * {
-  cursor: url("/cursors/cursor_hammer.png") 24 24, crosshair;
+  cursor:
+    url("/cursors/cursor_hammer.png") 24 24,
+    crosshair;
 }
 
 /* ── Part 1.2 · general (ขุนพล) picker: sit below the navbar, never overlap it ── */
