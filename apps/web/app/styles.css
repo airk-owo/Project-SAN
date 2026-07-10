@@ -3581,9 +3581,8 @@ h2 {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  /* rgba so the opacity is a plain 0-1 number to tune, not hex alpha math.
-     Was #00000014 (~8% opaque) — too see-through against the busy table art. */
-  background: #f2ece4ea;
+  background: #f2ece4; /* fully opaque parchment tone — was translucent, hard to read
+    against the busy table art behind it */
 }
 .local-skill-slot {
   display: flex;
