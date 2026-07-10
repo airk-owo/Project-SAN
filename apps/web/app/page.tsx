@@ -3137,16 +3137,7 @@ export default function Home() {
                 style={{ left: hoverTip.x, bottom: hoverTip.bottomOffset }}
               >
                 <b className="card-tip-name">{hoverTip.card.name}</b>
-                <span className="card-tip-type">
-                  {cardTypeLabel(hoverTip.card)} · {hoverTip.card.number}
-                  {suitTx(hoverTip.card.suit)}
-                </span>
                 <p className="card-tip-desc">{tipInfo.desc}</p>
-                {tipInfo.use && (
-                  <p className="card-tip-use">
-                    <i>เมื่อไหร่:</i> {tipInfo.use}
-                  </p>
-                )}
               </div>
             );
           })()}
