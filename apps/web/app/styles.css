@@ -2730,7 +2730,7 @@ h2 {
 .local-turn-controls button {
   margin: 0;
   font-size: 0.78rem;
-  width: 150px; /* fixed button size — tune this ONE value (buttons no longer stretch) */
+  width: 100%; /* stretch to fill the frame left-right, matching .local-skill-btn */
 }
 .local-out-of-range {
   opacity: 0.5;
@@ -3557,8 +3557,7 @@ h2 {
 }
 .local-skill-btn {
   margin: 0;
-  width: 150px; /* was only sized via .local-turn-controls button; now lives in its
-    own .local-skill-slot, so needs its own width to match จบเทิร์น/ทิ้งไพ่ */
+  width: 100%; /* stretch to fill the frame left-right, matching จบเทิร์น/ทิ้งไพ่ */
   font-size: 0.78rem;
   background: #5b3a86 !important;
   border-color: #5b3a86 !important;
@@ -3589,9 +3588,8 @@ h2 {
   justify-content: center;
 }
 .local-skill-slot-empty {
-  width: 150px;
+  width: 100%; /* matches the real (stretched) .local-skill-btn */
   min-height: 34px; /* ≈ a real .local-skill-btn's rendered height */
-  margin: 0 auto;
   border: 1px dashed #c8b58a55;
   border-radius: 8px;
   opacity: 0.4;
@@ -4340,11 +4338,10 @@ img {
 @media (min-width: 1000px) {
   .local-game-page .mock-current-player {
     display: grid;
-    /* --actions-gap: horizontal gap between [seat] · [buttons] · [hand]. Tune to taste.
-       Middle column is now narrow (buttons are fixed-width, item 5) → seat & hand sit closer. */
-    --actions-gap: 6px;
-    grid-template-columns: 244px 244px minmax(0, 1fr); /* middle (buttons) matches
-      the seat card's width — was minmax(160px,190px), narrower than the seat card */
+    /* --actions-gap: horizontal gap between [seat] · [hand] · [buttons]. Tune to taste. */
+    --actions-gap: 20px;
+    grid-template-columns: 244px minmax(0, 1fr) 244px; /* seat, hand, buttons —
+      buttons moved to the far right; both fixed columns match the seat card's width */
     column-gap: var(--actions-gap);
     align-items: end;
     justify-items: stretch;
@@ -4355,7 +4352,7 @@ img {
     justify-self: start;
   }
   .local-game-page .mock-current-player > .local-action-col {
-    grid-column: 2;
+    grid-column: 3;
     /* Bottom-anchored again (the earlier top-anchor experiment is no longer needed —
        .local-turn-frame's 2 reserved skill slots now keep this column's height
        constant regardless of character, so it can safely share the same bottom edge
@@ -4369,7 +4366,7 @@ img {
     width: 100%;
   }
   .local-game-page .mock-current-player > .mock-hand {
-    grid-column: 3;
+    grid-column: 2;
     align-self: end;
     justify-content: flex-start;
   }
@@ -5890,12 +5887,11 @@ textarea,
        margins on both sides of a wide screen. Let it use the full row width instead. */
     max-width: none;
   }
-  /* Part B — stack the turn/action buttons top-to-bottom in the middle column. */
+  /* Part B — stack the turn/action buttons top-to-bottom in the right-side frame. */
   .local-game-page .local-turn-controls {
     flex-direction: column;
-    align-items: center; /* was stretch — buttons keep their fixed width now */
+    align-items: stretch; /* buttons fill the frame's width again */
   }
-
 }
 
 /* ── Part 4 · custom action cursors ───────────────────────────────────────────
