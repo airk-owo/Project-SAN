@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783776955.5997717,
-    "ast_hash": "02edddb52c4a119e99d165fc1c2821e3",
+    "mtime": 1783784697.4071088,
+    "ast_hash": "266e5d2713e10c8a5ae9c999bbfeca7b",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -615,8 +615,8 @@
     "semantic_hash": "a212ffb67a49b17441f76738d16f9506"
   },
   "apps/web/app/lib/gameConstants.tsx": {
-    "mtime": 1783780352.83999,
-    "ast_hash": "cdfa824402516b7e88a52e78c986c6aa",
+    "mtime": 1783780825.5225146,
+    "ast_hash": "d4cce8f32f3b59bd029c6b8680fd6a7f",
     "semantic_hash": ""
   },
   "apps/web/app/lib/gameTypes.ts": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/SettingsPopover.tsx": {
-    "mtime": 1783681556.4730487,
-    "ast_hash": "e0811acb0afec6eb3d52a72fe66fc54c",
+    "mtime": 1783784715.6360471,
+    "ast_hash": "2bb8dd306b084e61473376e1334a32a6",
     "semantic_hash": ""
   },
   "packages/game/src/engine/actions.ts": {
@@ -1112,6 +1112,41 @@
   "source/Icon/ship.png": {
     "mtime": 1783776499.5460396,
     "ast_hash": "a5526ceb45c4f5aa6a0e3ac18c344b82",
+    "semantic_hash": ""
+  },
+  "apps/web/app/lib/bgm.ts": {
+    "mtime": 1783784621.5865376,
+    "ast_hash": "3eed26959c8fb0d46da5d85b1c06b05d",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/volume.png": {
+    "mtime": 1783784610.791599,
+    "ast_hash": "c5e6c0534800e862d33abad2474a2aa0",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/volume_mute.png": {
+    "mtime": 1783784610.8166046,
+    "ast_hash": "40542bdddd6ca732ff0ef9aa2b04b403",
+    "semantic_hash": ""
+  },
+  "source/Icon/volume.png": {
+    "mtime": 1783784320.6476598,
+    "ast_hash": "c5e6c0534800e862d33abad2474a2aa0",
+    "semantic_hash": ""
+  },
+  "source/Icon/volume_mute.png": {
+    "mtime": 1783784395.882561,
+    "ast_hash": "40542bdddd6ca732ff0ef9aa2b04b403",
+    "semantic_hash": ""
+  },
+  "apps/web/public/audio/game_1.mp3": {
+    "mtime": 1783784610.7725942,
+    "ast_hash": "20f3635dbf14cc91e3b0b167c80c21dd",
+    "semantic_hash": ""
+  },
+  "apps/web/public/audio/lobby_1.mp3": {
+    "mtime": 1783784610.7505891,
+    "ast_hash": "8be37a096c1208cc4cedc9b5e3f504ed",
     "semantic_hash": ""
   }
 }

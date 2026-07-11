@@ -63,6 +63,7 @@ import {
   playDecisionAlert,
   playThunder,
 } from "./lib/audio";
+import { playTrack, setMusicEnabled, setMusicVolume } from "./lib/bgm";
 import { RepeatAttackPrompt } from "../components/game/RepeatAttackPrompt";
 import { DestroyMountPrompt } from "../components/game/DestroyMountPrompt";
 import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePrompt";
@@ -158,6 +159,8 @@ export default function Home() {
   const [skillsCharacter, setSkillsCharacter] = useState<Character>();
   const [logChatTab, setLogChatTab] = useState<"log" | "chat">("log");
   const [soundOn, setSoundOn] = useState(true);
+  const [musicOn, setMusicOn] = useState(true); // background music (lobby/game loop)
+  const [musicVolume, setMusicVol] = useState(0.35); // background music level (0–1)
   const [rooms, setRooms] = useState<Room[]>([]);
   const [selectedAttackId, setSelectedAttackId] = useState<string>();
   const [selectedDiscardId, setSelectedDiscardId] = useState<string>();
@@ -333,6 +336,26 @@ export default function Home() {
     const stored = localStorage.getItem("wtk-card-tip");
     setCardTipEnabled(stored === null ? true : stored === "1");
   }, []);
+  // Background music on/off — same persisted-preference pattern (only "0" mutes).
+  useEffect(() => {
+    const stored = localStorage.getItem("wtk-music");
+    setMusicOn(stored === null ? true : stored === "1");
+    const vol = Number(localStorage.getItem("wtk-music-vol"));
+    if (Number.isFinite(vol) && vol > 0) setMusicVol(Math.min(1, vol));
+  }, []);
+  // Apply the music preferences to the shared player.
+  useEffect(() => {
+    setMusicEnabled(musicOn);
+  }, [musicOn]);
+  useEffect(() => {
+    setMusicVolume(musicVolume);
+  }, [musicVolume]);
+  // Swap the loop between lobby and table ambience as the phase changes. The
+  // lobby track covers pre-game (no game), waiting, and character-select; the
+  // table track plays only once the match is live.
+  useEffect(() => {
+    playTrack(game?.phase === "playing" ? "game" : "lobby");
+  }, [game?.phase]);
   // Encyclopedia: lazy-load the full card + general catalogues on first open.
   useEffect(() => {
     if (!showEncyclopedia) return;
@@ -723,6 +746,22 @@ export default function Home() {
     }
     emitNow(event, data);
   };
+  const toggleMusic = () =>
+    setMusicOn((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("wtk-music", next ? "1" : "0");
+      } catch {}
+      return next;
+    });
+  const changeMusicVolume = (v: number) => {
+    setMusicVol(v);
+    try {
+      localStorage.setItem("wtk-music-vol", String(v));
+    } catch {}
+    // Nudging the slider up from a muted state turns the music back on.
+    if (v > 0 && !musicOn) toggleMusic();
+  };
   const toggleConfirmBeforePlay = () =>
     setConfirmBeforePlay((v) => {
       const next = !v;
@@ -877,6 +916,40 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <div className="lobby-music-control">
+        {/* Vertical volume slider — revealed on hover / keyboard focus. */}
+        <div className="lobby-music-slider">
+          <input
+            type="range"
+            className="lobby-music-range"
+            min={0}
+            max={100}
+            value={Math.round(musicVolume * 100)}
+            onChange={(e) => changeMusicVolume(Number(e.target.value) / 100)}
+            aria-label="ระดับเสียงเพลง"
+            title="ระดับเสียงเพลง"
+          />
+        </div>
+        <button
+          type="button"
+          className={`lobby-music-toggle${musicOn && musicVolume > 0 ? "" : " muted"}`}
+          onClick={toggleMusic}
+          aria-pressed={!musicOn}
+          title={musicOn ? "ปิดเสียงเพลง (ชี้ค้างเพื่อปรับระดับ)" : "เปิดเสียงเพลง"}
+          aria-label={musicOn ? "ปิดเสียงเพลง" : "เปิดเสียงเพลง"}
+        >
+          <img
+            src={
+              musicOn && musicVolume > 0
+                ? "/icons/volume.png"
+                : "/icons/volume_mute.png"
+            }
+            alt=""
+            aria-hidden
+            draggable={false}
+          />
+        </button>
+      </div>
       </>
     );
 
@@ -1441,6 +1514,8 @@ export default function Home() {
               onToggleConfirm={toggleConfirmBeforePlay}
               soundOn={soundOn}
               onToggleSound={() => setSoundOn((v) => !v)}
+              musicOn={musicOn}
+              onToggleMusic={toggleMusic}
               cardTipEnabled={cardTipEnabled}
               onToggleCardTip={toggleCardTipEnabled}
             />

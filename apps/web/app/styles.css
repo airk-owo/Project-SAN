@@ -486,6 +486,113 @@ body:has(.lobby) {
   box-shadow: none;
   transform: none;
 }
+/* Floating music control — bottom-right of the lobby. Sibling of .lobby, so the
+   red .lobby button styling above does not apply. Click the medallion to mute;
+   hover (or keyboard-focus) reveals the vertical volume slider above it. */
+.lobby-music-control {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Slider capsule floats above the medallion, hidden until hover/focus. A padded
+   gap keeps the pointer from leaving the control while reaching up to it. */
+.lobby-music-slider {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  padding-bottom: 10px;
+  transform: translateX(-50%) scaleY(0.7);
+  transform-origin: bottom center;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+.lobby-music-control:hover .lobby-music-slider,
+.lobby-music-control:focus-within .lobby-music-slider {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) scaleY(1);
+}
+.lobby-music-range {
+  writing-mode: vertical-lr;
+  direction: rtl; /* so dragging up = louder */
+  width: 26px;
+  height: 108px;
+  margin: 0;
+  padding: 10px 0;
+  border-radius: 999px;
+  cursor: pointer;
+  accent-color: #8b2e2e;
+  border: 1px solid #b98a3d;
+  background: radial-gradient(circle at 50% 30%, #f7ecd2, #e7d3a6 82%, #d8bf8c);
+  box-shadow:
+    0 10px 24px -12px #000000bb,
+    inset 0 1px 0 #ffffff80;
+}
+.lobby-music-toggle {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #b98a3d;
+  /* Parchment medallion — the brown speaker icon reads directly on it. */
+  background: radial-gradient(circle at 50% 38%, #f7ecd2, #e7d3a6 78%, #d8bf8c);
+  box-shadow:
+    0 8px 20px -10px #000000aa,
+    inset 0 1px 0 #ffffff80;
+  transition:
+    transform 0.18s cubic-bezier(0.2, 0.7, 0.3, 1),
+    filter 0.18s,
+    box-shadow 0.18s;
+}
+.lobby-music-toggle:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 13px 26px -11px #000000cc,
+    inset 0 1px 0 #ffffff90;
+}
+.lobby-music-toggle:active {
+  transform: translateY(0);
+}
+.lobby-music-toggle img {
+  width: 27px;
+  height: 27px;
+  object-fit: contain;
+  pointer-events: none;
+}
+/* Muted: greyed medallion + faded icon so the off state is obvious at a glance. */
+.lobby-music-toggle.muted {
+  border-color: #9a875f;
+  background: radial-gradient(circle at 50% 38%, #e2dccb, #cabfa5 78%, #b8ab8c);
+}
+.lobby-music-toggle.muted img {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+}
+@media (max-width: 640px) {
+  .lobby-music-control {
+    right: 14px;
+    bottom: 14px;
+  }
+  .lobby-music-toggle {
+    width: 46px;
+    height: 46px;
+  }
+  .lobby-music-toggle img {
+    width: 23px;
+    height: 23px;
+  }
+}
 /* Create-room: input (left, grows) + compact button (right) on one row. */
 .lobby .create-room .create-row {
   display: flex;
@@ -5138,6 +5245,20 @@ textarea,
 }
 .settings-switch.on .settings-switch-knob {
   transform: translateX(22px);
+}
+/* Category heading inside the settings popover (ตั้งค่าการเล่น / ตั้งค่าเสียง). */
+.settings-section-title {
+  margin: 10px 0 0;
+  padding: 8px 2px 2px;
+  color: #8a6d3b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* The row right under a section title shouldn't draw its own top divider. */
+.settings-section-title + .settings-row {
+  border-top: none;
 }
 
 /* --- Settings popover (anchored to the ⚙️ navbar button, not a center modal) --- */
