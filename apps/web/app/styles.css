@@ -1803,9 +1803,13 @@ h2 {
 }
 /* Portrait + kingdom chip stacked under the picture, as a column beside the player content row. */
 .mock-portrait-col {
+  position: relative; /* anchor for the absolutely-placed .local-decision-badges */
+  align-self: stretch; /* span the full card height so the badges' % anchor is card-relative */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* portrait + ก๊ก chip stay at the top, aligned with the name row */
+  padding-top: 13px; /* nudge portrait down a touch from the very top edge */
   flex: none;
   gap: 3px;
 }
@@ -1839,20 +1843,65 @@ h2 {
 .local-role-emperor-tag {
   color: var(--primary) !important;
 }
-.local-decision-area {
+/* Delayed-trick markers as icon badges below the ก๊ก (kingdom) chip, in the portrait
+   column's normal flow. Sits in the column so it never widens the card; the column
+   stays shorter than the content beside it, so it never stretches the card's height
+   either — unlike the old .local-decision-card pills, which sat below the card content
+   and pushed it taller (worse with two tricks → a second wrapped row). */
+.local-decision-badges {
+  /* Vertically anchored to ~the equipment grid's mid-divider. A % (not px) so it tracks
+     that line across all four seat densities as the card height changes. Tune this one
+     value to slide the badges up/down. Centred horizontally under the portrait. */
+  position: absolute;
+  left: 50%;
+  top: 74%;
+  transform: translate(-50%, -50%);
   display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  margin-top: 3px;
 }
-.local-decision-card {
-  font-size: 0.62rem;
-  padding: 1px 6px;
-  border-radius: 8px;
-  background: #5b3a8622;
-  border: 1px solid #5b3a8688;
-  color: #6b4a96;
-  white-space: nowrap;
+.local-decision-badge-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #faf8ef;
+  border: 2px solid #6b4a96;
+  color: #5b3a86;
+  font-size: 1.2rem;
+  line-height: 1;
+  box-shadow: 0 1px 3px #0005;
+}
+/* A second badge fans out diagonally — shifted down and overlapping the first. transform
+   (not margin) so it doesn't add to the column's layout height / risk stretching the card;
+   later DOM order paints it on top. */
+.local-decision-badge-icon:not(:first-child) {
+  margin-left: -14px;
+  transform: translateY(11px);
+}
+.local-decision-badge-icon.local-inspectable {
+  cursor: pointer;
+}
+/* PNG fills most of the badge circle; emoji fallback uses the badge's own font-size. */
+.local-decision-badge-img {
+  width: 76%;
+  height: 76%;
+  object-fit: contain;
+  display: block;
+}
+/* ฟ้าลงโทษ reads as a hazard — amber ring instead of the indulgence purple. */
+.local-decision-badge-lightning {
+  border-color: #c9a227;
+  background: #fff7e0;
+}
+/* Compact opponent seats are tighter — trim the badge a touch so two still fit. */
+.mock-table-stage[data-density="compact"] .local-decision-badge-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+}
+.mock-table-stage[data-density="compact"] .local-decision-badge-icon:not(:first-child) {
+  margin-left: -12px;
+  transform: translateY(9px);
 }
 .local-multi-selected .mock-player {
   outline: 3px solid var(--danger);

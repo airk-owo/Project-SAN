@@ -2356,6 +2356,10 @@ export default function Home() {
                     {myPlayer.character.kingdomTh}
                   </span>
                 )}
+                <DecisionArea
+                  cards={myPlayer?.decisionArea ?? []}
+                  onInspect={setDetailCard}
+                />
               </div>
               <div className="mock-player-content">
                 <div className="local-name-row">
@@ -2412,10 +2416,6 @@ export default function Home() {
                       defensiveMount: null,
                     }
                   }
-                  onInspect={setDetailCard}
-                />
-                <DecisionArea
-                  cards={myPlayer?.decisionArea ?? []}
                   onInspect={setDetailCard}
                 />
               </div>

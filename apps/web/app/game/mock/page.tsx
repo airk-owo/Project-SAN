@@ -48,6 +48,15 @@ function mkCard(
   };
 }
 
+// Delayed-trick cards that sit in a player's decision area (DecisionArea keys its icon
+// off `effect`: ⚡ ฟ้าลงโทษ / 🕒 มีสุขลืมเมือง).
+function mkLightning(): Card {
+  return { ...mkCard("ฟ้าลงโทษ", "♠", "2", "ไพ่กล", "trick"), effect: "delayed_lightning_judgment" };
+}
+function mkIndulgence(): Card {
+  return { ...mkCard("มีสุขลืมเมือง", "♥", "Q", "ไพ่กล", "trick"), effect: "delayed_skip_play_phase" };
+}
+
 function mkCharacter(
   id: string,
   name: string,
@@ -116,6 +125,8 @@ const opponents: Player[] = [
     maxHp: 4,
     weapon: mkCard("กระบี่ชิงกัง", "♠", "3", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
     offensiveMount: mkCard("ม้าศึก", "♥", "A", "อุปกรณ์ / ม้า", "equipment", "offensive_mount"),
+    // DEMO: โดนฟ้าลงโทษอย่างเดียว
+    decisionArea: [mkLightning()],
   }),
   mkPlayer({
     id: "sun-quan",
@@ -125,7 +136,8 @@ const opponents: Player[] = [
     hp: 4,
     maxHp: 4,
     armor: mkCard("ค่ายกลแปดทิศ", "♣", "2", "อุปกรณ์ / เกราะ", "equipment", "armor"),
-    decisionArea: [mkCard("มีสุขลืมเมือง", "♥", "Q", "ไพ่กล", "trick")],
+    // DEMO: โดนมีสุขลืมเมืองอย่างเดียว
+    decisionArea: [mkIndulgence()],
   }),
   mkPlayer({
     id: "zhao-yun",
@@ -135,6 +147,8 @@ const opponents: Player[] = [
     hp: 3,
     maxHp: 4,
     weapon: mkCard("หอกมังกรเงิน", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+    // DEMO: โดนทั้งสองอย่าง (ฟ้าลงโทษ + มีสุขลืมเมือง)
+    decisionArea: [mkLightning(), mkIndulgence()],
   }),
   mkPlayer({
     id: "zhang-fei",
@@ -204,6 +218,8 @@ const me = mkPlayer({
   weapon: mkCard("ง้าวมังกรเขียว", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
   armor: mkCard("ค่ายกลแปดทิศ", "♣", "2", "อุปกรณ์ / เกราะ", "equipment", "armor"),
   role: "emperor",
+  // DEMO: การ์ดตัวเองโดนทั้งสองอย่าง ให้เห็นตราบนโปรไฟล์ฝั่งตัวเองด้วย
+  decisionArea: [mkLightning(), mkIndulgence()],
   hand: [
     mkCard("โจมตี", "♥", "7", "ไพ่พื้นฐาน", "basic"),
     mkCard("หลบ", "♠", "2", "ไพ่พื้นฐาน", "basic"),
@@ -351,6 +367,7 @@ export default function MockGamePage() {
                 {me.character.kingdomTh}
               </span>
             )}
+            <DecisionArea cards={me.decisionArea} />
           </div>
           <div className="mock-player-content">
             <div className="local-name-row">
@@ -371,7 +388,6 @@ export default function MockGamePage() {
               </small>
             )}
             <EquipmentDisplay eq={me.equipment} />
-            <DecisionArea cards={me.decisionArea} />
           </div>
         </article>
 

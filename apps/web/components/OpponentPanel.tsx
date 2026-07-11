@@ -43,6 +43,7 @@ export function OpponentPanel({
             {player.character.kingdomTh}
           </span>
         )}
+        <DecisionArea cards={player.decisionArea} onInspect={onInspect} />
       </div>
       <div className="mock-player-content">
         <div className="local-name-row">
@@ -78,7 +79,6 @@ export function OpponentPanel({
           {player.role ? (ROLE_LABEL[player.role] ?? player.role) : "???"}
         </small>
         <EquipmentDisplay eq={player.equipment} onInspect={onInspect} />
-        <DecisionArea cards={player.decisionArea} onInspect={onInspect} />
       </div>
     </article>
   );
