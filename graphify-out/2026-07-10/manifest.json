@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/game/mock/page.tsx": {
-    "mtime": 1783614857.2427206,
-    "ast_hash": "af8ed371e1e4bcbbefe32fc1a9e56ffe",
+    "mtime": 1783696482.2365427,
+    "ast_hash": "5048638531561db72ab9799034ff3562",
     "semantic_hash": ""
   },
   "apps/web/app/layout.tsx": {
@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "apps/web/app/page.tsx": {
-    "mtime": 1783686699.8855138,
-    "ast_hash": "90e67e074729e876b9754c236925171a",
+    "mtime": 1783692554.3956296,
+    "ast_hash": "56869ca48cb25ee225784be907c8d00e",
     "semantic_hash": ""
   },
   "apps/web/components/LobbyTable.tsx": {
@@ -620,9 +620,9 @@
     "semantic_hash": "08a1f95f1ffdd9ae2dc04ac435e5ca5d"
   },
   "apps/web/app/lib/gameTypes.ts": {
-    "mtime": 1783205586.1102362,
-    "ast_hash": "3c82ec3326b7dd6dd9f2a9262e8a46e7",
-    "semantic_hash": "3c82ec3326b7dd6dd9f2a9262e8a46e7"
+    "mtime": 1783687309.6404345,
+    "ast_hash": "ccbce2f87ee83bddeff86f8d47eb73bf",
+    "semantic_hash": ""
   },
   "apps/web/components/CardDetailModal.tsx": {
     "mtime": 1783321390.0514271,
@@ -690,13 +690,13 @@
     "semantic_hash": ""
   },
   "packages/game/src/engine/turns.ts": {
-    "mtime": 1783686150.6211574,
-    "ast_hash": "a8705ed70794ddb9a192e36efe2121ae",
+    "mtime": 1783687279.3299353,
+    "ast_hash": "d5ce60afe872c6b31c3fafc6cc0501a3",
     "semantic_hash": ""
   },
   "packages/game/src/engine/types.ts": {
-    "mtime": 1783509255.154524,
-    "ast_hash": "d7fa2eee948224ab3e5a1af22871b78a",
+    "mtime": 1783687266.3856404,
+    "ast_hash": "d2b21c220c52dbd58b988b0f151fb1d3",
     "semantic_hash": ""
   },
   "packages/game/src/engine/view.ts": {
@@ -895,8 +895,8 @@
     "semantic_hash": ""
   },
   "packages/game/src/engine/turn-flow.ts": {
-    "mtime": 1783510392.4187613,
-    "ast_hash": "cb5708e772d559a34228fdc16e85d5bf",
+    "mtime": 1783687296.712539,
+    "ast_hash": "c9e138fed10b58a634c05134669a6cfd",
     "semantic_hash": ""
   },
   "packages/game/src/test-helpers.ts": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "apps/web/components/OpponentPanel.tsx": {
-    "mtime": 1783562883.1220016,
-    "ast_hash": "173327f6a0013c656209d5d6f4c24132",
+    "mtime": 1783687351.049732,
+    "ast_hash": "64759275939161f55cd7e90937293f50",
     "semantic_hash": ""
   },
   "apps/web/components/game/AllyAssistPrompt.tsx": {

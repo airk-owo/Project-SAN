@@ -21,6 +21,7 @@
   "19": "trick-negate.test.ts",
   "20": "package.json",
   "21": "compilerOptions",
+  "22": "setup.ts",
   "23": "delayed-tricks.test.ts",
   "24": "snake-spear.test.ts",
   "25": "duel.test.ts",

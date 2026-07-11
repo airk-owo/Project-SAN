@@ -138,16 +138,44 @@ export const coarsePointer = () =>
   !!window.matchMedia &&
   window.matchMedia("(hover: none)").matches;
 
-// Arc across the top of the table. index 0 = viewer's immediate left neighbor,
-// last index = viewer's immediate right neighbor (viewer sits at the bottom).
+// Seats hug three sides of the table like a real card table (a straight row across the
+// top, plus seats down each side once there are enough opponents to need them) instead
+// of cramming everyone across a single top arc — generalizes the fixed 3/5/7/9 lookup
+// table already used in the hot-seat demo (game/local/page.tsx) to any player count.
+// index 0 = viewer's immediate left neighbor (bottom of the left side), sweeping up the
+// left side, across the top, down the right side, ending at index (total-1) = viewer's
+// immediate right neighbor (bottom of the right side).
 export function edgePosition(index: number, total: number) {
   if (total <= 0) return { left: "50%", top: "1%" };
   if (total === 1) return { left: "50%", top: "4%" };
-  const t = index / (total - 1); // 0 → left, 1 → right
-  const angle = Math.PI * (1 - t); // π (left) → 0 (right)
-  const left = 50 + 46 * Math.cos(angle); // 4% … 96%
-  const top = 48 - 46 * Math.sin(angle); // ends low (48), middle high (2)
-  return { left: `${left.toFixed(1)}%`, top: `${top.toFixed(1)}%` };
+  // Roughly 1 in 4 opponents goes to each side (capped at 2/side); the rest sit on top.
+  const sideEach = Math.min(2, Math.round(total / 4));
+  const topCount = total - 2 * sideEach;
+  // Pushed all the way to the table's own edge (0%/100%, vs. the top row's 4%…96%)
+  // so side seats read as clearly outside the table rather than hugging it. The
+  // max-width cap in styles.css (".local-game-page .mock-table-stage", all four
+  // densities) is tuned to this 0%/100% via a 1.0 divisor — pushing further out than
+  // this needs a bigger content-box safety margin too, or seats clip again.
+  const SIDE_LEFT = 0;
+  const SIDE_RIGHT = 100;
+  // k=0 → nearest the viewer, k=1 → nearer the top corner. k=1 moved down from the
+  // original 33 to 39 for clearance from the top row's corner seat (the compact
+  // opponent card got taller once equipment started showing icon+name). k=0 keeps
+  // the ORIGINAL 34-point gap from k=1 (39+34=73), not its original absolute 67 —
+  // pinning k=0 to 67 while k=1 moved shrank that gap to 28, too tight.
+  const SIDE_Y: Record<number, number[]> = { 1: [50], 2: [71, 39] };
+  const sideY = (k: number) => (SIDE_Y[sideEach]?.[k] ?? 50).toFixed(1);
+
+  if (index < sideEach) {
+    return { left: `${SIDE_LEFT}%`, top: `${sideY(index)}%` };
+  }
+  if (index >= sideEach + topCount) {
+    const m = index - sideEach - topCount; // 0 at the top corner, rising toward viewer
+    return { left: `${SIDE_RIGHT}%`, top: `${sideY(sideEach - 1 - m)}%` };
+  }
+  const j = index - sideEach;
+  const left = topCount === 1 ? 50 : 4 + (92 * j) / (topCount - 1);
+  return { left: `${left.toFixed(1)}%`, top: "2%" };
 }
 
 // Circular position for all 10 lobby seats (seat 1 at top, clockwise)

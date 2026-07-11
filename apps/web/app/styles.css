@@ -1117,14 +1117,34 @@ h2 {
   grid-row: 1/4;
   align-self: center;
 }
-.spectator-banner {
+/* Full-viewport frame while spectating: border starts right below the fixed navbar
+   so it doesn't get hidden underneath it. Decorative overlay — pointer-events:none
+   so it never blocks clicks on the game underneath. */
+.spectator-frame {
+  position: fixed;
+  top: var(--wtk-nav-h, 56px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 15px solid color-mix(in srgb, var(--info) 70%, transparent);
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 130;
+}
+.spectator-watching-banner {
+  position: fixed;
+  top: calc(var(--wtk-nav-h, 56px) + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 131;
   background: #355c7d18;
   border: 1px solid var(--info);
   border-radius: 8px;
-  padding: 9px 12px;
+  padding: 9px 60px;
   color: var(--info);
   font-weight: 700;
   text-align: center;
+  pointer-events: none;
 }
 .player-seat.has-character {
   pointer-events: auto;
@@ -2269,12 +2289,13 @@ h2 {
   min-height: 100px;
 }
 .mock-table-stage[data-density="compact"] .mock-player {
-  width: 156px;
-  min-height: 86px;
+  width: 200px;
+  min-height: 96px;
   padding: 7px;
 }
-.mock-table-stage[data-density="small"] .mock-equipment-slot b,
-.mock-table-stage[data-density="compact"] .mock-equipment-slot b,
+.mock-table-stage[data-density="small"] .mock-equipment-slot b {
+  display: none;
+}
 .mock-table-stage[data-density="compact"] .mock-equipment-slot em {
   display: none;
 }
@@ -2284,20 +2305,48 @@ h2 {
   font-size: 0.57rem;
 }
 .mock-table-stage[data-density="compact"] .mock-equipment {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 }
 .mock-table-stage[data-density="compact"] .mock-equipment-slot {
   display: grid;
   place-items: center;
   padding: 2px;
 }
+/* The base rule puts the name (b) on its own row below the icon (grid-column:1/-1)
+   — at this width that meant long names wrapped onto a ragged extra line. Pull it
+   back up next to the icon and let it stretch+ellipsis instead of wrapping. */
+.mock-table-stage[data-density="compact"] .mock-equipment-slot b {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: stretch;
+  min-width: 0;
+}
+/* Compact seats keep every slot's icon (matches the self-panel look) but drop the
+   generic "อาวุธ/เกราะ" label (em, hidden above) — weapon/armor show their icon +
+   equipped item name; the two mount slots just need the direction/modifier, not
+   which exact card is equipped, so their name (b) stays hidden in favour of the
+   short "ม้า ±1" label (em, re-enabled below). */
+.mock-table-stage[data-density="compact"] .mock-equip-offensiveMount.equipped b,
+.mock-table-stage[data-density="compact"]
+  .mock-equip-defensiveMount.equipped
+  b {
+  display: none;
+}
+.mock-table-stage[data-density="compact"]
+  .mock-equip-offensiveMount.equipped
+  em,
+.mock-table-stage[data-density="compact"]
+  .mock-equip-defensiveMount.equipped
+  em {
+  display: inline;
+}
 .mock-table-stage[data-density="compact"] .mock-portrait {
-  width: 37px;
-  height: 37px;
-  font-size: 1.15rem;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
 }
 .mock-table-stage[data-density="compact"] .mock-player-content > b {
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 .mock-table-stage[data-density="compact"] .mock-debug {
   font-size: 0.55rem;
@@ -5885,25 +5934,28 @@ textarea,
     /* Re-add the sticky-navbar spacer (single-screen had zeroed it → top-arc seats
        were clipped under the navbar) and centre the width-capped table. */
     margin: 44px auto 0;
-    /* Cap the table width so the extreme seats (edgePosition spans left 4%–96%) always
-       fit inside the clipped single-screen box. The seat arc is 0.92·stage wide and each
-       250px panel adds a 125px half-width past the arc, so the panel edges fit the content
-       box when stage ≤ (contentBox − 2·125)/0.92. `100%` = the match-layout (content) width,
-       which is contentBox; add back main's 48px inline padding the seats may bleed into.
-       Adapts to the viewport; +22px over the exact fit leaves a small edge gap.
-       Default value assumes the widest (large-density, 250px) panels. */
-    max-width: calc((100% - 224px) / 0.92);
+    /* Cap the table width so the extreme seats always fit inside the clipped
+       single-screen box. The side seats (edgePosition, gameConstants.tsx) are the
+       binding constraint, sitting right at the table's own edge (0%/100%, an
+       1.0-of-stage-wide span) rather than the top row's inset 4%–96%/0.92 — and each
+       250px panel adds a 125px half-width past that span, so the panel edges fit the
+       content box when stage ≤ (contentBox − 2·125)/1.0. `100%` = the match-layout
+       (content) width, which is contentBox; add back main's 48px inline padding the
+       seats may bleed into. Adapts to the viewport; +22px over the exact fit leaves a
+       small edge gap. Default value assumes the widest (large-density, 250px) panels. */
+    max-width: calc((100% - 224px) / 1);
   }
-  /* Denser tables use narrower panels (medium 216 / small 184 / compact 156px), so the
+  /* Denser tables use narrower panels (medium 216 / small 184 / compact 200px), so the
      table can be wider before the extreme seats clip — constant = 2·halfWidth − 26. */
   .local-game-page .mock-table-stage[data-density="medium"] {
-    max-width: calc((100% - 190px) / 0.92);
+    max-width: calc((100% - 190px) / 1);
   }
   .local-game-page .mock-table-stage[data-density="small"] {
-    max-width: calc((100% - 158px) / 0.92);
+    max-width: calc((100% - 158px) / 1);
   }
   .local-game-page .mock-table-stage[data-density="compact"] {
-    max-width: calc((100% - 130px) / 0.92);
+    /* compact panel width bumped 156→200px (halfWidth 100) → constant 2·100−26 = 174 */
+    max-width: calc((100% - 174px) / 1);
   }
   /* Pull the high top-arc seats (top≈2%) down clear of the navbar; side seats at
      top≈48% sit above the 44px min so they are untouched. Pairs with the 44px spacer. */

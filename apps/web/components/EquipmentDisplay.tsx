@@ -13,7 +13,7 @@ export function EquipmentDisplay({
     const s = eq[key];
     return (
       <span
-        className={`mock-equipment-slot ${s ? "equipped" : ""}${s && onInspect ? " local-inspectable" : ""}`}
+        className={`mock-equipment-slot mock-equip-${key} ${s ? "equipped" : ""}${s && onInspect ? " local-inspectable" : ""}`}
         title={s?.name ?? `${label}: ว่าง`}
         onClick={
           s && onInspect
@@ -36,8 +36,8 @@ export function EquipmentDisplay({
     <div className="mock-equipment">
       {r("weapon", "sword", "อาวุธ")}
       {r("armor", "shield", "เกราะ")}
-      {r("offensiveMount", "mount", "ม้ารุก −1")}
-      {r("defensiveMount", "mount", "ม้ารับ +1")}
+      {r("offensiveMount", "mount", "ม้า −1")}
+      {r("defensiveMount", "mount", "ม้า +1")}
     </div>
   );
 }

@@ -1873,9 +1873,12 @@ export default function Home() {
           </div>
         )}
         {game.isSpectator && (
-          <p className="spectator-banner">
-            คุณกำลังรับชมเกมนี้ในฐานะ Spectator
-          </p>
+          <>
+            <div className="spectator-frame" aria-hidden="true" />
+            <p className="spectator-watching-banner">
+              คุณกำลังรับชมเกมนี้ในฐานะผู้ชม
+            </p>
+          </>
         )}
 
         {/* Pre-game: same table layout as playing but no piles */}

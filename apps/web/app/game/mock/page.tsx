@@ -1,322 +1,298 @@
 /**
- * ⚠ DESIGN SANDBOX (route "/game/mock"), NOT the real game. Static mock data for tuning
- *   table/seat visuals in isolation (uses .mock-active-turn etc.). For real-game UI/UX edit
- *   app/page.tsx. (Hot-seat demo = app/game/local/page.tsx.)
+ * ⚠ DESIGN SANDBOX (route "/game/mock"), NOT the real game. Renders the SAME components
+ *   and CSS classes as the real online game page (app/page.tsx) — OpponentPanel,
+ *   EquipmentDisplay, DecisionArea, LogChatPanel, .mock-card hand, .local-turn-frame —
+ *   fed with static mock data, so table/seat/hand visuals can be tuned (e.g. checking
+ *   6–10 player density) without needing N real browser tabs connected via Socket.io.
+ *   For real-game UI/UX edit app/page.tsx. (Hot-seat demo = app/game/local/page.tsx.)
  */
-import type { CSSProperties } from "react";
+"use client";
+import { useRef, useState, type CSSProperties } from "react";
+import type { Card, Character, Player } from "../../lib/gameTypes";
+import {
+  ROLE_LABEL,
+  charName,
+  hearts,
+  suitColor,
+  suitTx,
+  cardTypeLabel,
+  edgePosition,
+} from "../../lib/gameConstants";
+import { OpponentPanel } from "../../../components/OpponentPanel";
+import { EquipmentDisplay } from "../../../components/EquipmentDisplay";
+import { DecisionArea } from "../../../components/DecisionArea";
+import { LogChatPanel } from "../../../components/LogChatPanel";
+import { Icon } from "../../../components/Icon";
 
-interface PlayerIdentity {
-  userId: string;
-  username: string;
-  displayName?: string;
-  characterName: string;
+let cardSeq = 0;
+function mkCard(
+  name: string,
+  suit: string,
+  number: string,
+  type: string,
+  cardType: string,
+  equipmentSlot: string | null = null,
+): Card {
+  cardSeq += 1;
+  return {
+    id: `mock-card-${cardSeq}`,
+    name,
+    type,
+    cardType,
+    suit,
+    number,
+    description: null,
+    effect: null,
+    equipmentSlot,
+    image: null,
+  };
 }
 
-type MockPlayer = PlayerIdentity & {
+function mkCharacter(
+  id: string,
+  name: string,
+  hp: number,
+  kingdom: string,
+  kingdomTh: string,
+  gender: string,
+): Character {
+  return { id, name, hp, kingdom, kingdomTh, gender, image: null, skills: [] };
+}
+
+function mkPlayer(p: {
   id: string;
+  username: string;
+  seatIndex: number;
+  character: Character;
   hp: number;
   maxHp: number;
-  handCount: number;
-  weapon?: string;
-  armor?: string;
-  offensiveMount?: string;
-  defensiveMount?: string;
-  seat: number;
-  role?: string;
-  isCurrentTurn?: boolean;
-};
-
-type MockCard = {
-  name: string;
-  suit: string;
-  number: string;
-  type: string;
-  accent: "red" | "gold" | "blue";
-};
-
-const currentPlayerId = "liu-bei";
-const players: MockPlayer[] = [
-  {
-    id: "cao-cao",
-    userId: "101",
-    username: "caocao_player",
-    characterName: "โจโฉ",
-    hp: 3,
-    maxHp: 4,
-    handCount: 4,
-    weapon: "กระบี่ชิงกัง",
-    offensiveMount: "ม้าศึก",
-    seat: 2,
-    isCurrentTurn: true,
-  },
-  {
-    id: "sun-quan",
-    userId: "102",
-    username: "sunquan",
-    characterName: "ซุนกวน",
-    hp: 4,
-    maxHp: 4,
-    handCount: 3,
-    armor: "ค่ายกลแปดทิศ",
-    defensiveMount: "ม้านั่ง",
-    seat: 3,
-  },
-  {
-    id: "zhao-yun",
-    userId: "103",
-    username: "zhaoyun_main",
-    characterName: "จูล่ง",
-    hp: 3,
-    maxHp: 4,
-    handCount: 5,
-    weapon: "หอกมังกรเงิน",
-    seat: 4,
-  },
-  {
-    id: currentPlayerId,
-    userId: "123",
-    username: "pakitta",
-    displayName: "Pakitta",
-    characterName: "เล่าปี่",
-    hp: 4,
-    maxHp: 4,
-    handCount: 5,
-    weapon: "ง้าวมังกรเขียว",
-    armor: "ค่ายกลแปดทิศ",
-    seat: 1,
-    role: "จักรพรรดิ",
-  },
-];
-
-const hand: MockCard[] = [
-  { name: "โจมตี", suit: "♥", number: "7", type: "ไพ่พื้นฐาน", accent: "red" },
-  { name: "หลบ", suit: "♠", number: "2", type: "ไพ่พื้นฐาน", accent: "blue" },
-  {
-    name: "เสบียง",
-    suit: "♦",
-    number: "9",
-    type: "ไพ่พื้นฐาน",
-    accent: "gold",
-  },
-  { name: "โจมตี", suit: "♣", number: "K", type: "ไพ่พื้นฐาน", accent: "red" },
-  {
-    name: "ง้าวมังกรเขียว",
-    suit: "♠",
-    number: "5",
-    type: "อาวุธ",
-    accent: "gold",
-  },
-];
-
-const logs = [
-  ["20:10", "เริ่มเกมแล้ว"],
-  ["20:11", "แจกบทบาทให้ผู้เล่นแล้ว"],
-  ["20:12", "เล่าปี่ เลือกขุนพล"],
-  ["20:13", "โจโฉ ติดตั้ง กระบี่ชิงกัง"],
-  ["20:14", "โจโฉ ใช้ โจมตี ใส่ เล่าปี่"],
-  ["20:15", "เล่าปี่ ใช้ หลบ"],
-  ["20:16", "ซุนกวน ติดตั้ง ค่ายกลแปดทิศ"],
-  ["20:17", "จูล่ง จั่วไพ่ 2 ใบ"],
-  ["20:18", "เล่าปี่ เริ่มเทิร์น"],
-];
-
-const chatMessages = [
-  ["pakitta", "ขอคิดก่อนนะ"],
-  ["sunquan", "พร้อมแล้ว"],
-  ["caocao_player", "ใช้หลบไหม?"],
-];
-
-function Hearts({ hp, maxHp }: Pick<MockPlayer, "hp" | "maxHp">) {
-  return (
-    <span className="mock-hearts" aria-label={`พลังชีวิต ${hp} จาก ${maxHp}`}>
-      {"♥".repeat(hp)}
-      <i>{"♥".repeat(maxHp - hp)}</i>
-    </span>
-  );
-}
-
-function EquipmentSlot({
-  icon,
-  label,
-  item,
-}: {
-  icon: string;
-  label: string;
-  item?: string;
-}) {
-  return (
-    <span
-      className={`mock-equipment-slot ${item ? "equipped" : ""}`}
-      title={item ?? `${label}: ว่าง`}
-    >
-      <i>{icon}</i>
-      <em>{label}</em>
-      <b>{item ?? "—"}</b>
-    </span>
-  );
-}
-
-function PlayerPanel({
-  player,
-  distance,
-  current,
-}: {
-  player: MockPlayer;
-  distance: number;
-  current?: boolean;
-}) {
-  return (
-    <article
-      className={`mock-player ${current ? "mock-self" : ""} ${player.isCurrentTurn ? "mock-active-turn" : ""}`}
-    >
-      {player.isCurrentTurn && (
-        <span className="mock-turn-badge">กำลังเล่น</span>
-      )}
-      <div className="mock-portrait" aria-hidden="true">
-        {player.characterName.slice(0, 1)}
-      </div>
-      <div className="mock-player-content">
-        <b>{player.characterName}</b>
-        <small className="mock-username">@{player.username}</small>
-        <Hearts hp={player.hp} maxHp={player.maxHp} />
-        <span className="mock-hand-count">🂠 × {player.handCount}</span>
-        <small className="mock-debug">
-          Seat {player.seat} · Distance {distance}
-        </small>
-        {player.role && (
-          <small className="mock-role">บทบาท: {player.role}</small>
-        )}
-        <div className="mock-equipment" aria-label="อุปกรณ์">
-          <EquipmentSlot icon="🗡" label="อาวุธ" item={player.weapon} />
-          <EquipmentSlot icon="🛡" label="เกราะ" item={player.armor} />
-          <EquipmentSlot
-            icon="🐎−"
-            label="ม้ารุก"
-            item={player.offensiveMount}
-          />
-          <EquipmentSlot
-            icon="🐎+"
-            label="ม้ารับ"
-            item={player.defensiveMount}
-          />
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function HandCard({ card }: { card: MockCard }) {
-  return (
-    <article className={` -${card.accent}`}>
-      <header>
-        <span>{card.number}</span>
-        <span>{card.suit}</span>
-      </header>
-      <div className="-art">WTK</div>
-      <b>{card.name}</b>
-      <small>{card.type}</small>
-    </article>
-  );
-}
-
-function getTableEdgePosition(index: number, opponentCount: number) {
-  const layouts: Record<number, Array<[number, number]>> = {
-    3: [
-      [50, 1],
-      [1, 50],
-      [99, 50],
-    ],
-    5: [
-      [25, 1],
-      [50, 1],
-      [75, 1],
-      [1, 50],
-      [99, 50],
-    ],
-    7: [
-      [20, 1],
-      [50, 1],
-      [80, 1],
-      [1, 33],
-      [1, 67],
-      [99, 33],
-      [99, 67],
-    ],
-    9: [
-      [12, 1],
-      [31, 1],
-      [50, 1],
-      [69, 1],
-      [88, 1],
-      [1, 33],
-      [1, 67],
-      [99, 33],
-      [99, 67],
-    ],
+  hand?: Card[];
+  weapon?: Card;
+  armor?: Card;
+  offensiveMount?: Card;
+  defensiveMount?: Card;
+  decisionArea?: Card[];
+  role?: Player["role"];
+  skippedPlayThisTurn?: boolean;
+}): Player {
+  return {
+    id: p.id,
+    username: p.username,
+    seatIndex: p.seatIndex,
+    connectionStatus: "online",
+    joinedAt: new Date().toISOString(),
+    lastSeenAt: new Date().toISOString(),
+    role: p.role,
+    roleRevealed: p.role === "emperor",
+    character: p.character,
+    characterOptions: [],
+    hand: p.hand ?? [],
+    handCount: (p.hand ?? []).length,
+    equipment: {
+      weapon: p.weapon ?? null,
+      armor: p.armor ?? null,
+      offensiveMount: p.offensiveMount ?? null,
+      defensiveMount: p.defensiveMount ?? null,
+    },
+    decisionArea: p.decisionArea ?? [],
+    alive: true,
+    hp: p.hp,
+    maxHp: p.maxHp,
+    skippedPlayThisTurn: p.skippedPlayThisTurn,
+    ready: true,
+    confirmedCharacter: true,
   };
-  const [left, top] = layouts[opponentCount]?.[index] ?? [50, 1];
-  return { left: `${left}%`, top: `${top}%` };
 }
 
-function getDensity(playerCount: number) {
-  if (playerCount <= 4) return "large";
-  if (playerCount <= 6) return "medium";
-  if (playerCount <= 8) return "small";
+const viewerId = "liu-bei";
+
+const opponents: Player[] = [
+  mkPlayer({
+    id: "cao-cao",
+    username: "caocao_player",
+    seatIndex: 2,
+    character: mkCharacter("CAOCAO", "โจโฉ", 4, "WEI", "วุย", "ชาย"),
+    hp: 3,
+    maxHp: 4,
+    weapon: mkCard("กระบี่ชิงกัง", "♠", "3", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+    offensiveMount: mkCard("ม้าศึก", "♥", "A", "อุปกรณ์ / ม้า", "equipment", "offensive_mount"),
+  }),
+  mkPlayer({
+    id: "sun-quan",
+    username: "sunquan",
+    seatIndex: 3,
+    character: mkCharacter("SUNQUAN", "ซุนกวน", 4, "WU", "งอ", "ชาย"),
+    hp: 4,
+    maxHp: 4,
+    armor: mkCard("ค่ายกลแปดทิศ", "♣", "2", "อุปกรณ์ / เกราะ", "equipment", "armor"),
+    decisionArea: [mkCard("มีสุขลืมเมือง", "♥", "Q", "ไพ่กล", "trick")],
+  }),
+  mkPlayer({
+    id: "zhao-yun",
+    username: "zhaoyun_main",
+    seatIndex: 4,
+    character: mkCharacter("ZHAOYUN", "จูล่ง", 4, "SHU", "จ๊ก", "ชาย"),
+    hp: 3,
+    maxHp: 4,
+    weapon: mkCard("หอกมังกรเงิน", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+  }),
+  mkPlayer({
+    id: "zhang-fei",
+    username: "zhangfei88",
+    seatIndex: 5,
+    character: mkCharacter("ZHANGFEI", "เตียวหุย", 4, "SHU", "จ๊ก", "ชาย"),
+    hp: 4,
+    maxHp: 4,
+    armor: mkCard("เกราะเหล็กกล้า", "♦", "6", "อุปกรณ์ / เกราะ", "equipment", "armor"),
+  }),
+  mkPlayer({
+    id: "lu-bu",
+    username: "lubu_ftw",
+    seatIndex: 6,
+    character: mkCharacter("LUBU", "ลิโป้", 4, "QUN", "กุ๋น", "ชาย"),
+    hp: 1,
+    maxHp: 4,
+    weapon: mkCard("ทวนฟ้าละคร", "♠", "K", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+    offensiveMount: mkCard("ม้าเซ็กเทา", "♥", "5", "อุปกรณ์ / ม้า", "equipment", "offensive_mount"),
+  }),
+  mkPlayer({
+    id: "sun-ce",
+    username: "sunce_",
+    seatIndex: 7,
+    character: mkCharacter("SUNCE", "ซุนเซ็ก", 4, "WU", "งอ", "ชาย"),
+    hp: 3,
+    maxHp: 4,
+    hand: Array.from({ length: 7 }, () => mkCard("การ์ด", "♠", "?", "", "basic")),
+  }),
+  mkPlayer({
+    id: "huang-gai",
+    username: "huanggai",
+    seatIndex: 8,
+    character: mkCharacter("HUANGGAI", "ฮองกาย", 4, "WU", "งอ", "ชาย"),
+    hp: 4,
+    maxHp: 4,
+    hand: [mkCard("การ์ด", "♠", "?", "", "basic")],
+  }),
+  mkPlayer({
+    id: "diao-chan",
+    username: "diaochan_",
+    seatIndex: 9,
+    character: mkCharacter("DIAOCHAN", "เตียวเสี้ยน", 3, "QUN", "กุ๋น", "หญิง"),
+    hp: 2,
+    maxHp: 3,
+    defensiveMount: mkCard("ม้าเซ็กเทา", "♥", "5", "อุปกรณ์ / ม้า", "equipment", "defensive_mount"),
+  }),
+  mkPlayer({
+    id: "xiahou-dun",
+    username: "xiahoudun",
+    seatIndex: 10,
+    character: mkCharacter("XIAHOUDUN", "แฮหัวตุ้น", 4, "WEI", "วุย", "ชาย"),
+    hp: 2,
+    maxHp: 4,
+    weapon: mkCard("ดาบคู่หงส์", "♦", "4", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+    skippedPlayThisTurn: true,
+  }),
+];
+
+const me = mkPlayer({
+  id: viewerId,
+  username: "pakitta",
+  seatIndex: 1,
+  character: mkCharacter("LIUBEI", "เล่าปี่", 4, "SHU", "จ๊ก", "ชาย"),
+  hp: 4,
+  maxHp: 4,
+  weapon: mkCard("ง้าวมังกรเขียว", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+  armor: mkCard("ค่ายกลแปดทิศ", "♣", "2", "อุปกรณ์ / เกราะ", "equipment", "armor"),
+  role: "emperor",
+  hand: [
+    mkCard("โจมตี", "♥", "7", "ไพ่พื้นฐาน", "basic"),
+    mkCard("หลบ", "♠", "2", "ไพ่พื้นฐาน", "basic"),
+    mkCard("เสบียง", "♦", "9", "ไพ่พื้นฐาน", "basic"),
+    mkCard("โจมตี", "♣", "K", "ไพ่พื้นฐาน", "basic"),
+    mkCard("ง้าวมังกรเขียว", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+  ],
+});
+
+const mockLog = [
+  { id: "l1", message: "เริ่มเกมแล้ว", at: "2026-01-01T20:10:00" },
+  { id: "l2", message: "แจกบทบาทให้ผู้เล่นแล้ว", at: "2026-01-01T20:11:00" },
+  { id: "l3", message: "เล่าปี่ เลือกขุนพล", at: "2026-01-01T20:12:00" },
+  { id: "l4", message: "โจโฉ ติดตั้ง กระบี่ชิงกัง", at: "2026-01-01T20:13:00" },
+  { id: "l5", message: "โจโฉ ใช้ โจมตี ใส่ เล่าปี่", at: "2026-01-01T20:14:00" },
+  { id: "l6", message: "เล่าปี่ ใช้ หลบ", at: "2026-01-01T20:15:00" },
+];
+
+const mockChat = [
+  { id: "c1", username: "pakitta", text: "ขอคิดก่อนนะ", at: "2026-01-01T20:16:00" },
+  { id: "c2", username: "sunquan", text: "พร้อมแล้ว", at: "2026-01-01T20:17:00" },
+  { id: "c3", username: "caocao_player", text: "ใช้หลบไหม?", at: "2026-01-01T20:18:00" },
+];
+
+function seatDensityFor(count: number) {
+  if (count <= 4) return "large";
+  if (count <= 6) return "medium";
+  if (count <= 8) return "small";
   return "compact";
 }
 
 export default function MockGamePage() {
-  const currentPlayer = players.find(
-    (player) => player.id === currentPlayerId,
-  )!;
-  const opponents = players.filter((player) => player.id !== currentPlayerId);
-  const density = getDensity(players.length);
+  const [openPanel, setOpenPanel] = useState<"log" | null>("log");
+  const [logChatTab, setLogChatTab] = useState<"log" | "chat">("log");
+  const [chatText, setChatText] = useState("");
+  const logEndRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const playerCount = opponents.length + 1;
+  const density = seatDensityFor(playerCount);
 
   return (
-    <main className={`mock-game-page mock-count-${players.length}`}>
-      <header className="mock-game-header">
-        <div>
-          <small>ตัวอย่างหน้าจอเกม</small>
-          <h1>ยุทธพิชัยสามก๊ก</h1>
+    <main className={`mock-game-page local-game-page mock-count-${playerCount}`}>
+      <nav className="local-navbar">
+        <div className="local-navbar-left">
+          <span className="local-nav-title">ยุทธพิชัยสามก๊ก</span>
+          <span className="local-nav-turn">
+            <b>ตา: {me.username}</b> <em>เล่น</em>
+          </span>
         </div>
-        <p>รอบที่ 6 · ทวนเข็มนาฬิกา</p>
-      </header>
+        <div className="local-role-counts">
+          {(["emperor", "rebel", "loyalist", "traitor"] as const).map((role) => (
+            <span key={role} className={`local-role-count local-role-${role}`}>
+              {ROLE_LABEL[role]} {role === "emperor" ? 1 : 3}
+            </span>
+          ))}
+        </div>
+        <div className="local-navbar-right">
+          <button
+            className={`local-nav-btn${openPanel === "log" ? " active" : ""}`}
+            onClick={() => setOpenPanel((p) => (p === "log" ? null : "log"))}
+            title="บันทึก/แชท"
+            aria-label="บันทึก/แชท"
+          >
+            <Icon name="comment" size={20} />
+          </button>
+        </div>
+      </nav>
+
+      {openPanel === "log" && (
+        <LogChatPanel
+          tab={logChatTab}
+          onTabChange={setLogChatTab}
+          onClose={() => setOpenPanel(null)}
+          log={mockLog}
+          renderLog={(msg) => msg}
+          logEndRef={logEndRef}
+          chat={mockChat}
+          chatEndRef={chatEndRef}
+          chatText={chatText}
+          onChatTextChange={setChatText}
+          onSendChat={() => {}}
+        />
+      )}
 
       <section className="mock-match-layout">
-        <aside className="mock-side-panels">
-          <section className="mock-log" aria-label="บันทึกเกม">
-            <h2>
-              บันทึกการเล่น <small>ซ่อน⌃</small>
-            </h2>
-            <div>
-              {logs.map(([time, log]) => (
-                <p key={`${time}-${log}`}>
-                  <time>{time}</time>
-                  {log}
-                </p>
-              ))}
-            </div>
-          </section>
-          <section className="mock-chat" aria-label="แชทตัวอย่าง">
-            <h2>แชท</h2>
-            <div>
-              {chatMessages.map(([username, message]) => (
-                <p key={`${username}-${message}`}>
-                  <b>{username}:</b> {message}
-                </p>
-              ))}
-            </div>
-          </section>
-        </aside>
-        <section
-          className="mock-table-stage"
-          data-density={density}
-          aria-label="โต๊ะเกมตัวอย่าง"
-        >
+        <section className="mock-table-stage" data-density={density}>
           <div className="mock-table-surface">
-            <div className="mock-table-pattern" aria-hidden="true">
-              三國
-            </div>
+            <div className="mock-table-pattern">三國</div>
             <section className="mock-piles" aria-label="กองไพ่">
               <article className="mock-pile">
                 <div className="mock-deck">🂠</div>
@@ -346,31 +322,96 @@ export default function MockGamePage() {
             </section>
           </div>
           {opponents.map((player, index) => {
-            const position = getTableEdgePosition(index, opponents.length);
+            const pos = edgePosition(index, opponents.length);
             const style = {
-              "--seat-x": position.left,
-              "--seat-y": position.top,
+              "--seat-x": pos.left,
+              "--seat-y": pos.top,
             } as CSSProperties;
             return (
               <div key={player.id} className="mock-opponent" style={style}>
-                <PlayerPanel
-                  player={player}
-                  distance={Math.min(index + 1, opponents.length - index)}
-                />
+                <OpponentPanel player={player} distance={Math.min(index + 1, opponents.length - index)} />
               </div>
             );
           })}
         </section>
       </section>
 
-      <section className="mock-current-player" aria-label="ข้อมูลผู้เล่นของคุณ">
-        <PlayerPanel player={currentPlayer} distance={0} current />
-        <div className="mock-your-turn">
-          ไพ่ของคุณ <strong>— รอการตัดสินใจ</strong>
+      <section className="mock-current-player local-seat-active">
+        <article className="mock-player mock-self mock-active-turn">
+          <div className="mock-portrait-col">
+            <div className="mock-portrait">
+              {me.character?.image ? (
+                <img src={me.character.image} alt={charName(me)} />
+              ) : (
+                charName(me).slice(0, 1)
+              )}
+            </div>
+            {me.character?.kingdomTh && (
+              <span className={`mock-kingdom kingdom-${me.character.kingdom ?? "QUN"}`}>
+                {me.character.kingdomTh}
+              </span>
+            )}
+          </div>
+          <div className="mock-player-content">
+            <div className="local-name-row">
+              <b>{charName(me)}</b>
+              <button className="local-skills-btn" title="ดูทักษะ">
+                !
+              </button>
+            </div>
+            <small className="mock-username">@{me.username}</small>
+            <div className="local-hp-hand">
+              {hearts(me.hp, me.maxHp)}
+              <span className="mock-hand-count">🂠 × {me.hand.length}</span>
+            </div>
+            <small className="mock-seat-info">ที่นั่ง {me.seatIndex}</small>
+            {me.role && (
+              <small className="mock-role local-role-emperor">
+                บทบาท: {ROLE_LABEL[me.role] ?? me.role}
+              </small>
+            )}
+            <EquipmentDisplay eq={me.equipment} />
+            <DecisionArea cards={me.decisionArea} />
+          </div>
+        </article>
+
+        <div className="local-action-col">
+          <div className="mock-your-turn">
+            <strong>⬆ กดกองจั่วบนโต๊ะเพื่อจั่วไพ่</strong>
+          </div>
+          <div className="local-turn-frame">
+            <div className="local-skill-slot">
+              <button className="local-skill-btn">
+                ทักษะ: ผูกมิตร (โปรยเสน่ห์)
+              </button>
+            </div>
+            <div className="local-skill-slot local-skill-slot-empty" />
+            <div className="local-turn-controls">
+              <button className="mock-muted-button" disabled>
+                ทิ้งไพ่เกินมือ
+              </button>
+              <button>จบเทิร์น</button>
+            </div>
+          </div>
         </div>
+
         <div className="mock-hand" aria-label="ไพ่ในมือ">
-          {hand.map((card, index) => (
-            <HandCard key={`${card.name}-${index}`} card={card} />
+          {me.hand.map((card) => (
+            <article
+              key={card.id}
+              tabIndex={0}
+              className={`mock-card mock-card-suit-${suitColor(card.suit)} local-hand-card`}
+            >
+              <header>
+                <span className="mock-card-rank">
+                  {card.number}
+                  {suitTx(card.suit)}
+                </span>
+              </header>
+              <div className="mock-card-art">WTK</div>
+              <b className="mock-card-name">{card.name}</b>
+              <small>{cardTypeLabel(card)}</small>
+            </article>
           ))}
         </div>
       </section>
