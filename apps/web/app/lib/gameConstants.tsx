@@ -125,6 +125,14 @@ export const cardTypeLabel = (c: Card) => {
   return base;
 };
 
+/** ก๊ก chip label: full form for desktop/wide ("วุยก๊ก") + a phone-abbreviated form with
+ *  the "ก๊ก" suffix trimmed ("วุย"). QUN is "อิสระ" (unaligned warlords — NOT a ก๊ก), which
+ *  has no suffix, so both forms are identical there. CSS picks which to show by viewport. */
+export const kingdomLabel = (kingdomTh: string) => ({
+  full: kingdomTh,
+  short: kingdomTh.replace(/ก๊ก$/, ""),
+});
+
 export const KINGDOM_FACTION: Record<string, string> = {
   WEI: "wei",
   SHU: "shu",
@@ -158,12 +166,16 @@ export function edgePosition(index: number, total: number) {
   // this needs a bigger content-box safety margin too, or seats clip again.
   const SIDE_LEFT = 0;
   const SIDE_RIGHT = 100;
-  // k=0 → nearest the viewer, k=1 → nearer the top corner. k=1 moved down from the
-  // original 33 to 39 for clearance from the top row's corner seat (the compact
-  // opponent card got taller once equipment started showing icon+name). k=0 keeps
-  // the ORIGINAL 34-point gap from k=1 (39+34=73), not its original absolute 67 —
-  // pinning k=0 to 67 while k=1 moved shrank that gap to 28, too tight.
-  const SIDE_Y: Record<number, number[]> = { 1: [50], 2: [71, 39] };
+  // Vertical positions of the side seats, k=0 nearest the viewer → higher k nearer the
+  // top corner. The two-a-side pair is tuned per density: 9–10 players (compact, smaller
+  // cards) sit closer together vertically than 7–8 players (small, bigger cards), which
+  // would otherwise crowd if spread the same. `total` here is the opponent count, so
+  // ≥8 opponents = the 9–10-player compact tables.
+  const compact = total >= 8;
+  const SIDE_Y: Record<number, number[]> = {
+    1: [50],
+    2: compact ? [67, 37] : [68, 34],
+  };
   const sideY = (k: number) => (SIDE_Y[sideEach]?.[k] ?? 50).toFixed(1);
 
   if (index < sideEach) {
@@ -174,12 +186,25 @@ export function edgePosition(index: number, total: number) {
     return { left: `${SIDE_RIGHT}%`, top: `${sideY(sideEach - 1 - m)}%` };
   }
   const j = index - sideEach;
-  const left = topCount === 1 ? 50 : 4 + (92 * j) / (topCount - 1);
+  // Top row inset from the table edges. Adaptive to how many top cards there are: the
+  // fewer there are, the tighter they cluster near the middle (and the clearer they stay
+  // of the side seats); the more there are, the wider they must spread so adjacent cards
+  // don't overlap. Never as wide as the side seats (0%/100%).
+  //   2 cards (7p) → 31%/69%   3 (8p) → 22%…78%   4 (9p) → 12%…88%   5 (10p) → 4%…96%
+  const TOP_INSET: Record<number, number> = { 2: 31, 3: 22, 4: 12 };
+  const topInset = TOP_INSET[topCount] ?? 4;
+  const left =
+    topCount === 1
+      ? 50
+      : topInset + ((100 - 2 * topInset) * j) / (topCount - 1);
   return { left: `${left.toFixed(1)}%`, top: "2%" };
 }
 
 // Circular position for all 10 lobby seats (seat 1 at top, clockwise)
-export function lobbyPosition(seatIndex: number): { left: string; top: string } {
+export function lobbyPosition(seatIndex: number): {
+  left: string;
+  top: string;
+} {
   const angle = ((seatIndex - 1) / 10) * 2 * Math.PI - Math.PI / 2;
   return {
     left: `${(50 + 42 * Math.cos(angle)).toFixed(1)}%`,
@@ -195,19 +220,19 @@ export function isViewerDecisionActive(game: Game | undefined): boolean {
   const rw = game.responseWindow;
   return Boolean(
     (rw?.status === "open" && rw.currentResponderId === me) ||
-      game.pendingJudgment?.playerId === me ||
-      game.pendingRepeatAttack?.attackerId === me ||
-      game.pendingDestroyMount?.attackerId === me ||
-      game.pendingForceAttackDamage?.attackerId === me ||
-      game.pendingReplaceDamage?.attackerId === me ||
-      game.pendingTwinSwords?.targetId === me ||
-      game.pendingFankui?.playerId === me ||
-      game.pendingLegacy?.ownerId === me ||
-      game.pendingRetaliateJudgment?.ownerId === me ||
-      game.pendingRetaliate?.damagerId === me ||
-      game.pendingPeek?.playerId === me ||
-      game.pendingDischord?.targetId === me ||
-      game.pendingAllyAssist?.allyId === me,
+    game.pendingJudgment?.playerId === me ||
+    game.pendingRepeatAttack?.attackerId === me ||
+    game.pendingDestroyMount?.attackerId === me ||
+    game.pendingForceAttackDamage?.attackerId === me ||
+    game.pendingReplaceDamage?.attackerId === me ||
+    game.pendingTwinSwords?.targetId === me ||
+    game.pendingFankui?.playerId === me ||
+    game.pendingLegacy?.ownerId === me ||
+    game.pendingRetaliateJudgment?.ownerId === me ||
+    game.pendingRetaliate?.damagerId === me ||
+    game.pendingPeek?.playerId === me ||
+    game.pendingDischord?.targetId === me ||
+    game.pendingAllyAssist?.allyId === me,
   );
 }
 
@@ -222,16 +247,26 @@ export function canAutoEndTurn(game: Game | undefined): boolean {
   if (game.responseWindow || game.pendingJudgment) return false;
   if ((game.pendingDraws?.[game.viewerId] ?? 0) > 0) return false;
   if (
-    game.pendingLegacy || game.pendingPeek || game.pendingDischord ||
-    game.pendingAllyAssist || game.pendingRetaliate || game.pendingRetaliateJudgment ||
-    game.pendingFankui || game.pendingCoerce || game.pendingTwinSwords ||
-    game.pendingForceAttackDamage || game.pendingReplaceDamage ||
-    game.pendingRepeatAttack || game.pendingDestroyMount || game.pendingHarvest
+    game.pendingLegacy ||
+    game.pendingPeek ||
+    game.pendingDischord ||
+    game.pendingAllyAssist ||
+    game.pendingRetaliate ||
+    game.pendingRetaliateJudgment ||
+    game.pendingFankui ||
+    game.pendingCoerce ||
+    game.pendingTwinSwords ||
+    game.pendingForceAttackDamage ||
+    game.pendingReplaceDamage ||
+    game.pendingRepeatAttack ||
+    game.pendingDestroyMount ||
+    game.pendingHarvest
   )
     return false;
   const me = game.players.find((p) => p.id === game.viewerId);
   if (!me || me.hp === undefined) return false;
-  const keys = (me.character && game.characterSkillKeys?.[me.character.id]) || [];
+  const keys =
+    (me.character && game.characterSkillKeys?.[me.character.id]) || [];
   const used = (k: string) => Boolean(game.skillsUsedThisTurn?.includes(k));
   const attackedThisTurn = game.turn?.attackUsedThisTurn ?? 0;
   const skipDiscard =
@@ -252,12 +287,17 @@ export function canAutoEndTurn(game: Game | undefined): boolean {
   };
   if (me.hand.some(playable)) return false;
   const handN = me.hand.length;
-  const hasSuit = (suits: string[]) => me.hand.some((c) => suits.includes(c.suit));
+  const hasSuit = (suits: string[]) =>
+    me.hand.some((c) => suits.includes(c.suit));
   const abilityUsable =
-    (me.equipment.weapon?.effect === "discard_two_as_attack" && canAttackMore) ||
+    (me.equipment.weapon?.effect === "discard_two_as_attack" &&
+      canAttackMore) ||
     (keys.includes("self_damage_draw") && me.hp > 0) ||
-    (keys.includes("discard_then_draw_equal") && !used("discard_then_draw_equal")) ||
-    (keys.includes("miracle_medicine") && !used("miracle_medicine") && handN > 0) ||
+    (keys.includes("discard_then_draw_equal") &&
+      !used("discard_then_draw_equal")) ||
+    (keys.includes("miracle_medicine") &&
+      !used("miracle_medicine") &&
+      handN > 0) ||
     (keys.includes("marriage_heal") && !used("marriage_heal") && handN >= 2) ||
     (keys.includes("benevolence_give") && handN > 0) ||
     (keys.includes("black_as_dismantle") && hasSuit(["♠", "♣"])) ||

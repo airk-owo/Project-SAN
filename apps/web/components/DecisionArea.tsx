@@ -6,30 +6,37 @@ import type { Card } from "../app/lib/gameTypes";
  *  two, when a player had both tricks) and stretch the seat card taller. */
 
 // Custom PNG per trick, with an emoji fallback if the image is missing (onError). Keyed
-// by the card's `effect`.
+// by the card's `effect`. ฟ้าลงโทษ's classic name is "เรือระเบิดเพลิง" (a fire ship), so
+// under classic card names it gets the ship icon instead of the modern lightning one.
 const TRICK_ICON: Record<string, { src: string; emoji: string }> = {
   delayed_lightning_judgment: { src: "/icons/thunder.png", emoji: "⚡" },
   delayed_skip_play_phase: { src: "/icons/mute.png", emoji: "🕒" },
 };
+const LIGHTNING_CLASSIC_ICON = { src: "/icons/ship.png", emoji: "🚢" };
 
 export function DecisionArea({
   cards,
   onInspect,
+  classicNames,
 }: {
   cards: Card[];
   onInspect?: (card: Card) => void;
+  classicNames?: boolean;
 }) {
   if (!cards?.length) return null;
   return (
     <div className="local-decision-badges">
       {cards.map((c) => {
         const isLightning = c.effect === "delayed_lightning_judgment";
-        const icon = TRICK_ICON[c.effect ?? ""];
+        const isShip = isLightning && classicNames;
+        const icon = isShip
+          ? LIGHTNING_CLASSIC_ICON
+          : TRICK_ICON[c.effect ?? ""];
         return (
           <span
             key={c.id}
-            className={`local-decision-badge-icon${isLightning ? " local-decision-badge-lightning" : ""}${onInspect ? " local-inspectable" : ""}`}
-            title={c.name}
+            className={`local-decision-badge-icon${isLightning ? " local-decision-badge-lightning" : ""}${isShip ? " local-decision-badge-ship" : ""}${onInspect ? " local-inspectable" : ""}`}
+            title={classicNames && c.oldName ? c.oldName : c.name}
             onClick={
               onInspect
                 ? (e) => {

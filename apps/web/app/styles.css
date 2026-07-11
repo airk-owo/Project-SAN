@@ -1775,9 +1775,9 @@ h2 {
   gap: 15px;
 }
 .mock-self .mock-portrait {
-  width: 68px;
-  height: 68px;
-  font-size: 2.1rem;
+  width: 58px;
+  height: 58px;
+  font-size: 1.8rem;
 }
 .mock-self .mock-player-content > b {
   font-size: 1.55rem;
@@ -1823,6 +1823,18 @@ h2 {
   line-height: 1.5;
   border: 1px solid currentColor;
   white-space: nowrap;
+}
+/* Full "…ก๊ก" label on desktop/wide; drop the ก๊ก suffix on phones to save room. */
+.kingdom-short {
+  display: none;
+}
+@media (max-width: 760px) {
+  .kingdom-full {
+    display: none;
+  }
+  .kingdom-short {
+    display: inline;
+  }
 }
 .kingdom-WEI {
   color: #2f6fb0;
@@ -1892,6 +1904,12 @@ h2 {
 .local-decision-badge-lightning {
   border-color: #c9a227;
   background: #fff7e0;
+}
+/* Classic name (เรือระเบิดเพลิง / fire ship) — deep-red ring to match the burning ship.
+   Keep the neutral cream fill (the reddish tint read as pink against the red ring). */
+.local-decision-badge-ship {
+  border-color: #8e2827;
+  background: #faf8ef;
 }
 /* Compact opponent seats are tighter — trim the badge a touch so two still fit. */
 .mock-table-stage[data-density="compact"] .local-decision-badge-icon {
@@ -2066,10 +2084,20 @@ h2 {
 .mock-equipment-slot em {
   font-style: normal;
   white-space: nowrap;
+  /* Match the equipped item name (b) so an empty slot's placeholder label reads at the
+     same size — explicit (not inherited) so the compact slot's smaller font doesn't
+     shrink it below b, which stays 0.64rem there. */
+  font-size: 0.64rem;
 }
 .mock-equipment-slot b {
   display: none;
-  grid-column: 1 / -1;
+  /* name sits next to the icon (col 2, same row), not on its own row below it — now that
+     equipped weapon/armor show only the name (no "อาวุธ/เกราะ" label), a full-width row
+     below a lone icon looked unbalanced. */
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: stretch;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2085,11 +2113,28 @@ h2 {
 .mock-equipment-slot.equipped b {
   display: block;
 }
+/* Equipped weapon/armor: show the item name (b), drop the "อาวุธ/เกราะ" type label (em) —
+   the name says which slot it is. (Empty slots keep em as a placeholder; see above.) */
+.mock-equipment-slot.equipped em {
+  display: none;
+}
+/* Equipped mounts are the exception: the specific mount card rarely matters, only its
+   ±1 range does — so keep the "ม้า −1"/"ม้า +1" label (em) and hide the item name (b).
+   Placed after the two rules above so it wins at equal specificity. */
+.mock-equip-offensiveMount.equipped em,
+.mock-equip-defensiveMount.equipped em {
+  display: inline;
+}
+.mock-equip-offensiveMount.equipped b,
+.mock-equip-defensiveMount.equipped b {
+  display: none;
+}
 .mock-self .mock-equipment-slot {
   padding: 4px 6px;
   font-size: 0.72rem;
 }
-.mock-self .mock-equipment-slot b {
+.mock-self .mock-equipment-slot b,
+.mock-self .mock-equipment-slot em {
   font-size: 0.69rem;
 }
 .mock-action {
@@ -2334,19 +2379,13 @@ h2 {
   min-height: 112px;
 }
 .mock-table-stage[data-density="small"] .mock-player {
-  width: 184px;
-  min-height: 100px;
+  width: 194px;
+  min-height: 110px;
 }
 .mock-table-stage[data-density="compact"] .mock-player {
   width: 200px;
   min-height: 96px;
   padding: 7px;
-}
-.mock-table-stage[data-density="small"] .mock-equipment-slot b {
-  display: none;
-}
-.mock-table-stage[data-density="compact"] .mock-equipment-slot em {
-  display: none;
 }
 .mock-table-stage[data-density="small"] .mock-equipment-slot,
 .mock-table-stage[data-density="compact"] .mock-equipment-slot {
@@ -2360,34 +2399,6 @@ h2 {
   display: grid;
   place-items: center;
   padding: 2px;
-}
-/* The base rule puts the name (b) on its own row below the icon (grid-column:1/-1)
-   — at this width that meant long names wrapped onto a ragged extra line. Pull it
-   back up next to the icon and let it stretch+ellipsis instead of wrapping. */
-.mock-table-stage[data-density="compact"] .mock-equipment-slot b {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: stretch;
-  min-width: 0;
-}
-/* Compact seats keep every slot's icon (matches the self-panel look) but drop the
-   generic "อาวุธ/เกราะ" label (em, hidden above) — weapon/armor show their icon +
-   equipped item name; the two mount slots just need the direction/modifier, not
-   which exact card is equipped, so their name (b) stays hidden in favour of the
-   short "ม้า ±1" label (em, re-enabled below). */
-.mock-table-stage[data-density="compact"] .mock-equip-offensiveMount.equipped b,
-.mock-table-stage[data-density="compact"]
-  .mock-equip-defensiveMount.equipped
-  b {
-  display: none;
-}
-.mock-table-stage[data-density="compact"]
-  .mock-equip-offensiveMount.equipped
-  em,
-.mock-table-stage[data-density="compact"]
-  .mock-equip-defensiveMount.equipped
-  em {
-  display: inline;
 }
 .mock-table-stage[data-density="compact"] .mock-portrait {
   width: 40px;
@@ -6000,7 +6011,8 @@ textarea,
     max-width: calc((100% - 190px) / 1);
   }
   .local-game-page .mock-table-stage[data-density="small"] {
-    max-width: calc((100% - 158px) / 1);
+    /* small panel width 194px (halfWidth 97) → constant 2·97−26 = 168 */
+    max-width: calc((100% - 168px) / 1);
   }
   .local-game-page .mock-table-stage[data-density="compact"] {
     /* compact panel width bumped 156→200px (halfWidth 100) → constant 2·100−26 = 174 */

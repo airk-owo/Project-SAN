@@ -16,6 +16,7 @@ import {
   suitColor,
   suitTx,
   cardTypeLabel,
+  kingdomLabel,
   edgePosition,
 } from "../../lib/gameConstants";
 import { OpponentPanel } from "../../../components/OpponentPanel";
@@ -51,7 +52,11 @@ function mkCard(
 // Delayed-trick cards that sit in a player's decision area (DecisionArea keys its icon
 // off `effect`: ⚡ ฟ้าลงโทษ / 🕒 มีสุขลืมเมือง).
 function mkLightning(): Card {
-  return { ...mkCard("ฟ้าลงโทษ", "♠", "2", "ไพ่กล", "trick"), effect: "delayed_lightning_judgment" };
+  return {
+    ...mkCard("ฟ้าลงโทษ", "♠", "2", "ไพ่กล", "trick"),
+    oldName: "เรือระเบิดเพลิง",
+    effect: "delayed_lightning_judgment",
+  };
 }
 function mkIndulgence(): Card {
   return { ...mkCard("มีสุขลืมเมือง", "♥", "Q", "ไพ่กล", "trick"), effect: "delayed_skip_play_phase" };
@@ -115,12 +120,15 @@ function mkPlayer(p: {
 
 const viewerId = "liu-bei";
 
-const opponents: Player[] = [
+// Full pool of 9 opponents (→ up to 10 players). The player-count control slices the
+// first (count − 1) of these, so the demo cases (delayed tricks, "โดนใบ้") are ordered
+// first to stay visible even at low counts. seatIndex is renumbered after slicing.
+const OPPONENT_POOL: Player[] = [
   mkPlayer({
     id: "cao-cao",
     username: "caocao_player",
     seatIndex: 2,
-    character: mkCharacter("CAOCAO", "โจโฉ", 4, "WEI", "วุย", "ชาย"),
+    character: mkCharacter("CAOCAO", "โจโฉ", 4, "WEI", "วุยก๊ก", "ชาย"),
     hp: 3,
     maxHp: 4,
     weapon: mkCard("กระบี่ชิงกัง", "♠", "3", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
@@ -132,7 +140,7 @@ const opponents: Player[] = [
     id: "sun-quan",
     username: "sunquan",
     seatIndex: 3,
-    character: mkCharacter("SUNQUAN", "ซุนกวน", 4, "WU", "งอ", "ชาย"),
+    character: mkCharacter("SUNQUAN", "ซุนกวน", 4, "WU", "ง่อก๊ก", "ชาย"),
     hp: 4,
     maxHp: 4,
     armor: mkCard("ค่ายกลแปดทิศ", "♣", "2", "อุปกรณ์ / เกราะ", "equipment", "armor"),
@@ -143,7 +151,7 @@ const opponents: Player[] = [
     id: "zhao-yun",
     username: "zhaoyun_main",
     seatIndex: 4,
-    character: mkCharacter("ZHAOYUN", "จูล่ง", 4, "SHU", "จ๊ก", "ชาย"),
+    character: mkCharacter("ZHAOYUN", "จูล่ง", 4, "SHU", "จ๊กก๊ก", "ชาย"),
     hp: 3,
     maxHp: 4,
     weapon: mkCard("หอกมังกรเงิน", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
@@ -151,29 +159,40 @@ const opponents: Player[] = [
     decisionArea: [mkLightning(), mkIndulgence()],
   }),
   mkPlayer({
-    id: "zhang-fei",
-    username: "zhangfei88",
+    id: "xiahou-dun",
+    username: "xiahoudun",
     seatIndex: 5,
-    character: mkCharacter("ZHANGFEI", "เตียวหุย", 4, "SHU", "จ๊ก", "ชาย"),
-    hp: 4,
+    character: mkCharacter("XIAHOUDUN", "แฮหัวตุ้น", 4, "WEI", "วุยก๊ก", "ชาย"),
+    hp: 2,
     maxHp: 4,
-    armor: mkCard("เกราะเหล็กกล้า", "♦", "6", "อุปกรณ์ / เกราะ", "equipment", "armor"),
+    weapon: mkCard("ดาบคู่หงส์", "♦", "4", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
+    // DEMO: โดนใบ้ (มีสุขลืมเมืองข้ามช่วงเล่นไพ่)
+    skippedPlayThisTurn: true,
   }),
   mkPlayer({
     id: "lu-bu",
     username: "lubu_ftw",
     seatIndex: 6,
-    character: mkCharacter("LUBU", "ลิโป้", 4, "QUN", "กุ๋น", "ชาย"),
+    character: mkCharacter("LUBU", "ลิโป้", 4, "QUN", "อิสระ", "ชาย"),
     hp: 1,
     maxHp: 4,
     weapon: mkCard("ทวนฟ้าละคร", "♠", "K", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
     offensiveMount: mkCard("ม้าเซ็กเทา", "♥", "5", "อุปกรณ์ / ม้า", "equipment", "offensive_mount"),
   }),
   mkPlayer({
+    id: "zhang-fei",
+    username: "zhangfei88",
+    seatIndex: 7,
+    character: mkCharacter("ZHANGFEI", "เตียวหุย", 4, "SHU", "จ๊กก๊ก", "ชาย"),
+    hp: 4,
+    maxHp: 4,
+    armor: mkCard("เกราะเหล็กกล้า", "♦", "6", "อุปกรณ์ / เกราะ", "equipment", "armor"),
+  }),
+  mkPlayer({
     id: "sun-ce",
     username: "sunce_",
-    seatIndex: 7,
-    character: mkCharacter("SUNCE", "ซุนเซ็ก", 4, "WU", "งอ", "ชาย"),
+    seatIndex: 8,
+    character: mkCharacter("SUNCE", "ซุนเซ็ก", 4, "WU", "ง่อก๊ก", "ชาย"),
     hp: 3,
     maxHp: 4,
     hand: Array.from({ length: 7 }, () => mkCard("การ์ด", "♠", "?", "", "basic")),
@@ -181,8 +200,8 @@ const opponents: Player[] = [
   mkPlayer({
     id: "huang-gai",
     username: "huanggai",
-    seatIndex: 8,
-    character: mkCharacter("HUANGGAI", "ฮองกาย", 4, "WU", "งอ", "ชาย"),
+    seatIndex: 9,
+    character: mkCharacter("HUANGGAI", "ฮองกาย", 4, "WU", "ง่อก๊ก", "ชาย"),
     hp: 4,
     maxHp: 4,
     hand: [mkCard("การ์ด", "♠", "?", "", "basic")],
@@ -190,21 +209,11 @@ const opponents: Player[] = [
   mkPlayer({
     id: "diao-chan",
     username: "diaochan_",
-    seatIndex: 9,
-    character: mkCharacter("DIAOCHAN", "เตียวเสี้ยน", 3, "QUN", "กุ๋น", "หญิง"),
+    seatIndex: 10,
+    character: mkCharacter("DIAOCHAN", "เตียวเสี้ยน", 3, "QUN", "อิสระ", "หญิง"),
     hp: 2,
     maxHp: 3,
     defensiveMount: mkCard("ม้าเซ็กเทา", "♥", "5", "อุปกรณ์ / ม้า", "equipment", "defensive_mount"),
-  }),
-  mkPlayer({
-    id: "xiahou-dun",
-    username: "xiahoudun",
-    seatIndex: 10,
-    character: mkCharacter("XIAHOUDUN", "แฮหัวตุ้น", 4, "WEI", "วุย", "ชาย"),
-    hp: 2,
-    maxHp: 4,
-    weapon: mkCard("ดาบคู่หงส์", "♦", "4", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
-    skippedPlayThisTurn: true,
   }),
 ];
 
@@ -212,7 +221,7 @@ const me = mkPlayer({
   id: viewerId,
   username: "pakitta",
   seatIndex: 1,
-  character: mkCharacter("LIUBEI", "เล่าปี่", 4, "SHU", "จ๊ก", "ชาย"),
+  character: mkCharacter("LIUBEI", "เล่าปี่", 4, "SHU", "จ๊กก๊ก", "ชาย"),
   hp: 4,
   maxHp: 4,
   weapon: mkCard("ง้าวมังกรเขียว", "♠", "5", "อุปกรณ์ / อาวุธ", "equipment", "weapon"),
@@ -244,6 +253,19 @@ const mockChat = [
   { id: "c3", username: "caocao_player", text: "ใช้หลบไหม?", at: "2026-01-01T20:18:00" },
 ];
 
+const stepBtn = (disabled: boolean): CSSProperties => ({
+  width: 26,
+  height: 26,
+  borderRadius: "50%",
+  border: "1px solid #c8b58a66",
+  background: disabled ? "#c8b58a22" : "#e0ba67",
+  color: disabled ? "#c8b58a66" : "#170f0a",
+  fontSize: "1.1rem",
+  fontWeight: 700,
+  lineHeight: 1,
+  cursor: disabled ? "default" : "pointer",
+});
+
 function seatDensityFor(count: number) {
   if (count <= 4) return "large";
   if (count <= 6) return "medium";
@@ -255,11 +277,18 @@ export default function MockGamePage() {
   const [openPanel, setOpenPanel] = useState<"log" | null>("log");
   const [logChatTab, setLogChatTab] = useState<"log" | "chat">("log");
   const [chatText, setChatText] = useState("");
+  const [playerCount, setPlayerCount] = useState(8);
   const logEndRef = useRef<HTMLDivElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const playerCount = opponents.length + 1;
+  // Take the first (playerCount − 1) opponents and renumber their seats around the viewer.
+  const opponents = OPPONENT_POOL.slice(0, playerCount - 1).map((p, i) => ({
+    ...p,
+    seatIndex: i + 2,
+  }));
   const density = seatDensityFor(playerCount);
+  // DEMO: ใช้ชื่อการ์ดเก่า → ฟ้าลงโทษแสดงเป็นไอคอนเรือ (เรือระเบิดเพลิง)
+  const classicNames = true;
 
   return (
     <main className={`mock-game-page local-game-page mock-count-${playerCount}`}>
@@ -288,6 +317,52 @@ export default function MockGamePage() {
           </button>
         </div>
       </nav>
+
+      {/* Dev control (sandbox only): step how many players sit at the table (2–10). */}
+      <div
+        style={{
+          position: "fixed",
+          top: "calc(var(--wtk-nav-h, 56px) + 8px)",
+          left: 10,
+          zIndex: 120,
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "4px 6px",
+          background: "#170f0aef",
+          border: "1px solid #c8b58a80",
+          borderRadius: 999,
+          boxShadow: "0 4px 14px #0006",
+        }}
+      >
+        <button
+          onClick={() => setPlayerCount((n) => Math.max(2, n - 1))}
+          disabled={playerCount <= 2}
+          title="ลดผู้เล่น"
+          style={stepBtn(playerCount <= 2)}
+        >
+          −
+        </button>
+        <span
+          style={{
+            color: "#faf8ef",
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            minWidth: 46,
+            textAlign: "center",
+          }}
+        >
+          {playerCount} คน
+        </span>
+        <button
+          onClick={() => setPlayerCount((n) => Math.min(10, n + 1))}
+          disabled={playerCount >= 10}
+          title="เพิ่มผู้เล่น"
+          style={stepBtn(playerCount >= 10)}
+        >
+          +
+        </button>
+      </div>
 
       {openPanel === "log" && (
         <LogChatPanel
@@ -345,7 +420,11 @@ export default function MockGamePage() {
             } as CSSProperties;
             return (
               <div key={player.id} className="mock-opponent" style={style}>
-                <OpponentPanel player={player} distance={Math.min(index + 1, opponents.length - index)} />
+                <OpponentPanel
+                  player={player}
+                  distance={Math.min(index + 1, opponents.length - index)}
+                  classicNames={classicNames}
+                />
               </div>
             );
           })}
@@ -364,10 +443,15 @@ export default function MockGamePage() {
             </div>
             {me.character?.kingdomTh && (
               <span className={`mock-kingdom kingdom-${me.character.kingdom ?? "QUN"}`}>
-                {me.character.kingdomTh}
+                <span className="kingdom-full">
+                  {kingdomLabel(me.character.kingdomTh).full}
+                </span>
+                <span className="kingdom-short">
+                  {kingdomLabel(me.character.kingdomTh).short}
+                </span>
               </span>
             )}
-            <DecisionArea cards={me.decisionArea} />
+            <DecisionArea cards={me.decisionArea} classicNames={classicNames} />
           </div>
           <div className="mock-player-content">
             <div className="local-name-row">

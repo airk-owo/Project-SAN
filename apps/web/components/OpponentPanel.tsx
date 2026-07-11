@@ -1,5 +1,10 @@
 import type { Card, Player } from "../app/lib/gameTypes";
-import { ROLE_LABEL, charName, hearts } from "../app/lib/gameConstants";
+import {
+  ROLE_LABEL,
+  charName,
+  hearts,
+  kingdomLabel,
+} from "../app/lib/gameConstants";
 import { EquipmentDisplay } from "./EquipmentDisplay";
 import { DecisionArea } from "./DecisionArea";
 
@@ -12,6 +17,7 @@ export function OpponentPanel({
   onClick,
   onSkills,
   onInspect,
+  classicNames,
 }: {
   player: Player;
   targetable?: boolean;
@@ -20,6 +26,7 @@ export function OpponentPanel({
   onClick?: () => void;
   onSkills?: () => void;
   onInspect?: (card: Card) => void;
+  classicNames?: boolean;
 }) {
   return (
     <article
@@ -40,10 +47,19 @@ export function OpponentPanel({
           <span
             className={`mock-kingdom kingdom-${player.character.kingdom ?? "QUN"}`}
           >
-            {player.character.kingdomTh}
+            <span className="kingdom-full">
+              {kingdomLabel(player.character.kingdomTh).full}
+            </span>
+            <span className="kingdom-short">
+              {kingdomLabel(player.character.kingdomTh).short}
+            </span>
           </span>
         )}
-        <DecisionArea cards={player.decisionArea} onInspect={onInspect} />
+        <DecisionArea
+          cards={player.decisionArea}
+          onInspect={onInspect}
+          classicNames={classicNames}
+        />
       </div>
       <div className="mock-player-content">
         <div className="local-name-row">

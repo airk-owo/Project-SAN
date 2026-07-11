@@ -38,6 +38,7 @@ import {
   suitTx,
   cardTypeLabel,
   KINGDOM_FACTION,
+  kingdomLabel,
   edgePosition,
   lobbyPosition,
   isViewerDecisionActive,
@@ -2306,6 +2307,7 @@ export default function Home() {
                           : undefined
                       }
                       onInspect={setDetailCard}
+                      classicNames={game.cardNameVersion === "classic"}
                     />
                     {respCard && (
                       <div
@@ -2353,12 +2355,18 @@ export default function Home() {
                   <span
                     className={`mock-kingdom kingdom-${myPlayer.character.kingdom ?? "QUN"}`}
                   >
-                    {myPlayer.character.kingdomTh}
+                    <span className="kingdom-full">
+                      {kingdomLabel(myPlayer.character.kingdomTh).full}
+                    </span>
+                    <span className="kingdom-short">
+                      {kingdomLabel(myPlayer.character.kingdomTh).short}
+                    </span>
                   </span>
                 )}
                 <DecisionArea
                   cards={myPlayer?.decisionArea ?? []}
                   onInspect={setDetailCard}
+                  classicNames={game.cardNameVersion === "classic"}
                 />
               </div>
               <div className="mock-player-content">
