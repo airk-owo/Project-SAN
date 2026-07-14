@@ -169,6 +169,9 @@ body:has(.lobby) {
    --fade-intensity : opacity of the cream at the very bottom (0–1).
                       1 = bottom fully melts into solid cream · LOWER = softer, more see-through. */
 body:has(.lobby) {
+  /* The lobby has no navbar, so body's navbar spacer (padding-top) is dead space that
+     just pushes the card down — zero it here. The card's own --card-y then positions it. */
+  padding-top: 0;
   --bg-veil: 0.6;
   --fade-height: 30vh;
   --fade-intensity: 1;
@@ -752,18 +755,31 @@ body:has(.lobby) {
   color: #a4906f;
   font-style: italic;
 }
-/* ── LOBBY CARD PLACEMENT (desktop, ≥768px) — TWEAK THE TWO VALUES BELOW ──
-   --card-x = distance from the LEFT screen edge.
-              increase it (5rem → 12rem…) to move the card RIGHT · decrease (→ 0) to move it LEFT.
-   --card-y = distance from the TOP screen edge.
-              increase it (9vh → 20vh…) to move the card DOWN · decrease (→ 0) to move it UP.
-   Units are free — try rem/px for X, vh/% for Y. margin-right stays auto so the
-   card stays left-anchored and the artwork keeps the right side of the screen. */
+/* ── LOBBY CARD PLACEMENT (desktop, ≥768px) ──
+   --card-y = distance from the TOP screen edge. The default centres the card vertically:
+              half the leftover space above/below it (card height = the min() below, and
+              body's navbar spacer is zeroed on the lobby). Override with a plain value
+              (e.g. 9vh) to pin it a fixed distance from the top instead.
+   Horizontally the card is CENTRED by default — that's what narrower windows need, since
+   there isn't enough room beside it for the artwork anyway. Only wide screens pull it to
+   the left (see the next block). */
 @media (min-width: 768px) {
   .lobby {
+    --card-y: calc((100vh - min(88vh, 760px)) / 2);
+    margin: var(--card-y) auto 0;
+  }
+}
+/* ── WIDE SCREENS ONLY (>1100px): left-anchor the card so the artwork owns the right side ──
+   --card-x = distance from the LEFT screen edge.
+              increase it (15rem → 20rem…) to move the card RIGHT · decrease (→ 0) to move it LEFT.
+   Below this width the card stays centred (above) — at ~1100px and under, the leftover
+   strip on the right is too narrow for the art to read, and an off-centre card just looks
+   lopsided. Raise/lower the 1100px breakpoint to change where the switch happens. */
+@media (min-width: 1101px) {
+  .lobby {
     --card-x: 15rem;
-    --card-y: 9vh;
-    margin: var(--card-y) auto 0 var(--card-x);
+    margin-left: var(--card-x);
+    margin-right: auto;
   }
 }
 @media (max-width: 700px) {
@@ -1233,17 +1249,25 @@ h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  border: 15px solid color-mix(in srgb, var(--info) 70%, transparent);
+  /* Thickness scales with the viewport (border-width can't take %, so vmin = % of the
+     shorter screen side). clamp() keeps it from getting too thin/thick on tiny/huge
+     screens — tune the 1.6vmin (≈% of screen) or the 10px/24px bounds. */
+  border: clamp(6px, 1.6vmin, 24px) solid
+    color-mix(in srgb, var(--info) 70%, transparent);
   box-sizing: border-box;
   pointer-events: none;
-  z-index: 130;
+  /* Below the navbar (140) and the slide-in panels (.local-navpanel, 130) — this is
+     ambient decoration and must never sit on top of the menus. */
+  z-index: 100;
 }
 .spectator-watching-banner {
   position: fixed;
   top: calc(var(--wtk-nav-h, 56px) + 5px);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 131;
+  /* Sits above the frame (100) but below the room/log panels (130) and navbar (140),
+     so opening a menu covers the banner rather than the banner covering the menu. */
+  z-index: 101;
   background: #355c7d18;
   border: 1px solid var(--info);
   border-radius: 8px;
