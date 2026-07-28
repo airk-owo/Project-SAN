@@ -340,7 +340,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_server_src_auth_stats_verifyaccesstoken",
-      "community": 0,
+      "community": 101,
       "norm_label": "verifyaccesstoken()"
     },
     {
@@ -350,7 +350,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "apps_server_src_auth_stats_bindauth",
-      "community": 0,
+      "community": 101,
       "norm_label": "bindauth()"
     },
     {
@@ -360,7 +360,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "apps_server_src_auth_stats_unbindauth",
-      "community": 0,
+      "community": 101,
       "norm_label": "unbindauth()"
     },
     {
@@ -410,7 +410,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox",
-      "community": 0,
+      "community": 19,
       "norm_label": "dev-sandbox.ts"
     },
     {
@@ -420,7 +420,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_devsandboxdeps",
-      "community": 0,
+      "community": 19,
       "norm_label": "devsandboxdeps"
     },
     {
@@ -430,7 +430,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_frozengames",
-      "community": 0,
+      "community": 19,
       "norm_label": "frozengames"
     },
     {
@@ -440,7 +440,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_dummygames",
-      "community": 0,
+      "community": 19,
       "norm_label": "dummygames"
     },
     {
@@ -450,7 +450,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_dummytimers",
-      "community": 0,
+      "community": 19,
       "norm_label": "dummytimers"
     },
     {
@@ -460,7 +460,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_istimerfrozen",
-      "community": 0,
+      "community": 19,
       "norm_label": "istimerfrozen()"
     },
     {
@@ -470,7 +470,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_devautotick",
-      "community": 0,
+      "community": 19,
       "norm_label": "devautotick()"
     },
     {
@@ -480,7 +480,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_focusedids",
-      "community": 0,
+      "community": 19,
       "norm_label": "focusedids()"
     },
     {
@@ -490,7 +490,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_rundummystep",
-      "community": 0,
+      "community": 19,
       "norm_label": "rundummystep()"
     },
     {
@@ -500,7 +500,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_attachdevhandlers",
-      "community": 0,
+      "community": 19,
       "norm_label": "attachdevhandlers()"
     },
     {
@@ -510,7 +510,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "apps_server_src_dev_sandbox_registerdevsandbox",
-      "community": 0,
+      "community": 19,
       "norm_label": "registerdevsandbox()"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "apps_web_app_game_local_page_localgamepage",
-      "community": 20,
+      "community": 0,
       "norm_label": "localgamepage()"
     },
     {
@@ -1587,7 +1587,7 @@
       "label": "IceSelection",
       "file_type": "code",
       "source_file": "apps/web/app/lib/gameTypes.ts",
-      "source_location": "L218",
+      "source_location": "L217",
       "_origin": "ast",
       "id": "apps_web_app_lib_gametypes_iceselection",
       "community": 23,
@@ -1677,7 +1677,7 @@
       "label": "Home()",
       "file_type": "code",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L89",
+      "source_location": "L88",
       "_origin": "ast",
       "id": "apps_web_app_page_home",
       "community": 4,
@@ -2344,26 +2344,6 @@
       "norm_label": "allyassistprompt()"
     },
     {
-      "label": "ArrogancePrompt.tsx",
-      "file_type": "code",
-      "source_file": "apps/web/components/game/ArrogancePrompt.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_web_components_game_arroganceprompt",
-      "community": 4,
-      "norm_label": "arroganceprompt.tsx"
-    },
-    {
-      "label": "ArrogancePrompt()",
-      "file_type": "code",
-      "source_file": "apps/web/components/game/ArrogancePrompt.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "apps_web_components_game_arroganceprompt_arroganceprompt",
-      "community": 4,
-      "norm_label": "arroganceprompt()"
-    },
-    {
       "label": "CoercePrompt.tsx",
       "file_type": "code",
       "source_file": "apps/web/components/game/CoercePrompt.tsx",
@@ -2390,7 +2370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_destroymountprompt",
-      "community": 23,
+      "community": 4,
       "norm_label": "destroymountprompt.tsx"
     },
     {
@@ -2400,7 +2380,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_web_components_game_destroymountprompt_destroymountprompt",
-      "community": 23,
+      "community": 4,
       "norm_label": "destroymountprompt()"
     },
     {
@@ -2557,7 +2537,7 @@
       "label": "PeekPrompt()",
       "file_type": "code",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L9",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "apps_web_components_game_peekprompt_peekprompt",
       "community": 1,
@@ -2630,7 +2610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_retaliatejudgmentprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "retaliatejudgmentprompt.tsx"
     },
     {
@@ -2640,7 +2620,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "retaliatejudgmentprompt()"
     },
     {
@@ -3930,7 +3910,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_suited",
-      "community": 13,
+      "community": 10,
       "norm_label": "suited()"
     },
     {
@@ -3940,7 +3920,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_duelcard",
-      "community": 13,
+      "community": 10,
       "norm_label": "duelcard()"
     },
     {
@@ -3950,7 +3930,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_dodgecard",
-      "community": 13,
+      "community": 10,
       "norm_label": "dodgecard()"
     },
     {
@@ -3960,7 +3940,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_makecard",
-      "community": 0,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -3970,7 +3950,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_attackcard",
-      "community": 0,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -3980,14 +3960,14 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_makegame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
       "label": "clearNegateWindow()",
       "file_type": "code",
       "source_file": "packages/game/src/character-skills.test.ts",
-      "source_location": "L1630",
+      "source_location": "L1613",
       "_origin": "ast",
       "id": "packages_game_src_character_skills_test_clearnegatewindow",
       "community": 2,
@@ -4000,7 +3980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_coerce_test",
-      "community": 13,
+      "community": 10,
       "norm_label": "coerce.test.ts"
     },
     {
@@ -4010,7 +3990,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_coerce_test_coercecard",
-      "community": 13,
+      "community": 10,
       "norm_label": "coercecard()"
     },
     {
@@ -4020,7 +4000,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_coerce_test_weapon",
-      "community": 13,
+      "community": 10,
       "norm_label": "weapon()"
     },
     {
@@ -4030,7 +4010,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "packages_game_src_coerce_test_makegame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
@@ -4040,7 +4020,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test",
-      "community": 13,
+      "community": 100,
       "norm_label": "delayed-tricks.test.ts"
     },
     {
@@ -4050,7 +4030,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_runjudgment",
-      "community": 0,
+      "community": 100,
       "norm_label": "runjudgment()"
     },
     {
@@ -4060,7 +4040,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_makecard",
-      "community": 13,
+      "community": 100,
       "norm_label": "makecard()"
     },
     {
@@ -4070,7 +4050,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_indulgence",
-      "community": 13,
+      "community": 100,
       "norm_label": "indulgence()"
     },
     {
@@ -4080,7 +4060,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_lightning",
-      "community": 13,
+      "community": 100,
       "norm_label": "lightning()"
     },
     {
@@ -4090,7 +4070,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_plain",
-      "community": 13,
+      "community": 100,
       "norm_label": "plain()"
     },
     {
@@ -4100,7 +4080,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_delayed_tricks_test_makeplayinggame",
-      "community": 13,
+      "community": 100,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -4110,7 +4090,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_duel_test",
-      "community": 13,
+      "community": 10,
       "norm_label": "duel.test.ts"
     },
     {
@@ -4120,7 +4100,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_makecard",
-      "community": 13,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -4130,7 +4110,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_attackcard",
-      "community": 13,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -4140,7 +4120,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_duelcard",
-      "community": 13,
+      "community": 10,
       "norm_label": "duelcard()"
     },
     {
@@ -4150,7 +4130,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "packages_game_src_duel_test_makegame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
@@ -4160,7 +4140,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions",
-      "community": 20,
+      "community": 102,
       "norm_label": "actions.ts"
     },
     {
@@ -4170,7 +4150,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_createtargetedcardaction",
-      "community": 20,
+      "community": 0,
       "norm_label": "createtargetedcardaction()"
     },
     {
@@ -4180,7 +4160,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_resolvetargetedcardaction",
-      "community": 20,
+      "community": 0,
       "norm_label": "resolvetargetedcardaction()"
     },
     {
@@ -4190,7 +4170,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "packages_game_src_engine_actions_canplayeract",
-      "community": 20,
+      "community": 0,
       "norm_label": "canplayeract()"
     },
     {
@@ -4414,20 +4394,20 @@
       "norm_label": "useunarmedhunt()"
     },
     {
-      "label": "resolveArrogance()",
+      "label": "useArrogance()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L529",
+      "source_location": "L528",
       "_origin": "ast",
-      "id": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
+      "id": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "community": 0,
-      "norm_label": "resolvearrogance()"
+      "norm_label": "usearrogance()"
     },
     {
       "label": "useDischord()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L567",
+      "source_location": "L559",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_usedischord",
       "community": 0,
@@ -4437,7 +4417,7 @@
       "label": "pickDischordSuit()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L596",
+      "source_location": "L588",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
       "community": 0,
@@ -4447,7 +4427,7 @@
       "label": "requestUnityAttack()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L640",
+      "source_location": "L632",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "community": 0,
@@ -4457,7 +4437,7 @@
       "label": "requestGuardianDodge()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L678",
+      "source_location": "L670",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "community": 0,
@@ -4467,7 +4447,7 @@
       "label": "allyAssist()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L713",
+      "source_location": "L705",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_allyassist",
       "community": 0,
@@ -4477,7 +4457,7 @@
       "label": "declineAllyAssist()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L744",
+      "source_location": "L736",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_declineallyassist",
       "community": 0,
@@ -4487,7 +4467,7 @@
       "label": "useIncite()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L758",
+      "source_location": "L750",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_useincite",
       "community": 0,
@@ -4497,7 +4477,7 @@
       "label": "usePeek()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L818",
+      "source_location": "L810",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_usepeek",
       "community": 0,
@@ -4507,7 +4487,7 @@
       "label": "resolvePeek()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L847",
+      "source_location": "L839",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "community": 0,
@@ -4517,7 +4497,7 @@
       "label": "useFortune()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L879",
+      "source_location": "L871",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_usefortune",
       "community": 0,
@@ -4527,7 +4507,7 @@
       "label": "useBenevolence()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L930",
+      "source_location": "L922",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "community": 0,
@@ -4540,7 +4520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat",
-      "community": 102,
+      "community": 0,
       "norm_label": "combat.ts"
     },
     {
@@ -4550,7 +4530,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playerhasanycard",
-      "community": 102,
+      "community": 0,
       "norm_label": "playerhasanycard()"
     },
     {
@@ -4590,7 +4570,7 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_finishgame",
-      "community": 102,
+      "community": 0,
       "norm_label": "finishgame()"
     },
     {
@@ -4600,7 +4580,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_checkwincondition",
-      "community": 102,
+      "community": 0,
       "norm_label": "checkwincondition()"
     },
     {
@@ -4640,7 +4620,7 @@
       "source_location": "L299",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_declineresponse",
-      "community": 2,
+      "community": 0,
       "norm_label": "declineresponse()"
     },
     {
@@ -4660,7 +4640,7 @@
       "source_location": "L473",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_openattackdodgewindow",
-      "community": 102,
+      "community": 0,
       "norm_label": "openattackdodgewindow()"
     },
     {
@@ -4700,7 +4680,7 @@
       "source_location": "L627",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_resolvecurrentaction",
-      "community": 102,
+      "community": 0,
       "norm_label": "resolvecurrentaction()"
     },
     {
@@ -4720,7 +4700,7 @@
       "source_location": "L774",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_combat_playheal",
-      "community": 20,
+      "community": 0,
       "norm_label": "playheal()"
     },
     {
@@ -4730,7 +4710,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox",
-      "community": 0,
+      "community": 19,
       "norm_label": "dev-sandbox.ts"
     },
     {
@@ -4740,7 +4720,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_normalize",
-      "community": 0,
+      "community": 19,
       "norm_label": "normalize()"
     },
     {
@@ -4750,7 +4730,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_findcarddefs",
-      "community": 0,
+      "community": 19,
       "norm_label": "findcarddefs()"
     },
     {
@@ -4760,7 +4740,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_takecardcopy",
-      "community": 0,
+      "community": 19,
       "norm_label": "takecardcopy()"
     },
     {
@@ -4770,7 +4750,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devspawncard",
-      "community": 0,
+      "community": 19,
       "norm_label": "devspawncard()"
     },
     {
@@ -4780,7 +4760,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devsetcharacter",
-      "community": 0,
+      "community": 19,
       "norm_label": "devsetcharacter()"
     },
     {
@@ -4790,7 +4770,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devsethp",
-      "community": 0,
+      "community": 19,
       "norm_label": "devsethp()"
     },
     {
@@ -4800,7 +4780,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devinserttopdeck",
-      "community": 0,
+      "community": 19,
       "norm_label": "devinserttopdeck()"
     },
     {
@@ -4810,7 +4790,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_suit_aliases",
-      "community": 0,
+      "community": 19,
       "norm_label": "suit_aliases"
     },
     {
@@ -4820,7 +4800,7 @@
       "source_location": "L196",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devforcejudgment",
-      "community": 0,
+      "community": 19,
       "norm_label": "devforcejudgment()"
     },
     {
@@ -4830,7 +4810,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devsnapshot",
-      "community": 0,
+      "community": 19,
       "norm_label": "devsnapshot()"
     },
     {
@@ -4840,7 +4820,7 @@
       "source_location": "L243",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_dev_sandbox_devloadsnapshot",
-      "community": 0,
+      "community": 19,
       "norm_label": "devloadsnapshot()"
     },
     {
@@ -4850,7 +4830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives",
-      "community": 102,
+      "community": 0,
       "norm_label": "equipment-passives.ts"
     },
     {
@@ -4860,7 +4840,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_getattackrange",
-      "community": 10,
+      "community": 0,
       "norm_label": "getattackrange()"
     },
     {
@@ -4880,7 +4860,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasunlimitedattack",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasunlimitedattack()"
     },
     {
@@ -4890,7 +4870,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasrepeatattackafterdodge",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasrepeatattackafterdodge()"
     },
     {
@@ -4900,7 +4880,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_attackignorestargetarmor",
-      "community": 102,
+      "community": 0,
       "norm_label": "attackignorestargetarmor()"
     },
     {
@@ -4910,7 +4890,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasdamagedestroytargetmount",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasdamagedestroytargetmount()"
     },
     {
@@ -4920,7 +4900,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasdiscardtwoforceattackdamage",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasdiscardtwoforceattackdamage()"
     },
     {
@@ -4930,7 +4910,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasreplacedamagewithdiscardtwo",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasreplacedamagewithdiscardtwo()"
     },
     {
@@ -4940,7 +4920,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasdiscardtwoasattack",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasdiscardtwoasattack()"
     },
     {
@@ -4950,7 +4930,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_hasoppositegenderattackchoice",
-      "community": 102,
+      "community": 0,
       "norm_label": "hasoppositegenderattackchoice()"
     },
     {
@@ -4960,7 +4940,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_passives_areoppositegenders",
-      "community": 102,
+      "community": 0,
       "norm_label": "areoppositegenders()"
     },
     {
@@ -4970,7 +4950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment",
-      "community": 102,
+      "community": 0,
       "norm_label": "equipment.ts"
     },
     {
@@ -5000,7 +4980,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_usediscardtwoasattack",
-      "community": 102,
+      "community": 0,
       "norm_label": "usediscardtwoasattack()"
     },
     {
@@ -5010,7 +4990,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_haslasthandmultitargetattack",
-      "community": 102,
+      "community": 0,
       "norm_label": "haslasthandmultitargetattack()"
     },
     {
@@ -5020,7 +5000,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_playlasthandmultiattack",
-      "community": 102,
+      "community": 0,
       "norm_label": "playlasthandmultiattack()"
     },
     {
@@ -5120,7 +5100,7 @@
       "source_location": "L541",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_equipment_playequipment",
-      "community": 20,
+      "community": 0,
       "norm_label": "playequipment()"
     },
     {
@@ -5130,7 +5110,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_response_queue",
-      "community": 20,
+      "community": 0,
       "norm_label": "response-queue.ts"
     },
     {
@@ -5140,7 +5120,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_response_queue_isqueuedresponsewindow",
-      "community": 20,
+      "community": 0,
       "norm_label": "isqueuedresponsewindow()"
     },
     {
@@ -5150,7 +5130,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_response_queue_advancemassresponsequeue",
-      "community": 20,
+      "community": 0,
       "norm_label": "advancemassresponsequeue()"
     },
     {
@@ -5160,7 +5140,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks",
-      "community": 20,
+      "community": 0,
       "norm_label": "tricks.ts"
     },
     {
@@ -5170,7 +5150,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_massqueue",
-      "community": 20,
+      "community": 0,
       "norm_label": "massqueue()"
     },
     {
@@ -5180,7 +5160,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmasstrick",
-      "community": 20,
+      "community": 0,
       "norm_label": "playmasstrick()"
     },
     {
@@ -5190,7 +5170,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassdodgeordamage",
-      "community": 20,
+      "community": 33,
       "norm_label": "playmassdodgeordamage()"
     },
     {
@@ -5200,7 +5180,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassattackordamage",
-      "community": 20,
+      "community": 33,
       "norm_label": "playmassattackordamage()"
     },
     {
@@ -5210,7 +5190,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playcoerceattack",
-      "community": 20,
+      "community": 0,
       "norm_label": "playcoerceattack()"
     },
     {
@@ -5240,7 +5220,7 @@
       "source_location": "L261",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playharvest",
-      "community": 20,
+      "community": 0,
       "norm_label": "playharvest()"
     },
     {
@@ -5300,7 +5280,7 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playmassresponsecard",
-      "community": 20,
+      "community": 0,
       "norm_label": "playmassresponsecard()"
     },
     {
@@ -5310,7 +5290,7 @@
       "source_location": "L480",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_declinemassresponse",
-      "community": 20,
+      "community": 0,
       "norm_label": "declinemassresponse()"
     },
     {
@@ -5320,7 +5300,7 @@
       "source_location": "L510",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_prepareimmediatetrick",
-      "community": 20,
+      "community": 33,
       "norm_label": "prepareimmediatetrick()"
     },
     {
@@ -5330,7 +5310,7 @@
       "source_location": "L532",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playdrawcardstrick",
-      "community": 20,
+      "community": 33,
       "norm_label": "playdrawcardstrick()"
     },
     {
@@ -5340,7 +5320,7 @@
       "source_location": "L567",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playhealallliving",
-      "community": 20,
+      "community": 33,
       "norm_label": "playhealallliving()"
     },
     {
@@ -5350,7 +5330,7 @@
       "source_location": "L601",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playdiscardtargetcard",
-      "community": 20,
+      "community": 0,
       "norm_label": "playdiscardtargetcard()"
     },
     {
@@ -5360,7 +5340,7 @@
       "source_location": "L662",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playstealtargetcard",
-      "community": 20,
+      "community": 0,
       "norm_label": "playstealtargetcard()"
     },
     {
@@ -5370,7 +5350,7 @@
       "source_location": "L724",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_opennegatewindowfortrick",
-      "community": 20,
+      "community": 0,
       "norm_label": "opennegatewindowfortrick()"
     },
     {
@@ -5380,7 +5360,7 @@
       "source_location": "L752",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_resolvetrickeffect",
-      "community": 20,
+      "community": 0,
       "norm_label": "resolvetrickeffect()"
     },
     {
@@ -5390,7 +5370,7 @@
       "source_location": "L921",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_respondwithnegate",
-      "community": 20,
+      "community": 0,
       "norm_label": "respondwithnegate()"
     },
     {
@@ -5410,7 +5390,7 @@
       "source_location": "L1000",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playnegateinmasswindow",
-      "community": 20,
+      "community": 0,
       "norm_label": "playnegateinmasswindow()"
     },
     {
@@ -5420,7 +5400,7 @@
       "source_location": "L1035",
       "_origin": "ast",
       "id": "packages_game_src_engine_handlers_tricks_playdelayedtrick",
-      "community": 20,
+      "community": 0,
       "norm_label": "playdelayedtrick()"
     },
     {
@@ -5460,7 +5440,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "packages_game_src_engine_setup_setcardnameversion",
-      "community": 0,
+      "community": 13,
       "norm_label": "setcardnameversion()"
     },
     {
@@ -5540,7 +5520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills",
-      "community": 24,
+      "community": 0,
       "norm_label": "skills.ts"
     },
     {
@@ -5550,7 +5530,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_character_skills",
-      "community": 24,
+      "community": 0,
       "norm_label": "character_skills"
     },
     {
@@ -5570,7 +5550,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_card_conversions",
-      "community": 24,
+      "community": 0,
       "norm_label": "card_conversions"
     },
     {
@@ -5580,7 +5560,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_cardactsas",
-      "community": 20,
+      "community": 0,
       "norm_label": "cardactsas()"
     },
     {
@@ -5590,7 +5570,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_isimmunetoattack",
-      "community": 10,
+      "community": 0,
       "norm_label": "isimmunetoattack()"
     },
     {
@@ -5600,7 +5580,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_attackdodgesrequired",
-      "community": 102,
+      "community": 0,
       "norm_label": "attackdodgesrequired()"
     },
     {
@@ -5610,7 +5590,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "packages_game_src_engine_skills_attackdamagebonus",
-      "community": 102,
+      "community": 0,
       "norm_label": "attackdamagebonus()"
     },
     {
@@ -5650,7 +5630,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_createemptyequipmentslots",
-      "community": 13,
+      "community": 22,
       "norm_label": "createemptyequipmentslots()"
     },
     {
@@ -5660,7 +5640,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_tocardinstance",
-      "community": 20,
+      "community": 0,
       "norm_label": "tocardinstance()"
     },
     {
@@ -5680,7 +5660,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getaliveplayers",
-      "community": 20,
+      "community": 0,
       "norm_label": "getaliveplayers()"
     },
     {
@@ -5690,7 +5670,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getplayersinseatorder",
-      "community": 0,
+      "community": 102,
       "norm_label": "getplayersinseatorder()"
     },
     {
@@ -5700,7 +5680,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getaliveplayersinseatorder",
-      "community": 20,
+      "community": 0,
       "norm_label": "getaliveplayersinseatorder()"
     },
     {
@@ -5710,7 +5690,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_getbasedistancebetweenplayers",
-      "community": 10,
+      "community": 0,
       "norm_label": "getbasedistancebetweenplayers()"
     },
     {
@@ -5770,7 +5750,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_numberparam",
-      "community": 102,
+      "community": 0,
       "norm_label": "numberparam()"
     },
     {
@@ -5790,7 +5770,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_findhandcard",
-      "community": 20,
+      "community": 0,
       "norm_label": "findhandcard()"
     },
     {
@@ -5800,7 +5780,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_validatehiddenhandindex",
-      "community": 20,
+      "community": 0,
       "norm_label": "validatehiddenhandindex()"
     },
     {
@@ -5810,7 +5790,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_resolvehiddenhandcard",
-      "community": 20,
+      "community": 2,
       "norm_label": "resolvehiddenhandcard()"
     },
     {
@@ -5840,7 +5820,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_runtimeequipmentslot",
-      "community": 22,
+      "community": 0,
       "norm_label": "runtimeequipmentslot"
     },
     {
@@ -5850,7 +5830,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "packages_game_src_engine_state_equipmentslotforcard",
-      "community": 0,
+      "community": 19,
       "norm_label": "equipmentslotforcard()"
     },
     {
@@ -5950,7 +5930,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting",
-      "community": 10,
+      "community": 0,
       "norm_label": "targeting.ts"
     },
     {
@@ -5960,7 +5940,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_geteffectivedistancebetweenplayers",
-      "community": 10,
+      "community": 0,
       "norm_label": "geteffectivedistancebetweenplayers()"
     },
     {
@@ -5970,7 +5950,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_cantargetwithattack",
-      "community": 10,
+      "community": 0,
       "norm_label": "cantargetwithattack()"
     },
     {
@@ -5980,7 +5960,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_forcedattacktargets",
-      "community": 10,
+      "community": 0,
       "norm_label": "forcedattacktargets()"
     },
     {
@@ -5990,7 +5970,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "packages_game_src_engine_targeting_assertforcedattacktarget",
-      "community": 10,
+      "community": 0,
       "norm_label": "assertforcedattacktarget()"
     },
     {
@@ -6000,24 +5980,24 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow",
-      "community": 0,
+      "community": 102,
       "norm_label": "turn-flow.ts"
     },
     {
       "label": "getNextAlivePlayer()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L13",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_getnextaliveplayer",
-      "community": 0,
+      "community": 102,
       "norm_label": "getnextaliveplayer()"
     },
     {
       "label": "beginNextJudgment()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L25",
+      "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_beginnextjudgment",
       "community": 0,
@@ -6027,7 +6007,7 @@
       "label": "startTurn()",
       "file_type": "code",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L48",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "packages_game_src_engine_turn_flow_startturn",
       "community": 0,
@@ -6300,7 +6280,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_currentaction",
-      "community": 20,
+      "community": 102,
       "norm_label": "currentaction"
     },
     {
@@ -6310,7 +6290,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetrules",
-      "community": 3,
+      "community": 102,
       "norm_label": "targetrules"
     },
     {
@@ -6320,7 +6300,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetedcardaction",
-      "community": 3,
+      "community": 102,
       "norm_label": "targetedcardaction"
     },
     {
@@ -6340,7 +6320,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_targetcardselection",
-      "community": 102,
+      "community": 0,
       "norm_label": "targetcardselection"
     },
     {
@@ -6410,7 +6390,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_effectparams",
-      "community": 102,
+      "community": 3,
       "norm_label": "effectparams"
     },
     {
@@ -6420,7 +6400,7 @@
       "source_location": "L188",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_cardnameversion",
-      "community": 3,
+      "community": 13,
       "norm_label": "cardnameversion"
     },
     {
@@ -6430,7 +6410,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_card",
-      "community": 13,
+      "community": 27,
       "norm_label": "card"
     },
     {
@@ -6440,7 +6420,7 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_character",
-      "community": 13,
+      "community": 27,
       "norm_label": "character"
     },
     {
@@ -6530,7 +6510,7 @@
       "source_location": "L292",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_effectresolver",
-      "community": 3,
+      "community": 33,
       "norm_label": "effectresolver"
     },
     {
@@ -6630,7 +6610,7 @@
       "source_location": "L333",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_pendingjudgment",
-      "community": 0,
+      "community": 102,
       "norm_label": "pendingjudgment"
     },
     {
@@ -6710,14 +6690,14 @@
       "source_location": "L353",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_gamestate",
-      "community": 13,
+      "community": 27,
       "norm_label": "gamestate"
     },
     {
       "label": "GameLog",
       "file_type": "code",
       "source_file": "packages/game/src/engine/types.ts",
-      "source_location": "L430",
+      "source_location": "L429",
       "_origin": "ast",
       "id": "packages_game_src_engine_types_gamelog",
       "community": 3,
@@ -6740,7 +6720,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_engine_view_publiccardview",
-      "community": 20,
+      "community": 0,
       "norm_label": "publiccardview()"
     },
     {
@@ -6810,7 +6790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test",
-      "community": 13,
+      "community": 27,
       "norm_label": "harvest.test.ts"
     },
     {
@@ -6820,7 +6800,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test_makecard",
-      "community": 13,
+      "community": 27,
       "norm_label": "makecard()"
     },
     {
@@ -6830,7 +6810,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test_harvestcard",
-      "community": 13,
+      "community": 27,
       "norm_label": "harvestcard()"
     },
     {
@@ -6840,7 +6820,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test_poolcard",
-      "community": 13,
+      "community": 27,
       "norm_label": "poolcard()"
     },
     {
@@ -6850,7 +6830,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_harvest_test_makegame",
-      "community": 13,
+      "community": 27,
       "norm_label": "makegame()"
     },
     {
@@ -6860,7 +6840,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test",
-      "community": 13,
+      "community": 91,
       "norm_label": "ice-sword.test.ts"
     },
     {
@@ -6870,7 +6850,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_makecard",
-      "community": 13,
+      "community": 91,
       "norm_label": "makecard()"
     },
     {
@@ -6880,7 +6860,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_attackcard",
-      "community": 13,
+      "community": 91,
       "norm_label": "attackcard()"
     },
     {
@@ -6890,7 +6870,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_icesword",
-      "community": 13,
+      "community": 91,
       "norm_label": "icesword()"
     },
     {
@@ -6900,7 +6880,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_makeplayinggame",
-      "community": 13,
+      "community": 91,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -6910,7 +6890,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "packages_game_src_ice_sword_test_attackdeclined",
-      "community": 13,
+      "community": 91,
       "norm_label": "attackdeclined()"
     },
     {
@@ -6920,7 +6900,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_index",
-      "community": 20,
+      "community": 33,
       "norm_label": "index.ts"
     },
     {
@@ -6930,7 +6910,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "packages_game_src_index_effectresolvers",
-      "community": 20,
+      "community": 33,
       "norm_label": "effectresolvers"
     },
     {
@@ -6940,7 +6920,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "packages_game_src_index_playcard",
-      "community": 20,
+      "community": 33,
       "norm_label": "playcard()"
     },
     {
@@ -6960,7 +6940,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_multi_attack_test",
-      "community": 13,
+      "community": 10,
       "norm_label": "multi-attack.test.ts"
     },
     {
@@ -6970,7 +6950,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "packages_game_src_multi_attack_test_zhangbaspear",
-      "community": 13,
+      "community": 10,
       "norm_label": "zhangbaspear()"
     },
     {
@@ -6980,7 +6960,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_multi_attack_test_makegame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
@@ -6990,7 +6970,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_negate_test",
-      "community": 20,
+      "community": 33,
       "norm_label": "negate.test.ts"
     },
     {
@@ -7000,7 +6980,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_makecard",
-      "community": 20,
+      "community": 33,
       "norm_label": "makecard()"
     },
     {
@@ -7010,7 +6990,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_negatecard",
-      "community": 20,
+      "community": 33,
       "norm_label": "negatecard()"
     },
     {
@@ -7020,7 +7000,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_drawcard",
-      "community": 20,
+      "community": 33,
       "norm_label": "drawcard()"
     },
     {
@@ -7030,7 +7010,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_healallcard",
-      "community": 20,
+      "community": 33,
       "norm_label": "healallcard()"
     },
     {
@@ -7040,7 +7020,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_dodgecard",
-      "community": 20,
+      "community": 33,
       "norm_label": "dodgecard()"
     },
     {
@@ -7050,7 +7030,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "packages_game_src_negate_test_attackcard",
-      "community": 20,
+      "community": 33,
       "norm_label": "attackcard()"
     },
     {
@@ -7070,7 +7050,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test",
-      "community": 13,
+      "community": 27,
       "norm_label": "pending-draws.test.ts"
     },
     {
@@ -7080,7 +7060,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_makecard",
-      "community": 13,
+      "community": 27,
       "norm_label": "makecard()"
     },
     {
@@ -7090,7 +7070,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "packages_game_src_pending_draws_test_makegame",
-      "community": 13,
+      "community": 27,
       "norm_label": "makegame()"
     },
     {
@@ -7100,7 +7080,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test",
-      "community": 13,
+      "community": 105,
       "norm_label": "reconnect.test.ts"
     },
     {
@@ -7110,7 +7090,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_allmembers",
-      "community": 13,
+      "community": 105,
       "norm_label": "allmembers()"
     },
     {
@@ -7120,7 +7100,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handlejoin",
-      "community": 13,
+      "community": 105,
       "norm_label": "handlejoin()"
     },
     {
@@ -7130,7 +7110,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handledisconnect",
-      "community": 13,
+      "community": 105,
       "norm_label": "handledisconnect()"
     },
     {
@@ -7140,7 +7120,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "packages_game_src_reconnect_test_handleleave",
-      "community": 13,
+      "community": 105,
       "norm_label": "handleleave()"
     },
     {
@@ -7280,7 +7260,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test",
-      "community": 13,
+      "community": 86,
       "norm_label": "snake-spear.test.ts"
     },
     {
@@ -7290,7 +7270,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_makecard",
-      "community": 13,
+      "community": 86,
       "norm_label": "makecard()"
     },
     {
@@ -7300,7 +7280,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_handcard",
-      "community": 13,
+      "community": 86,
       "norm_label": "handcard()"
     },
     {
@@ -7310,7 +7290,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_dodgecard",
-      "community": 13,
+      "community": 86,
       "norm_label": "dodgecard()"
     },
     {
@@ -7320,7 +7300,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_snakespear",
-      "community": 13,
+      "community": 86,
       "norm_label": "snakespear()"
     },
     {
@@ -7330,7 +7310,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_renwangshield",
-      "community": 13,
+      "community": 86,
       "norm_label": "renwangshield()"
     },
     {
@@ -7340,7 +7320,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "packages_game_src_snake_spear_test_makeplayinggame",
-      "community": 13,
+      "community": 86,
       "norm_label": "makeplayinggame()"
     },
     {
@@ -7350,7 +7330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers",
-      "community": 13,
+      "community": 27,
       "norm_label": "test-helpers.ts"
     },
     {
@@ -7370,7 +7350,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_makecard",
-      "community": 13,
+      "community": 10,
       "norm_label": "makecard()"
     },
     {
@@ -7380,7 +7360,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_attackcard",
-      "community": 13,
+      "community": 10,
       "norm_label": "attackcard()"
     },
     {
@@ -7390,7 +7370,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_dodgecard",
-      "community": 13,
+      "community": 10,
       "norm_label": "dodgecard()"
     },
     {
@@ -7400,7 +7380,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_makecharacter",
-      "community": 13,
+      "community": 10,
       "norm_label": "makecharacter()"
     },
     {
@@ -7410,7 +7390,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_standardgameoptions",
-      "community": 13,
+      "community": 27,
       "norm_label": "standardgameoptions"
     },
     {
@@ -7420,7 +7400,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_makestandardgame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makestandardgame()"
     },
     {
@@ -7430,7 +7410,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "packages_game_src_test_helpers_passnegate",
-      "community": 13,
+      "community": 27,
       "norm_label": "passnegate()"
     },
     {
@@ -7440,7 +7420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test",
-      "community": 13,
+      "community": 32,
       "norm_label": "trick-negate.test.ts"
     },
     {
@@ -7450,7 +7430,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_makecard",
-      "community": 13,
+      "community": 32,
       "norm_label": "makecard()"
     },
     {
@@ -7460,7 +7440,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_negatecard",
-      "community": 13,
+      "community": 32,
       "norm_label": "negatecard()"
     },
     {
@@ -7470,7 +7450,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_indulgence",
-      "community": 13,
+      "community": 32,
       "norm_label": "indulgence()"
     },
     {
@@ -7480,7 +7460,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_lightning",
-      "community": 13,
+      "community": 32,
       "norm_label": "lightning()"
     },
     {
@@ -7490,7 +7470,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_attackcard",
-      "community": 13,
+      "community": 32,
       "norm_label": "attackcard()"
     },
     {
@@ -7500,7 +7480,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_weapon",
-      "community": 13,
+      "community": 32,
       "norm_label": "weapon()"
     },
     {
@@ -7510,7 +7490,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_makegame",
-      "community": 13,
+      "community": 32,
       "norm_label": "makegame()"
     },
     {
@@ -7520,7 +7500,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "packages_game_src_trick_negate_test_negatewith",
-      "community": 13,
+      "community": 32,
       "norm_label": "negatewith()"
     },
     {
@@ -7530,7 +7510,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_twin_swords_test",
-      "community": 13,
+      "community": 10,
       "norm_label": "twin-swords.test.ts"
     },
     {
@@ -7540,7 +7520,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "packages_game_src_twin_swords_test_twinswords",
-      "community": 13,
+      "community": 10,
       "norm_label": "twinswords()"
     },
     {
@@ -7550,7 +7530,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "packages_game_src_twin_swords_test_makegame",
-      "community": 13,
+      "community": 10,
       "norm_label": "makegame()"
     },
     {
@@ -7560,7 +7540,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test",
-      "community": 13,
+      "community": 27,
       "norm_label": "viewer-safe-state.test.ts"
     },
     {
@@ -7570,7 +7550,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_makecard",
-      "community": 13,
+      "community": 27,
       "norm_label": "makecard()"
     },
     {
@@ -7580,7 +7560,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_makecharacter",
-      "community": 13,
+      "community": 27,
       "norm_label": "makecharacter()"
     },
     {
@@ -7600,7 +7580,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "packages_game_src_viewer_safe_state_test_assigncharacters",
-      "community": 13,
+      "community": 27,
       "norm_label": "assigncharacters()"
     },
     {
@@ -10404,7 +10384,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L113",
+      "source_location": "L112",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "apps_server_src_auth_stats_verifyaccesstoken"
@@ -10426,7 +10406,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L113",
+      "source_location": "L112",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "apps_server_src_auth_stats_bindauth"
@@ -10448,7 +10428,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L117",
+      "source_location": "L116",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "apps_server_src_auth_stats_unbindauth"
@@ -10823,7 +10803,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L119",
+      "source_location": "L118",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "apps_server_src_dev_sandbox_istimerfrozen"
@@ -11087,7 +11067,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L193",
+      "source_location": "L192",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "apps_server_src_dev_sandbox_registerdevsandbox"
@@ -11233,7 +11213,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L891",
+      "source_location": "L890",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_server_src_server_test_join"
@@ -11385,17 +11365,6 @@
       "source_location": "L10",
       "weight": 1.0,
       "source": "apps_server_src_server",
-      "target": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "apps_server_src_server",
       "target": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "confidence_score": 1.0
     },
@@ -11441,6 +11410,17 @@
       "weight": 1.0,
       "source": "apps_server_src_server",
       "target": "packages_game_src_engine_handlers_character_skills_takecardfromdamager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "apps_server_src_server",
+      "target": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "confidence_score": 1.0
     },
     {
@@ -12208,7 +12188,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L166",
+      "source_location": "L165",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_allyassist"
@@ -12219,7 +12199,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L141",
+      "source_location": "L140",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_assignlegacycard"
@@ -12230,7 +12210,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L167",
+      "source_location": "L166",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_declineallyassist"
@@ -12241,7 +12221,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L140",
+      "source_location": "L139",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_declinefankui"
@@ -12252,7 +12232,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L162",
+      "source_location": "L161",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_pickdischordsuit"
@@ -12263,7 +12243,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L145",
+      "source_location": "L144",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_redirectattack"
@@ -12274,7 +12254,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L136",
+      "source_location": "L135",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_replacejudgmentcard"
@@ -12285,7 +12265,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_requestguardiandodge"
@@ -12296,7 +12276,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L164",
+      "source_location": "L163",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_requestunityattack"
@@ -12307,18 +12287,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L157",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_resolvearrogance"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L160",
+      "source_location": "L159",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_resolvepeek"
@@ -12329,7 +12298,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L143",
+      "source_location": "L142",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_retaliatediscard"
@@ -12340,7 +12309,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L144",
+      "source_location": "L143",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_retaliatetakedamage"
@@ -12351,7 +12320,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L142",
+      "source_location": "L141",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_revealretaliatejudgment"
@@ -12362,7 +12331,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L139",
+      "source_location": "L138",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_character_skills_takecardfromdamager"
@@ -12376,29 +12345,7 @@
       "source_location": "L156",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usebenevolence"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L150",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usediscardthendraw"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L161",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usedischord"
+      "target": "packages_game_src_engine_handlers_character_skills_usearrogance"
     },
     {
       "relation": "calls",
@@ -12409,62 +12356,7 @@
       "source_location": "L155",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usefortune"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L163",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_useincite"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L152",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usemarriage"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L151",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usemiraclemedicine"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L159",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_usepeek"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L153",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_useraid"
+      "target": "packages_game_src_engine_handlers_character_skills_usebenevolence"
     },
     {
       "relation": "calls",
@@ -12475,7 +12367,18 @@
       "source_location": "L149",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_useselfdamagedraw"
+      "target": "packages_game_src_engine_handlers_character_skills_usediscardthendraw"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_character_skills_usedischord"
     },
     {
       "relation": "calls",
@@ -12486,7 +12389,7 @@
       "source_location": "L154",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_character_skills_useunarmedhunt"
+      "target": "packages_game_src_engine_handlers_character_skills_usefortune"
     },
     {
       "relation": "calls",
@@ -12494,10 +12397,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L147",
+      "source_location": "L162",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_combat_declineresponse"
+      "target": "packages_game_src_engine_handlers_character_skills_useincite"
     },
     {
       "relation": "calls",
@@ -12505,10 +12408,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L148",
+      "source_location": "L151",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_combat_playattackresponse"
+      "target": "packages_game_src_engine_handlers_character_skills_usemarriage"
     },
     {
       "relation": "calls",
@@ -12516,219 +12419,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L146",
+      "source_location": "L150",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_combat_playheal"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L138",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_combat_surrenderplayer"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L169",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_continuerepeatattackafterdodge"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L172",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_declinedestroytargetmount"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L174",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_declineforceattackdamage"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L170",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_declinerepeatattackafterdodge"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L176",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_declinereplaceattackdamage"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L171",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_destroytargetmountafterdamage"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L173",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_forceattackdamagebydiscardingtwo"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L180",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_playlasthandmultiattack"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_replaceattackdamagebydiscarding"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L178",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_resolvetwinswordsdiscard"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L179",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_resolvetwinswordsletdraw"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L168",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_usearmorjudgment"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L177",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_equipment_usediscardtwoasattack"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L183",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_declinecoerce"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L128",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_declinemassresponse"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L126",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_declinenegate"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L184",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_pickharvestcard"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/server/src/server.ts",
-      "source_location": "L181",
-      "weight": 1.0,
-      "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playcoerceattack"
+      "target": "packages_game_src_engine_handlers_character_skills_usemiraclemedicine"
     },
     {
       "relation": "calls",
@@ -12739,7 +12433,7 @@
       "source_location": "L158",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playdelayedtrick"
+      "target": "packages_game_src_engine_handlers_character_skills_usepeek"
     },
     {
       "relation": "calls",
@@ -12747,10 +12441,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L185",
+      "source_location": "L152",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playdiscardtargetcard"
+      "target": "packages_game_src_engine_handlers_character_skills_useraid"
     },
     {
       "relation": "calls",
@@ -12758,10 +12452,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L127",
+      "source_location": "L148",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playmassresponsecard"
+      "target": "packages_game_src_engine_handlers_character_skills_useselfdamagedraw"
     },
     {
       "relation": "calls",
@@ -12769,10 +12463,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L127",
+      "source_location": "L153",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playnegateinmasswindow"
+      "target": "packages_game_src_engine_handlers_character_skills_useunarmedhunt"
     },
     {
       "relation": "calls",
@@ -12780,10 +12474,186 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L186",
+      "source_location": "L146",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_playstealtargetcard"
+      "target": "packages_game_src_engine_handlers_combat_declineresponse"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_combat_playattackresponse"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_combat_playheal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_combat_surrenderplayer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_continuerepeatattackafterdodge"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_declinedestroytargetmount"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_declineforceattackdamage"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_declinerepeatattackafterdodge"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_declinereplaceattackdamage"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_destroytargetmountafterdamage"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_forceattackdamagebydiscardingtwo"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_playlasthandmultiattack"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_replaceattackdamagebydiscarding"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_resolvetwinswordsdiscard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_resolvetwinswordsletdraw"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_usearmorjudgment"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_equipment_usediscardtwoasattack"
     },
     {
       "relation": "calls",
@@ -12794,7 +12664,18 @@
       "source_location": "L182",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
-      "target": "packages_game_src_engine_handlers_tricks_resolvecoercewithattack"
+      "target": "packages_game_src_engine_handlers_tricks_declinecoerce"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_declinemassresponse"
     },
     {
       "relation": "calls",
@@ -12805,6 +12686,105 @@
       "source_location": "L125",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_declinenegate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_pickharvestcard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L180",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playcoerceattack"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playdelayedtrick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playdiscardtargetcard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playmassresponsecard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playnegateinmasswindow"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_playstealtargetcard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
+      "target": "packages_game_src_engine_handlers_tricks_resolvecoercewithattack"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/server/src/server.ts",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_handlers_tricks_respondwithnegate"
     },
     {
@@ -12813,7 +12793,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L122",
+      "source_location": "L121",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_beginplayaftercharacters"
@@ -12824,7 +12804,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L113",
+      "source_location": "L112",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_creategame"
@@ -12835,7 +12815,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L114",
+      "source_location": "L113",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_createseatedplayer"
@@ -12846,7 +12826,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L119",
+      "source_location": "L118",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_dealemperoroptions"
@@ -12857,7 +12837,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L119",
+      "source_location": "L118",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_dealroles"
@@ -12868,7 +12848,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L122",
+      "source_location": "L121",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_selectcharacter"
@@ -12879,7 +12859,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L121",
+      "source_location": "L120",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_setup_setcardnameversion"
@@ -12901,7 +12881,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L132",
+      "source_location": "L131",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_sync_drawpendingcard"
@@ -12912,7 +12892,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L187",
+      "source_location": "L186",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_discardforhandlimit"
@@ -12923,7 +12903,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L130",
+      "source_location": "L129",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_drawforturn"
@@ -12934,7 +12914,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L133",
+      "source_location": "L132",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_drawjudgmentcard"
@@ -12945,7 +12925,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L131",
+      "source_location": "L130",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_drawoneturncard"
@@ -12956,7 +12936,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L129",
+      "source_location": "L128",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_endturn"
@@ -12967,7 +12947,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L134",
+      "source_location": "L133",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_keepjudgmentcard"
@@ -12978,7 +12958,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L137",
+      "source_location": "L136",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_negatelightningjudgment"
@@ -12989,7 +12969,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L135",
+      "source_location": "L134",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_engine_turns_resolvejudgmentcard"
@@ -13011,7 +12991,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L123",
+      "source_location": "L122",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_index_playcard"
@@ -13022,7 +13002,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/server/src/server.ts",
-      "source_location": "L124",
+      "source_location": "L123",
       "weight": 1.0,
       "source": "apps_server_src_server_createserver",
       "target": "packages_game_src_index_respondtoattack"
@@ -13875,7 +13855,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L138",
+      "source_location": "L137",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_game_local_page_card"
@@ -15122,7 +15102,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L267",
+      "source_location": "L266",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playdecisionalert"
@@ -15144,7 +15124,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L280",
+      "source_location": "L279",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playcountdowntick"
@@ -15166,7 +15146,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L294",
+      "source_location": "L293",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playautoendchime"
@@ -15188,7 +15168,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L678",
+      "source_location": "L677",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_audio_playthunder"
@@ -15356,7 +15336,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L358",
+      "source_location": "L357",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_bgm_playtrack"
@@ -15378,7 +15358,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L349",
+      "source_location": "L348",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_bgm_setmusicenabled"
@@ -15400,7 +15380,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L352",
+      "source_location": "L351",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_bgm_setmusicvolume"
@@ -15788,7 +15768,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_app_lib_gameconstants",
@@ -15943,7 +15923,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1977",
+      "source_location": "L1983",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_roletext"
@@ -15965,7 +15945,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2459",
+      "source_location": "L2465",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -15987,7 +15967,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/game/PreGameTable.tsx",
-      "source_location": "L122",
+      "source_location": "L120",
       "weight": 1.0,
       "source": "apps_web_components_game_pregametable_pregametable",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -16031,7 +16011,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2345",
+      "source_location": "L2351",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -16163,7 +16143,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/game/PreGameTable.tsx",
-      "source_location": "L96",
+      "source_location": "L94",
       "weight": 1.0,
       "source": "apps_web_components_game_pregametable_pregametable",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -16273,7 +16253,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2854",
+      "source_location": "L2855",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -16361,7 +16341,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1921",
+      "source_location": "L1927",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suitcolor"
@@ -16515,7 +16495,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1927",
+      "source_location": "L1933",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -16657,7 +16637,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_app_lib_gameconstants_suittx",
@@ -16669,7 +16649,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L100",
+      "source_location": "L52",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt_peekprompt",
       "target": "apps_web_app_lib_gameconstants_suittx"
@@ -16735,7 +16715,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L1936",
+      "source_location": "L1942",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardtypelabel"
@@ -16845,7 +16825,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2428",
+      "source_location": "L2434",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_kingdomlabel"
@@ -16922,7 +16902,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2049",
+      "source_location": "L2055",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_edgeposition"
@@ -16955,7 +16935,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/components/game/PreGameTable.tsx",
-      "source_location": "L68",
+      "source_location": "L66",
       "weight": 1.0,
       "source": "apps_web_components_game_pregametable_pregametable",
       "target": "apps_web_app_lib_gameconstants_lobbyposition"
@@ -16977,7 +16957,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L262",
+      "source_location": "L261",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_isviewerdecisionactive"
@@ -16999,7 +16979,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L287",
+      "source_location": "L286",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_canautoendturn"
@@ -17048,7 +17028,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/lib/gameTypes.ts",
-      "source_location": "L218",
+      "source_location": "L217",
       "weight": 1.0,
       "source": "apps_web_app_lib_gametypes",
       "target": "apps_web_app_lib_gametypes_iceselection",
@@ -17247,17 +17227,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "apps/web/components/game/ArrogancePrompt.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_web_components_game_arroganceprompt",
-      "target": "apps_web_app_lib_gametypes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/CoercePrompt.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -17358,7 +17327,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L3",
+      "source_location": "L2",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_app_lib_gametypes",
@@ -17633,7 +17602,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L3",
+      "source_location": "L2",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_app_lib_gametypes_card",
@@ -17896,17 +17865,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "apps/web/components/game/ArrogancePrompt.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_web_components_game_arroganceprompt",
-      "target": "apps_web_app_lib_gametypes_game",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/CoercePrompt.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -18007,7 +17965,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L3",
+      "source_location": "L2",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_app_lib_gametypes_game",
@@ -18246,7 +18204,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L744",
+      "source_location": "L743",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_socket_play_confirm_events"
@@ -18279,7 +18237,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L438",
+      "source_location": "L437",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_socket_emitroomjoin"
@@ -18342,7 +18300,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L89",
+      "source_location": "L88",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_app_page_home",
@@ -18485,7 +18443,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L78",
+      "source_location": "L77",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_allyassistprompt",
@@ -18496,7 +18454,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L78",
+      "source_location": "L77",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_allyassistprompt_allyassistprompt",
@@ -18507,29 +18465,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L73",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_components_game_arroganceprompt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L73",
-      "weight": 1.0,
-      "source": "apps_web_app_page",
-      "target": "apps_web_components_game_arroganceprompt_arroganceprompt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/app/page.tsx",
-      "source_location": "L80",
+      "source_location": "L79",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_coerceprompt",
@@ -18540,7 +18476,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L80",
+      "source_location": "L79",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_coerceprompt_coerceprompt",
@@ -18573,7 +18509,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L77",
+      "source_location": "L76",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_dischordprompt",
@@ -18584,7 +18520,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L77",
+      "source_location": "L76",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_dischordprompt_dischordprompt",
@@ -18639,7 +18575,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L81",
+      "source_location": "L80",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_harvestprompt",
@@ -18650,7 +18586,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L81",
+      "source_location": "L80",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_harvestprompt_harvestprompt",
@@ -18683,7 +18619,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L82",
+      "source_location": "L81",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_judgmentpanel",
@@ -18694,7 +18630,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L82",
+      "source_location": "L81",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_judgmentpanel_judgmentpanel",
@@ -18705,7 +18641,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L74",
+      "source_location": "L73",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_legacyprompt",
@@ -18716,7 +18652,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L74",
+      "source_location": "L73",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_legacyprompt_legacyprompt",
@@ -18727,7 +18663,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L79",
+      "source_location": "L78",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_peekprompt",
@@ -18738,7 +18674,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L79",
+      "source_location": "L78",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_peekprompt_peekprompt",
@@ -18749,7 +18685,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L86",
+      "source_location": "L85",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_pregametable",
@@ -18760,7 +18696,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L86",
+      "source_location": "L85",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_pregametable_pregametable",
@@ -18793,7 +18729,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L83",
+      "source_location": "L82",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_responsewindowpanel",
@@ -18804,7 +18740,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L83",
+      "source_location": "L82",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_responsewindowpanel_responsewindowpanel",
@@ -18815,7 +18751,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L75",
+      "source_location": "L74",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_retaliatejudgmentprompt",
@@ -18826,7 +18762,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L75",
+      "source_location": "L74",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_retaliatejudgmentprompt_retaliatejudgmentprompt",
@@ -18837,7 +18773,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L76",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_retaliateprompt",
@@ -18848,7 +18784,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L76",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_retaliateprompt_retaliateprompt",
@@ -18859,7 +18795,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L87",
+      "source_location": "L86",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_tablepiles",
@@ -18870,7 +18806,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L87",
+      "source_location": "L86",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_tablepiles_tablepiles",
@@ -18881,7 +18817,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L84",
+      "source_location": "L83",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_targetcardpicker",
@@ -18892,7 +18828,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L84",
+      "source_location": "L83",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_targetcardpicker_targetcardpicker",
@@ -18925,7 +18861,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L85",
+      "source_location": "L84",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_winnerscreen",
@@ -18936,7 +18872,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L85",
+      "source_location": "L84",
       "weight": 1.0,
       "source": "apps_web_app_page",
       "target": "apps_web_components_game_winnerscreen_winnerscreen",
@@ -19069,7 +19005,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L308",
+      "source_location": "L307",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_lib_useauth_useauth"
@@ -19875,16 +19811,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/web/components/game/ArrogancePrompt.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "apps_web_components_game_arroganceprompt",
-      "target": "apps_web_components_game_arroganceprompt_arroganceprompt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/CoercePrompt.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -19976,7 +19902,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/web/components/game/PeekPrompt.tsx",
-      "source_location": "L9",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "apps_web_components_game_peekprompt",
       "target": "apps_web_components_game_peekprompt_peekprompt",
@@ -21866,7 +21792,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L953",
+      "source_location": "L945",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_basic_combat_scenarios_card"
@@ -23898,7 +23824,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/character-skills.test.ts",
-      "source_location": "L1630",
+      "source_location": "L1613",
       "weight": 1.0,
       "source": "packages_game_src_character_skills_test",
       "target": "packages_game_src_character_skills_test_clearnegatewindow",
@@ -24061,17 +23987,6 @@
       "source_location": "L3",
       "weight": 1.0,
       "source": "packages_game_src_character_skills_test",
-      "target": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/game/src/character-skills.test.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "packages_game_src_character_skills_test",
       "target": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "confidence_score": 1.0
     },
@@ -24117,6 +24032,17 @@
       "weight": 1.0,
       "source": "packages_game_src_character_skills_test",
       "target": "packages_game_src_engine_handlers_character_skills_takecardfromdamager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/game/src/character-skills.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "packages_game_src_character_skills_test",
+      "target": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "confidence_score": 1.0
     },
     {
@@ -24729,7 +24655,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/character-skills.test.ts",
-      "source_location": "L1637",
+      "source_location": "L1620",
       "weight": 1.0,
       "source": "packages_game_src_character_skills_test_clearnegatewindow",
       "target": "packages_game_src_engine_handlers_tricks_declinenegate",
@@ -26143,7 +26069,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L646",
+      "source_location": "L638",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_actions_canplayeract"
@@ -26154,7 +26080,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L936",
+      "source_location": "L928",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_actions_canplayeract"
@@ -26176,7 +26102,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L572",
+      "source_location": "L564",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_actions_canplayeract"
@@ -26187,7 +26113,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L765",
+      "source_location": "L757",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_actions_canplayeract"
@@ -26599,7 +26525,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L713",
+      "source_location": "L705",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_allyassist",
@@ -26619,7 +26545,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L744",
+      "source_location": "L736",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_declineallyassist",
@@ -26649,7 +26575,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L596",
+      "source_location": "L588",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
@@ -26679,7 +26605,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L678",
+      "source_location": "L670",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
@@ -26689,7 +26615,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L640",
+      "source_location": "L632",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_requestunityattack",
@@ -26699,17 +26625,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L529",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills",
-      "target": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L847",
+      "source_location": "L839",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_resolvepeek",
@@ -26759,7 +26675,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L930",
+      "source_location": "L528",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills",
+      "target": "packages_game_src_engine_handlers_character_skills_usearrogance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L922",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_usebenevolence",
@@ -26779,7 +26705,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L567",
+      "source_location": "L559",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_usedischord",
@@ -26789,7 +26715,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L879",
+      "source_location": "L871",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_usefortune",
@@ -26799,7 +26725,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L758",
+      "source_location": "L750",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_useincite",
@@ -26829,7 +26755,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L818",
+      "source_location": "L810",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills",
       "target": "packages_game_src_engine_handlers_character_skills_usepeek",
@@ -27409,7 +27335,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L971",
+      "source_location": "L555",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
+      "target": "packages_game_src_engine_handlers_character_skills_markskillused",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L963",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_handlers_character_skills_markskillused",
@@ -27431,7 +27368,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L584",
+      "source_location": "L576",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_handlers_character_skills_markskillused",
@@ -27442,7 +27379,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L910",
+      "source_location": "L902",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usefortune",
       "target": "packages_game_src_engine_handlers_character_skills_markskillused",
@@ -27453,7 +27390,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L787",
+      "source_location": "L779",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_handlers_character_skills_markskillused",
@@ -27486,7 +27423,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L837",
+      "source_location": "L829",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_handlers_character_skills_markskillused",
@@ -28345,9 +28282,20 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L544",
+      "source_location": "L534",
       "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
+      "target": "packages_game_src_engine_skills_hascharacterskill"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L548",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "target": "packages_game_src_engine_state_charactername"
     },
     {
@@ -28356,10 +28304,21 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L537",
+      "source_location": "L536",
       "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "target": "packages_game_src_engine_state_getplayerbyid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L545",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
+      "target": "packages_game_src_engine_state_logaction"
     },
     {
       "relation": "calls",
@@ -28369,18 +28328,7 @@
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
       "source_location": "L541",
       "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
-      "target": "packages_game_src_engine_state_logaction"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L550",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "target": "packages_game_src_engine_sync_reshufflediscardintodrawpile"
     },
     {
@@ -28389,9 +28337,9 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L547",
+      "source_location": "L556",
       "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_resolvearrogance",
+      "source": "packages_game_src_engine_handlers_character_skills_usearrogance",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
     },
     {
@@ -28400,7 +28348,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L574",
+      "source_location": "L566",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -28411,10 +28359,21 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L589",
+      "source_location": "L581",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_state_charactername"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L570",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usedischord",
+      "target": "packages_game_src_engine_state_getplayerbyid"
     },
     {
       "relation": "calls",
@@ -28425,17 +28384,6 @@
       "source_location": "L578",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
-      "target": "packages_game_src_engine_state_getplayerbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L586",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_state_logaction"
     },
     {
@@ -28444,7 +28392,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L593",
+      "source_location": "L585",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usedischord",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28455,7 +28403,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L635",
+      "source_location": "L627",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
       "target": "packages_game_src_engine_handlers_combat_applydamage"
@@ -28466,10 +28414,21 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L617",
+      "source_location": "L609",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
       "target": "packages_game_src_engine_state_charactername"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L598",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
+      "target": "packages_game_src_engine_state_getplayerbyid"
     },
     {
       "relation": "calls",
@@ -28480,17 +28439,6 @@
       "source_location": "L606",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
-      "target": "packages_game_src_engine_state_getplayerbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L614",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
       "target": "packages_game_src_engine_state_logaction"
     },
     {
@@ -28499,7 +28447,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L610",
+      "source_location": "L602",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_pickdischordsuit",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28510,7 +28458,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L655",
+      "source_location": "L647",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_handlers_equipment_passives_hasunlimitedattack"
@@ -28521,7 +28469,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L651",
+      "source_location": "L643",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -28532,7 +28480,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L671",
+      "source_location": "L663",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_state_charactername"
@@ -28543,7 +28491,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L648",
+      "source_location": "L640",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28554,7 +28502,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L668",
+      "source_location": "L660",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_state_logaction"
@@ -28565,7 +28513,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L675",
+      "source_location": "L667",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28576,7 +28524,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L658",
+      "source_location": "L650",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestunityattack",
       "target": "packages_game_src_engine_targeting_cantargetwithattack"
@@ -28587,7 +28535,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L693",
+      "source_location": "L685",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -28598,7 +28546,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L706",
+      "source_location": "L698",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "target": "packages_game_src_engine_state_charactername"
@@ -28609,7 +28557,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L690",
+      "source_location": "L682",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28620,7 +28568,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L703",
+      "source_location": "L695",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "target": "packages_game_src_engine_state_logaction"
@@ -28631,7 +28579,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L710",
+      "source_location": "L702",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_requestguardiandodge",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28642,7 +28590,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L741",
+      "source_location": "L733",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_allyassist",
       "target": "packages_game_src_engine_handlers_combat_playattack"
@@ -28653,7 +28601,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L742",
+      "source_location": "L734",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_allyassist",
       "target": "packages_game_src_engine_handlers_combat_playdodge"
@@ -28664,10 +28612,32 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L735",
+      "source_location": "L727",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_allyassist",
       "target": "packages_game_src_engine_state_charactername"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L716",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_allyassist",
+      "target": "packages_game_src_engine_state_findhandcard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L713",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_allyassist",
+      "target": "packages_game_src_engine_state_getplayerbyid"
     },
     {
       "relation": "calls",
@@ -28678,28 +28648,6 @@
       "source_location": "L724",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_allyassist",
-      "target": "packages_game_src_engine_state_findhandcard"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L721",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_allyassist",
-      "target": "packages_game_src_engine_state_getplayerbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L732",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_allyassist",
       "target": "packages_game_src_engine_state_logaction"
     },
     {
@@ -28708,7 +28656,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L752",
+      "source_location": "L744",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_declineallyassist",
       "target": "packages_game_src_engine_state_charactername"
@@ -28719,7 +28667,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L752",
+      "source_location": "L744",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_declineallyassist",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28730,7 +28678,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L749",
+      "source_location": "L741",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_declineallyassist",
       "target": "packages_game_src_engine_state_logaction"
@@ -28741,7 +28689,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L755",
+      "source_location": "L747",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_declineallyassist",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28752,7 +28700,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L767",
+      "source_location": "L759",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -28763,7 +28711,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L812",
+      "source_location": "L804",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_charactername"
@@ -28774,7 +28722,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L773",
+      "source_location": "L765",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_findhandcard"
@@ -28785,7 +28733,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L771",
+      "source_location": "L763",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28796,7 +28744,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L809",
+      "source_location": "L801",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_logaction"
@@ -28807,7 +28755,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L786",
+      "source_location": "L778",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_movetodiscard"
@@ -28818,7 +28766,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L792",
+      "source_location": "L784",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_state_tocardinstance"
@@ -28829,7 +28777,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L815",
+      "source_location": "L807",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_useincite",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28840,7 +28788,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L825",
+      "source_location": "L817",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -28851,7 +28799,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L841",
+      "source_location": "L833",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_state_charactername"
@@ -28862,7 +28810,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L831",
+      "source_location": "L823",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_state_getaliveplayers"
@@ -28873,7 +28821,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L829",
+      "source_location": "L821",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28884,7 +28832,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L838",
+      "source_location": "L830",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_state_logaction"
@@ -28895,7 +28843,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L832",
+      "source_location": "L824",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_sync_reshufflediscardintodrawpile"
@@ -28906,7 +28854,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L844",
+      "source_location": "L836",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usepeek",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28917,7 +28865,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L873",
+      "source_location": "L865",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "target": "packages_game_src_engine_state_charactername"
@@ -28928,7 +28876,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L873",
+      "source_location": "L865",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -28939,7 +28887,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L870",
+      "source_location": "L862",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "target": "packages_game_src_engine_state_logaction"
@@ -28950,7 +28898,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L876",
+      "source_location": "L868",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_resolvepeek",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -28961,65 +28909,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L889",
+      "source_location": "L881",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usefortune",
       "target": "packages_game_src_engine_skills_hascharacterskill"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L903",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
-      "target": "packages_game_src_engine_state_charactername"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L920",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
-      "target": "packages_game_src_engine_state_flashtable"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L893",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
-      "target": "packages_game_src_engine_state_getplayerbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L900",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
-      "target": "packages_game_src_engine_state_logaction"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L909",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
-      "target": "packages_game_src_engine_state_movetodiscard"
     },
     {
       "relation": "calls",
@@ -29030,6 +28923,61 @@
       "source_location": "L895",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usefortune",
+      "target": "packages_game_src_engine_state_charactername"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L912",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
+      "target": "packages_game_src_engine_state_flashtable"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L885",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
+      "target": "packages_game_src_engine_state_getplayerbyid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L892",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
+      "target": "packages_game_src_engine_state_logaction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L901",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
+      "target": "packages_game_src_engine_state_movetodiscard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "packages/game/src/engine/handlers/character-skills.ts",
+      "source_location": "L887",
+      "weight": 1.0,
+      "source": "packages_game_src_engine_handlers_character_skills_usefortune",
       "target": "packages_game_src_engine_sync_reshufflediscardintodrawpile"
     },
     {
@@ -29038,7 +28986,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L927",
+      "source_location": "L919",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usefortune",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -29049,7 +28997,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L972",
+      "source_location": "L964",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_handlers_combat_healplayer"
@@ -29060,7 +29008,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L938",
+      "source_location": "L930",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_skills_hascharacterskill"
@@ -29071,7 +29019,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L960",
+      "source_location": "L952",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_state_charactername"
@@ -29082,7 +29030,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L949",
+      "source_location": "L941",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_state_findhandcard"
@@ -29093,7 +29041,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L940",
+      "source_location": "L932",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -29104,7 +29052,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L957",
+      "source_location": "L949",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_state_logaction"
@@ -29115,7 +29063,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/handlers/character-skills.ts",
-      "source_location": "L980",
+      "source_location": "L972",
       "weight": 1.0,
       "source": "packages_game_src_engine_handlers_character_skills_usebenevolence",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -37504,17 +37452,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_turn_flow",
-      "target": "packages_game_src_engine_skills",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/turns.ts",
       "source_location": "L19",
       "weight": 1.0,
@@ -37630,28 +37567,6 @@
       "source_location": "L30",
       "weight": 1.0,
       "source": "packages_game_src_engine_targeting_geteffectivedistancebetweenplayers",
-      "target": "packages_game_src_engine_skills_hascharacterskill"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_turn_flow",
-      "target": "packages_game_src_engine_skills_hascharacterskill",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L80",
-      "weight": 1.0,
-      "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_skills_hascharacterskill"
     },
     {
@@ -38427,7 +38342,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L49",
+      "source_location": "L48",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_state_getplayerbyid"
@@ -38570,7 +38485,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L14",
+      "source_location": "L13",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_getnextaliveplayer",
       "target": "packages_game_src_engine_state_getplayersinseatorder"
@@ -38845,7 +38760,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L43",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_beginnextjudgment",
       "target": "packages_game_src_engine_state_charactername"
@@ -38856,7 +38771,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L73",
+      "source_location": "L71",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_state_charactername"
@@ -39076,7 +38991,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L40",
+      "source_location": "L39",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_beginnextjudgment",
       "target": "packages_game_src_engine_state_logaction"
@@ -39087,7 +39002,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L70",
+      "source_location": "L68",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_state_logaction"
@@ -39544,7 +39459,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L84",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_sync_synchronizegamestate"
@@ -39857,7 +39772,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L25",
+      "source_location": "L24",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow",
       "target": "packages_game_src_engine_turn_flow_beginnextjudgment",
@@ -39867,7 +39782,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow",
       "target": "packages_game_src_engine_turn_flow_getnextaliveplayer",
@@ -39877,7 +39792,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L48",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow",
       "target": "packages_game_src_engine_turn_flow_startturn",
@@ -39976,7 +39891,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/turn-flow.ts",
-      "source_location": "L76",
+      "source_location": "L74",
       "weight": 1.0,
       "source": "packages_game_src_engine_turn_flow_startturn",
       "target": "packages_game_src_engine_turn_flow_beginnextjudgment",
@@ -40473,7 +40388,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/game/src/engine/types.ts",
-      "source_location": "L430",
+      "source_location": "L429",
       "weight": 1.0,
       "source": "packages_game_src_engine_types",
       "target": "packages_game_src_engine_types_gamelog",
@@ -45431,5 +45346,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "0593a7349a593a4c8beb44751089fa1a2a2bfc0f"
+  "built_at_commit": "79bfd749812d7bb78d9de3d8976b5ed10e270239"
 }

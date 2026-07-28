@@ -178,6 +178,7 @@ export type Game = {
     revealed?: Card;
   } | null;
   pendingFankui?: { playerId: string; damagerId: string } | null;
+  pendingArrogance?: { playerId: string } | null;
   pendingRetaliate?: { damagerId: string; victimId: string } | null;
   pendingRetaliateJudgment?: { ownerId: string; damagerId: string } | null;
   pendingLegacy?: { ownerId: string; cards: Card[] } | null;

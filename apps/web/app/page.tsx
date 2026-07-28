@@ -70,6 +70,7 @@ import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePro
 import { IceReplacePrompt } from "../components/game/IceReplacePrompt";
 import { TwinSwordsPrompt } from "../components/game/TwinSwordsPrompt";
 import { FankuiPrompt } from "../components/game/FankuiPrompt";
+import { ArrogancePrompt } from "../components/game/ArrogancePrompt";
 import { LegacyPrompt } from "../components/game/LegacyPrompt";
 import { RetaliateJudgmentPrompt } from "../components/game/RetaliateJudgmentPrompt";
 import { RetaliatePrompt } from "../components/game/RetaliatePrompt";
@@ -1079,6 +1080,11 @@ export default function Home() {
         myConv("attack", card) &&
         (hasUnlimitedAttack || (game.turn?.attackUsedThisTurn ?? 0) < 1)
       ); // จูล่ง/กวนอู: ใช้ "หลบ"/ไพ่แดง เป็น "โจมตี"
+    if (card.effect === "coerce_attack_or_take_weapon")
+      // ยืมมือสังหาร: เล่นได้ก็ต่อเมื่อมีขุนพลอื่นถืออาวุธอยู่ (ไม่งั้นเทาไว้เหมือน "หลบ")
+      return game.players.some(
+        (p) => p.alive && p.id !== game.viewerId && p.equipment.weapon,
+      );
     return true;
   };
   const selectCard = (card: Card) => {
@@ -1831,19 +1837,7 @@ export default function Home() {
       </button>,
     );
   }
-  if (
-    isDrawPhase &&
-    hasMySkill("emperor_arrogance") &&
-    myPlayer?.role === "emperor" &&
-    (game.turn?.drawnThisTurn ?? 0) === 0 &&
-    !skillUsed("arrogance")
-  ) {
-    skillButtons.push(
-      <button key="arrogance" className="local-skill-btn" onClick={() => emit("skill:arrogance")}>
-        ✦ จองหอง (จั่ว +1, มือ -1)
-      </button>,
-    );
-  }
+  // จองหอง (อ้วนสุด) ย้ายไปเป็น pendingArrogance prompt แยก (ArrogancePrompt) — ไม่ใช่ปุ่มในเทิร์นแล้ว
   if (
     isDrawPhase &&
     hasMySkill("peek_reorder_deck") &&
@@ -2516,8 +2510,6 @@ export default function Home() {
                 <strong>
                   ⬆ คุณได้รับไพ่ {myOwedDraws} ใบ — กดกองจั่วเพื่อรับ
                 </strong>
-              ) : selectedAttackId || selectedDiscardId || selectedStealId ? (
-                <strong>เลือกผู้เล่นเป้าหมายบนโต๊ะ</strong>
               ) : isDrawPhase ? (
                 <strong>⬆ กดกองจั่วบนโต๊ะเพื่อจั่วไพ่</strong>
               ) : null}
@@ -2543,6 +2535,7 @@ export default function Home() {
                     !(requiredDiscard > 0 && isMyTurn && !discardLimitMode)
                   }
                   onClick={() => {
+                    cancelSelection(); // ล้างโหมดเลือกอื่น (เช่น ยืมมือสังหาร) ก่อน เหลือแค่แอคชันล่าสุด
                     setDiscardLimitMode(true);
                     setDiscardLimitSelected([]);
                   }}
@@ -2564,10 +2557,15 @@ export default function Home() {
                 </button>
               </div>
             </div>
+            {/* แถบ prompt ในเทิร์น: ลอยอยู่ใต้โต๊ะ (นอก flow ของคอลัมน์ปุ่ม) ไม่ดัน UI */}
+            <div className="local-table-prompt">
             {(selectedAttackId || selectedDiscardId || selectedStealId) && (
-              <button className="local-cancel" onClick={cancelSelection}>
-                ยกเลิกเลือกเป้าหมาย
-              </button>
+              <div className="local-discard-limit-bar">
+                <span>เลือกผู้เล่นเป้าหมายบนโต๊ะ</span>
+                <button className="mock-muted-button" onClick={cancelSelection}>
+                  ยกเลิกเลือกเป้าหมาย
+                </button>
+              </div>
             )}
             {discardLimitMode && (
               <div className="local-discard-limit-bar">
@@ -2846,6 +2844,7 @@ export default function Home() {
               </div>
             )}
             </div>
+            </div>
             <div
               className="mock-hand"
               ref={handRef}
@@ -3078,6 +3077,9 @@ export default function Home() {
           <FankuiPrompt game={game} emit={emit} countdown={countdownBadge} />
         )}
         {isPlaying && (
+          <ArrogancePrompt game={game} emit={emit} countdown={countdownBadge} />
+        )}
+        {isPlaying && (
           <LegacyPrompt game={game} emit={emit} countdown={countdownBadge} />
         )}
         {isPlaying && (
@@ -3289,6 +3291,7 @@ export default function Home() {
                     emit("hand:discard", { cardIds: discardLimitSelected });
                     setDiscardLimitSelected([]);
                     setDiscardLimitConfirming(false);
+                    cancelSelection(); // กันหน้าต่างเลือกขุนพล (ยืมมือสังหาร) ค้างหลังทิ้งไพ่เสร็จ
                   }}
                 >
                   ยืนยัน ทิ้งไพ่

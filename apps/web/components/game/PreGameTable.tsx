@@ -40,7 +40,9 @@ export function PreGameTable({
             <div className="local-select-center">
               {!emperor?.confirmedCharacter ? (
                 <>
-                  กำลังรอ <b>จักรพรรดิ</b> เลือกขุนพล
+                  กำลังรอ <b>จักรพรรดิ</b>
+                  {emperor?.username ? <> (@{emperor.username})</> : null}{" "}
+                  เลือกขุนพล
                 </>
               ) : waitingForCharacter.length ? (
                 <>

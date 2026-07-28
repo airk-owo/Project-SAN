@@ -9,6 +9,7 @@ import {
   logAction,
 } from "./state.js";
 import { synchronizeGameState } from "./sync.js";
+import { hasCharacterSkill } from "./skills.js";
 export function getNextAlivePlayer(state: GameState, currentPlayerId: string) {
   const players = getPlayersInSeatOrder(state),
     currentIndex = players.findIndex((player) => player.id === currentPlayerId);
@@ -57,6 +58,7 @@ export function startTurn(state: GameState, playerId: string) {
   state.unarmedPowerActive = false;
   state.benevolenceGivenThisTurn = 0;
   state.arrogancePenalty = false;
+  state.pendingArrogance = undefined;
   state.turn = {
     activePlayerId: playerId,
     phase: "judgment",
@@ -72,5 +74,12 @@ export function startTurn(state: GameState, playerId: string) {
     player.id,
   );
   if (!beginNextJudgment(state, player)) state.turn.phase = "draw"; // no delayed tricks → straight to draw
+  // อ้วนสุด จองหอง: ในขั้นเตรียมของจักรพรรดิ เสนอให้ผู้ถือทักษะเลือกว่าจะจั่วเพิ่มไหม
+  if (player.role === "emperor") {
+    const holder = state.players.find(
+      (p) => p.alive && hasCharacterSkill(state, p.id, "emperor_arrogance"),
+    );
+    if (holder) state.pendingArrogance = { playerId: holder.id };
+  }
   synchronizeGameState(state);
 }

@@ -31,7 +31,7 @@ import {
   useUnarmedHunt,
   useFortune,
   useBenevolence,
-  useArrogance,
+  resolveArrogance,
   usePeek,
   resolvePeek,
   useDischord,
@@ -1368,23 +1368,25 @@ describe("Character skill – ซุนกวน ค้ำจุน (emperor res
 });
 
 describe("Character skill – อ้วนสุด จองหอง (emperor arrogance)", () => {
-  const drawPhase = (game: GameState) => {
-    game.turn.phase = "draw";
-    game.turn.drawnThisTurn = 0;
-    game.hasDrawnThisTurn = false;
-  };
-
-  it("lets the emperor draw one extra and lowers the hand limit by 1", () => {
-    const game = makeGame({ p0: "CHAR027" });
+  it("offers Yuan Shu (a non-emperor) the choice on the emperor's prepare phase; accepting draws +1 for Yuan Shu and lowers the EMPEROR's hand limit", () => {
+    const game = makeGame({ p0: "CHAR001", p1: "CHAR027" }); // p1 = อ้วนสุด ≠ จักรพรรดิ
     const p0 = game.players.find((p) => p.id === "p0")!;
+    const p1 = game.players.find((p) => p.id === "p1")!;
     p0.role = "emperor";
     p0.hp = 4;
     p0.hand = [];
-    drawPhase(game);
+    p1.hand = [];
     game.deck = [attackCard("e1")];
-    useArrogance(game, "p0");
-    assert.equal(p0.hand.length, 1, "drew one extra");
+    startTurn(game, "p0"); // เริ่มเทิร์นของจักรพรรดิ → เสนอจองหองให้อ้วนสุด
+    assert.equal(
+      game.pendingArrogance?.playerId,
+      "p1",
+      "Yuan Shu is offered the choice, not the emperor",
+    );
+    resolveArrogance(game, "p1", true);
+    assert.equal(p1.hand.length, 1, "Yuan Shu drew one extra");
     assert.equal(game.arrogancePenalty, true);
+    assert.equal(game.pendingArrogance, undefined, "decision cleared");
     p0.hand = [
       attackCard("a"),
       attackCard("b"),
@@ -1394,27 +1396,42 @@ describe("Character skill – อ้วนสุด จองหอง (emperor 
     assert.equal(
       getDiscardRequirement(game, "p0"),
       1,
-      "hand limit is hp-1 = 3",
+      "emperor hand limit is hp-1 = 3",
     );
   });
 
-  it("cannot be used by a non-emperor", () => {
-    const game = makeGame({ p0: "CHAR027" });
+  it("declining draws nothing and applies no penalty", () => {
+    const game = makeGame({ p0: "CHAR001", p1: "CHAR027" });
     const p0 = game.players.find((p) => p.id === "p0")!;
-    p0.role = "rebel";
-    drawPhase(game);
+    const p1 = game.players.find((p) => p.id === "p1")!;
+    p0.role = "emperor";
+    p1.hand = [];
     game.deck = [attackCard("e1")];
-    assert.throws(() => useArrogance(game, "p0"), /จักรพรรดิ/);
+    startTurn(game, "p0");
+    resolveArrogance(game, "p1", false);
+    assert.equal(p1.hand.length, 0, "no extra draw");
+    assert.equal(game.arrogancePenalty ?? false, false);
+    assert.equal(game.pendingArrogance, undefined);
   });
 
-  it("can only be used once per turn", () => {
-    const game = makeGame({ p0: "CHAR027" });
+  it("is not offered during a non-emperor's turn", () => {
+    const game = makeGame({ p0: "CHAR001", p1: "CHAR027" });
     const p0 = game.players.find((p) => p.id === "p0")!;
     p0.role = "emperor";
-    drawPhase(game);
-    game.deck = [attackCard("e1"), attackCard("e2")];
-    useArrogance(game, "p0");
-    assert.throws(() => useArrogance(game, "p0"), /1 ครั้งต่อรอบ/);
+    startTurn(game, "p1"); // เทิร์นของอ้วนสุดเอง (ไม่ใช่จักรพรรดิ)
+    assert.equal(
+      game.pendingArrogance,
+      undefined,
+      "no offer outside the emperor's prepare phase",
+    );
+  });
+
+  it("rejects a resolve from anyone who isn't the pending holder", () => {
+    const game = makeGame({ p0: "CHAR001", p1: "CHAR027" });
+    const p0 = game.players.find((p) => p.id === "p0")!;
+    p0.role = "emperor";
+    startTurn(game, "p0");
+    assert.throws(() => resolveArrogance(game, "p0", true), /จองหอง/);
   });
 });
 
@@ -1764,6 +1781,31 @@ describe("Character skill – จูกัดเหลียง หยั่ง�
       game.deck[game.deck.length - 1].id,
       peeked[3],
       "chosen card is now on top",
+    );
+  });
+
+  it("keeps every peeked card on top in the arranged order (client now always sends full topIds, empty bottom)", () => {
+    const game = makeGame({ p0: "CHAR012" });
+    drawPhase(game);
+    game.deck = deck5();
+    usePeek(game, "p0");
+    const peeked = game.pendingPeek!.cards.map((c) => c.id); // peeked[0] = top-most
+    const arranged = [peeked[3], peeked[0], peeked[1], peeked[2]]; // ลากใบท้ายมาบนสุด
+    resolvePeek(game, "p0", arranged, []); // ไม่มีกองล่าง
+    assert.equal(game.pendingPeek, undefined);
+    assert.equal(game.deck.length, 5, "all cards returned");
+    assert.equal(
+      game.deck[game.deck.length - 1].id,
+      arranged[0],
+      "drawn-first card = the arranged top",
+    );
+    assert.deepEqual(
+      game.deck
+        .slice(-arranged.length)
+        .reverse()
+        .map((c) => c.id),
+      arranged,
+      "deck top follows the arranged order exactly (matches what the player saw)",
     );
   });
 

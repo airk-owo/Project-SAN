@@ -1781,6 +1781,7 @@ h2 {
   bottom: 26px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* กันปุ่ม/แถบ prompt ล้นกรอบ — ให้ตกบรรทัดในกรอบแทน */
   gap: 14px;
   max-width: 460px;
   padding: 17px 18px;
@@ -1815,7 +1816,9 @@ h2 {
 .mock-response-actions {
   display: grid;
   gap: 5px;
-  flex: none;
+  flex: 0 1 auto; /* ยอมหดได้เมื่อจะล้นกรอบ (แต่ไม่ยืด) */
+  min-width: 0;
+  max-width: 100%;
 }
 .mock-response-actions button {
   margin: 0;
@@ -3879,9 +3882,13 @@ h2 {
 .local-discard-limit-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* ข้อความยาว + ปุ่มยกเลิกให้ตกบรรทัด ไม่ล้นกรอบ */
   gap: 8px;
   padding: 6px 10px;
   margin-bottom: 6px;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: #8b2e2e22;
   border: 1px solid var(--danger);
   border-radius: 8px;
@@ -3890,6 +3897,36 @@ h2 {
 }
 .local-discard-limit-bar span {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* แถบ prompt+ปุ่มยกเลิกในเทิร์น (ยืมมือสังหาร/ท้าสู้/โปรยเสน่ห์ ฯลฯ): ลอยเหนือผิวโต๊ะ
+   ส่วนล่าง แทนที่จะต่อท้ายคอลัมน์ปุ่มด้านขวา (ซึ่งดัน UI อื่นขึ้น). ยึดกับแถวผู้เล่น
+   ปัจจุบันแล้ววางตัวเองออกนอก flow ด้วย position:absolute จึงไม่กระทบความสูงคอลัมน์. */
+.local-game-page .mock-current-player {
+  position: relative;
+}
+.local-table-prompt {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px); /* เหนือแถวผู้เล่น = ผิวโต๊ะส่วนล่าง */
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: max-content;
+  max-width: min(560px, 88vw);
+  pointer-events: none; /* กล่องว่างไม่บังการคลิกกองไพ่บนโต๊ะ */
+}
+.local-table-prompt > * {
+  pointer-events: auto; /* แต่ตัวแถบ prompt เองยังคลิกได้ */
+}
+.local-table-prompt .local-discard-limit-bar {
+  margin-bottom: 0;
+  background: #2a1a12ee; /* ทึบขึ้นเพราะลอยบนพื้นโต๊ะ อ่านง่าย */
+  box-shadow: 0 6px 18px #1c120b88;
 }
 .local-discard-limit-bar button {
   margin: 0;
@@ -4753,19 +4790,50 @@ img {
   font-size: 0.72rem;
   margin: 2px 0 4px;
 }
-.local-peek-list button {
+.local-peek-list {
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  flex-direction: column;
+  gap: 4px;
 }
-.local-peek-list button em {
-  margin-left: auto;
+.local-peek-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid #7a5c33;
+  border-radius: 6px;
+  background: #2a1c11;
+  cursor: grab;
+}
+.local-peek-row:active {
+  cursor: grabbing;
+}
+.local-peek-row.local-peek-dragging {
+  opacity: 0.5;
+}
+.local-peek-row.local-peek-over {
+  border-color: #e0b64a;
+  box-shadow: inset 0 0 0 1px #e0b64a;
+}
+.local-peek-grip {
+  color: #b79a6a;
+  cursor: grab;
+}
+.local-peek-row em {
   font-style: normal;
   font-size: 0.72rem;
   color: #c8a24a;
 }
-.local-peek-list button.selected-card em {
-  color: #e07070;
+.local-peek-moves {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 2px;
+}
+.local-peek-moves button {
+  margin: 0;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 /* Prevent accidental text selection/copy while playing (esp. mobile long-press) */

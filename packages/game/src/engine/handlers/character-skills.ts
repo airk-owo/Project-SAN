@@ -524,20 +524,29 @@ export function useUnarmedHunt(state: GameState, playerId: string) {
   } else state.turn.phase = "play";
   synchronizeGameState(state);
 }
-/** อ้วนสุด จองหอง: emperor prep phase, draw one extra card at the cost of −1 hand limit this turn. */
-export function useArrogance(state: GameState, playerId: string) {
-  if (state.responseWindow) throw new Error("ต้องแก้ไขสถานะที่ค้างอยู่ก่อน");
-  if (state.turn.activePlayerId !== playerId || state.turn.phase !== "draw")
-    throw new Error("ใช้ได้เฉพาะช่วงเตรียมการของคุณ (ก่อนจั่วไพ่)");
-  if ((state.turn.drawnThisTurn || 0) > 0)
-    throw new Error("ต้องใช้ก่อนเริ่มจั่วไพ่");
-  if (!hasCharacterSkill(state, playerId, "emperor_arrogance"))
-    throw new Error("ไม่มีทักษะจองหอง");
+/** อ้วนสุด จองหอง: ระหว่างขั้นเตรียมของจักรพรรดิ ผู้ถือทักษะเลือกจั่วเพิ่ม 1 ใบ
+ *  แลกกับขีดจำกัดไพ่บนมือของจักรพรรดิ −1 ในรอบนั้น (ตัดสินใจแยกจากเจ้าของเทิร์น) */
+export function resolveArrogance(
+  state: GameState,
+  playerId: string,
+  use: boolean,
+) {
+  const pending = state.pendingArrogance;
+  if (!pending || pending.playerId !== playerId)
+    throw new Error("ไม่มีจังหวะจองหองที่ค้างอยู่");
   const player = getPlayerById(state, playerId);
   if (!player) throw new Error("Unknown player");
-  if (player.role !== "emperor") throw new Error("ใช้ได้เฉพาะจักรพรรดิ");
-  if (state.skillsUsedThisTurn?.includes("arrogance"))
-    throw new Error("ใช้จองหองได้ 1 ครั้งต่อรอบ");
+  state.pendingArrogance = undefined;
+  if (!use) {
+    logAction(
+      state,
+      "skill-arrogance-declined",
+      `${characterName(player)} ไม่ใช้ จองหอง`,
+      playerId,
+    );
+    synchronizeGameState(state);
+    return;
+  }
   if (!state.deck.length) reshuffleDiscardIntoDrawPile(state);
   const card = state.deck.pop();
   if (card) {
@@ -545,14 +554,13 @@ export function useArrogance(state: GameState, playerId: string) {
     logAction(
       state,
       "skill-arrogance",
-      `${characterName(player)} ใช้ จองหอง จั่วเพิ่ม 1 ใบ (ขีดจำกัดไพ่บนมือ -1 ในรอบนี้)`,
+      `${characterName(player)} ใช้ จองหอง จั่วเพิ่ม 1 ใบ (ขีดจำกัดไพ่บนมือของจักรพรรดิ -1 ในรอบนี้)`,
       playerId,
       undefined,
       card.id,
     );
   }
   state.arrogancePenalty = true;
-  markSkillUsed(state, "arrogance");
   synchronizeGameState(state);
 }
 /** จิวยี่ บาดหมาง: once per turn, choose a general who must guess a suit; a random card is drawn from จิวยี่'s hand to them, and on a suit mismatch they lose 1 HP. */

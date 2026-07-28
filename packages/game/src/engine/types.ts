@@ -371,6 +371,7 @@ export type GameState = {
   pendingHarvest?: PendingHarvest;
   pendingJudgment?: PendingJudgment;
   pendingFankui?: PendingFankui;
+  pendingArrogance?: { playerId: string };
   pendingRetaliate?: PendingRetaliate;
   pendingRetaliateJudgment?: PendingRetaliateJudgment;
   pendingLegacy?: PendingLegacy;
