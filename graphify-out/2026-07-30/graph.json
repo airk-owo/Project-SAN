@@ -2350,7 +2350,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_arroganceprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "arroganceprompt.tsx"
     },
     {
@@ -2360,7 +2360,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_web_components_game_arroganceprompt_arroganceprompt",
-      "community": 4,
+      "community": 23,
       "norm_label": "arroganceprompt()"
     },
     {
@@ -2390,7 +2390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_web_components_game_destroymountprompt",
-      "community": 23,
+      "community": 4,
       "norm_label": "destroymountprompt.tsx"
     },
     {
@@ -2400,7 +2400,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_web_components_game_destroymountprompt_destroymountprompt",
-      "community": 23,
+      "community": 4,
       "norm_label": "destroymountprompt()"
     },
     {
@@ -15965,7 +15965,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2459",
+      "source_location": "L2460",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_hearts"
@@ -16031,7 +16031,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2345",
+      "source_location": "L2346",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_charname"
@@ -16273,7 +16273,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2854",
+      "source_location": "L2857",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_cardinfo"
@@ -16845,7 +16845,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/web/app/page.tsx",
-      "source_location": "L2428",
+      "source_location": "L2429",
       "weight": 1.0,
       "source": "apps_web_app_page_home",
       "target": "apps_web_app_lib_gameconstants_kingdomlabel"
@@ -45431,5 +45431,5 @@
       "confidence_score": 0.9
     }
   ],
-  "built_at_commit": "0593a7349a593a4c8beb44751089fa1a2a2bfc0f"
+  "built_at_commit": "ddf4ce67e03c57da83577acab2a1e7b7ef23208e"
 }

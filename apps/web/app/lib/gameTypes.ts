@@ -144,7 +144,15 @@ export type Game = {
   roleDefinitions?: RoleDefinition[];
   deck: { length: number };
   discard: Card[];
-  log: { id: string; message: string; at: string }[];
+  log: {
+    id: string;
+    message: string;
+    at: string;
+    type: string;
+    actorId?: string;
+    targetId?: string;
+    cardId?: string;
+  }[];
   turn: Turn | null;
   responseWindow: ResponseWindow | null;
   winner?: string;

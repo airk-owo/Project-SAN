@@ -62,8 +62,10 @@ import {
   playCountdownTick,
   playDecisionAlert,
   playThunder,
+  playYourTurnChime,
 } from "./lib/audio";
 import { playTrack, setMusicEnabled, setMusicVolume } from "./lib/bgm";
+import { dispatchGameLogSfx, setSfxEnabled } from "./lib/game-sfx";
 import { RepeatAttackPrompt } from "../components/game/RepeatAttackPrompt";
 import { DestroyMountPrompt } from "../components/game/DestroyMountPrompt";
 import { ForceAttackDamagePrompt } from "../components/game/ForceAttackDamagePrompt";
@@ -254,6 +256,11 @@ export default function Home() {
   );
   const autoEndedTurnRef = useRef<string | undefined>(undefined);
   const revealedRole = useRef<Role | undefined>(undefined);
+  // game-log-driven SFX: index of the last log entry already sounded, plus
+  // whether we had a `game` last render — used to tell "new entries since
+  // last render" apart from "just (re)joined a room, don't replay history".
+  const seenLogIndexRef = useRef(0);
+  const hadGameRef = useRef(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
   const handRef = useRef<HTMLDivElement>(null);
@@ -262,6 +269,37 @@ export default function Home() {
   const myDecision = isViewerDecisionActive(game);
   const prevDecisionRef = useRef(false);
   const lastTickRef = useRef<number | null>(null);
+  // Gate game SFX (card played, damage, dying, heal, draw, game-finished) the
+  // same way every other cue is gated.
+  useEffect(() => {
+    setSfxEnabled(soundOn);
+  }, [soundOn]);
+  // Core game-event SFX: watch game.log for entries new since the last
+  // render and play (at most one) cue per batch via dispatchGameLogSfx. Log
+  // is append-only, so an index ref is enough to find "what's new" — except
+  // right after (re)joining a room, where we must seed from the current
+  // length instead of replaying that room's whole history.
+  useEffect(() => {
+    if (!game) {
+      hadGameRef.current = false;
+      return;
+    }
+    if (!hadGameRef.current) {
+      hadGameRef.current = true;
+      seenLogIndexRef.current = game.log.length;
+      return;
+    }
+    const seen = seenLogIndexRef.current;
+    if (game.log.length <= seen) {
+      if (game.log.length < seen) seenLogIndexRef.current = game.log.length;
+      return;
+    }
+    const newEntries = game.log.slice(seen);
+    seenLogIndexRef.current = game.log.length;
+    const viewerRole = game.players.find((p) => p.id === game.viewerId)?.role;
+    dispatchGameLogSfx(newEntries, { viewerRole, winner: game.winner });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game?.log?.length]);
   // Initial alert: sound the moment a decision falls to the viewer.
   useEffect(() => {
     if (myDecision && !prevDecisionRef.current && soundOn) playDecisionAlert();
@@ -451,32 +489,7 @@ export default function Home() {
       setTurnBanner(true);
       if (turnBannerTimer.current) clearTimeout(turnBannerTimer.current);
       turnBannerTimer.current = setTimeout(() => setTurnBanner(false), 2800);
-      if (soundOn) {
-        try {
-          const ctx = new AudioContext();
-          // Two-tone rising "ding-ding" so the turn cue is unmistakable.
-          const chime = (freq: number, start: number, end: number) => {
-            const osc = ctx.createOscillator(),
-              gain = ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
-            gain.gain.setValueAtTime(0.0001, ctx.currentTime + start);
-            gain.gain.exponentialRampToValueAtTime(
-              0.16,
-              ctx.currentTime + start + 0.02,
-            );
-            gain.gain.exponentialRampToValueAtTime(
-              0.0001,
-              ctx.currentTime + end,
-            );
-            osc.connect(gain).connect(ctx.destination);
-            osc.start(ctx.currentTime + start);
-            osc.stop(ctx.currentTime + end + 0.02);
-          };
-          chime(660, 0, 0.22);
-          chime(988, 0.16, 0.5);
-        } catch {}
-      }
+      if (soundOn) playYourTurnChime();
     }
     lastTurn.current = turn;
   }, [game?.currentPlayerId, game?.viewerId, soundOn]);

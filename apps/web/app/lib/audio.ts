@@ -46,3 +46,35 @@ export const playThunder = () => {
   tone(92, 0.05, 1.15, 0.2, "sawtooth");
   tone(55, 0.12, 1.4, 0.17, "sine"); // หางเสียงกึกก้อง
 };
+
+// Two-tone rising "ding-ding" for "it's your turn" — moved here from an inline
+// oscillator block in page.tsx that built a fresh AudioContext every turn (leak).
+// tone() reuses the shared singleton context instead.
+export const playYourTurnChime = () => {
+  tone(660, 0, 0.22, 0.16);
+  tone(988, 0.16, 0.5, 0.16);
+};
+
+// A card gets declared/played on the table — short, dry click so it doesn't
+// compete with the (louder, sample-based) hit/dying cues that may follow it
+// in the same log batch.
+export const playCardDeclare = () => tone(720, 0, 0.09, 0.1, "triangle");
+
+// Dodge (閃) — a quick descending whoosh.
+export const playDodge = () => {
+  tone(900, 0, 0.08, 0.12, "sawtooth");
+  tone(500, 0.05, 0.16, 0.1, "sawtooth");
+};
+
+// Heal (桃/酒) — gentle ascending two-note, mirror of playAutoEndChime's
+// descending shape so the two read as opposites.
+export const playHeal = () => {
+  tone(392, 0, 0.16, 0.12);
+  tone(587, 0.12, 0.4, 0.14);
+};
+
+// Draw phase — two short neutral ticks (card-on-card).
+export const playDrawCards = () => {
+  tone(1100, 0, 0.05, 0.1, "square");
+  tone(1100, 0.08, 0.13, 0.1, "square");
+};
