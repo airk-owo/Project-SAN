@@ -3927,6 +3927,10 @@ h2 {
   margin-bottom: 0;
   background: #2a1a12ee; /* ทึบขึ้นเพราะลอยบนพื้นโต๊ะ อ่านง่าย */
   box-shadow: 0 6px 18px #1c120b88;
+  color: #fff; /* พื้นเข้ม — ตัว --text เดิม (น้ำตาลเข้ม) กลืนกับพื้นจนอ่านไม่ออก */
+}
+.local-table-prompt .mock-muted-button {
+  color: #fff !important;
 }
 .local-discard-limit-bar button {
   margin: 0;

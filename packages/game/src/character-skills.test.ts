@@ -1960,7 +1960,7 @@ describe("Character skill – เตียวเสี้ยน สาวงา�
   });
 });
 
-describe("Emperor skill – เล่าปี่ คุณธรรมสามัคคี (SHU ally attacks for you)", () => {
+describe("Emperor skill – เล่าปี่ คุณธรรมนำประชา (SHU ally attacks for you)", () => {
   it("a SHU ally plays an Attack counted as เล่าปี่ against the chosen target", () => {
     const game = makeGame({ p0: "CHAR009" });
     const p0 = game.players.find((p) => p.id === "p0")!;

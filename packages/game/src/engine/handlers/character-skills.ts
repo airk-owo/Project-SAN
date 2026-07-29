@@ -635,8 +635,8 @@ export function pickDischordSuit(
   if (!matched) applyDamage(state, targetId, 1, jiuyi.id);
   synchronizeGameState(state);
 }
-// ── Emperor "ask an ally to respond for you" skills (เล่าปี่ คุณธรรมสามัคคี / โจโฉ ปกป้องราชันย์) ──
-/** เล่าปี่ คุณธรรมสามัคคี: emperor asks a SHU ally to play an Attack (counted as เล่าปี่'s) against a target in เล่าปี่'s range. */
+// ── Emperor "ask an ally to respond for you" skills (เล่าปี่ คุณธรรมนำประชา / โจโฉ ปกป้องราชันย์) ──
+/** เล่าปี่ คุณธรรมนำประชา: emperor asks a SHU ally to play an Attack (counted as เล่าปี่'s) against a target in เล่าปี่'s range. */
 export function requestUnityAttack(
   state: GameState,
   emperorId: string,
@@ -649,7 +649,7 @@ export function requestUnityAttack(
   if (!emperor || emperor.role !== "emperor")
     throw new Error("ใช้ได้เฉพาะจักรพรรดิ");
   if (!hasCharacterSkill(state, emperorId, "ask_shu_attack"))
-    throw new Error("ไม่มีทักษะคุณธรรมสามัคคี");
+    throw new Error("ไม่มีทักษะคุณธรรมนำประชา");
   if (
     state.turn.attackUsedThisTurn >= 1 &&
     !hasUnlimitedAttack(state, emperorId)
@@ -668,7 +668,7 @@ export function requestUnityAttack(
   logAction(
     state,
     "skill-unity",
-    `${characterName(emperor)} ใช้ คุณธรรมสามัคคี ขอให้ ${characterName(ally)} โจมตี ${characterName(getPlayerById(state, targetId)!)} แทน`,
+    `${characterName(emperor)} ใช้ คุณธรรมนำประชา ขอให้ ${characterName(ally)} โจมตี ${characterName(getPlayerById(state, targetId)!)} แทน`,
     emperorId,
     allyId,
   );

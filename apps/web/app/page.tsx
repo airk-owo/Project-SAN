@@ -1794,7 +1794,7 @@ export default function Home() {
           setUnityTarget(undefined);
         }}
       >
-        ✦ คุณธรรมสามัคคี (ให้จ๊กก๊กโจมตีแทน)
+        ✦ คุณธรรมนำประชา (ให้จ๊กก๊กโจมตีแทน)
       </button>,
     );
   }
@@ -2244,6 +2244,7 @@ export default function Home() {
                                         targetId: player.id,
                                       });
                                       setBenevolenceCards([]);
+                                      setBenevolenceMode(false);
                                     }
                                   : raidTargetable
                                     ? () => {
@@ -2748,7 +2749,9 @@ export default function Home() {
                   เมตตาธรรม: เลือกไพ่ <b>{benevolenceCards.length}</b> ใบ
                   {benevolenceCards.length > 0
                     ? " → เลือกผู้รับบนโต๊ะ"
-                    : " (มอบ 2+ ใบในรอบ = ฟื้น 1 HP)"}
+                    : game.skillsUsedThisTurn?.includes("benevolence_healed")
+                      ? " (ใช้โควต้าฟื้นฟู HP ของรอบนี้ไปแล้ว)"
+                      : " (มอบ 2+ ใบในรอบ = ฟื้น 1 HP)"}
                 </span>
                 <button
                   className="mock-muted-button"
@@ -2827,7 +2830,7 @@ export default function Home() {
             {unityMode && (
               <div className="local-discard-limit-bar">
                 <span>
-                  คุณธรรมสามัคคี:{" "}
+                  คุณธรรมนำประชา:{" "}
                   {!unityTarget
                     ? "เลือกเป้าหมายโจมตี (ในระยะของคุณ)"
                     : "เลือกพันธมิตรจ๊กก๊กให้โจมตีแทน"}
@@ -3609,10 +3612,7 @@ export default function Home() {
           </div>
         )}
         {startCountdown !== null && (
-          <div
-            className="local-countdown-overlay"
-            onClick={() => setStartCountdown(null)}
-          >
+          <div className="local-countdown-overlay">
             <span className="local-countdown-num" key={startCountdown}>
               {startCountdown > 0 ? startCountdown : "เริ่ม!"}
             </span>
